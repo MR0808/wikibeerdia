@@ -5,3 +5,8 @@ export type NavLink = {
     admin: boolean;
     subMenu?: NavLink[];
 };
+
+export type actionFunction = (
+    prevState: any,
+    formData: FormData
+) => Promise<{ message: string }>;

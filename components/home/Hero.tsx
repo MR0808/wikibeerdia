@@ -1,4 +1,7 @@
 import { Typewriter } from 'nextjs-simple-typewriter';
+import { logout } from '@/actions/auth';
+import { ActionButton } from '@/components/form/ActionButton';
+import { LogOutIcon } from 'lucide-react';
 
 function Hero() {
     const styles = [
@@ -27,6 +30,15 @@ function Hero() {
                                     delaySpeed={1000}
                                 />
                             </h1>
+                            <form action={logout} className="w-full">
+                                <ActionButton
+                                    className="w-full"
+                                    variant="destructive"
+                                >
+                                    <LogOutIcon className="size-4 mr-2" />
+                                    <span>Sign out</span>
+                                </ActionButton>
+                            </form>
                             <form className="max-w-[850px] mx-auto pt-2 md:pt-20">
                                 <div className="sm:flex items-center bg-white rounded-lg overflow-hidden px-2 py-3 justify-between">
                                     <div className="items-center mr-4 md:w-4/12 pb-2 md:pb-0">
