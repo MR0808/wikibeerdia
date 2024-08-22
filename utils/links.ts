@@ -1,10 +1,4 @@
-type NavLink = {
-    href: string;
-    label: string;
-    auth: boolean;
-    admin: boolean;
-    subMenu?: NavLink[];
-};
+import { NavLink } from './types';
 
 export const links: NavLink[] = [
     { href: '/', label: 'home', auth: false, admin: false },
@@ -24,13 +18,19 @@ export const links: NavLink[] = [
     },
     {
         href: '/breweries',
-        label: 'home',
+        label: 'breweries',
         auth: false,
         admin: false,
         subMenu: [
             {
                 href: '/breweries/popular',
                 label: 'popular',
+                auth: false,
+                admin: false
+            },
+            {
+                href: '/breweries/az',
+                label: 'A-Z',
                 auth: false,
                 admin: false
             }
@@ -43,7 +43,7 @@ export const links: NavLink[] = [
         admin: false,
         subMenu: [
             {
-                href: '/breweries/popular',
+                href: '/beer/popular',
                 label: 'popular',
                 auth: false,
                 admin: false

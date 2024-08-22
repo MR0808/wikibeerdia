@@ -15,14 +15,17 @@ import { Input } from '../ui/input';
 function LoginModal() {
     return (
         <>
-            <div className="text-xl font-medium text-white">
-                <FiLock />
-            </div>
             <Dialog>
-                <DialogTrigger>
-                    <div className="hover:text-primary text-white text-lg font-medium">
+                <DialogTrigger asChild>
+                    {/* <div className="hover:text-primary text-lg font-medium sm:block">
                         Login / Signup
-                    </div>
+                    </div> */}
+                    <Button
+                        variant="ghost"
+                        className="flex rounded text-sm sm:text-md h-11 border border-primary p-2"
+                    >
+                        Login / Signup
+                    </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
