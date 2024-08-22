@@ -1,8 +1,8 @@
 'use client';
 
 import { updateUser } from '@/actions/user';
-import { ActionButton } from '@/components/global/action-button';
-import { FormError } from '@/components/global/form-error';
+import { ActionButton } from '@/components/form/ActionButton';
+import { FormError } from '@/components/form/FormError';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User } from '@prisma/client';
