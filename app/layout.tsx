@@ -5,6 +5,8 @@ import { ToastContainer } from 'react-toastify';
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { auth } from '@/auth';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -12,17 +14,20 @@ export const metadata: Metadata = {
     description: 'Everything you needed to know about beer'
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await auth();
     return (
-        <html lang="en" suppressHydrationWarning={true}>
-            <body className={inter.className}>
-                <ToastContainer position="top-center" />
-                {children}
-            </body>
-        </html>
+        <SessionProvider session={session}>
+            <html lang="en" suppressHydrationWarning={true}>
+                <body className={inter.className}>
+                    <ToastContainer position="top-center" />
+                    {children}
+                </body>
+            </html>
+        </SessionProvider>
     );
 }
