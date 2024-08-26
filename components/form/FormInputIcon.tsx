@@ -18,7 +18,12 @@ type FormInputProps = {
     defaultValue?: string;
 };
 
-const FormInputIcon = ({ label, name, type, defaultValue }: FormInputProps) => {
+export const FormInputIcon = ({
+    label,
+    name,
+    type,
+    defaultValue
+}: FormInputProps) => {
     return (
         <>
             <Input
@@ -44,7 +49,6 @@ const FormInputIcon = ({ label, name, type, defaultValue }: FormInputProps) => {
         </>
     );
 };
-export default FormInputIcon;
 
 export const RegisterPasswordInputIcon = () => {
     const [showPassword, setShowPassword] = useState(false);

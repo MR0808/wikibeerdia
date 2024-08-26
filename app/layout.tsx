@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
+import { ToastContainer } from 'react-toastify';
 import './globals.css';
-import '@/lib/env';
-import { GlobalToaster } from '@/components/global/GlobalToaster';
-import { Suspense } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,12 +18,10 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning={true}>
             <body className={inter.className}>
+                <ToastContainer position="top-center" />
                 {children}
-                <Suspense>
-                    <GlobalToaster />
-                </Suspense>
             </body>
         </html>
     );

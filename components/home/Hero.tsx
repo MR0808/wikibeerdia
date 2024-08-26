@@ -1,5 +1,4 @@
 import { Typewriter } from 'nextjs-simple-typewriter';
-import { logout } from '@/actions/auth';
 import { ActionButton } from '@/components/form/ActionButton';
 import { LogOutIcon } from 'lucide-react';
 
@@ -30,7 +29,7 @@ function Hero() {
                                     delaySpeed={1000}
                                 />
                             </h1>
-                            <form action={logout} className="w-full">
+                            <form className="w-full">
                                 <ActionButton
                                     className="w-full"
                                     variant="destructive"

@@ -1,4 +1,4 @@
-function DashboardLayout({ children }: { children: React.ReactNode }) {
+function AuthLayout({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
 }
-export default DashboardLayout;
+export default AuthLayout;

@@ -3,7 +3,7 @@ import logo from '@/public/images/logo.png';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const EntryContainer = ({ paragraph }: { paragraph: string }) => {
+const AuthContainer = ({ paragraph }: { paragraph: string }) => {
     const cheers = [
         'Cheers',
         'Cin! Cin!',
@@ -75,4 +75,4 @@ const EntryContainer = ({ paragraph }: { paragraph: string }) => {
         </div>
     );
 };
-export default EntryContainer;
+export default AuthContainer;
