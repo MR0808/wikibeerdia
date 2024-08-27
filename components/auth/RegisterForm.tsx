@@ -11,8 +11,6 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
-    FormMessage
 } from '@/components/ui/form';
 
 import AuthWrapper from './AuthWrapper';
@@ -61,7 +59,7 @@ const RegisterForm = () => {
             backButtonLabel="Login"
         >
             <Form {...form}>
-                <form className="mt-8 space-y-6">
+                <form className="mt-8 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="relative grid grid-cols-2 gap-4">
                         <div>
                             <FormField
@@ -133,7 +131,7 @@ const RegisterForm = () => {
                         
                     </div>
                     <div>
-                        <AuthSubmitButton text="Register" />
+                        <AuthSubmitButton text="Register" isPending={isPending}/>
                     </div>
                 </form>
             </Form>

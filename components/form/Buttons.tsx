@@ -13,23 +13,24 @@ type SubmitButtonProps = {
     className?: string;
     text?: string;
     size?: btnSize;
+    isPending: boolean
 };
 
 export function SubmitButton({
     className = '',
     text = 'submit',
-    size = 'lg'
+    size = 'lg',
+    isPending
 }: SubmitButtonProps) {
-    const { pending } = useFormStatus();
 
     return (
         <Button
             type="submit"
-            disabled={pending}
+            disabled={isPending}
             className={cn('capitalize', className)}
             size={size}
         >
-            {pending ? (
+            {isPending ? (
                 <>
                     <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                     Please wait...
@@ -44,18 +45,18 @@ export function SubmitButton({
 export function AuthSubmitButton({
     className = '',
     text = 'submit',
-    size = 'lg'
+    size = 'lg',
+    isPending
 }: SubmitButtonProps) {
-    const { pending } = useFormStatus();
 
     return (
         <Button
             type="submit"
-            disabled={pending}
+            disabled={isPending}
             className={cn('capitalize w-full rounded-full h-12', className)}
             size={size}
         >
-            {pending ? (
+            {isPending ? (
                 <>
                     <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                     Please wait...
