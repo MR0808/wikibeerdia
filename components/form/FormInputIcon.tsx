@@ -21,7 +21,7 @@ type FormInputProps = {
 
 
 export const FormInputIcon = forwardRef<HTMLInputElement, FormInputProps>(
-    ({ label, name, type, defaultValue, ...props }, ref) => {
+   function FormInputIcon ({ label, name, type, defaultValue, ...props }, ref) {
     return (
         <>
             <Input
@@ -50,7 +50,7 @@ export const FormInputIcon = forwardRef<HTMLInputElement, FormInputProps>(
 )
 
 export const RegisterPasswordInputIcon = forwardRef<HTMLInputElement, FormInputProps>(
-    ({ label, name, type, defaultValue, ...props }, ref) => {
+   function RegisterPasswordInputIcon ({ label, name, type, defaultValue, ...props }, ref) {
     const [showPassword, setShowPassword] = useState(false);
     return (
         <>
