@@ -53,7 +53,7 @@ const LoginForm = () => {
                     </div>
                 </div>
                 <div>
-                    <AuthSubmitButton text="Login" />
+                    <AuthSubmitButton text="Login" isPending={true} />
                 </div>
             </form>
         </AuthWrapper>

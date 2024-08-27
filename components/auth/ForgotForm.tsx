@@ -27,7 +27,7 @@ const ForgotForm = () => {
                     />
                 </div>
                 <div>
-                    <AuthSubmitButton text="Send verification" />
+                    <AuthSubmitButton text="Send verification" isPending={true} />
                 </div>
             </form>
         </AuthWrapper>
