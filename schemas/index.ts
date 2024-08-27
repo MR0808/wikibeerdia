@@ -23,7 +23,8 @@ export const RegisterSchema = z.object({
     }),
     password: z.string().min(6, {
         message: 'Minimum 6 characters required'
-    }).superRefine(({ password }, checkPassComplexity) => {
+    })
+  }).superRefine(({ password }, checkPassComplexity) => {
     const containsUppercase = (ch: string) => /[A-Z]/.test(ch);
     const containsLowercase = (ch: string) => /[a-z]/.test(ch);
     const containsSpecialChar = (ch: string) =>
@@ -50,8 +51,7 @@ export const RegisterSchema = z.object({
         message: "password does not meet complexity requirements",
       });
     }
-  })
-});
+  });
 
 export const ResetSchema = z.object({
     email: z.string().email({
