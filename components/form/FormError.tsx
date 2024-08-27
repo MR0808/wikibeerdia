@@ -1,22 +1,18 @@
-'use client';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
-import { useEffect } from 'react';
-import toast from 'react-hot-toast';
-
-export function FormError({
-    hidden = false,
-    value
-}: {
-    hidden?: boolean;
-    value: string[] | undefined;
-}) {
-    useEffect(() => {
-        if (!hidden) return;
-        if (value?.length && value.length > 0)
-            toast.error(`FATAL: ${value[0]}`);
-    }, [hidden, value]);
-
-    if (hidden || !value || !value.length) return null;
-    toast.error(value[0]);
-    return null;
+interface FormErrorProps {
+    message?: string;
 }
+
+const FormError = ({ message }: FormErrorProps) => {
+    if (!message) return null;
+
+    return (
+        <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive">
+            <ExclamationTriangleIcon className="h-4 w-4" />
+            <p>{message}</p>
+        </div>
+    );
+};
+
+export default FormError;

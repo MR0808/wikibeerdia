@@ -1,11 +1,13 @@
 import Navbar from '@/components/navbar/Navbar';
+import { currentUser } from '@/lib/auth';
 
-function PublicLayout({ children }: { children: React.ReactNode }) {
+const PublicLayout = async ({ children }: { children: React.ReactNode }) => {
+    const user = await currentUser();
     return (
         <div className="relative flex min-h-screen flex-col">
-            <Navbar />
+            <Navbar user={user} />
             <div className="flex-1">{children}</div>
         </div>
     );
-}
+};
 export default PublicLayout;

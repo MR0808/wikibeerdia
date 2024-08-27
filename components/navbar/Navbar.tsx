@@ -1,12 +1,18 @@
 'use client';
+import { ExtendedUser } from '@/next-auth';
+
 import NavSearch from './NavSearch';
 import NavLinks from './NavLinks';
-import LoginModal from './LoginModal';
+import UserSection from './UserSection';
 import Logo from './Logo';
 import { useState, useEffect } from 'react';
 import MobileMenu from './MobileMenu';
 
-function Navbar() {
+interface UserProps {
+    user?: ExtendedUser;
+}
+
+const Navbar = ({ user }: UserProps) => {
     const [scrollActive, setScrollActive] = useState(false);
     const [navbarShow, setNavbarShow] = useState(false);
 
@@ -35,7 +41,7 @@ function Navbar() {
                     <NavSearch />
                 </div>
                 <div className="flex items-center justify-end space-x-2">
-                    <LoginModal />
+                    <UserSection user={user} />
                 </div>
                 <div className="sm:hidden gap-6 md:gap-10 flex">
                     <MobileMenu />
@@ -43,5 +49,5 @@ function Navbar() {
             </div>
         </div>
     );
-}
+};
 export default Navbar;

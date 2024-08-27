@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 import {
     Dialog,
     DialogContent,
@@ -7,19 +11,18 @@ import {
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog';
-import { FiLock } from 'react-icons/fi';
 import { Button } from '../ui/button';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
+import LoginForm from '../auth/LoginForm';
+import RegisterForm from '../auth/RegisterForm';
 
 function LoginModal() {
+    const [login, setLogin] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <>
-            <Dialog>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
-                    {/* <div className="hover:text-primary text-lg font-medium sm:block">
-                        Login / Signup
-                    </div> */}
                     <Button
                         variant="ghost"
                         className="flex rounded text-sm sm:text-md h-11 border border-primary p-2"
@@ -29,36 +32,30 @@ function LoginModal() {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Edit profile</DialogTitle>
-                        <DialogDescription>
-                            Make changes to your profile here. Click save when
-                            you are done.
+                        <DialogTitle className="text-center">
+                            {login ? 'Welcome Back' : 'Register Now!'}
+                        </DialogTitle>
+                        <DialogDescription className="text-center">
+                            {login
+                                ? 'Use the form below to log in to your account'
+                                : 'Use the form below to register your account'}
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="name" className="text-right">
-                                Name
-                            </Label>
-                            <Input
-                                id="name"
-                                value="Pedro Duarte"
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="username" className="text-right">
-                                Username
-                            </Label>
-                            <Input
-                                id="username"
-                                value="@peduarte"
-                                className="col-span-3"
-                            />
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <Button type="submit">Save changes</Button>
+                    {login ? <LoginForm /> : <RegisterForm />}
+                    <DialogFooter className="text-center sm:justify-center">
+                        <p className="flex flex-col items-center justify-center text-center text-md text-gray-500">
+                            <span>
+                                {login
+                                    ? "Don't have an account?"
+                                    : 'Already have an account?'}
+                            </span>
+                            <div
+                                onClick={() => setLogin(!login)}
+                                className="text-indigo-400 hover:text-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-300"
+                            >
+                                {login ? 'Register' : 'Login'}
+                            </div>
+                        </p>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
