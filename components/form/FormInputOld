@@ -1,5 +1,4 @@
 'use client';
-import { forwardRef } from 'react';
 
 import { Input } from '../ui/input';
 import {
@@ -17,18 +16,20 @@ type FormInputProps = {
     type: string;
     label?: string;
     defaultValue?: string;
-}
 
-
-export const FormInputIcon = forwardRef<HTMLInputElement, FormInputProps>(
-    ({ label, name, type, defaultValue, ...props }, ref) => {
+export const FormInputIcon = ({
+    label,
+    name,
+    type,
+    defaultValue
+}: FormInputProps) => {
     return (
         <>
             <Input
                 type={type}
                 placeholder={label}
                 name={name}
-                {...props}
+                defaultValue={defaultValue}
                 className="rounded-full h-14 bg-purple-50 border border-zinc-800 border-opacity-30 focus-visible:ring-2 focus-visible:ring-zinc-800 focus-visible:ring-opacity-20 focus-visible:ring-offset-2 placeholder-zinc-800 placeholder-opacity-30 px-10"
             />
             <div
@@ -46,19 +47,16 @@ export const FormInputIcon = forwardRef<HTMLInputElement, FormInputProps>(
             </div>
         </>
     );
-}
-)
+};
 
-export const RegisterPasswordInputIcon = forwardRef<HTMLInputElement, FormInputProps>(
-    ({ label, name, type, defaultValue, ...props }, ref) => {
+export const RegisterPasswordInputIcon = () => {
     const [showPassword, setShowPassword] = useState(false);
     return (
         <>
             <Input
                 type={showPassword ? 'text' : 'password'}
-                placeholder={label}
-                name={name}
-                {...props}
+                placeholder="Password"
+                name="password"
                 className="rounded-full h-14 bg-purple-50 border border-zinc-800 border-opacity-30 focus-visible:ring-2 focus-visible:ring-zinc-800 focus-visible:ring-opacity-20 focus-visible:ring-offset-2 placeholder-zinc-800 placeholder-opacity-30 px-10"
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -84,5 +82,4 @@ export const RegisterPasswordInputIcon = forwardRef<HTMLInputElement, FormInputP
             </div>
         </>
     );
-}
-)
+};

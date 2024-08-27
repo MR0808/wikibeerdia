@@ -1,7 +1,6 @@
 'use client';
 
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
@@ -70,7 +69,7 @@ export function AuthSubmitButton({
 
 type actionType = 'edit' | 'delete';
 export const IconButton = ({ actionType }: { actionType: actionType }) => {
-    const { pending } = useFormStatus();
+    const pending = true;
 
     const renderIcon = () => {
         switch (actionType) {
@@ -97,7 +96,7 @@ export const IconButton = ({ actionType }: { actionType: actionType }) => {
 };
 
 export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
-    const { pending } = useFormStatus();
+    const pending = true;
     return (
         <Button
             type="submit"
