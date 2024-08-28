@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 import { cn } from '@/lib/utils';
 import { NavLink } from '@/utils/types';
 
-function SingleMenuItem({ link }: { link: NavLink }) {
+const SingleMenuItem = ({ link }: { link: NavLink }) => {
     const pathname = usePathname();
     const isCurrent: boolean =
         pathname.split('/')[1] === link.href.split('/')[1];
@@ -22,5 +23,5 @@ function SingleMenuItem({ link }: { link: NavLink }) {
             </Link>
         </div>
     );
-}
+};
 export default SingleMenuItem;

@@ -1,6 +1,6 @@
-import { Input } from '../ui/input';
+import { Input } from '@/components/ui/input';
 
-function NavSearch() {
+const NavSearch = () => {
     return (
         <Input
             type="search"
@@ -8,5 +8,5 @@ function NavSearch() {
             className="w-full text-gray-900 border-2 border-gray-300 rounded-lg bg-gray-50"
         />
     );
-}
+};
 export default NavSearch;

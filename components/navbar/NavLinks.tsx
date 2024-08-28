@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { links } from '@/utils/links';
-import { cn } from '@/lib/utils';
 import { BsChevronDown } from 'react-icons/bs';
 import { usePathname } from 'next/navigation';
 
-export function NavLinks() {
+import { links } from '@/utils/links';
+import { cn } from '@/lib/utils';
+
+const NavLinks = () => {
     const pathname = usePathname();
 
     return (
@@ -61,5 +62,6 @@ export function NavLinks() {
             })}
         </ul>
     );
-}
+};
+
 export default NavLinks;

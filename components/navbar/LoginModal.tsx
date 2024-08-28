@@ -11,11 +11,11 @@ import {
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog';
-import { Button } from '../ui/button';
-import LoginForm from '../auth/LoginForm';
-import RegisterForm from '../auth/RegisterForm';
+import { Button } from '@/components/ui/button';
+import LoginForm from '@/components/auth/LoginForm';
+import RegisterForm from '@/components/auth/RegisterForm';
 
-function LoginModal() {
+const LoginModal = () => {
     const [login, setLogin] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -61,5 +61,5 @@ function LoginModal() {
             </Dialog>
         </>
     );
-}
+};
 export default LoginModal;

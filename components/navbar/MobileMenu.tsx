@@ -1,3 +1,7 @@
+import { IoMdMenu } from 'react-icons/io';
+import { BsSearch } from 'react-icons/bs';
+import Image from 'next/image';
+
 import {
     Sheet,
     SheetContent,
@@ -5,15 +9,12 @@ import {
     SheetTitle,
     SheetTrigger
 } from '@/components/ui/sheet';
-import { IoMdMenu } from 'react-icons/io';
 import logo from '@/public/images/logo-black.png';
-import Image from 'next/image';
 import { links } from '@/utils/links';
-import { BsSearch } from 'react-icons/bs';
 import SingleMenuItem from './SingleMenuItem';
 import MultiMenuItem from './MultiMenuItem';
 
-function MobileMenu() {
+const MobileMenu = () => {
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -53,5 +54,5 @@ function MobileMenu() {
             </SheetContent>
         </Sheet>
     );
-}
+};
 export default MobileMenu;

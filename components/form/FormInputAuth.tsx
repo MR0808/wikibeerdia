@@ -1,16 +1,10 @@
 'use client';
 import { forwardRef } from 'react';
-
-import { Input } from '../ui/input';
-import {
-    FaEnvelope,
-    FaKey,
-    FaUser,
-    FaRegEyeSlash,
-    FaRegEye
-} from 'react-icons/fa';
+import { FaRegEyeSlash, FaRegEye } from 'react-icons/fa';
 import { useState } from 'react';
-import { Button } from '../ui/button';
+
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 type FormInputProps = {
     name: string;

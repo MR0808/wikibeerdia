@@ -1,6 +1,6 @@
 import Hero from '@/components/home/Hero';
 
-function HomePage() {
+const HomePage = () => {
     return (
         <>
             <Hero />
@@ -201,5 +201,5 @@ function HomePage() {
             </p>
         </>
     );
-}
+};
 export default HomePage;

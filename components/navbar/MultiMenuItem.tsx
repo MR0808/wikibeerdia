@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import { useState } from 'react';
+
 import { cn } from '@/lib/utils';
 import { NavLink } from '@/utils/types';
-import { useState } from 'react';
-import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
-function MultiMenuItem({ link }: { link: NavLink }) {
+const MultiMenuItem = ({ link }: { link: NavLink }) => {
     const pathname = usePathname();
     const isCurrent: boolean =
         pathname.split('/')[1] === link.href.split('/')[1];
@@ -68,5 +69,5 @@ function MultiMenuItem({ link }: { link: NavLink }) {
             )}
         </>
     );
-}
+};
 export default MultiMenuItem;

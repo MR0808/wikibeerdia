@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import logo from '@/public/images/logo.png';
-import logoBlack from '@/public/images/logo-black.png';
 import Image from 'next/image';
 
-function Logo({ scrollActive }: { scrollActive: boolean }) {
+import logo from '@/public/images/logo.png';
+import logoBlack from '@/public/images/logo-black.png';
+
+const Logo = ({ scrollActive }: { scrollActive: boolean }) => {
     const logoUrl = scrollActive ? logoBlack : logo;
 
     return (
@@ -15,6 +16,6 @@ function Logo({ scrollActive }: { scrollActive: boolean }) {
             />
         </Link>
     );
-}
+};
 
 export default Logo;

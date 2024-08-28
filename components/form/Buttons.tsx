@@ -1,10 +1,11 @@
 'use client';
 
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { LuTrash2, LuPenSquare } from 'react-icons/lu';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type btnSize = 'default' | 'lg' | 'sm';
 
@@ -12,16 +13,15 @@ type SubmitButtonProps = {
     className?: string;
     text?: string;
     size?: btnSize;
-    isPending: boolean
+    isPending: boolean;
 };
 
-export function SubmitButton({
+export const SubmitButton = ({
     className = '',
     text = 'submit',
     size = 'lg',
     isPending
-}: SubmitButtonProps) {
-
+}: SubmitButtonProps) => {
     return (
         <Button
             type="submit"
@@ -39,15 +39,14 @@ export function SubmitButton({
             )}
         </Button>
     );
-}
+};
 
-export function AuthSubmitButton({
+export const AuthSubmitButton = ({
     className = '',
     text = 'submit',
     size = 'lg',
     isPending
-}: SubmitButtonProps) {
-
+}: SubmitButtonProps) => {
     return (
         <Button
             type="submit"
@@ -65,9 +64,10 @@ export function AuthSubmitButton({
             )}
         </Button>
     );
-}
+};
 
 type actionType = 'edit' | 'delete';
+
 export const IconButton = ({ actionType }: { actionType: actionType }) => {
     const pending = true;
 
