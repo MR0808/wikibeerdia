@@ -85,8 +85,8 @@ export const {
             const existingAccount = await getAccountByUserId(existingUser.id);
 
             token.isOAuth = !!existingAccount;
-            token.firstName = existingUser.firstName as string;
-            token.lastName = existingUser.lastName as string;
+            token.firstName = (existingUser.firstName as string) || '';
+            token.lastName = (existingUser.lastName as string) || '';
             token.email = existingUser.email;
             token.role = existingUser.role;
             token.image = existingUser.image;
