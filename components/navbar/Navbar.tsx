@@ -1,21 +1,30 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { ExtendedUser } from '@/next-auth';
 
 import NavSearch from './NavSearch';
 import NavLinks from './NavLinks';
 import UserSection from './UserSection';
 import Logo from './Logo';
 import MobileMenu from './MobileMenu';
-import { UserProps } from '@/utils/types';
 
-const Navbar = ({ user }: UserProps) => {
+interface NavProps {
+    user?: ExtendedUser;
+    pathname: string;
+    pages: string[];
+}
+
+const Navbar = ({ user, pathname, pages }: NavProps) => {
     const [scrollActive, setScrollActive] = useState(false);
-    const [navbarShow, setNavbarShow] = useState(false);
 
     useEffect(() => {
-        window.addEventListener('scroll', () => {
-            setScrollActive(window.scrollY > 100);
-        });
+        if (pages.includes(pathname)) {
+            window.addEventListener('scroll', () => {
+                setScrollActive(window.scrollY > 100);
+            });
+        } else {
+            setScrollActive(true);
+        }
     }, []);
     return (
         <div

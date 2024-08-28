@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 import AuthWrapper from './AuthWrapper';
-import { FormInputIcon } from '@/components/form/FormInputIcon';
+import { FormInputAuth } from '@/components/form/FormInputAuth';
 import CheckboxInput from '@/components/form/CheckboxInput';
 import { AuthSubmitButton } from '@/components/form/Buttons';
 
@@ -19,7 +19,7 @@ const ForgotForm = () => {
         >
             <form className="mt-8 space-y-6">
                 <div className="relative">
-                    <FormInputIcon
+                    <FormInputAuth
                         label="Email"
                         name="email"
                         type="text"
@@ -27,7 +27,10 @@ const ForgotForm = () => {
                     />
                 </div>
                 <div>
-                    <AuthSubmitButton text="Send verification" isPending={true} />
+                    <AuthSubmitButton
+                        text="Send verification"
+                        isPending={true}
+                    />
                 </div>
             </form>
         </AuthWrapper>

@@ -1,10 +1,12 @@
-import { Button } from '../ui/button';
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { BsChevronDown } from 'react-icons/bs';
 import { FaRegCircleUser } from 'react-icons/fa6';
 import { FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
+import { useState } from 'react';
 
 import {
     Popover,
@@ -15,8 +17,15 @@ import profile from '@/public/images/profile.jpg';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserProps } from '@/utils/types';
 import { logout } from '@/actions/logout';
+import { Button } from '@/components/ui/button';
 
 const UserSection = ({ user }: UserProps) => {
+    const [open, setOpen] = useState(false);
+
+    const openMenu = () => {
+        setOpen(true);
+    };
+
     const onClick = () => {
         logout();
     };
@@ -24,7 +33,7 @@ const UserSection = ({ user }: UserProps) => {
         <>
             {user ? (
                 <>
-                    <Avatar>
+                    <Avatar onClick={openMenu} className="cursor-pointer">
                         <AvatarImage
                             src={user.image}
                             alt={`${user.firstName} ${user.lastName}`}
@@ -36,7 +45,7 @@ const UserSection = ({ user }: UserProps) => {
                             />
                         </AvatarFallback>
                     </Avatar>
-                    <Popover>
+                    <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                             <div className="relative flex items-center justify-between py-2 text-base font-medium text-dark group-hover:text-primary lg:ml-3 lg:mr-0 lg:inline-flex lg:pl-0 lg:group-hover:text-primary cursor-pointer">
                                 Account
@@ -65,7 +74,7 @@ const UserSection = ({ user }: UserProps) => {
                                 <div className="grid gap-2">
                                     <div className="grid items-center gap-4">
                                         <Link
-                                            href="/profile"
+                                            href="/account"
                                             className="flex w-full gap-2 items-center hover:text-primary hover:ml-2 hover:transition-all duration-300"
                                         >
                                             <FaRegCircleUser />
