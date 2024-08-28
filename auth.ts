@@ -66,10 +66,10 @@ export const {
             }
 
             if (session.user) {
-                session.user.firstName = token.firstName || '';
-                session.user.lastName = token.lastname || '';
+                session.user.firstName = token.firstName as string;
+                session.user.lastName = token.lastname as string;
                 session.user.email = token.email!;
-                session.user.email = token.image as string;
+                session.user.image = token.image as string;
                 session.user.isOAuth = token.isOAuth as boolean;
             }
 
@@ -85,8 +85,8 @@ export const {
             const existingAccount = await getAccountByUserId(existingUser.id);
 
             token.isOAuth = !!existingAccount;
-            token.firstName = existingUser.firstName;
-            token.lastName = existingUser.lastName;
+            token.firstName = existingUser.firstName as string;
+            token.lastName = existingUser.lastName as string;
             token.email = existingUser.email;
             token.role = existingUser.role;
             token.image = existingUser.image;
