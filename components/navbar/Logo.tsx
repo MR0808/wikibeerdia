@@ -4,8 +4,14 @@ import Image from 'next/image';
 import logo from '@/public/images/logo.png';
 import logoBlack from '@/public/images/logo-black.png';
 
-const Logo = ({ scrollActive }: { scrollActive: boolean }) => {
-    const logoUrl = scrollActive ? logoBlack : logo;
+const Logo = ({
+    scrollActive,
+    whiteLogo
+}: {
+    scrollActive: boolean;
+    whiteLogo: boolean;
+}) => {
+    const logoUrl = whiteLogo ? logo : scrollActive ? logoBlack : logo;
 
     return (
         <Link href="/" className="flex items-center space-x-2 sm:w-56">

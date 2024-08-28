@@ -11,14 +11,16 @@ import MobileMenu from './MobileMenu';
 interface NavProps {
     user?: ExtendedUser;
     pathname: string;
-    pages: string[];
+    pagesTransparent: string[];
+    pagesWhite: string[];
 }
 
-const Navbar = ({ user, pathname, pages }: NavProps) => {
+const Navbar = ({ user, pathname, pagesTransparent, pagesWhite }: NavProps) => {
     const [scrollActive, setScrollActive] = useState(false);
+    const [whiteLogo, setWhiteLogo] = useState(!pagesWhite.includes(pathname));
 
     useEffect(() => {
-        if (pages.includes(pathname)) {
+        if (pagesTransparent.includes(pathname)) {
             window.addEventListener('scroll', () => {
                 setScrollActive(window.scrollY > 100);
             });
@@ -26,17 +28,20 @@ const Navbar = ({ user, pathname, pages }: NavProps) => {
             setScrollActive(true);
         }
     }, []);
+
+    const bgClass = whiteLogo
+        ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
+        : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground';
+
     return (
         <div
             className={`fixed py-4 left-0 top-0 z-40 flex w-full items-center justify-center transition duration-500 ${
-                scrollActive
-                    ? ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
-                    : 'bg-transparent text-white'
+                scrollActive ? bgClass : 'bg-transparent text-white'
             }`}
         >
             <div className="container flex h-16 items-center space-x-4 sm:justify-between justify-between sm:space-x-0">
                 <div className="flex">
-                    <Logo scrollActive={scrollActive} />
+                    <Logo scrollActive={scrollActive} whiteLogo={whiteLogo} />
                 </div>
                 <div className="sm:flex gap-6 md:gap-10 hidden">
                     <NavLinks />

@@ -60,14 +60,20 @@ export const {
                 session.user.role = token.role as UserRole;
             }
 
+            if (token.firstName && session.user) {
+                session.user.firstName = token.firstName as string;
+            }
+
+            if (token.lastName && session.user) {
+                session.user.lastName = token.lastName as string;
+            }
+
             if (session.user) {
                 session.user.isTwoFactorEnabled =
                     token.isTwoFactorEnabled as boolean;
             }
 
             if (session.user) {
-                session.user.firstName = token.firstName as string;
-                session.user.lastName = token.lastname as string;
                 session.user.email = token.email!;
                 session.user.image = token.image as string;
                 session.user.isOAuth = token.isOAuth as boolean;
