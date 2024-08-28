@@ -1,4 +1,6 @@
 import NextAuth from 'next-auth';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 import authConfig from '@/auth.config';
 import {
@@ -49,3 +51,10 @@ export default auth((req) => {
 export const config = {
     matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)']
 };
+
+export function middleware(request: NextRequest) {
+    // Add a new header x-current-path which passes the path to downstream components
+    const headers = new Headers(request.headers);
+    headers.set('x-current-path', request.nextUrl.pathname);
+    return NextResponse.next({ headers });
+}
