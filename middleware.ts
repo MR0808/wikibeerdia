@@ -24,14 +24,15 @@ export default auth((req) => {
     headers.set('x-current-path', req.nextUrl.pathname);
 
     if (isApiAuthRoute) {
-        return NextResponse.next({ headers });
+        // return NextResponse.next({ headers });
+        return;
     }
 
     if (isAuthRoute) {
         if (isLoggedIn) {
             return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
-        return NextResponse.next({ headers });
+        return;
     }
 
     if (!isLoggedIn && !isPublicRoute) {
@@ -47,7 +48,7 @@ export default auth((req) => {
         );
     }
 
-    return NextResponse.next({ headers });
+    return;
 });
 
 // Optionally, don't invoke Middleware on some paths

@@ -10,6 +10,7 @@ const LoginPage = () => {
             backButtonString="Don't have an account yet?"
             backButtonHref="/register"
             backButtonLabel="Register"
+            showSocial={true}
         >
             <LoginForm />
         </AuthWrapper>

@@ -5,8 +5,9 @@ import { currentUser } from '@/lib/auth';
 
 const PublicLayout = async ({ children }: { children: React.ReactNode }) => {
     const user = await currentUser();
-    const headerList = headers();
-    const pathname = headerList.get('x-current-path') || '/';
+    const headersList = headers();
+    const url = new URL(headersList.get('referer') || '');
+    const pathname = url.pathname;
 
     const pagesTransparent = ['/'];
     const gapClass = !pagesTransparent.includes(pathname)

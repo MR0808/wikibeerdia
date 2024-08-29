@@ -7,10 +7,8 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { currentUser } from '@/lib/auth';
 
 const PersonalInfoPage = async () => {
-    const user = await currentUser();
     return (
         <div className="container flex flex-col h-16 sm:justify-between justify-between sm:space-x-0 mt-14">
             <Breadcrumb>

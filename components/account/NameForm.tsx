@@ -4,7 +4,7 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTransition, useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 
 import {
@@ -42,26 +42,28 @@ const NameForm = () => {
     });
 
     const cancel = () => {
+        form.setValue('firstName', user?.firstName!);
+        form.setValue('lastName', user?.firstName!);
         setEdit(!edit);
-        form.reset();
     };
 
     const onSubmit = (values: z.infer<typeof NameSchema>) => {
         startTransition(() => {
-            updateName(values).then((data) => {
-                console.log('data - ' + data);
-                update();
+            updateName(values)
+                .then((data) => {
+                    console.log(data);
 
-                if (data?.error) {
-                    setError(data.error);
-                }
+                    if (data?.error) {
+                        setError(data.error);
+                    }
 
-                if (data?.success) {
-                    form.reset();
-                    setEdit(false);
-                    toast.success('Name successfully updated');
-                }
-            });
+                    if (data?.success) {
+                        setEdit(false);
+                        update();
+                        toast.success('Name successfully updated');
+                    }
+                })
+                .catch(() => setError('Something went wrong!'));
         });
     };
 

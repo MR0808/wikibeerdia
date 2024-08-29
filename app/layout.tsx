@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { SessionProvider } from 'next-auth/react';
-import { ToastContainer } from 'react-toastify';
 import './globals.css';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/auth';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -23,9 +21,12 @@ export default async function RootLayout({
     return (
         <SessionProvider session={session}>
             <html lang="en" suppressHydrationWarning={true}>
-                <body className={inter.className} suppressHydrationWarning={true}>
-                    <ToastContainer position="top-center" />
+                <body
+                    className={inter.className}
+                    suppressHydrationWarning={true}
+                >
                     {children}
+                    <Toaster richColors />
                 </body>
             </html>
         </SessionProvider>

@@ -3,6 +3,7 @@
 import AuthHeader from './AuthHeader';
 import AuthContainer from './AuthContainer';
 import AuthBackButton from './AuthBackButton';
+import OauthButtons from './OauthButtons';
 
 interface AuthWrapperProps {
     children: React.ReactNode;
@@ -33,6 +34,7 @@ const AuthWrapper = ({
                     <div className="max-w-md w-full space-y-8 mr-10">
                         <AuthHeader heading={heading} subHeading={subHeading} />
                         {children}
+                        {showSocial && <OauthButtons />}
                         <AuthBackButton
                             backButtonString={backButtonString}
                             backButtonHref={backButtonHref}
