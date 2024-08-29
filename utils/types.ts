@@ -17,5 +17,5 @@ export interface UserProps {
 }
 
 export interface GenderProps {
-    gender?: Gender;
+    genderProp?: Gender;
 }

@@ -23,19 +23,17 @@ import {
 } from '@/components/ui/select';
 
 import { SubmitButton } from '@/components/form/Buttons';
-import useCurrentUser from '@/hooks/useCurrentUser';
 import FormError from '@/components/form/FormError';
 import { updateGender } from '@/actions/personalInfo';
 import { GenderSchema } from '@/schemas';
 import { Gender } from '@prisma/client';
 import { GenderProps } from '@/utils/types';
 
-const GenderForm = ({ gender }: GenderProps) => {
-    const user = useCurrentUser();
-
+const GenderForm = ({ genderProp }: GenderProps) => {
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
     const [isPending, startTransition] = useTransition();
+    const [gender, setGender] = useState(genderProp);
 
     const errorClass = 'pl-6';
 

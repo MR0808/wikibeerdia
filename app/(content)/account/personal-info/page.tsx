@@ -41,7 +41,7 @@ const PersonalInfoPage = async () => {
                     {/* Start Name Edit */}
                     <NameForm />
                     {/* End Name Edit */}
-                    <GenderForm gender={userDb?.gender || undefined} />
+                    <GenderForm genderProp={userDb?.gender || undefined} />
                 </div>
                 <div className="flex flex-col w-2/5">Profile Pic</div>
             </div>
