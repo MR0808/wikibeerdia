@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { UserRole } from '@prisma/client';
+import { Gender } from '@prisma/client';
 
 export const LoginSchema = z.object({
     email: z.string().email({
@@ -74,4 +74,8 @@ export const NameSchema = z.object({
     lastName: z.string().min(1, {
         message: 'Last name is required'
     })
+});
+
+export const GenderSchema = z.object({
+    gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'NOTSAY'])
 });

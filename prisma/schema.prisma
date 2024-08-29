@@ -14,6 +14,13 @@ enum UserRole {
   USER
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  NOTSAY
+}
+
 model User {
   id            String    @id @default(cuid())
   firstName     String?   
@@ -22,6 +29,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  gender        Gender?
   password      String?
   stateId       Int?
   countryId     Int? 

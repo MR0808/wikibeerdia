@@ -3,10 +3,11 @@
 import * as z from 'zod';
 
 import db from '@/lib/db';
-import { NameSchema } from '@/schemas';
+import { NameSchema, GenderSchema } from '@/schemas';
 import { getUserById } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
+import { Gender } from '@prisma/client';
 
 export const updateName = async (values: z.infer<typeof NameSchema>) => {
     const user = await currentUser();
@@ -43,3 +44,5 @@ export const updateName = async (values: z.infer<typeof NameSchema>) => {
 
     return { success: 'Name updated' };
 };
+
+export const updateGender = async (values: z.infer<typeof GenderSchema>) => {};

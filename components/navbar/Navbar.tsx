@@ -1,22 +1,20 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { ExtendedUser } from '@/next-auth';
+import { usePathname } from 'next/navigation';
 
 import NavSearch from './NavSearch';
 import NavLinks from './NavLinks';
 import UserSection from './UserSection';
 import Logo from './Logo';
 import MobileMenu from './MobileMenu';
+import { UserProps } from '@/utils/types';
 
-interface NavProps {
-    user?: ExtendedUser;
-    pathname: string;
-    pagesTransparent: string[];
-    pagesWhite: string[];
-}
-
-const Navbar = ({ user, pathname, pagesTransparent, pagesWhite }: NavProps) => {
+const Navbar = ({ user }: UserProps) => {
     const [scrollActive, setScrollActive] = useState(false);
+    const pathname = usePathname();
+    const pagesWhite = ['/'];
+    const pagesTransparent = ['/'];
+
     const [whiteLogo, setWhiteLogo] = useState(!pagesWhite.includes(pathname));
 
     useEffect(() => {

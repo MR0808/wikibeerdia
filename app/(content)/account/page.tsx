@@ -12,7 +12,7 @@ import {
 
 const AccountPage = () => {
     return (
-        <div className="container flex flex-col h-16 md:space-x-4 sm:justify-between justify-between sm:space-x-0 mt-14">
+        <div className="mt-36 container flex flex-col h-16 md:space-x-4 sm:justify-between justify-between sm:space-x-0">
             <div className="flex flex-col w-full justify-between">
                 <div className="flex flex-col gap-y-5">
                     <h1 className="text-4xl font-semibold">Account</h1>

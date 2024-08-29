@@ -1,3 +1,4 @@
+import GenderForm from '@/components/account/GenderForm';
 import NameForm from '@/components/account/NameForm';
 import {
     Breadcrumb,
@@ -8,9 +9,15 @@ import {
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 
+import { getUserById } from '@/data/user';
+import { currentUser } from '@/lib/auth';
+
 const PersonalInfoPage = async () => {
+    const user = await currentUser();
+    const userDb = await getUserById(user?.id!);
+
     return (
-        <div className="container flex flex-col h-16 sm:justify-between justify-between sm:space-x-0 mt-14">
+        <div className="container flex flex-col h-16 sm:justify-between justify-between sm:space-x-0 mt-36">
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
@@ -34,6 +41,7 @@ const PersonalInfoPage = async () => {
                     {/* Start Name Edit */}
                     <NameForm />
                     {/* End Name Edit */}
+                    <GenderForm gender={userDb?.gender || undefined} />
                 </div>
                 <div className="flex flex-col w-2/5">Profile Pic</div>
             </div>

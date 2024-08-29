@@ -1,4 +1,5 @@
 import { ExtendedUser } from '@/next-auth';
+import { Gender } from '@prisma/client';
 
 export type NavLink = {
     href: string;
@@ -13,4 +14,8 @@ export type actionFunction = (
 
 export interface UserProps {
     user?: ExtendedUser;
+}
+
+export interface GenderProps {
+    gender?: Gender;
 }

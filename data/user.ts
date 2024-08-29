@@ -1,4 +1,5 @@
 import db from '@/lib/db';
+import { Gender } from '@prisma/client';
 
 export const getUserByEmail = async (email: string) => {
     try {

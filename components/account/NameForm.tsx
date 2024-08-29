@@ -25,6 +25,7 @@ import { updateName } from '@/actions/personalInfo';
 
 const NameForm = () => {
     const user = useCurrentUser();
+    console.log(user);
 
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
@@ -42,8 +43,7 @@ const NameForm = () => {
     });
 
     const cancel = () => {
-        form.setValue('firstName', user?.firstName!);
-        form.setValue('lastName', user?.firstName!);
+        form.reset();
         setEdit(!edit);
     };
 
@@ -60,6 +60,7 @@ const NameForm = () => {
                     if (data?.success) {
                         setEdit(false);
                         update();
+                        form.reset(values);
                         toast.success('Name successfully updated');
                     }
                 })
@@ -85,11 +86,6 @@ const NameForm = () => {
                         className="space-y-6 w-full"
                         onSubmit={form.handleSubmit(onSubmit)}
                     >
-                        <input
-                            type="hidden"
-                            name="userEmail"
-                            value={user?.email!}
-                        />
                         <div className="flex flex-row gap-x-6">
                             <FormField
                                 control={form.control}
