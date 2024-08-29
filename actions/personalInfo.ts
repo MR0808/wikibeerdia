@@ -4,31 +4,40 @@ import * as z from 'zod';
 
 import db from '@/lib/db';
 import { NameSchema } from '@/schemas';
-import { getUserByEmail } from '@/data/user';
+import { getUserById } from '@/data/user';
+import { unstable_update as update } from '@/auth';
+import { currentUser } from '@/lib/auth';
 
-export const updateName = async (
-    values: z.infer<typeof NameSchema>,
-    email: string
-) => {
+export const updateName = async (values: z.infer<typeof NameSchema>) => {
+    const user = await currentUser();
+
+    if (!user) {
+        return { error: 'Unauthorized' };
+    }
+
+    const dbUser = await getUserById(user.id!);
+
+    if (!dbUser) {
+        return { error: 'Unauthorized' };
+    }
+
     const validatedFields = NameSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return { error: 'Invalid fields!' };
     }
 
-    const { firstName, lastName } = validatedFields.data;
-
-    const existingUser = await getUserByEmail(email!);
-
-    if (!existingUser) {
-        return { error: 'User does not exist!' };
-    }
-
-    await db.user.update({
-        where: { id: existingUser.id },
+    const updatedUser = await db.user.update({
+        where: { id: dbUser.id },
         data: {
-            firstName,
-            lastName
+            ...values
+        }
+    });
+
+    update({
+        user: {
+            firstName: updatedUser.firstName as string,
+            lastName: updatedUser.lastName as string
         }
     });
 

@@ -34,7 +34,7 @@ const PersonalInfoPage = async () => {
             <div className="flex flex-row gap-x-16">
                 <div className="flex flex-col w-3/5">
                     {/* Start Name Edit */}
-                    <NameForm user={user} />
+                    <NameForm />
                     {/* End Name Edit */}
                 </div>
                 <div className="flex flex-col w-2/5">Profile Pic</div>

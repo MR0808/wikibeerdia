@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTransition, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSession } from 'next-auth/react';
 
 import {
     Form,
@@ -15,20 +16,22 @@ import {
 } from '@/components/ui/form';
 
 import { SubmitButton } from '@/components/form/Buttons';
-import { UserProps } from '@/utils/types';
+import useCurrentUser from '@/hooks/useCurrentUser';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
 import { NameSchema } from '@/schemas';
 import { cn } from '@/lib/utils';
 import { updateName } from '@/actions/personalInfo';
 
-const NameForm = ({ user }: UserProps) => {
+const NameForm = () => {
+    const user = useCurrentUser();
+
     const [edit, setEdit] = useState(false);
-    const [error, setError] = useState<string | undefined>('');
+    const [error, setError] = useState<string | undefined>();
+    const { update } = useSession();
     const [isPending, startTransition] = useTransition();
 
     const errorClass = 'pl-6';
-    const userEmail = user?.email!;
 
     const form = useForm<z.infer<typeof NameSchema>>({
         resolver: zodResolver(NameSchema),
@@ -44,11 +47,10 @@ const NameForm = ({ user }: UserProps) => {
     };
 
     const onSubmit = (values: z.infer<typeof NameSchema>) => {
-        setError('');
-
         startTransition(() => {
-            updateName(values, userEmail).then((data) => {
+            updateName(values).then((data) => {
                 console.log('data - ' + data);
+                update();
 
                 if (data?.error) {
                     setError(data.error);
