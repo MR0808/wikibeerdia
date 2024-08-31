@@ -79,3 +79,8 @@ export const NameSchema = z.object({
 export const GenderSchema = z.object({
     gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'NOTSAY'])
 });
+
+export const LocationSchema = z.object({
+    country: z.number({ message: 'Country is required' }),
+    state: z.optional(z.number({ message: 'State is required' }))
+});

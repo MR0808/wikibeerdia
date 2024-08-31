@@ -25,8 +25,6 @@ import { updateName } from '@/actions/personalInfo';
 
 const NameForm = () => {
     const user = useCurrentUser();
-    console.log(user);
-
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
     const { update } = useSession();
@@ -51,8 +49,6 @@ const NameForm = () => {
         startTransition(() => {
             updateName(values)
                 .then((data) => {
-                    console.log(data);
-
                     if (data?.error) {
                         setError(data.error);
                     }

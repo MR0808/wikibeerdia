@@ -64,7 +64,7 @@ const UserSection = ({ user }: UserProps) => {
                                             href="/profile"
                                             className="flex w-full gap-2 items-center hover:text-primary hover:ml-2 hover:transition-all duration-300"
                                         >
-                                            <FaCog />
+                                            <FaRegCircleUser />
                                             <div className="block font-sans text-md font-normal leading-normal text-inherit antialiased">
                                                 My Profile
                                             </div>
@@ -77,7 +77,7 @@ const UserSection = ({ user }: UserProps) => {
                                             href="/account"
                                             className="flex w-full gap-2 items-center hover:text-primary hover:ml-2 hover:transition-all duration-300"
                                         >
-                                            <FaRegCircleUser />
+                                            <FaCog />
                                             <div className="block font-sans text-md font-normal leading-normal text-inherit antialiased">
                                                 Account
                                             </div>

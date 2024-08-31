@@ -1,5 +1,5 @@
 import { ExtendedUser } from '@/next-auth';
-import { Gender } from '@prisma/client';
+import { Country, Gender, State } from '@prisma/client';
 
 export type NavLink = {
     href: string;
@@ -18,4 +18,11 @@ export interface UserProps {
 
 export interface GenderProps {
     genderProp?: Gender;
+}
+
+export interface LocationProps {
+    stateProp?: State;
+    countryProp?: Country;
+    countries: Country[];
+    states: State[];
 }

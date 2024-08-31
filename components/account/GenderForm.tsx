@@ -19,7 +19,9 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue
+    SelectValue,
+    SelectGroup,
+    SelectLabel
 } from '@/components/ui/select';
 
 import { SubmitButton } from '@/components/form/Buttons';
@@ -28,19 +30,31 @@ import { updateGender } from '@/actions/personalInfo';
 import { GenderSchema } from '@/schemas';
 import { Gender } from '@prisma/client';
 import { GenderProps } from '@/utils/types';
+import { cn } from '@/lib/utils';
+
+const genderLabels: { value: Gender; label: string }[] = [
+    { value: Gender.MALE, label: 'Male' },
+    { value: Gender.FEMALE, label: 'Female' },
+    { value: Gender.OTHER, label: 'Other' },
+    { value: Gender.NOTSAY, label: 'Rather not say' }
+];
 
 const GenderForm = ({ genderProp }: GenderProps) => {
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
     const [isPending, startTransition] = useTransition();
-    const [gender, setGender] = useState(genderProp);
+    const [gender, setGender] = useState(
+        genderProp
+            ? genderLabels.find((g) => g.value === genderProp!)
+            : undefined
+    );
 
     const errorClass = 'pl-6';
 
     const form = useForm<z.infer<typeof GenderSchema>>({
         resolver: zodResolver(GenderSchema),
         defaultValues: {
-            gender: gender || undefined
+            gender: gender?.value || undefined
         }
     });
 
@@ -53,18 +67,17 @@ const GenderForm = ({ genderProp }: GenderProps) => {
         startTransition(() => {
             updateGender(values)
                 .then((data) => {
-                    console.log(data);
-
-                    // if (data?.error) {
-                    //     setError(data.error);
-                    // }
-
-                    // if (data?.success) {
-                    //     setEdit(false);
-                    //     update();
-                    //     form.reset(values);
-                    //     toast.success('Name successfully updated');
-                    // }
+                    if (data?.error) {
+                        setError(data.error);
+                    }
+                    if (data?.success) {
+                        setEdit(false);
+                        setGender(
+                            genderLabels.find((g) => g.value === values.gender)
+                        );
+                        form.reset(values);
+                        toast.success('Gender successfully updated');
+                    }
                 })
                 .catch(() => setError('Something went wrong!'));
         });
@@ -93,39 +106,50 @@ const GenderForm = ({ genderProp }: GenderProps) => {
                                 control={form.control}
                                 name="gender"
                                 render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className={cn('w-full')}>
                                         <Select
                                             disabled={isPending}
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger
+                                                    className={cn(
+                                                        'w-full rounded-xl py-3 px-6 text-sm font-normal h-12'
+                                                    )}
+                                                >
                                                     <SelectValue placeholder="Select a gender" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value={Gender.MALE}>
-                                                    Male
-                                                </SelectItem>
-                                                <SelectItem
-                                                    value={Gender.FEMALE}
-                                                >
-                                                    Female
-                                                </SelectItem>
-                                                <SelectItem
-                                                    value={Gender.OTHER}
-                                                >
-                                                    Other
-                                                </SelectItem>
-                                                <SelectItem
-                                                    value={Gender.NOTSAY}
-                                                >
-                                                    Rather not say
-                                                </SelectItem>
+                                                <SelectGroup>
+                                                    <SelectLabel>
+                                                        Genders
+                                                    </SelectLabel>
+                                                    <SelectItem
+                                                        value={Gender.MALE}
+                                                    >
+                                                        Male
+                                                    </SelectItem>
+                                                    <SelectItem
+                                                        value={Gender.FEMALE}
+                                                    >
+                                                        Female
+                                                    </SelectItem>
+                                                    <SelectItem
+                                                        value={Gender.OTHER}
+                                                    >
+                                                        Other
+                                                    </SelectItem>
+                                                    <SelectItem
+                                                        value={Gender.NOTSAY}
+                                                    >
+                                                        Rather not say
+                                                    </SelectItem>
+                                                </SelectGroup>
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
+                                        <FormMessage className={errorClass} />
                                     </FormItem>
                                 )}
                             />
@@ -137,7 +161,7 @@ const GenderForm = ({ genderProp }: GenderProps) => {
                 </Form>
             ) : (
                 <div className={`${!gender && 'italic'} text-base font-normal`}>
-                    {gender ? `${gender}` : 'Not specified'}
+                    {gender ? `${gender.label}` : 'Not specified'}
                 </div>
             )}
         </div>

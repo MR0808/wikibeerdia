@@ -33,6 +33,7 @@ model User {
   password      String?
   stateId       Int?
   countryId     Int? 
+  dateOfBirth   DateTime?
   role          UserRole @default(USER)
   accounts      Account[]
   isTwoFactorEnabled Boolean @default(false)
@@ -110,6 +111,6 @@ model State {
   id        Int    @id @default(autoincrement())
   isoCode   String
   name      String
-  country   Country @relation(fields: [countryId], references: [id])
+  country   Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId Int
 }
