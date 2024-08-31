@@ -25,6 +25,7 @@ const PersonalInfoPage = async () => {
     const userDb = await getUserById(user?.id!);
     const countries = await getAllCountries();
     const defaultCountry = await getCountryByName('Australia');
+    const initialValueProp = userDb?.countryId ? true : false;
     const states = userDb?.countryId
         ? await getStatesByCountry(userDb.countryId)
         : await getStatesByCountry(defaultCountry?.id!);
@@ -65,6 +66,7 @@ const PersonalInfoPage = async () => {
                         stateProp={state || undefined}
                         countries={countries!}
                         states={states!}
+                        initialValueProp={initialValueProp}
                     />
                 </div>
                 <div className="flex flex-col w-2/5">Profile Pic</div>

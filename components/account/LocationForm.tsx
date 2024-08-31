@@ -43,9 +43,11 @@ const LocationForm = ({
     stateProp,
     countryProp,
     countries,
-    states
+    states,
+    initialValueProp
 }: LocationProps) => {
     const [edit, setEdit] = useState(false);
+    const [initialValue, setInitialValue] = useState(initialValueProp);
     const [error, setError] = useState<string | undefined>();
     const [isPending, startTransition] = useTransition();
     const [country, setCountry] = useState(countryProp);
@@ -98,8 +100,9 @@ const LocationForm = ({
                         setEdit(false);
                         setCountry(data.country!);
                         setState(data.state);
+                        setInitialValue(true);
                         form.reset(values);
-                        toast.success('Gender successfully updated');
+                        toast.success('Location successfully updated');
                     }
                 })
                 .catch(() => setError('Something went wrong!'));
@@ -251,10 +254,11 @@ const LocationForm = ({
                                                         }
                                                         className="w-full rounded-xl py-3 px-6 text-sm font-normal h-12 justify-between"
                                                     >
-                                                        {field.value
+                                                        {field.value &&
+                                                        field.value !== -1
                                                             ? statesList.find(
-                                                                  (country) =>
-                                                                      country.id ===
+                                                                  (state) =>
+                                                                      state.id ===
                                                                       field.value
                                                               )?.name
                                                             : 'Select State...'}
@@ -341,9 +345,15 @@ const LocationForm = ({
                     </form>
                 </Form>
             ) : (
-                <div className={`${!state && 'italic'} text-base font-normal`}>
-                    {country && state
-                        ? `${state.name} ${country.name}`
+                <div
+                    className={`${
+                        !initialValue && 'italic'
+                    } text-base font-normal`}
+                >
+                    {initialValue
+                        ? state
+                            ? `${state.name}, ${country?.name}`
+                            : country?.name
                         : 'Not specified'}
                 </div>
             )}

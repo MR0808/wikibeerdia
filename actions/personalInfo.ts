@@ -89,28 +89,32 @@ export const updateLocation = async (
         return { error: 'Unauthorized' };
     }
 
-    const validatedFields = GenderSchema.safeParse(values);
+    const validatedFields = LocationSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return { error: 'Invalid fields!' };
     }
 
     let state: State | undefined;
+    let stateDb: number | null | undefined;
 
     if (values.state === -1) {
-        values = { country: values.country, state: undefined };
         state = undefined;
+        stateDb = null;
     } else {
         const tempState = await db.state.findFirst({
             where: { id: values.state }
         });
         state = tempState ? tempState : undefined;
+        stateDb = values.state;
     }
 
+    console.log(values);
     await db.user.update({
         where: { id: dbUser.id },
         data: {
-            ...values
+            countryId: values.country,
+            stateId: stateDb
         }
     });
 

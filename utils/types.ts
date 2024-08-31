@@ -25,4 +25,5 @@ export interface LocationProps {
     countryProp?: Country;
     countries: Country[];
     states: State[];
+    initialValueProp: boolean;
 }

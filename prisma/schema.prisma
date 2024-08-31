@@ -25,7 +25,7 @@ model User {
   id            String    @id @default(cuid())
   firstName     String?   
   lastName      String?
-  displayName   String?
+  displayName   String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
