@@ -70,7 +70,6 @@ const LocationForm = ({
     useEffect(() => {
         const fetchStates = async () => {
             try {
-                console.log(form.getValues('country'));
                 const result = await getStatesByCountry(
                     form.getValues('country')
                 );

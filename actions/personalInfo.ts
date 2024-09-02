@@ -1,6 +1,7 @@
 'use server';
 
 import * as z from 'zod';
+import { add } from 'date-fns';
 
 import db from '@/lib/db';
 import { NameSchema, GenderSchema, LocationSchema, DateOfBirthSchema } from '@/schemas';
@@ -138,18 +139,19 @@ export const updateDateOfBirth = async (values: z.infer<typeof DateOfBirthSchema
         return { error: 'Unauthorized' };
     }
 
-    // const validatedFields = GenderSchema.safeParse(values);
+    const validatedFields = DateOfBirthSchema.safeParse(values);
 
-    // if (!validatedFields.success) {
-    //     return { error: 'Invalid fields!' };
-    // }
+    if (!validatedFields.success) {
+        return { error: 'Invalid fields!' };
+    }
+    values.dateOfBirth = add(values.dateOfBirth, {days: 1})
 
-    // await db.user.update({
-    //     where: { id: dbUser.id },
-    //     data: {
-    //         ...values
-    //     }
-    // });
+    await db.user.update({
+        where: { id: dbUser.id },
+        data: {
+            ...values
+        }
+    });
 
     return { success: 'Date of birth updated' };
 };

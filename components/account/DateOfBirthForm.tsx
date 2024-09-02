@@ -1,7 +1,7 @@
 'use client';
 
 import * as z from 'zod';
-import { format, sub } from "date-fns"
+import { format, sub, parseISO } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -30,15 +30,16 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
     const [isPending, startTransition] = useTransition();
-    const [dateOfBirth, setDateOfBirth] = useState(dateOfBirthProp || undefined);
-    const [date, setDate] = useState(sub(new Date(), {years:18}))
+    const [isOpen, setIsOpen] = useState(false);
+    const [date, setDate] = useState<Date | null>(dateOfBirthProp || null);
+    const [dateOfBirth, setDateOfBirth] = useState(new Date(date!.valueOf() + date!.getTimezoneOffset() * 60 * 1000));
 
     const errorClass = 'pl-6';
 
     const form = useForm<z.infer<typeof DateOfBirthSchema>>({
         resolver: zodResolver(DateOfBirthSchema),
         defaultValues: {
-            dateOfBirth: dateOfBirth || undefined
+            dateOfBirth: date || undefined
         }
     });
 
@@ -48,22 +49,21 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
     };
 
     const onSubmit = (values: z.infer<typeof DateOfBirthSchema>) => {
-        // startTransition(() => {
-        //     updateDateOfBirth(values)
-        //         .then((data) => {
-        //             if (data?.error) {
-        //                 setError(data.error);
-        //             }
-        //             if (data?.success) {
-        //                 setEdit(false);
-        //                 setDateOfBirth(values.dateOfBirth)
-        //                 );
-        //                 form.reset(values);
-        //                 toast.success('Gender successfully updated');
-        //             }
-        //         })
-        //         .catch(() => setError('Something went wrong!'));
-        // });
+        startTransition(() => {
+            updateDateOfBirth(values)
+                .then((data) => {
+                    if (data?.error) {
+                        setError(data.error);
+                    }
+                    if (data?.success) {
+                        setEdit(false);
+                        setDateOfBirth(values.dateOfBirth)
+                        form.reset(values);
+                        toast.success('Date of birth successfully updated');
+                    }
+                })
+                .catch(() => setError('Something went wrong!'));
+        });
     };
 
     return (
@@ -89,33 +89,46 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
                                 control={form.control}
                                 name="dateOfBirth"
                                 render={({ field }) => (
-                                    <FormItem className={cn('w-full')}>
-                                        
-                                            <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <FormControl>
-                                                        <Button
-                                                        variant={"outline"}
-                                                        className={cn("w-[240px] justify-start text-left font-normal", !field.value && "text-muted-foreground")}
-                                                        >
-                                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                                                        </Button>
-                                                    </FormControl>
-                                                </PopoverTrigger>
-                                                <PopoverContent align="start" className=" w-auto p-0">
-                                                    <Calendar
-                                                    mode="single"
-                                                    captionLayout="dropdown-buttons"
-                                                    selected={field.value}
-                                                    onSelect={field.onChange}
-                                                    fromYear={1900}
-                                                    toYear={date.getFullYear()}
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                        
-                                        <FormMessage className={errorClass} />
+                                    <FormItem className="flex flex-col w-full">
+                                    <Popover open={isOpen} onOpenChange={setIsOpen}>
+                                        <PopoverTrigger asChild className='h-12'>
+                                        <FormControl>
+                                            <Button
+                                            variant={"outline"}
+                                            className={cn(
+                                                "w-full font-normal",
+                                                !field.value && "text-muted-foreground"
+                                            )}
+                                            >
+                                            {field.value ? (
+                                                `${format(field.value, 'do MMMM, yyyy')}`
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                            </Button>
+                                        </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            captionLayout="dropdown"
+                                            selected={date || field.value}
+                                            onSelect={(selectedDate) => {
+                                            setDate(selectedDate!);
+                                            field.onChange(selectedDate);
+                                            }}
+                                            onDayClick={() => setIsOpen(false)}
+                                            fromYear={1900}
+                                            toYear={sub(new Date(), {years:18}).getFullYear()}
+                                            disabled={(date) =>
+                                            Number(date) > Number(sub(new Date(), {years:18}))
+                                            }
+                                            defaultMonth={date || sub(new Date(), {years:18})}
+                                        />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage className={errorClass} />
                                     </FormItem>
                                 )}
                             />
@@ -127,7 +140,7 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
                 </Form>
             ) : (
                 <div className={`${!dateOfBirth && 'italic'} text-base font-normal`}>
-                    {dateOfBirth ? `${dateOfBirth}` : 'Not specified'}
+                    {dateOfBirth ? `${format(dateOfBirth, 'do MMMM, yyyy')}` : 'Not specified'}
                 </div>
             )}
         </div>
