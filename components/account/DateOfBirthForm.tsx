@@ -7,6 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTransition, useState } from 'react';
 import { toast } from 'sonner';
+import { enAU } from "date-fns/locale";
+import { toZonedTime } from "date-fns-tz";
 
 import {
     Form,
@@ -17,7 +19,7 @@ import {
 } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
-import { Calendar } from '@/components/form/DatePicker';
+import { Calendar } from '@/components/ui/calendar';
 
 import { SubmitButton } from '@/components/form/Buttons';
 import FormError from '@/components/form/FormError';
@@ -32,7 +34,6 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
     const [isPending, startTransition] = useTransition();
     const [isOpen, setIsOpen] = useState(false);
     const [date, setDate] = useState<Date | null>(dateOfBirthProp || null);
-    const [dateOfBirth, setDateOfBirth] = useState(new Date(date!.valueOf() + date!.getTimezoneOffset() * 60 * 1000));
 
     const errorClass = 'pl-6';
 
@@ -49,6 +50,7 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
     };
 
     const onSubmit = (values: z.infer<typeof DateOfBirthSchema>) => {
+        console.log('values', values)
         startTransition(() => {
             updateDateOfBirth(values)
                 .then((data) => {
@@ -57,7 +59,7 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
                     }
                     if (data?.success) {
                         setEdit(false);
-                        setDateOfBirth(values.dateOfBirth)
+                        setDate(values.dateOfBirth)
                         form.reset(values);
                         toast.success('Date of birth successfully updated');
                     }
@@ -112,6 +114,7 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
                                         <PopoverContent className="w-auto p-0" align="start">
                                         <Calendar
                                             mode="single"
+                                            locale={enAU}
                                             captionLayout="dropdown"
                                             selected={date || field.value}
                                             onSelect={(selectedDate) => {
@@ -139,8 +142,8 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
                     </form>
                 </Form>
             ) : (
-                <div className={`${!dateOfBirth && 'italic'} text-base font-normal`}>
-                    {dateOfBirth ? `${format(dateOfBirth, 'do MMMM, yyyy')}` : 'Not specified'}
+                <div className={`${!date && 'italic'} text-base font-normal`}>
+                    {date ? `${format(toZonedTime(date, "Australia/Melbourne"), 'do MMMM, yyyy')}` : 'Not specified'}
                 </div>
             )}
         </div>
