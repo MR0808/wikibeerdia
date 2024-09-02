@@ -182,3 +182,7 @@
         border-left: 25rem solid transparent;
     }
 }
+
+.rdp-vhidden {
+    @apply hidden;
+  }

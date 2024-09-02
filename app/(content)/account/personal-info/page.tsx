@@ -1,5 +1,7 @@
 import GenderForm from '@/components/account/GenderForm';
 import NameForm from '@/components/account/NameForm';
+import LocationForm from '@/components/account/LocationForm';
+import DateOfBirthForm from '@/components/account/DateOfBirthForm';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -18,7 +20,7 @@ import {
     getStateById,
     getCountryById
 } from '@/data/location';
-import LocationForm from '@/components/account/LocationForm';
+
 
 const PersonalInfoPage = async () => {
     const user = await currentUser();
@@ -68,6 +70,7 @@ const PersonalInfoPage = async () => {
                         states={states!}
                         initialValueProp={initialValueProp}
                     />
+                    <DateOfBirthForm dateOfBirthProp={userDb?.dateOfBirth || undefined} />
                 </div>
                 <div className="flex flex-col w-2/5">Profile Pic</div>
             </div>

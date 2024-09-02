@@ -27,3 +27,7 @@ export interface LocationProps {
     states: State[];
     initialValueProp: boolean;
 }
+
+export interface DateOfBirthProps {
+    dateOfBirthProp?: Date;
+}

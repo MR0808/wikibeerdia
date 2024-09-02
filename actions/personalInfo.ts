@@ -3,11 +3,11 @@
 import * as z from 'zod';
 
 import db from '@/lib/db';
-import { NameSchema, GenderSchema, LocationSchema } from '@/schemas';
+import { NameSchema, GenderSchema, LocationSchema, DateOfBirthSchema } from '@/schemas';
 import { getUserById } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
-import { Gender, State } from '@prisma/client';
+import { State } from '@prisma/client';
 
 export const updateName = async (values: z.infer<typeof NameSchema>) => {
     const user = await currentUser();
@@ -123,4 +123,33 @@ export const updateLocation = async (
     });
 
     return { success: 'Location updated', country, state };
+};
+
+export const updateDateOfBirth = async (values: z.infer<typeof DateOfBirthSchema>) => {
+    const user = await currentUser();
+
+    if (!user) {
+        return { error: 'Unauthorized' };
+    }
+
+    const dbUser = await getUserById(user.id!);
+
+    if (!dbUser) {
+        return { error: 'Unauthorized' };
+    }
+
+    // const validatedFields = GenderSchema.safeParse(values);
+
+    // if (!validatedFields.success) {
+    //     return { error: 'Invalid fields!' };
+    // }
+
+    // await db.user.update({
+    //     where: { id: dbUser.id },
+    //     data: {
+    //         ...values
+    //     }
+    // });
+
+    return { success: 'Date of birth updated' };
 };
