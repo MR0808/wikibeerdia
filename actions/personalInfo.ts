@@ -144,7 +144,8 @@ export const updateDateOfBirth = async (values: z.infer<typeof DateOfBirthSchema
     if (!validatedFields.success) {
         return { error: 'Invalid fields!' };
     }
-    values.dateOfBirth = add(values.dateOfBirth, {days: 1})
+    // values.dateOfBirth = add(values.dateOfBirth, {days: 1})
+    console.log(values)
 
     await db.user.update({
         where: { id: dbUser.id },

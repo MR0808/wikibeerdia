@@ -85,7 +85,9 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker, DropdownProps } from "react-day-picker";
+import { DropdownProps } from "react-day-picker";
+import { DayPicker } from 'react-day-picker/utc';
+import { UTCDate } from "@date-fns/utc";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
