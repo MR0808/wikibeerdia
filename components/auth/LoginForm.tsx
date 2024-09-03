@@ -120,11 +120,11 @@ const LoginForm = () => {
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                        <CheckboxInput
+                        {/* <CheckboxInput
                             label="Remember Me"
                             name="rememberMe"
                             defaultChecked={true}
-                        />
+                        /> */}&nbsp;
                     </div>
                     <div className="text-sm">
                         <Link
