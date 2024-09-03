@@ -116,25 +116,3 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
         </Button>
     );
 };
-
-export const CheckSubmitButton = ({
-    isPending,
-    disabledCheck = false
-}: SubmitButtonProps) => {
-    return (
-        <Button
-            type="button"
-            disabled={isPending || disabledCheck}
-            className={cn('capitalize w-full h-12')}
-        >
-            {isPending ? (
-                <>
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait...
-                </>
-            ) : (
-                'Check'
-            )}
-        </Button>
-    );
-};
