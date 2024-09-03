@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -15,17 +16,21 @@ const Navbar = ({ user }: UserProps) => {
     const pathname = usePathname();
 
     const [whiteLogo, setWhiteLogo] = useState(!pagesWhite.includes(pathname));
-    const [bgClass, setBgClass] = useState(whiteLogo
-        ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
-        : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground')
+    const [bgClass, setBgClass] = useState(
+        whiteLogo
+            ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
+            : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
+    );
 
     useEffect(() => {
         setWhiteLogo(!pagesWhite.includes(pathname));
-        setBgClass(whiteLogo
-            ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
-            : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground')
-            console.log(bgClass)
-    }, [pathname])
+        setBgClass(
+            whiteLogo
+                ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
+                : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
+        );
+        console.log(bgClass);
+    }, [pathname]);
 
     useEffect(() => {
         if (pagesTransparent.includes(pathname)) {

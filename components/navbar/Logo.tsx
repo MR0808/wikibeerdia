@@ -11,7 +11,6 @@ const Logo = ({
     scrollActive: boolean;
     whiteLogo: boolean;
 }) => {
-
     const logoUrl = whiteLogo ? logo : scrollActive ? logoBlack : logo;
 
     return (

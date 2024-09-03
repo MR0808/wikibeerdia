@@ -20,7 +20,6 @@ import {
     FormInputAuth,
     PasswordInputAuth
 } from '@/components/form/FormInputAuth';
-import CheckboxInput from '@/components/form/CheckboxInput';
 import { AuthSubmitButton } from '@/components/form/Buttons';
 import { LoginSchema } from '@/schemas';
 import login from '@/actions/login';
@@ -44,13 +43,15 @@ const LoginForm = () => {
         resolver: zodResolver(LoginSchema),
         defaultValues: {
             email: '',
-            password: ''
+            password: '',
+            rememberMe: true
         }
     });
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError('');
         setSuccess('');
+        console.log(values);
 
         startTransition(() => {
             login(values, callbackUrl)
@@ -119,13 +120,34 @@ const LoginForm = () => {
                     />
                 </div>
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                        {/* <CheckboxInput
-                            label="Remember Me"
+                    {/* <div className="flex items-center">
+                        <FormField
+                            control={form.control}
                             name="rememberMe"
-                            defaultChecked={true}
-                        /> */}&nbsp;
-                    </div>
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <div className="flex items-center space-x-2">
+                                            <Checkbox
+                                                name="rememberMe"
+                                                id="rememberMe"
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                            <label
+                                                htmlFor="rememberMe"
+                                                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize"
+                                            >
+                                                Remember Me
+                                            </label>
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage className={errorClass} />
+                                </FormItem>
+                            )}
+                        />
+                    </div> */}
+                    &nbsp;
                     <div className="text-sm">
                         <Link
                             href="/forgot"

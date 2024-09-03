@@ -1,8 +1,9 @@
-import GenderForm from '@/components/account/GenderForm';
-import DisplayNameForm from '@/components/account/DisplayNameForm';
-import NameForm from '@/components/account/NameForm';
-import LocationForm from '@/components/account/LocationForm';
-import DateOfBirthForm from '@/components/account/DateOfBirthForm';
+import GenderForm from '@/components/account/personal-info/GenderForm';
+import DisplayNameForm from '@/components/account/personal-info/DisplayNameForm';
+import NameForm from '@/components/account/personal-info/NameForm';
+import LocationForm from '@/components/account/personal-info/LocationForm';
+import DateOfBirthForm from '@/components/account/personal-info/DateOfBirthForm';
+import ProfilePictureForm from '@/components/account/personal-info/ProfilePictureForm';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -70,9 +71,13 @@ const PersonalInfoPage = async () => {
                         states={states!}
                         initialValueProp={initialValueProp}
                     />
-                    <DateOfBirthForm dateOfBirthProp={userDb?.dateOfBirth || undefined} />
+                    <DateOfBirthForm
+                        dateOfBirthProp={userDb?.dateOfBirth || undefined}
+                    />
                 </div>
-                <div className="flex flex-col w-2/5">Profile Pic</div>
+                <div className="flex flex-col w-2/5">
+                    <ProfilePictureForm />
+                </div>
             </div>
         </div>
     );

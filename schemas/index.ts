@@ -1,5 +1,4 @@
 import * as z from 'zod';
-import { Gender } from '@prisma/client';
 
 export const LoginSchema = z.object({
     email: z.string().email({
@@ -8,7 +7,8 @@ export const LoginSchema = z.object({
     password: z.string().min(1, {
         message: 'Password is required'
     }),
-    code: z.optional(z.string())
+    code: z.optional(z.string()),
+    rememberMe: z.optional(z.boolean())
 });
 
 export const RegisterSchema = z
@@ -83,7 +83,9 @@ export const NameSchema = z.object({
 });
 
 export const GenderSchema = z.object({
-    gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'NOTSAY'], {message: 'Gender is required'})
+    gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'NOTSAY'], {
+        message: 'Gender is required'
+    })
 });
 
 export const LocationSchema = z.object({
@@ -92,5 +94,11 @@ export const LocationSchema = z.object({
 });
 
 export const DateOfBirthSchema = z.object({
-    dateOfBirth: z.date({message: 'Date of birth is required'})
+    dateOfBirth: z.date({ message: 'Date of birth is required' })
+});
+
+export const ProfilePictureSchema = z.object({
+    image: z.string().min(1, {
+        message: 'Profile picture is required'
+    })
 });

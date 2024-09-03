@@ -3,13 +3,22 @@
 import * as z from 'zod';
 
 import db from '@/lib/db';
-import { NameSchema, GenderSchema, LocationSchema, DateOfBirthSchema, DisplayNameSchema } from '@/schemas';
+import {
+    NameSchema,
+    GenderSchema,
+    LocationSchema,
+    DateOfBirthSchema,
+    DisplayNameSchema,
+    ProfilePictureSchema
+} from '@/schemas';
 import { getUserById } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
 import { State } from '@prisma/client';
 
-export const updateDisplayName = async (values: z.infer<typeof DisplayNameSchema>) => {
+export const updateDisplayName = async (
+    values: z.infer<typeof DisplayNameSchema>
+) => {
     const user = await currentUser();
 
     if (!user) {
@@ -42,7 +51,7 @@ export const updateDisplayName = async (values: z.infer<typeof DisplayNameSchema
     });
 
     return { success: 'Display name updated' };
-}
+};
 
 export const updateName = async (values: z.infer<typeof NameSchema>) => {
     const user = await currentUser();
@@ -160,7 +169,9 @@ export const updateLocation = async (
     return { success: 'Location updated', country, state };
 };
 
-export const updateDateOfBirth = async (values: z.infer<typeof DateOfBirthSchema>) => {
+export const updateDateOfBirth = async (
+    values: z.infer<typeof DateOfBirthSchema>
+) => {
     const user = await currentUser();
 
     if (!user) {
@@ -179,7 +190,7 @@ export const updateDateOfBirth = async (values: z.infer<typeof DateOfBirthSchema
         return { error: 'Invalid fields!' };
     }
     // values.dateOfBirth = add(values.dateOfBirth, {days: 1})
-    console.log(values)
+    console.log(values);
 
     await db.user.update({
         where: { id: dbUser.id },
@@ -190,3 +201,7 @@ export const updateDateOfBirth = async (values: z.infer<typeof DateOfBirthSchema
 
     return { success: 'Date of birth updated' };
 };
+
+export const updateProfilePicture = async (
+    values: z.infer<typeof ProfilePictureSchema>
+) => {};

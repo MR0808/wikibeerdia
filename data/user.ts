@@ -1,4 +1,4 @@
-'use server'
+'use server';
 
 import {
     uniqueUsernameGenerator,
@@ -16,9 +16,9 @@ const config: Config = {
 import db from '@/lib/db';
 
 export const getUserByEmail = async (email: string) => {
-    email = email.toLocaleLowerCase()
+    email = email.toLocaleLowerCase();
     try {
-        const user = await db.user.findFirst({ where: { email } });
+        let user = await db.user.findFirst({ where: { email } });
 
         return user;
     } catch {
@@ -55,9 +55,11 @@ export const generateDisplayName = async () => {
 
 export const checkDisplayName = async (displayName: string) => {
     try {
-        const user = await db.user.findFirst({ where: { displayName: {  equals: displayName, mode: 'insensitive' } } });     
-        return user ? false : true;   
+        const user = await db.user.findFirst({
+            where: { displayName: { equals: displayName, mode: 'insensitive' } }
+        });
+        return user ? false : true;
     } catch {
         return null;
     }
-}
+};

@@ -15,7 +15,6 @@ import {
     generateTwoFactorToken
 } from '@/lib/tokens';
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
-import { truncate } from 'fs/promises';
 
 export const login = async (
     values: z.infer<typeof LoginSchema>,
