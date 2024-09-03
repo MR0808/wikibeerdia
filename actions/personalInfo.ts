@@ -1,14 +1,48 @@
 'use server';
 
 import * as z from 'zod';
-import { add } from 'date-fns';
 
 import db from '@/lib/db';
-import { NameSchema, GenderSchema, LocationSchema, DateOfBirthSchema } from '@/schemas';
+import { NameSchema, GenderSchema, LocationSchema, DateOfBirthSchema, DisplayNameSchema } from '@/schemas';
 import { getUserById } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
 import { State } from '@prisma/client';
+
+export const updateDisplayName = async (values: z.infer<typeof DisplayNameSchema>) => {
+    const user = await currentUser();
+
+    if (!user) {
+        return { error: 'Unauthorized' };
+    }
+
+    const dbUser = await getUserById(user.id!);
+
+    if (!dbUser) {
+        return { error: 'Unauthorized' };
+    }
+
+    const validatedFields = DisplayNameSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { error: 'Invalid fields!' };
+    }
+
+    const updatedUser = await db.user.update({
+        where: { id: dbUser.id },
+        data: {
+            ...values
+        }
+    });
+
+    update({
+        user: {
+            displayName: updatedUser.displayName as string
+        }
+    });
+
+    return { success: 'Display name updated' };
+}
 
 export const updateName = async (values: z.infer<typeof NameSchema>) => {
     const user = await currentUser();

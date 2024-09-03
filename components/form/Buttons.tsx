@@ -14,18 +14,20 @@ type SubmitButtonProps = {
     text?: string;
     size?: btnSize;
     isPending: boolean;
+    disabledCheck?: boolean
 };
 
 export const SubmitButton = ({
     className = '',
     text = 'submit',
     size = 'lg',
-    isPending
+    isPending,
+    disabledCheck = true
 }: SubmitButtonProps) => {
     return (
         <Button
             type="submit"
-            disabled={isPending}
+            disabled={isPending || !disabledCheck}
             className={cn('capitalize', className)}
             size={size}
         >
@@ -110,6 +112,28 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
                 <FaHeart />
             ) : (
                 <FaRegHeart />
+            )}
+        </Button>
+    );
+};
+
+export const CheckSubmitButton = ({
+    isPending,
+    disabledCheck = false
+}: SubmitButtonProps) => {
+    return (
+        <Button
+            type="button"
+            disabled={isPending || disabledCheck}
+            className={cn('capitalize w-full h-12')}
+        >
+            {isPending ? (
+                <>
+                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait...
+                </>
+            ) : (
+                'Check'
             )}
         </Button>
     );

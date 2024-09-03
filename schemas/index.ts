@@ -67,6 +67,12 @@ export const NewPasswordSchema = z.object({
     })
 });
 
+export const DisplayNameSchema = z.object({
+    displayName: z.string().min(1, {
+        message: 'Display name is required'
+    })
+});
+
 export const NameSchema = z.object({
     firstName: z.string().min(1, {
         message: 'First name is required'

@@ -15,28 +15,30 @@ import {
     FormMessage
 } from '@/components/ui/form';
 
-import { SubmitButton } from '@/components/form/Buttons';
+import { CheckSubmitButton, SubmitButton } from '@/components/form/Buttons';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
-import { NameSchema } from '@/schemas';
+import { DisplayNameSchema } from '@/schemas';
 import { cn } from '@/lib/utils';
-import { updateName } from '@/actions/personalInfo';
+import { updateDisplayName } from '@/actions/personalInfo';
+import { checkDisplayName } from '@/data/user';
 
-const NameForm = () => {
+const DisplayNameForm = () => {
     const user = useCurrentUser();
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
+    const [displayNameAvailable, setDisplayNameAvailable] = useState(false);
     const { update } = useSession();
-    const [isPending, startTransition] = useTransition();
+    const [isPendingForm, startTransitionForm] = useTransition();
+    const [isPendingCheck, startTransitionCheck] = useTransition();
 
     const errorClass = 'pl-6';
 
-    const form = useForm<z.infer<typeof NameSchema>>({
-        resolver: zodResolver(NameSchema),
+    const form = useForm<z.infer<typeof DisplayNameSchema>>({
+        resolver: zodResolver(DisplayNameSchema),
         defaultValues: {
-            firstName: user?.firstName || '',
-            lastName: user?.lastName || ''
+            displayName: user?.displayName || ''
         }
     });
 
@@ -45,29 +47,44 @@ const NameForm = () => {
         setEdit(!edit);
     };
 
-    const onSubmit = (values: z.infer<typeof NameSchema>) => {
-        startTransition(() => {
-            updateName(values)
-                .then((data) => {
-                    if (data?.error) {
-                        setError(data.error);
-                    }
-
-                    if (data?.success) {
-                        setEdit(false);
-                        update();
-                        form.reset(values);
-                        toast.success('Name successfully updated');
-                    }
+    const onCheckDisplayName = (values: z.infer<typeof DisplayNameSchema>) => {
+        startTransitionCheck(() => {
+            if (user?.displayName !== values.displayName)
+                checkDisplayName(values.displayName)
+                    .then((data) => {
+                        console.log(data)
+                        data ? setDisplayNameAvailable(true) : setDisplayNameAvailable(false)
+                        if (!data) {
+                                     setError(data.error);
+                                 }
                 })
                 .catch(() => setError('Something went wrong!'));
+        })
+    }
+
+    const onSubmit = (values: z.infer<typeof DisplayNameSchema>) => {
+        startTransitionForm(() => {
+            updateDisplayName(values)
+                // .then((data) => {
+                //     if (data?.error) {
+                //         setError(data.error);
+                //     }
+
+                //     if (data?.success) {
+                //         setEdit(false);
+                //         update();
+                //         form.reset(values);
+                //         toast.success('Name successfully updated');
+                //     }
+                // })
+                // .catch(() => setError('Something went wrong!'));
         });
     };
 
     return (
-        <div className="flex flex-col gap-5 border-b border-b-gray-200 pb-8 mt-8">
+        <div className="flex flex-col gap-5 border-b border-b-gray-200 pb-8">
             <div className="flex justify-between">
-                <h3 className="font-semibold text-base">Name</h3>
+                <h3 className="font-semibold text-base">Display Name</h3>
                 <div
                     className="cursor-pointer text-base font-normal hover:underline"
                     onClick={cancel}
@@ -83,58 +100,46 @@ const NameForm = () => {
                         onSubmit={form.handleSubmit(onSubmit)}
                     >
                         <div className="flex flex-row gap-x-6">
+                            <div className='basis-3/4'>
                             <FormField
                                 control={form.control}
-                                name="firstName"
+                                name="displayName"
                                 render={({ field }) => (
                                     <FormItem className={cn('w-full')}>
                                         <FormControl>
                                             <AccountFormInput
                                                 {...field}
-                                                name="firstName"
+                                                name="displayName"
                                                 type="text"
-                                                placeholder="First Name"
+                                                placeholder="Display Name"
                                             />
                                         </FormControl>
                                         <FormMessage className={errorClass} />
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="lastName"
-                                render={({ field }) => (
-                                    <FormItem className={cn('w-full')}>
-                                        <FormControl>
-                                            <AccountFormInput
-                                                {...field}
-                                                name="lastName"
-                                                type="text"
-                                                placeholder="Last Name"
-                                            />
-                                        </FormControl>
-                                        <FormMessage className={errorClass} />
-                                    </FormItem>
-                                )}
-                            />
+                            </div>
+                            <div className='basis-1/4' onClick={() => onCheckDisplayName(form.getValues())}>
+                            <CheckSubmitButton isPending={isPendingCheck} disabledCheck={displayNameAvailable} />
+                            </div>
                         </div>
                         <div className="flex-1">
-                            <SubmitButton text="update" isPending={isPending} />
+                            <SubmitButton text="update" isPending={isPendingForm} disabledCheck={displayNameAvailable} />
                         </div>
                     </form>
                 </Form>
             ) : (
                 <div
                     className={`${
-                        !user?.firstName && 'italic'
+                        !user?.displayName && 'italic'
                     } text-base font-normal`}
                 >
                     {user?.firstName && user?.lastName
-                        ? `${user.firstName} ${user.lastName}`
+                        ? `${user.displayName}`
                         : 'Not specified'}
                 </div>
             )}
         </div>
     );
 };
-export default NameForm;
+export default DisplayNameForm;

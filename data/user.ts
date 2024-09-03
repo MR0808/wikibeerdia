@@ -1,3 +1,5 @@
+'use server'
+
 import {
     uniqueUsernameGenerator,
     Config,
@@ -33,7 +35,7 @@ export const getUserById = async (id: string) => {
     }
 };
 
-export const getDisplayName = async () => {
+export const generateDisplayName = async () => {
     let uniqueDisplayName = false;
     let displayName: string = '';
     let user;
@@ -49,3 +51,12 @@ export const getDisplayName = async () => {
         return null;
     }
 };
+
+export const checkDisplayName = async (displayName: string) => {
+    try {
+        const user = await db.user.findUnique({ where: { displayName } });     
+        return user ? false : true;   
+    } catch {
+        return null;
+    }
+}

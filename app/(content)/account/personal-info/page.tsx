@@ -1,4 +1,5 @@
 import GenderForm from '@/components/account/GenderForm';
+import DisplayNameForm from '@/components/account/DisplayNameForm';
 import NameForm from '@/components/account/NameForm';
 import LocationForm from '@/components/account/LocationForm';
 import DateOfBirthForm from '@/components/account/DateOfBirthForm';
@@ -20,7 +21,6 @@ import {
     getStateById,
     getCountryById
 } from '@/data/location';
-
 
 const PersonalInfoPage = async () => {
     const user = await currentUser();
@@ -60,8 +60,8 @@ const PersonalInfoPage = async () => {
             </div>
             <div className="flex flex-row gap-x-16">
                 <div className="flex flex-col w-3/5">
+                    <DisplayNameForm />
                     {!user?.isOAuth && <NameForm />}
-
                     <GenderForm genderProp={userDb?.gender || undefined} />
                     <LocationForm
                         countryProp={country || defaultCountry!}

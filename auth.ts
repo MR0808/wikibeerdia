@@ -67,6 +67,9 @@ export const {
             if (token.lastName && session.user) {
                 session.user.lastName = token.lastName as string;
             }
+            if (token.displayName && session.user) {
+                session.user.displayName = token.displayName as string;
+            }
 
             if (session.user) {
                 session.user.isTwoFactorEnabled =
@@ -96,6 +99,7 @@ export const {
             token.email = existingUser.email;
             token.role = existingUser.role;
             token.image = existingUser.image;
+            token.displayName = existingUser.displayName;
             token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
             return token;

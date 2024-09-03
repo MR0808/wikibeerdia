@@ -8,14 +8,24 @@ import UserSection from './UserSection';
 import Logo from './Logo';
 import MobileMenu from './MobileMenu';
 import { UserProps } from '@/utils/types';
+import { pagesWhite, pagesTransparent } from '@/utils/pages';
 
 const Navbar = ({ user }: UserProps) => {
     const [scrollActive, setScrollActive] = useState(false);
     const pathname = usePathname();
-    const pagesWhite = ['/'];
-    const pagesTransparent = ['/'];
 
     const [whiteLogo, setWhiteLogo] = useState(!pagesWhite.includes(pathname));
+    const [bgClass, setBgClass] = useState(whiteLogo
+        ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
+        : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground')
+
+    useEffect(() => {
+        setWhiteLogo(!pagesWhite.includes(pathname));
+        setBgClass(whiteLogo
+            ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
+            : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground')
+            console.log(bgClass)
+    }, [pathname])
 
     useEffect(() => {
         if (pagesTransparent.includes(pathname)) {
@@ -26,10 +36,6 @@ const Navbar = ({ user }: UserProps) => {
             setScrollActive(true);
         }
     }, []);
-
-    const bgClass = whiteLogo
-        ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
-        : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground';
 
     return (
         <div

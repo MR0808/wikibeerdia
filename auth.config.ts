@@ -4,7 +4,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google, { GoogleProfile } from 'next-auth/providers/google';
 
 import { LoginSchema } from '@/schemas';
-import { getUserByEmail, getDisplayName } from '@/data/user';
+import { getUserByEmail, generateDisplayName } from '@/data/user';
 
 export default {
     providers: [
@@ -18,7 +18,7 @@ export default {
                     lastName: _profile.family_name,
                     email: _profile.email,
                     image: _profile.picture,
-                    displayName: await getDisplayName()
+                    displayName: await generateDisplayName()
                 };
             }
         }),

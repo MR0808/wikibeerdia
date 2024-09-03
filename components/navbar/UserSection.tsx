@@ -6,7 +6,8 @@ import { BsChevronDown } from 'react-icons/bs';
 import { FaRegCircleUser } from 'react-icons/fa6';
 import { FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 import {
     Popover,
@@ -21,6 +22,11 @@ import { Button } from '@/components/ui/button';
 
 const UserSection = ({ user }: UserProps) => {
     const [open, setOpen] = useState(false);
+    const pathname = usePathname()
+
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname])
 
     const openMenu = () => {
         setOpen(true);
