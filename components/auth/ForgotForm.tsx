@@ -1,10 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-
 import AuthWrapper from './AuthWrapper';
 import { FormInputAuth } from '@/components/form/FormInputAuth';
-import CheckboxInput from '@/components/form/CheckboxInput';
 import { AuthSubmitButton } from '@/components/form/Buttons';
 
 const ForgotForm = () => {
