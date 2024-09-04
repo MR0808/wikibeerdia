@@ -8,6 +8,7 @@ import { FaCog } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import {
     Popover,
@@ -19,14 +20,33 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserProps } from '@/utils/types';
 import { logout } from '@/actions/logout';
 import { Button } from '@/components/ui/button';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 const UserSection = ({ user }: UserProps) => {
     const [open, setOpen] = useState(false);
-    const pathname = usePathname()
+    const pathname = usePathname();
+    const { update } = useSession();
+    user = useCurrentUser();
 
     useEffect(() => {
         setOpen(false);
-    }, [pathname])
+    }, [pathname]);
+
+    useEffect(() => {
+        const sessionUpdatedEventHandler = () => update();
+
+        window.addEventListener(
+            'sessionUpdated',
+            sessionUpdatedEventHandler,
+            false
+        );
+        return () => {
+            window.removeEventListener(
+                'sessionUpdated',
+                sessionUpdatedEventHandler
+            );
+        };
+    }, [update]);
 
     const openMenu = () => {
         setOpen(true);

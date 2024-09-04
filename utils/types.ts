@@ -10,7 +10,7 @@ export type NavLink = {
 export type actionFunction = (
     prevState: any,
     formData: FormData
-) => Promise<{ message: string }>;
+) => Promise<{ result: boolean | null; message: string }>;
 
 export interface UserProps {
     user?: ExtendedUser;

@@ -9,12 +9,14 @@ import {
     LocationSchema,
     DateOfBirthSchema,
     DisplayNameSchema,
-    ProfilePictureSchema
+    ProfilePictureSchema,
+    validateWithZodSchema
 } from '@/schemas';
 import { getUserById } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
 import { State } from '@prisma/client';
+import { uploadImage, deleteImage } from '@/utils/supabase';
 
 export const updateDisplayName = async (
     values: z.infer<typeof DisplayNameSchema>
@@ -202,6 +204,94 @@ export const updateDateOfBirth = async (
     return { success: 'Date of birth updated' };
 };
 
+// export const updateProfilePicture = async (
+//     values: z.infer<typeof ProfilePictureSchema>
+// ) => {
+//     console.log('here');
+//     const user = await currentUser();
+
+//     if (!user) {
+//         return { error: 'Unauthorized' };
+//     }
+
+//     const dbUser = await getUserById(user.id!);
+
+//     if (!dbUser) {
+//         return { error: 'Unauthorized' };
+//     }
+
+//     const validatedFields = ProfilePictureSchema.safeParse(values);
+
+//     if (!validatedFields.success) {
+//         return { error: 'Invalid fields!' };
+//     }
+
+//     const image = values.image as File;
+
+//     console.log(image);
+
+//     // const updatedUser = await db.user.update({
+//     //     where: { id: dbUser.id },
+//     //     data: {
+//     //         ...values
+//     //     }
+//     // });
+
+//     // update({
+//     //     user: {
+//     //         displayName: updatedUser.displayName as string
+//     //     }
+//     // });
+
+//     return { success: 'Display name updated' };
+// };
+
 export const updateProfilePicture = async (
-    values: z.infer<typeof ProfilePictureSchema>
-) => {};
+    prevState: any,
+    formData: FormData
+) => {
+    try {
+        const user = await currentUser();
+
+        if (!user) {
+            return { result: false, message: 'Unauthorized' };
+        }
+
+        const dbUser = await getUserById(user.id!);
+
+        if (!dbUser) {
+            return { result: false, message: 'Unauthorized' };
+        }
+
+        const image = formData.get('image') as File;
+
+        const validatedFile = validateWithZodSchema(ProfilePictureSchema, {
+            image
+        });
+
+        const fullPath = await uploadImage(
+            validatedFile.image,
+            'profile-bucket'
+        );
+        if (dbUser?.image) await deleteImage(dbUser?.image, 'profile-bucket');
+        await db.user.update({
+            where: { id: dbUser.id },
+            data: {
+                image: fullPath
+            }
+        });
+        return { result: true, message: 'Profile image updated successfully' };
+    } catch (error) {
+        return renderError(error);
+    }
+};
+
+const renderError = (
+    error: unknown
+): { result: boolean | null; message: string } => {
+    console.log(error);
+    return {
+        result: false,
+        message: error instanceof Error ? error.message : 'An error occurred'
+    };
+};

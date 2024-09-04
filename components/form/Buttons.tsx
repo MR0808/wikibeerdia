@@ -3,6 +3,7 @@
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { LuTrash2, LuPenSquare } from 'react-icons/lu';
+import { useFormStatus } from 'react-dom';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -14,7 +15,12 @@ type SubmitButtonProps = {
     text?: string;
     size?: btnSize;
     isPending: boolean;
-    disabledCheck?: boolean
+    disabledCheck?: boolean;
+};
+
+type ProfileButtonProps = {
+    text?: string;
+    newImage: boolean;
 };
 
 export const SubmitButton = ({
@@ -116,3 +122,23 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
         </Button>
     );
 };
+
+export function ProfileButton({
+    text = 'submit',
+    newImage
+}: ProfileButtonProps) {
+    const { pending } = useFormStatus();
+
+    return (
+        <Button type="submit" disabled={!newImage || pending}>
+            {pending ? (
+                <>
+                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait...
+                </>
+            ) : (
+                text
+            )}
+        </Button>
+    );
+}

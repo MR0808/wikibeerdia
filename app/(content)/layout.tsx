@@ -1,4 +1,4 @@
-import { headers } from 'next/headers';
+'use server';
 
 import Navbar from '@/components/navbar/Navbar';
 import { currentUser } from '@/lib/auth';

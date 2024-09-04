@@ -23,24 +23,31 @@ const Navbar = ({ user }: UserProps) => {
     );
 
     useEffect(() => {
-        setWhiteLogo(!pagesWhite.includes(pathname));
-        setBgClass(
-            whiteLogo
-                ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
-                : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
-        );
-        console.log(bgClass);
-    }, [pathname]);
-
-    useEffect(() => {
         if (pagesTransparent.includes(pathname)) {
             window.addEventListener('scroll', () => {
                 setScrollActive(window.scrollY > 100);
             });
+            setScrollActive(false);
         } else {
+            setWhiteLogo(!pagesWhite.includes(pathname));
             setScrollActive(true);
         }
-    }, []);
+        setBgClass(
+            !pagesWhite.includes(pathname)
+                ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
+                : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
+        );
+    }, [pathname]);
+
+    // useEffect(() => {
+    //     if (pagesTransparent.includes(pathname)) {
+    //         window.addEventListener('scroll', () => {
+    //             setScrollActive(window.scrollY > 100);
+    //         });
+    //     } else {
+    //         setScrollActive(true);
+    //     }
+    // }, []);
 
     return (
         <div

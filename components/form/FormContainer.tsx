@@ -2,28 +2,38 @@
 
 import { useFormState } from 'react-dom';
 import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { actionFunction } from '@/utils/types';
 
 const initialState = {
+    result: null,
     message: ''
 };
 
-const FormContainer = ({
+function FormContainer({
     action,
-    children
+    children,
+    sendDataToParent
 }: {
     action: actionFunction;
     children: React.ReactNode;
-}) => {
+    sendDataToParent: (data: string) => void;
+}) {
     const [state, formAction] = useFormState(action, initialState);
-    const { toast } = useToast();
+    const { update } = useSession();
     useEffect(() => {
-        if (state.message) {
-            toast({ description: state.message });
+        if (state.result && state.message) {
+            update();
+            toast.success(state.message);
+            sendDataToParent('updated');
+            window.dispatchEvent(new CustomEvent('sessionUpdated'));
+        }
+        if (!state.result && state.message) {
+            toast.error(state.message);
         }
     }, [state]);
     return <form action={formAction}>{children}</form>;
-};
+}
 export default FormContainer;
