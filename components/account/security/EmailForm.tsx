@@ -26,8 +26,6 @@ const EmailForm = () => {
     const { update } = useSession();
     const [isPending, startTransition] = useTransition();
 
-    const errorClass = 'pl-6';
-
     const form = useForm<z.infer<typeof EmailSchema>>({
         resolver: zodResolver(EmailSchema),
         defaultValues: {

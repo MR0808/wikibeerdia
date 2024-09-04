@@ -13,7 +13,6 @@ import { SubmitButton } from '@/components/form/Buttons';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
-import FormSuccess from '@/components/form/FormSuccess';
 import { ResetPasswordSchema } from '@/schemas';
 import { cn } from '@/lib/utils';
 import { updatePassword } from '@/actions/security';
@@ -22,52 +21,50 @@ const PasswordForm = () => {
     const user = useCurrentUser();
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
-    const [success, setSuccess] = useState<string | undefined>();
     const { update } = useSession();
     const [isPending, startTransition] = useTransition();
 
-    const errorClass = 'pl-6';
-
     const form = useForm<z.infer<typeof ResetPasswordSchema>>({
-        resolver: zodResolver(ResetPasswordSchema)
+        resolver: zodResolver(ResetPasswordSchema),
+        defaultValues: {
+            password: '',
+            confirmPassword: ''
+        }
     });
 
     const cancel = () => {
         form.reset();
         setEdit(!edit);
         setError(undefined);
-        setSuccess(undefined);
     };
 
     const onSubmit = (values: z.infer<typeof ResetPasswordSchema>) => {
         startTransition(() => {
-            updatePassword(values);
-            // .then((data) => {
-            //     if (data?.error) {
-            //         setError(data.error);
-            //     }
+            updatePassword(values)
+                .then((data) => {
+                    if (data?.error) {
+                        setError(data.error);
+                    }
 
-            //     if (data?.success) {
-            //         update();
-            //         form.reset(values);
-            //         setSuccess(
-            //             'Email successfully updated, you will need to verify this email though'
-            //         );
-            //         setError(undefined);
-            //         toast.success('Email successfully updated');
-            //     }
-            // })
-            // .catch((error) => {
-            //     console.log(error);
-            //     setError('Something went wrong!');
-            // });
+                    if (data?.success) {
+                        update();
+                        form.reset();
+                        setError(undefined);
+                        setEdit(!edit);
+                        toast.success('Password successfully updated');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setError('Something went wrong!');
+                });
         });
     };
 
     return (
         <div className="flex flex-col gap-5 border-b border-b-gray-200 pb-8 mt-8">
             <div className="flex justify-between">
-                <h3 className="font-semibold text-base">Display Name</h3>
+                <h3 className="font-semibold text-base">Password</h3>
                 <div
                     className="cursor-pointer text-base font-normal hover:underline"
                     onClick={cancel}
@@ -75,7 +72,7 @@ const PasswordForm = () => {
                     {edit ? 'Cancel' : 'Edit'}
                 </div>
             </div>
-            {edit ? (
+            {edit && (
                 <Form {...form}>
                     <form
                         className="space-y-6 w-full"
@@ -86,7 +83,7 @@ const PasswordForm = () => {
                                 control={form.control}
                                 name="password"
                                 render={({ field }) => (
-                                    <FormItem className={cn('w-full')}>
+                                    <FormItem className={cn('w-full mb-5')}>
                                         <FormControl>
                                             <AccountFormInput
                                                 {...field}
@@ -115,11 +112,10 @@ const PasswordForm = () => {
                                 )}
                             />
                         </div>
-                        {(success || error) && (
+                        {error && (
                             <div className="flex flex-row gap-x-6">
                                 <div className="basis-full">
                                     <FormError message={error} />
-                                    <FormSuccess message={success} />
                                 </div>
                             </div>
                         )}
@@ -128,14 +124,6 @@ const PasswordForm = () => {
                         </div>
                     </form>
                 </Form>
-            ) : (
-                <div
-                    className={`${
-                        !user?.email && 'italic'
-                    } text-base font-normal`}
-                >
-                    {user?.email ? `${user.email}` : 'Not specified'}
-                </div>
             )}
         </div>
     );

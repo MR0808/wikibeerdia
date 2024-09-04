@@ -26,14 +26,16 @@ const UserSection = ({ user }: UserProps) => {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
     const { update } = useSession();
-    user = useCurrentUser();
 
     useEffect(() => {
         setOpen(false);
+        update();
     }, [pathname]);
 
     useEffect(() => {
-        const sessionUpdatedEventHandler = () => update();
+        const sessionUpdatedEventHandler = () => {
+            update();
+        };
 
         window.addEventListener(
             'sessionUpdated',
