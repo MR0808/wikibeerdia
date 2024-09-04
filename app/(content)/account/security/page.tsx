@@ -1,3 +1,5 @@
+import EmailForm from '@/components/account/security/EmailForm';
+import PasswordForm from '@/components/account/security/PasswordForm';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -35,7 +37,10 @@ const SecurityPage = async () => {
                 <h1 className="text-4xl font-semibold">Login and Security</h1>
             </div>
             <div className="flex flex-row gap-x-16">
-                <div className="flex flex-col w-3/5"></div>
+                <div className="flex flex-col w-3/5">
+                    <EmailForm />
+                    <PasswordForm />
+                </div>
                 <div className="flex flex-col w-2/5">More goes here</div>
             </div>
         </div>

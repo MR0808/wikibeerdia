@@ -14,11 +14,11 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
 import FormSuccess from '@/components/form/FormSuccess';
-import { EmailSchema } from '@/schemas';
+import { ResetPasswordSchema } from '@/schemas';
 import { cn } from '@/lib/utils';
-import { updateEmail } from '@/actions/security';
+import { updatePassword } from '@/actions/security';
 
-const EmailForm = () => {
+const PasswordForm = () => {
     const user = useCurrentUser();
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
@@ -28,11 +28,8 @@ const EmailForm = () => {
 
     const errorClass = 'pl-6';
 
-    const form = useForm<z.infer<typeof EmailSchema>>({
-        resolver: zodResolver(EmailSchema),
-        defaultValues: {
-            email: user?.email || ''
-        }
+    const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+        resolver: zodResolver(ResetPasswordSchema)
     });
 
     const cancel = () => {
@@ -42,33 +39,33 @@ const EmailForm = () => {
         setSuccess(undefined);
     };
 
-    const onSubmit = (values: z.infer<typeof EmailSchema>) => {
+    const onSubmit = (values: z.infer<typeof ResetPasswordSchema>) => {
         startTransition(() => {
-            updateEmail(values)
-                .then((data) => {
-                    if (data?.error) {
-                        setError(data.error);
-                    }
+            updatePassword(values);
+            // .then((data) => {
+            //     if (data?.error) {
+            //         setError(data.error);
+            //     }
 
-                    if (data?.success) {
-                        update();
-                        form.reset(values);
-                        setSuccess(
-                            'Email successfully updated, you will need to verify this email though'
-                        );
-                        setError(undefined);
-                        toast.success('Email successfully updated');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setError('Something went wrong!');
-                });
+            //     if (data?.success) {
+            //         update();
+            //         form.reset(values);
+            //         setSuccess(
+            //             'Email successfully updated, you will need to verify this email though'
+            //         );
+            //         setError(undefined);
+            //         toast.success('Email successfully updated');
+            //     }
+            // })
+            // .catch((error) => {
+            //     console.log(error);
+            //     setError('Something went wrong!');
+            // });
         });
     };
 
     return (
-        <div className="flex flex-col gap-5 border-b border-b-gray-200 pb-8">
+        <div className="flex flex-col gap-5 border-b border-b-gray-200 pb-8 mt-8">
             <div className="flex justify-between">
                 <h3 className="font-semibold text-base">Display Name</h3>
                 <div
@@ -84,18 +81,34 @@ const EmailForm = () => {
                         className="space-y-6 w-full"
                         onSubmit={form.handleSubmit(onSubmit)}
                     >
-                        <div className="flex flex-row gap-x-6">
+                        <div className="flex flex-col gap-x-6">
                             <FormField
                                 control={form.control}
-                                name="email"
+                                name="password"
                                 render={({ field }) => (
                                     <FormItem className={cn('w-full')}>
                                         <FormControl>
                                             <AccountFormInput
                                                 {...field}
-                                                name="email"
-                                                type="email"
-                                                placeholder="Email"
+                                                name="password"
+                                                type="password"
+                                                placeholder="Password"
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="confirmPassword"
+                                render={({ field }) => (
+                                    <FormItem className={cn('w-full')}>
+                                        <FormControl>
+                                            <AccountFormInput
+                                                {...field}
+                                                name="confirmPassword"
+                                                type="password"
+                                                placeholder="Confirm Password"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -127,4 +140,4 @@ const EmailForm = () => {
         </div>
     );
 };
-export default EmailForm;
+export default PasswordForm;

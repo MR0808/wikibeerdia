@@ -16,7 +16,7 @@ const config: Config = {
 import db from '@/lib/db';
 
 export const getUserByEmail = async (email: string) => {
-    email = email.toLocaleLowerCase();
+    email = email.toLowerCase();
     try {
         let user = await db.user.findFirst({ where: { email } });
 

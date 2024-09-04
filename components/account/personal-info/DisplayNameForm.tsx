@@ -190,7 +190,7 @@ const DisplayNameForm = () => {
                         !user?.displayName && 'italic'
                     } text-base font-normal`}
                 >
-                    {user?.firstName && user?.lastName
+                    {user?.displayName
                         ? `${user.displayName}`
                         : 'Not specified'}
                 </div>

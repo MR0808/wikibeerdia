@@ -204,48 +204,6 @@ export const updateDateOfBirth = async (
     return { success: 'Date of birth updated' };
 };
 
-// export const updateProfilePicture = async (
-//     values: z.infer<typeof ProfilePictureSchema>
-// ) => {
-//     console.log('here');
-//     const user = await currentUser();
-
-//     if (!user) {
-//         return { error: 'Unauthorized' };
-//     }
-
-//     const dbUser = await getUserById(user.id!);
-
-//     if (!dbUser) {
-//         return { error: 'Unauthorized' };
-//     }
-
-//     const validatedFields = ProfilePictureSchema.safeParse(values);
-
-//     if (!validatedFields.success) {
-//         return { error: 'Invalid fields!' };
-//     }
-
-//     const image = values.image as File;
-
-//     console.log(image);
-
-//     // const updatedUser = await db.user.update({
-//     //     where: { id: dbUser.id },
-//     //     data: {
-//     //         ...values
-//     //     }
-//     // });
-
-//     // update({
-//     //     user: {
-//     //         displayName: updatedUser.displayName as string
-//     //     }
-//     // });
-
-//     return { success: 'Display name updated' };
-// };
-
 export const updateProfilePicture = async (
     prevState: any,
     formData: FormData
