@@ -1,53 +1,30 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 
 import NavSearch from './NavSearch';
 import NavLinks from './NavLinks';
 import UserSection from './UserSection';
 import Logo from './Logo';
 import MobileMenu from './MobileMenu';
-import { UserProps } from '@/utils/types';
-import { pagesWhite, pagesTransparent } from '@/utils/pages';
+import { NavBarProps } from '@/utils/types';
 
-const Navbar = ({ user }: UserProps) => {
+const Navbar = ({ whiteBackground, session }: NavBarProps) => {
     const [scrollActive, setScrollActive] = useState(false);
-    const pathname = usePathname();
 
-    const [whiteLogo, setWhiteLogo] = useState(!pagesWhite.includes(pathname));
-    const [bgClass, setBgClass] = useState(
-        whiteLogo
-            ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
-            : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
-    );
+    const bgClass = whiteBackground
+        ? ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
+        : ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white';
 
     useEffect(() => {
-        if (pagesTransparent.includes(pathname)) {
+        if (whiteBackground) {
             window.addEventListener('scroll', () => {
                 setScrollActive(window.scrollY > 100);
             });
-            setScrollActive(false);
         } else {
-            setWhiteLogo(!pagesWhite.includes(pathname));
             setScrollActive(true);
         }
-        setBgClass(
-            !pagesWhite.includes(pathname)
-                ? ' bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white'
-                : ' bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground'
-        );
-    }, [pathname]);
-
-    // useEffect(() => {
-    //     if (pagesTransparent.includes(pathname)) {
-    //         window.addEventListener('scroll', () => {
-    //             setScrollActive(window.scrollY > 100);
-    //         });
-    //     } else {
-    //         setScrollActive(true);
-    //     }
-    // }, []);
+    }, []);
 
     return (
         <div
@@ -57,7 +34,7 @@ const Navbar = ({ user }: UserProps) => {
         >
             <div className="container flex h-16 items-center space-x-4 sm:justify-between justify-between sm:space-x-0">
                 <div className="flex">
-                    <Logo scrollActive={scrollActive} whiteLogo={whiteLogo} />
+                    <Logo whiteBackground={whiteBackground} />
                 </div>
                 <div className="sm:flex gap-6 md:gap-10 hidden">
                     <NavLinks />
@@ -67,7 +44,7 @@ const Navbar = ({ user }: UserProps) => {
                     <NavSearch />
                 </div>
                 <div className="flex items-center justify-end space-x-3 ml-5">
-                    <UserSection user={user} />
+                    <UserSection session={session} />
                 </div>
                 <div className="sm:hidden gap-6 md:gap-10 flex">
                     <MobileMenu />

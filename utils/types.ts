@@ -1,5 +1,6 @@
 import { ExtendedUser } from '@/next-auth';
 import { Country, Gender, State } from '@prisma/client';
+import type { Session } from 'next-auth';
 
 export type NavLink = {
     href: string;
@@ -14,6 +15,11 @@ export type actionFunction = (
 
 export interface UserProps {
     user?: ExtendedUser;
+}
+
+export interface NavBarProps {
+    whiteBackground: boolean;
+    session: Session | null;
 }
 
 export interface GenderProps {

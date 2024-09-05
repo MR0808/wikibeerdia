@@ -3,26 +3,32 @@
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useTransition, useState } from 'react';
+import { useTransition, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
+import type { Session } from 'next-auth';
 
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 
 import { SubmitButton } from '@/components/form/Buttons';
-import useCurrentUser from '@/hooks/useCurrentUser';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
 import { ResetPasswordSchema } from '@/schemas';
 import { cn } from '@/lib/utils';
 import { updatePassword } from '@/actions/security';
 
-const PasswordForm = () => {
-    const user = useCurrentUser();
+const PasswordForm = ({ session }: { session: Session | null }) => {
+    const [user, setUser] = useState(session?.user);
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
-    const { update } = useSession();
+    const { data: newSession, update } = useSession();
     const [isPending, startTransition] = useTransition();
+
+    useEffect(() => {
+        if (newSession && newSession.user) {
+            setUser(newSession?.user);
+        }
+    }, [newSession]);
 
     const form = useForm<z.infer<typeof ResetPasswordSchema>>({
         resolver: zodResolver(ResetPasswordSchema),

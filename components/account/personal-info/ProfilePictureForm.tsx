@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
-
+import { useState, useRef, useEffect } from 'react';
+import type { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { MdOutlinePhotoCamera } from 'react-icons/md';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import useCurrentUser from '@/hooks/useCurrentUser';
 import { cn } from '@/lib/utils';
 import { updateProfilePicture } from '@/actions/personalInfo';
 import Image from 'next/image';
@@ -15,16 +15,21 @@ import { Input } from '@/components/ui/input';
 import { ProfileButton } from '@/components/form/Buttons';
 import FormContainer from '@/components/form/FormContainer';
 
-const ProfilePictureForm = () => {
-    const user = useCurrentUser();
+const ProfilePictureForm = ({ session }: { session: Session | null }) => {
+    const [user, setUser] = useState(session?.user);
+    const { data: newSession, update } = useSession();
     const [newImage, setNewImage] = useState(false);
     const ref = useRef<HTMLInputElement | null>(null);
     const [image, setImage] = useState<string | undefined>(user?.image);
 
+    useEffect(() => {
+        if (newSession && newSession.user) {
+            setUser(newSession?.user);
+        }
+    }, [newSession]);
+
     const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event);
         if (event.target.files && event.target.files[0]) {
-            console.log('this');
             setImage(URL.createObjectURL(event.target.files[0]));
             setNewImage(true);
         }

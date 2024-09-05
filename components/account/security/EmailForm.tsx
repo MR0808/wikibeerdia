@@ -3,14 +3,14 @@
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useTransition, useState } from 'react';
+import { useTransition, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
+import type { Session } from 'next-auth';
 
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 
 import { SubmitButton } from '@/components/form/Buttons';
-import useCurrentUser from '@/hooks/useCurrentUser';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
 import FormSuccess from '@/components/form/FormSuccess';
@@ -18,13 +18,19 @@ import { EmailSchema } from '@/schemas';
 import { cn } from '@/lib/utils';
 import { updateEmail } from '@/actions/security';
 
-const EmailForm = () => {
-    const user = useCurrentUser();
+const EmailForm = ({ session }: { session: Session | null }) => {
+    const [user, setUser] = useState(session?.user);
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
-    const { update } = useSession();
+    const { data: newSession, update } = useSession();
     const [isPending, startTransition] = useTransition();
+
+    useEffect(() => {
+        if (newSession && newSession.user) {
+            setUser(newSession?.user);
+        }
+    }, [newSession]);
 
     const form = useForm<z.infer<typeof EmailSchema>>({
         resolver: zodResolver(EmailSchema),
@@ -68,7 +74,7 @@ const EmailForm = () => {
     return (
         <div className="flex flex-col gap-5 border-b border-b-gray-200 pb-8">
             <div className="flex justify-between">
-                <h3 className="font-semibold text-base">Display Name</h3>
+                <h3 className="font-semibold text-base">Email</h3>
                 <div
                     className="cursor-pointer text-base font-normal hover:underline"
                     onClick={cancel}

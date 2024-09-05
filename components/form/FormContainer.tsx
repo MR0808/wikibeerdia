@@ -28,7 +28,6 @@ function FormContainer({
             update();
             toast.success(state.message);
             sendDataToParent('updated');
-            window.dispatchEvent(new CustomEvent('sessionUpdated'));
         }
         if (!state.result && state.message) {
             toast.error(state.message);

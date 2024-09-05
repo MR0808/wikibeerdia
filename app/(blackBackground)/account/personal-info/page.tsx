@@ -13,6 +13,7 @@ import {
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 
+import { auth } from '@/auth';
 import { getUserById } from '@/data/user';
 import { currentUser } from '@/lib/auth';
 import {
@@ -25,6 +26,7 @@ import {
 
 const PersonalInfoPage = async () => {
     const user = await currentUser();
+    const session = await auth();
     const userDb = await getUserById(user?.id!);
     const countries = await getAllCountries();
     const defaultCountry = await getCountryByName('Australia');
@@ -61,8 +63,8 @@ const PersonalInfoPage = async () => {
             </div>
             <div className="flex flex-row gap-x-16">
                 <div className="flex flex-col w-3/5">
-                    <DisplayNameForm />
-                    {!user?.isOAuth && <NameForm />}
+                    <DisplayNameForm session={session} />
+                    {!user?.isOAuth && <NameForm session={session} />}
                     <GenderForm genderProp={userDb?.gender || undefined} />
                     <LocationForm
                         countryProp={country || defaultCountry!}
@@ -76,7 +78,7 @@ const PersonalInfoPage = async () => {
                     />
                 </div>
                 <div className="flex flex-col w-2/5">
-                    <ProfilePictureForm />
+                    <ProfilePictureForm session={session} />
                 </div>
             </div>
         </div>

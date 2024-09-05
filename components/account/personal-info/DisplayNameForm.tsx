@@ -3,22 +3,16 @@
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useTransition, useState } from 'react';
+import { useTransition, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import type { Session } from 'next-auth';
 
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
 import { SubmitButton } from '@/components/form/Buttons';
-import useCurrentUser from '@/hooks/useCurrentUser';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
 import FormSuccess from '@/components/form/FormSuccess';
@@ -27,17 +21,15 @@ import { cn } from '@/lib/utils';
 import { updateDisplayName } from '@/actions/personalInfo';
 import { checkDisplayName } from '@/data/user';
 
-const DisplayNameForm = () => {
-    const user = useCurrentUser();
+const DisplayNameForm = ({ session }: { session: Session | null }) => {
+    const [user, setUser] = useState(session?.user);
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
     const [displayNameAvailable, setDisplayNameAvailable] = useState(false);
-    const { update } = useSession();
+    const { data: newSession, update } = useSession();
     const [isPendingForm, startTransitionForm] = useTransition();
     const [isPendingCheck, startTransitionCheck] = useTransition();
-
-    const errorClass = 'pl-6';
 
     const form = useForm<z.infer<typeof DisplayNameSchema>>({
         resolver: zodResolver(DisplayNameSchema),
@@ -45,6 +37,12 @@ const DisplayNameForm = () => {
             displayName: user?.displayName || ''
         }
     });
+
+    useEffect(() => {
+        if (newSession && newSession.user) {
+            setUser(newSession?.user);
+        }
+    }, [newSession]);
 
     const cancel = () => {
         form.reset();

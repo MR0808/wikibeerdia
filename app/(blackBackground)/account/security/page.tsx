@@ -9,10 +9,13 @@ import {
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 
+import { auth } from '@/auth';
 import { getUserById } from '@/data/user';
 import { currentUser } from '@/lib/auth';
+import TwoFactorForm from '@/components/account/security/TwoFactorForm';
 
 const SecurityPage = async () => {
+    const session = await auth();
     const user = await currentUser();
     const userDb = await getUserById(user?.id!);
 
@@ -38,8 +41,12 @@ const SecurityPage = async () => {
             </div>
             <div className="flex flex-row gap-x-16">
                 <div className="flex flex-col w-3/5">
-                    <EmailForm />
-                    <PasswordForm />
+                    <EmailForm session={session} />
+                    <PasswordForm session={session} />
+                    <TwoFactorForm
+                        session={session}
+                        isTwoFactorEnabled={userDb?.isTwoFactorEnabled || false}
+                    />
                 </div>
                 <div className="flex flex-col w-2/5">More goes here</div>
             </div>

@@ -9,6 +9,7 @@ import { FiLogOut } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import type { Session } from 'next-auth';
 
 import {
     Popover,
@@ -17,15 +18,15 @@ import {
 } from '@/components/ui/popover';
 import profile from '@/public/images/profile.jpg';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { UserProps } from '@/utils/types';
 import { logout } from '@/actions/logout';
 import { Button } from '@/components/ui/button';
-import useCurrentUser from '@/hooks/useCurrentUser';
 
-const UserSection = ({ user }: UserProps) => {
+const UserSection = ({ session }: { session: Session | null }) => {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
-    const { update } = useSession();
+    const { data: newSession, update } = useSession();
+
+    const [user, setUser] = useState(session?.user);
 
     useEffect(() => {
         setOpen(false);
@@ -33,22 +34,29 @@ const UserSection = ({ user }: UserProps) => {
     }, [pathname]);
 
     useEffect(() => {
-        const sessionUpdatedEventHandler = () => {
-            update();
-        };
+        if (newSession && newSession.user) {
+            setUser(newSession?.user);
+        }
+    }, [newSession]);
 
-        window.addEventListener(
-            'sessionUpdated',
-            sessionUpdatedEventHandler,
-            false
-        );
-        return () => {
-            window.removeEventListener(
-                'sessionUpdated',
-                sessionUpdatedEventHandler
-            );
-        };
-    }, [update]);
+    // useEffect(() => {
+    //     const sessionUpdatedEventHandler = () => {
+    //         update();
+    //         setUser(session?.user);
+    //     };
+
+    //     window.addEventListener(
+    //         'sessionUpdated',
+    //         sessionUpdatedEventHandler,
+    //         false
+    //     );
+    //     return () => {
+    //         window.removeEventListener(
+    //             'sessionUpdated',
+    //             sessionUpdatedEventHandler
+    //         );
+    //     };
+    // }, [update]);
 
     const openMenu = () => {
         setOpen(true);
