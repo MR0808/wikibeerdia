@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { SubmitButton } from '@/components/form/Buttons';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
-import { ResetPasswordSchema } from '@/schemas';
+import { ResetPasswordSchema } from '@/schemas/auth';
 import { cn } from '@/lib/utils';
 import { updatePassword } from '@/actions/security';
 

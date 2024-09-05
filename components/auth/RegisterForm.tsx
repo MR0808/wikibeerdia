@@ -21,7 +21,7 @@ import {
     PasswordInputAuth
 } from '@/components/form/FormInputAuth';
 import { AuthSubmitButton } from '@/components/form/Buttons';
-import { RegisterSchema } from '@/schemas';
+import { RegisterSchema } from '@/schemas/auth';
 import register from '@/actions/register';
 
 const RegisterForm = () => {

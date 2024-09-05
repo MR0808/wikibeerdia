@@ -34,7 +34,7 @@ import {
 import { SubmitButton } from '@/components/form/Buttons';
 import FormError from '@/components/form/FormError';
 import { updateLocation } from '@/actions/personalInfo';
-import { LocationSchema } from '@/schemas';
+import { LocationSchema } from '@/schemas/personal-info';
 import { cn } from '@/lib/utils';
 import { LocationProps } from '@/utils/types';
 import { getStatesByCountry } from '@/data/location';

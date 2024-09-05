@@ -16,7 +16,7 @@ import { SubmitButton } from '@/components/form/Buttons';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
 import FormSuccess from '@/components/form/FormSuccess';
-import { DisplayNameSchema } from '@/schemas';
+import { DisplayNameSchema } from '@/schemas/personal-info';
 import { cn } from '@/lib/utils';
 import { updateDisplayName } from '@/actions/personalInfo';
 import { checkDisplayName } from '@/data/user';

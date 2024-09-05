@@ -14,7 +14,7 @@ import { SubmitButton } from '@/components/form/Buttons';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
 import FormSuccess from '@/components/form/FormSuccess';
-import { EmailSchema } from '@/schemas';
+import { EmailSchema } from '@/schemas/auth';
 import { cn } from '@/lib/utils';
 import { updateEmail } from '@/actions/security';
 

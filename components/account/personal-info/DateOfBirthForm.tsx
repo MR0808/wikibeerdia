@@ -1,7 +1,7 @@
 'use client';
 
 import * as z from 'zod';
-import { format, sub, parseISO } from 'date-fns';
+import { format, sub } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -28,7 +28,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { SubmitButton } from '@/components/form/Buttons';
 import FormError from '@/components/form/FormError';
 import { updateDateOfBirth } from '@/actions/personalInfo';
-import { DateOfBirthSchema } from '@/schemas';
+import { DateOfBirthSchema } from '@/schemas/personal-info';
 import { DateOfBirthProps } from '@/utils/types';
 import { cn } from '@/lib/utils';
 

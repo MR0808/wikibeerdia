@@ -37,3 +37,11 @@ export interface LocationProps {
 export interface DateOfBirthProps {
     dateOfBirthProp?: Date;
 }
+
+export interface DialogsProp {
+    isOpen: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    data: any;
+    setData(data: any): void;
+}

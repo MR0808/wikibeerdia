@@ -19,7 +19,7 @@ import {
 import { SubmitButton } from '@/components/form/Buttons';
 import { AccountFormInput } from '@/components/form/FormInput';
 import FormError from '@/components/form/FormError';
-import { NameSchema } from '@/schemas';
+import { NameSchema } from '@/schemas/personal-info';
 import { cn } from '@/lib/utils';
 import { updateName } from '@/actions/personalInfo';
 

@@ -21,7 +21,7 @@ import {
     PasswordInputAuth
 } from '@/components/form/FormInputAuth';
 import { AuthSubmitButton } from '@/components/form/Buttons';
-import { LoginSchema } from '@/schemas';
+import { LoginSchema } from '@/schemas/auth';
 import login from '@/actions/login';
 
 const LoginForm = () => {

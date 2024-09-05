@@ -9,9 +9,9 @@ import {
     LocationSchema,
     DateOfBirthSchema,
     DisplayNameSchema,
-    ProfilePictureSchema,
-    validateWithZodSchema
-} from '@/schemas';
+    ProfilePictureSchema
+} from '@/schemas/personal-info';
+import { validateWithZodSchema } from '@/schemas';
 import { getUserById } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';

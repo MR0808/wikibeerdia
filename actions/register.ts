@@ -4,7 +4,7 @@ import * as z from 'zod';
 import bcrypt from 'bcryptjs';
 
 import db from '@/lib/db';
-import { RegisterSchema } from '@/schemas';
+import { RegisterSchema } from '@/schemas/auth';
 import { getUserByEmail, generateDisplayName } from '@/data/user';
 import { sendVerificationEmail } from '@/lib/mail';
 import { generateVerificationToken } from '@/lib/tokens';
@@ -17,7 +17,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     }
 
     let { firstName, lastName, email, password } = validatedFields.data;
-    email = email.toLocaleLowerCase()
+    email = email.toLocaleLowerCase();
     const displayName = await generateDisplayName();
     const hashedPassword = await bcrypt.hash(password, 10);
     const existingUser = await getUserByEmail(email);

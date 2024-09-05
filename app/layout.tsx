@@ -5,6 +5,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/auth';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import TwoFactorModalProvider from '@/providers/TwoFactorModalProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,6 +30,7 @@ export default async function RootLayout({
                     {children}
                     <Toaster richColors />
                     <SpeedInsights />
+                    <TwoFactorModalProvider />
                 </body>
             </html>
         </SessionProvider>

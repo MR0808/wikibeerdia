@@ -4,7 +4,11 @@ import * as z from 'zod';
 import bcrypt from 'bcryptjs';
 
 import db from '@/lib/db';
-import { EmailSchema, ResetPasswordSchema } from '@/schemas';
+import {
+    EmailSchema,
+    ResetPasswordSchema,
+    TwoFactorSchema
+} from '@/schemas/auth';
 import { getUserById, getUserByEmail } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
@@ -96,3 +100,7 @@ export const updatePassword = async (
 
     return { success: 'Password updated' };
 };
+
+export const setupTwoFactor = async (
+    values: z.infer<typeof TwoFactorSchema>
+) => {};
