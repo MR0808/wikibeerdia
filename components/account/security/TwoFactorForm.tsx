@@ -5,18 +5,17 @@ import { useSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
 
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useTwoFactorDialog } from '@/hooks/useTwoFactorDialog';
 
 const TwoFactorForm = ({
     session,
-    isTwoFactorEnabled
+    otpEnabled
 }: {
     session: Session | null;
-    isTwoFactorEnabled: boolean;
+    otpEnabled: boolean;
 }) => {
     const [user, setUser] = useState(session?.user);
-    const [twoFactor, setTwoFactor] = useState(isTwoFactorEnabled);
+    const [twoFactor, setTwoFactor] = useState(otpEnabled);
     const [edit, setEdit] = useState(false);
     const { data: newSession, update } = useSession();
     const { onOpen, onEdit } = useTwoFactorDialog();

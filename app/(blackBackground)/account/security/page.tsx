@@ -45,7 +45,7 @@ const SecurityPage = async () => {
                     <PasswordForm session={session} />
                     <TwoFactorForm
                         session={session}
-                        isTwoFactorEnabled={userDb?.isTwoFactorEnabled || false}
+                        otpEnabled={userDb?.otpEnabled || false}
                     />
                 </div>
                 <div className="flex flex-col w-2/5">More goes here</div>
