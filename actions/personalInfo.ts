@@ -155,7 +155,6 @@ export const updateLocation = async (
         stateDb = values.state;
     }
 
-    console.log(values);
     await db.user.update({
         where: { id: dbUser.id },
         data: {
@@ -191,8 +190,6 @@ export const updateDateOfBirth = async (
     if (!validatedFields.success) {
         return { error: 'Invalid fields!' };
     }
-    // values.dateOfBirth = add(values.dateOfBirth, {days: 1})
-    console.log(values);
 
     await db.user.update({
         where: { id: dbUser.id },

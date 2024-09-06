@@ -1,14 +1,12 @@
 import * as OTPAuth from 'otpauth';
 import { NextRequest } from 'next/server';
-import bcrypt from 'bcryptjs';
 
-import { generateRandomString } from '@/lib/tokens';
+import { generateRecoveryCodes } from '@/lib/tokens';
 
 export async function POST(req: NextRequest): Promise<Response> {
     try {
         const data = await req.json();
         const { name, secret, token, setup } = data;
-        // console.log(data);
 
         let totp = new OTPAuth.TOTP({
             issuer: 'Wikibeerdia',
@@ -28,16 +26,8 @@ export async function POST(req: NextRequest): Promise<Response> {
         }
 
         if (setup) {
-            const recoveryCodes = [];
-            const recoveryCodesHashed = [];
-            for (let i = 0; i < 6; i++) {
-                const recoveryCode = generateRandomString(6);
-                let chars = [...recoveryCode];
-                chars.splice(3, 0, '-');
-                const hashedCode = await bcrypt.hash(recoveryCode, 12);
-                recoveryCodes.push(chars.join(''));
-                recoveryCodesHashed.push(hashedCode);
-            }
+            const { recoveryCodes, recoveryCodesHashed } =
+                await generateRecoveryCodes();
 
             returnData = {
                 result: true,

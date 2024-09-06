@@ -63,7 +63,6 @@ const DisplayNameForm = ({ session }: { session: Session | null }) => {
             if (user?.displayName !== values.displayName) {
                 checkDisplayName(values.displayName)
                     .then((data) => {
-                        console.log(data);
                         data
                             ? setDisplayNameAvailable(true)
                             : setDisplayNameAvailable(false);

@@ -89,7 +89,6 @@ const LocationForm = ({
 
     const onSubmit = (values: z.infer<typeof LocationSchema>) => {
         startTransition(() => {
-            console.log(values);
             updateLocation(values)
                 .then((data) => {
                     if (data?.error) {

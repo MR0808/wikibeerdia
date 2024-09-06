@@ -51,6 +51,10 @@ const TwoFactorModal = ({ session }: { session: Session | null }) => {
 
     const closeDialog = () => {
         update();
+        setVerify(true);
+        setQRData('');
+        setQRSecret('');
+        setBackupCodes([]);
         onUpdate(true);
         onClose();
     };
@@ -93,7 +97,6 @@ const TwoFactorModal = ({ session }: { session: Session | null }) => {
             })
         });
         const data = await response.json();
-        console.log('data', data);
         if (data.data.result) {
             setupTwoFactor({
                 otpAuthUrl: qrData!,

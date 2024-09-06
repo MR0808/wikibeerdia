@@ -103,7 +103,6 @@ export const setupTwoFactor = async ({
     otpBase32,
     otpBackups
 }: TwoFactorProps) => {
-    console.log(otpBackups);
     const user = await currentUser();
 
     if (!user) {
@@ -166,4 +165,18 @@ export const disableTwoFactor = async () => {
         }
     });
     return { success: 'Two factor disabled' };
+};
+
+export const resetBackupCodes = async () => {
+    const user = await currentUser();
+
+    if (!user) {
+        return { error: 'Unauthorized' };
+    }
+
+    const dbUser = await getUserById(user.id!);
+
+    if (!dbUser) {
+        return { error: 'Unauthorized' };
+    }
 };

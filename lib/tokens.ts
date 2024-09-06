@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs';
 
 import db from '@/lib/db';
 import { getVerificationTokenByEmail } from '@/data/verification-token';
@@ -62,4 +63,18 @@ export const generateRandomString = (length: number) => {
         );
     }
     return result;
+};
+
+export const generateRecoveryCodes = async () => {
+    const recoveryCodes = [];
+    const recoveryCodesHashed = [];
+    for (let i = 0; i < 6; i++) {
+        const recoveryCode = generateRandomString(6);
+        let chars = [...recoveryCode];
+        chars.splice(3, 0, '-');
+        const hashedCode = await bcrypt.hash(recoveryCode, 12);
+        recoveryCodes.push(chars.join(''));
+        recoveryCodesHashed.push(hashedCode);
+    }
+    return { recoveryCodes, recoveryCodesHashed };
 };

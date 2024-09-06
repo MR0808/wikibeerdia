@@ -54,7 +54,6 @@ const DateOfBirthForm = ({ dateOfBirthProp }: DateOfBirthProps) => {
     };
 
     const onSubmit = (values: z.infer<typeof DateOfBirthSchema>) => {
-        console.log('values', values);
         startTransition(() => {
             updateDateOfBirth(values)
                 .then((data) => {
