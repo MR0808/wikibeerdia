@@ -46,4 +46,12 @@ export interface TwoFactorDialogsProp {
     onClose: () => void;
     data: any;
     setData(data: any): void;
+    isUpdate: boolean;
+    onUpdate: (update: boolean) => void;
+}
+
+export interface TwoFactorProps {
+    otpAuthUrl: string;
+    otpBase32: string;
+    otpBackups: string[];
 }

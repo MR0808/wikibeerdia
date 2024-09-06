@@ -44,6 +44,7 @@ model User {
   otpBase32     String?
   otpAuthUrl    String?
   otpBackups    String[]
+  twoFactorConfirmation TwoFactorConfirmation?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -101,4 +102,13 @@ model State {
   name      String
   country   Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId Int
+}
+
+model TwoFactorConfirmation {
+  id String @id @default(cuid())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
 }

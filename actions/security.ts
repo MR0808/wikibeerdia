@@ -4,11 +4,8 @@ import * as z from 'zod';
 import bcrypt from 'bcryptjs';
 
 import db from '@/lib/db';
-import {
-    EmailSchema,
-    ResetPasswordSchema,
-    TwoFactorSchema
-} from '@/schemas/auth';
+import { EmailSchema, ResetPasswordSchema } from '@/schemas/auth';
+import { TwoFactorProps } from '@/utils/types';
 import { getUserById, getUserByEmail } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
@@ -101,6 +98,72 @@ export const updatePassword = async (
     return { success: 'Password updated' };
 };
 
-export const setupTwoFactor = async (
-    values: z.infer<typeof TwoFactorSchema>
-) => {};
+export const setupTwoFactor = async ({
+    otpAuthUrl,
+    otpBase32,
+    otpBackups
+}: TwoFactorProps) => {
+    console.log(otpBackups);
+    const user = await currentUser();
+
+    if (!user) {
+        return { error: 'Unauthorized' };
+    }
+
+    const dbUser = await getUserById(user.id!);
+
+    if (!dbUser) {
+        return { error: 'Unauthorized' };
+    }
+
+    await db.user.update({
+        where: { id: dbUser.id },
+        data: {
+            otpEnabled: true,
+            otpVerified: true,
+            otpBase32,
+            otpAuthUrl,
+            otpBackups
+        }
+    });
+
+    update({
+        user: {
+            otpEnabled: true
+        }
+    });
+
+    return { success: 'Two factor updated' };
+};
+
+export const disableTwoFactor = async () => {
+    const user = await currentUser();
+
+    if (!user) {
+        return { error: 'Unauthorized' };
+    }
+
+    const dbUser = await getUserById(user.id!);
+
+    if (!dbUser) {
+        return { error: 'Unauthorized' };
+    }
+
+    await db.user.update({
+        where: { id: dbUser.id },
+        data: {
+            otpEnabled: false,
+            otpVerified: false,
+            otpBase32: null,
+            otpAuthUrl: null,
+            otpBackups: []
+        }
+    });
+
+    update({
+        user: {
+            otpEnabled: false
+        }
+    });
+    return { success: 'Two factor disabled' };
+};

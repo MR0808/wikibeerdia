@@ -10,14 +10,12 @@ import {
 } from '@/components/ui/breadcrumb';
 
 import { auth } from '@/auth';
-import { getUserById } from '@/data/user';
 import { currentUser } from '@/lib/auth';
 import TwoFactorForm from '@/components/account/security/TwoFactorForm';
 
 const SecurityPage = async () => {
     const session = await auth();
     const user = await currentUser();
-    const userDb = await getUserById(user?.id!);
 
     return (
         <div className="container flex flex-col h-16 sm:justify-between justify-between sm:space-x-0 mt-36">
@@ -43,10 +41,7 @@ const SecurityPage = async () => {
                 <div className="flex flex-col w-3/5">
                     <EmailForm session={session} />
                     <PasswordForm session={session} />
-                    <TwoFactorForm
-                        session={session}
-                        otpEnabled={userDb?.otpEnabled || false}
-                    />
+                    <TwoFactorForm session={session} />
                 </div>
                 <div className="flex flex-col w-2/5">More goes here</div>
             </div>

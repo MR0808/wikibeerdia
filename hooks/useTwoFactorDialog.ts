@@ -9,5 +9,7 @@ export const useTwoFactorDialog = create<TwoFactorDialogsProp>((set) => ({
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
     data: {},
-    setData: (data) => set({ data: { data } })
+    setData: (data) => set({ data: { data } }),
+    isUpdate: false,
+    onUpdate: (update: boolean) => set({ isUpdate: update })
 }));
