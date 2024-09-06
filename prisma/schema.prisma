@@ -41,8 +41,6 @@ model User {
   passwordResetExpires DateTime?
   otpEnabled    Boolean @default(false)
   otpVerified   Boolean @default(false)
-  otpAscii      String?
-  otpHex        String?
   otpBase32     String?
   otpAuthUrl    String?
   otpBackups    String[]

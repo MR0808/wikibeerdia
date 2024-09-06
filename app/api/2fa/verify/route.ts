@@ -36,7 +36,12 @@ export async function POST(req: NextRequest): Promise<Response> {
             recoveryCodes.push(chars.join(''));
             recoveryCodesHashed.push({ backup_code: hashedCode });
         }
-        returnData = { result: true, recoveryCodes, recoveryCodesHashed };
+        returnData = {
+            result: true,
+            recoveryCodes,
+            recoveryCodesHashed,
+            otpAuthUrl: totp.toString()
+        };
 
         return Response.json({ returnData });
     } catch (error) {
