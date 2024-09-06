@@ -38,8 +38,10 @@ export interface DateOfBirthProps {
     dateOfBirthProp?: Date;
 }
 
-export interface DialogsProp {
+export interface TwoFactorDialogsProp {
     isOpen: boolean;
+    isEdit: boolean;
+    onEdit: (edit: boolean) => void;
     onOpen: () => void;
     onClose: () => void;
     data: any;

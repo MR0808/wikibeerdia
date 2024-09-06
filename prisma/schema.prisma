@@ -36,10 +36,18 @@ model User {
   dateOfBirth   DateTime?
   role          UserRole @default(USER)
   accounts      Account[]
-  isTwoFactorEnabled Boolean @default(false)
-  twoFactorConfirmation TwoFactorConfirmation?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  emailOld      String?
+  passwordResetToken String?
+  passwordResetExpires DateTime?
+  otpEnabled    Boolean @default(false)
+  otpVerified   Boolean @default(false)
+  otpAscii      String?
+  otpHex        String?
+  otpBase32     String?
+  otpAuthUrl    String?
+  otpBackups    String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Account {
@@ -79,24 +87,6 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
-}
-
-model TwoFactorToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
-  expires DateTime
-
-  @@unique([email, token])
-}
-
-model TwoFactorConfirmation {
-  id String @id @default(cuid())
-
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
 }
 
 model Country {

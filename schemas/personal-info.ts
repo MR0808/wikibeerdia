@@ -1,4 +1,4 @@
-import { z, ZodSchema } from 'zod';
+import * as z from 'zod';
 
 export const DisplayNameSchema = z.object({
     displayName: z.string().min(1, {

@@ -1,16 +1,50 @@
-import { type NextRequest } from 'next/server';
-import speakeasy from 'speakeasy';
+import * as OTPAuth from 'otpauth';
+import { NextRequest } from 'next/server';
+import bcrypt from 'bcryptjs';
 
-export async function GET(request: NextRequest): Promise<Response> {
-    const searchParams = request.nextUrl.searchParams;
+import { generateRandomString } from '@/lib/tokens';
 
-    const verified = speakeasy.totp.verify({
-        secret: searchParams.get('secret') as string,
-        encoding: 'base32',
-        token: searchParams.get('token') as string
-    });
+export async function POST(req: NextRequest): Promise<Response> {
+    try {
+        const data = await req.json();
+        const { name, secret, token } = data;
 
-    return Response.json({
-        verified
-    });
+        let totp = new OTPAuth.TOTP({
+            issuer: 'Wikibeerdia',
+            label: name,
+            algorithm: 'SHA1',
+            digits: 6,
+            secret
+        });
+
+        let delta = totp.validate({ token });
+
+        let returnData;
+
+        if (delta === null) {
+            returnData = { result: false };
+            return Response.json({ data });
+        }
+
+        const recoveryCodes = [];
+        const recoveryCodesHashed = [];
+        for (let i = 0; i < 6; i++) {
+            const recoveryCode = generateRandomString(6);
+            let chars = [...recoveryCode];
+            chars.splice(3, 0, '-');
+            const hashedCode = await bcrypt.hash(recoveryCode, 12);
+            recoveryCodes.push(chars.join(''));
+            recoveryCodesHashed.push({ backup_code: hashedCode });
+        }
+        returnData = { result: true, recoveryCodes, recoveryCodesHashed };
+
+        return Response.json({ returnData });
+    } catch (error) {
+        console.log('error inside get route', error);
+        if (error instanceof Error) {
+            return new Response(error.message, { status: 500 });
+        }
+
+        return new Response('Internal Server Errors', { status: 500 });
+    }
 }

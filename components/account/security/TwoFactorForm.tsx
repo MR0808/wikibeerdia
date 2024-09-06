@@ -19,13 +19,29 @@ const TwoFactorForm = ({
     const [twoFactor, setTwoFactor] = useState(isTwoFactorEnabled);
     const [edit, setEdit] = useState(false);
     const { data: newSession, update } = useSession();
-    const { onOpen } = useTwoFactorDialog();
+    const { onOpen, onEdit } = useTwoFactorDialog();
 
     useEffect(() => {
         if (newSession && newSession.user) {
             setUser(newSession?.user);
         }
     }, [newSession]);
+
+    useEffect(() => {
+        const fetchQRCode = async () => {
+            const response = await fetch(`/api/2fa/qrcode`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: `${user?.firstName} ${user?.lastName}`
+                })
+            });
+            const data = await response.json();
+        };
+        fetchQRCode();
+    }, []);
 
     const cancel = () => {
         setEdit(!edit);
@@ -46,7 +62,14 @@ const TwoFactorForm = ({
             </div>
             {edit ? (
                 <>
-                    <Button onClick={onOpen}>Create</Button>
+                    <Button
+                        onClick={() => {
+                            onOpen();
+                            onEdit(true);
+                        }}
+                    >
+                        Create
+                    </Button>
                 </>
             ) : (
                 <div>{twoFactor ? 'Enabled' : 'Disabled'}</div>

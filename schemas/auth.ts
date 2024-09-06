@@ -1,4 +1,4 @@
-import { z, ZodSchema } from 'zod';
+import * as z from 'zod';
 
 export const LoginSchema = z.object({
     email: z.string().email({
@@ -104,7 +104,7 @@ export const ResetPasswordSchema = z
     });
 
 export const TwoFactorSchema = z.object({
-    code: z.string().min(1, {
-        message: 'Code is required'
+    token: z.string().min(1, {
+        message: 'Token is required'
     })
 });

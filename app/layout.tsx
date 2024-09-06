@@ -30,7 +30,7 @@ export default async function RootLayout({
                     {children}
                     <Toaster richColors />
                     <SpeedInsights />
-                    <TwoFactorModalProvider />
+                    <TwoFactorModalProvider session={session} />
                 </body>
             </html>
         </SessionProvider>

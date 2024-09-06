@@ -1,9 +1,11 @@
 import { create } from 'zustand';
 
-import { DialogsProp } from '@/utils/types';
+import { TwoFactorDialogsProp } from '@/utils/types';
 
-export const useTwoFactorDialog = create<DialogsProp>((set) => ({
+export const useTwoFactorDialog = create<TwoFactorDialogsProp>((set) => ({
     isOpen: false,
+    isEdit: false,
+    onEdit: (edit: boolean) => set({ isEdit: edit }),
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
     data: {},
