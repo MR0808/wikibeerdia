@@ -6,6 +6,7 @@ import type { Session } from 'next-auth';
 
 import { Button } from '@/components/ui/button';
 import { useTwoFactorDialog } from '@/hooks/useTwoFactorDialog';
+import {}
 import { cn } from '@/lib/utils';
 
 import TwoFactorDisableDialog from './TwoFactorDisableDialog';
@@ -16,6 +17,7 @@ const TwoFactorForm = ({ session }: { session: Session | null }) => {
     const { data: newSession, update } = useSession();
     const { onOpen, onEdit, isUpdate } = useTwoFactorDialog();
     const [openDisable, setOpenDisable] = useState(false);
+    const [openBackup, setOpenBackup] = useState(false);
 
     useEffect(() => {
         update();
@@ -27,6 +29,8 @@ const TwoFactorForm = ({ session }: { session: Session | null }) => {
             setTwoFactor(user?.otpEnabled);
         }
     }, [newSession]);
+
+    const generateBackupCo
 
     return (
         <div className="flex flex-col gap-5 pb-8 mt-8">
