@@ -6,7 +6,7 @@ import db from './lib/db';
 import authConfig from '@/auth.config';
 import { getUserById } from './data/user';
 import { getAccountByUserId } from '@/data/account';
-import { getTwoFactorConfirmationByUserId } from './data/twoFactorConfirmation';
+import getTwoFactorConfirmationByUserId from './data/twoFactorConfirmation';
 
 export const {
     handlers: { GET, POST },
