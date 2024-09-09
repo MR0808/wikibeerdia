@@ -1,6 +1,6 @@
 import db from '@/lib/db';
 
-export const getTwoFactorConfirmationByUserId = async (userId: string) => {
+const getTwoFactorConfirmationByUserId = async (userId: string) => {
     try {
         const twoFactorConfirmation = await db.twoFactorConfirmation.findUnique(
             {
@@ -13,3 +13,5 @@ export const getTwoFactorConfirmationByUserId = async (userId: string) => {
         return null;
     }
 };
+
+export default getTwoFactorConfirmationByUserId

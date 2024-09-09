@@ -7,7 +7,7 @@ export const LoginSchema = z.object({
     password: z.string().min(1, {
         message: 'Password is required'
     }),
-    code: z.optional(z.string()),
+    token: z.optional(z.string()),
     rememberMe: z.optional(z.boolean())
 });
 

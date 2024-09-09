@@ -12,8 +12,15 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormMessage
+    FormMessage,
+    FormDescription
 } from '@/components/ui/form';
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSlot,
+    InputOTPSeparator
+  } from "@/components/ui/input-otp"
 
 import FormError from '@/components/form/FormError';
 import {
@@ -65,9 +72,9 @@ const LoginForm = () => {
                         setSuccess(data.success);
                     }
 
-                    // if (data?.twoFactor) {
-                    //     setShowTwoFactor(true);
-                    // }
+                    if (data?.twoFactor) {
+                        setShowTwoFactor(true);
+                    }
                 })
                 .catch(() => setError('Something went wrong'));
         });
@@ -78,46 +85,78 @@ const LoginForm = () => {
             <FormError message={error || urlError} />
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                 <input type="hidden" name="callbackUrl" value="placeholder" />
-                <div className="relative">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
+                {showTwoFactor ? (
+                    <div className="relative">
+                        <FormField
+                            control={form.control}
+                            name="token"
+                            render={({ field }) => (
+                                <FormItem>
                                 <FormControl>
-                                    <FormInputAuth
-                                        {...field}
-                                        label="Email"
-                                        name="email"
-                                        type="text"
-                                        defaultValue=""
-                                    />
+                                    <InputOTP maxLength={6} {...field}>
+                                    <InputOTPGroup>
+                                        <InputOTPSlot index={0} />
+                                        <InputOTPSlot index={1} />
+                                        <InputOTPSlot index={2} />
+                                        </InputOTPGroup>
+                                    <InputOTPSeparator />
+                                    <InputOTPGroup>
+                                        <InputOTPSlot index={3} />
+                                        <InputOTPSlot index={4} />
+                                        <InputOTPSlot index={5} />
+                                    </InputOTPGroup>
+                                    </InputOTP>
                                 </FormControl>
-                                <FormMessage className={errorClass} />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                <div className="relative">
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <PasswordInputAuth
-                                        {...field}
-                                        label="Password"
-                                        name="password"
-                                        type="password"
-                                        defaultValue=""
-                                    />
-                                </FormControl>
-                                <FormMessage className={errorClass} />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                                <FormDescription>
+                                    Please enter the one-time password sent to your phone.
+                                </FormDescription>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>) : 
+                (<>
+                    <div className="relative">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <FormInputAuth
+                                            {...field}
+                                            label="Email"
+                                            name="email"
+                                            type="text"
+                                            defaultValue=""
+                                        />
+                                    </FormControl>
+                                    <FormMessage className={errorClass} />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <div className="relative">
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <PasswordInputAuth
+                                            {...field}
+                                            label="Password"
+                                            name="password"
+                                            type="password"
+                                            defaultValue=""
+                                        />
+                                    </FormControl>
+                                    <FormMessage className={errorClass} />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                </>)}
                 <div className="flex items-center justify-between">
                     {/* <div className="flex items-center">
                         <FormField
