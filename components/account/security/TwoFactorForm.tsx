@@ -9,10 +9,10 @@ import { cn } from '@/lib/utils';
 
 import TwoFactorSetupDialog from './TwoFactorSetupDialog';
 import TwoFactorDisableDialog from './TwoFactorDisableDialog';
+import TwoFactorBackupDialog from './TwoFactorBackupDialog'
 
 const TwoFactorForm = ({ session }: { session: Session | null }) => {
     const [user, setUser] = useState(session?.user);
-    const [twoFactor, setTwoFactor] = useState(user?.otpEnabled);
     const { data: newSession, update } = useSession();
     const [openSetup, setOpenSetup] = useState(false);
     const [openDisable, setOpenDisable] = useState(false);
@@ -21,7 +21,6 @@ const TwoFactorForm = ({ session }: { session: Session | null }) => {
     useEffect(() => {
         if (newSession && newSession.user) {
             setUser(newSession?.user);
-            setTwoFactor(user?.otpEnabled);
         }
     }, [newSession]);
 
@@ -57,6 +56,10 @@ const TwoFactorForm = ({ session }: { session: Session | null }) => {
                         <TwoFactorDisableDialog
                             openDisable={openDisable}
                             setOpenDisable={setOpenDisable}
+                        />
+                        <TwoFactorBackupDialog
+                            openBackup={openBackup}
+                            setOpenBackup={setOpenBackup}
                         />
                     </div>
                 ) : (

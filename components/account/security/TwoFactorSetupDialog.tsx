@@ -125,7 +125,7 @@ const TwoFactorSetupDialog = ({ openSetup, setOpenSetup, session }: TwoFactorSet
     }
 
     return (
-        <Dialog open={openSetup} onOpenChange={() => setOpenSetup(false)}>
+        <Dialog open={openSetup} onOpenChange={() => setOpenSetup((prevOpen) => !prevOpen)}>
             <DialogContent
                 className={cn(
                     'p-0 overflow-hidden max-w-[700px] mx-4 sm:mx-6 md:mx-8 lg:mx-10'

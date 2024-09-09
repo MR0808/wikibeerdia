@@ -63,7 +63,7 @@ const TwoFactorDisableDialog = ({
                                 Please wait...
                             </>
                         ) : (
-                            'Confrim'
+                            'Confirm'
                         )}
                     </Button>
                 </DialogFooter>

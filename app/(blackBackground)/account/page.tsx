@@ -1,3 +1,5 @@
+'use server';
+
 import Link from 'next/link';
 import { FaRegAddressCard } from 'react-icons/fa6';
 import { GoLock } from 'react-icons/go';
@@ -9,8 +11,10 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card';
+import { currentUser } from '@/lib/auth';
 
-const AccountPage = () => {
+const AccountPage = async () => {
+    const user = await currentUser();
     return (
         <div className="mt-36 container flex flex-col h-16 md:space-x-4 sm:justify-between justify-between sm:space-x-0">
             <div className="flex flex-col w-full justify-between">
@@ -42,7 +46,8 @@ const AccountPage = () => {
                             </CardContent>
                         </Card>
                     </Link>
-                    <Link href="/account/security">
+                    {!user?.isOAuth &&
+                    (<Link href="/account/security">
                         <Card className="w-[350px] shadow-md hover:shadow-lg">
                             <CardHeader>
                                 <CardTitle className="mb-4">
@@ -57,7 +62,7 @@ const AccountPage = () => {
                                 settings to keep you secure
                             </CardContent>
                         </Card>
-                    </Link>
+                    </Link>)}
                 </div>
             </div>
         </div>

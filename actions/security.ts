@@ -10,7 +10,7 @@ import { getUserById, getUserByEmail } from '@/data/user';
 import { unstable_update as update } from '@/auth';
 import { currentUser } from '@/lib/auth';
 import { sendVerificationEmail } from '@/lib/mail';
-import { generateVerificationToken } from '@/lib/tokens';
+import { generateVerificationToken, generateRecoveryCodes } from '@/lib/tokens';
 
 export const updateEmail = async (values: z.infer<typeof EmailSchema>) => {
     const user = await currentUser();
@@ -179,4 +179,15 @@ export const resetBackupCodes = async () => {
     if (!dbUser) {
         return { error: 'Unauthorized' };
     }
+
+    const { recoveryCodes, recoveryCodesHashed } = await generateRecoveryCodes();
+
+    await db.user.update({
+        where: { id: dbUser.id },
+        data: {
+            otpBackups: recoveryCodesHashed
+        }
+    });
+
+    return {recoveryCodes}
 };
