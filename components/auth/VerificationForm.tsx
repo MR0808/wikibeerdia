@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BeatLoader } from 'react-spinners';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 import { verification } from '@/actions/verification';
 import FormError from '@/components/form/FormError';
@@ -40,10 +41,21 @@ export const VerificationForm = () => {
 
     return (
         <>
-            <div className="flex items-center w-full justify-center">
+            <div className="flex flex-col items-center w-full justify-center">
                 {!success && !error && <BeatLoader />}
                 <FormSuccess message={success} />
                 {!success && <FormError message={error} />}
+                {success && (
+                    <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
+                        <span>Proceed to login</span>
+                        <Link
+                            href="/login"
+                            className="text-indigo-400 hover:text-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-300"
+                        >
+                            Login
+                        </Link>
+                    </p>
+                )}
             </div>
         </>
     );

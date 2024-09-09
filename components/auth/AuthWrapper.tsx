@@ -14,6 +14,7 @@ interface AuthWrapperProps {
     backButtonLabel: string;
     backButtonHref: string;
     showSocial?: boolean;
+    showFooter?: boolean;
 }
 
 const AuthWrapper = ({
@@ -24,7 +25,8 @@ const AuthWrapper = ({
     backButtonString,
     backButtonLabel,
     backButtonHref,
-    showSocial
+    showSocial,
+    showFooter = true
 }: AuthWrapperProps) => {
     return (
         <div className="relative min-h-screen flex ">
@@ -35,11 +37,13 @@ const AuthWrapper = ({
                         <AuthHeader heading={heading} subHeading={subHeading} />
                         {children}
                         {showSocial && <OauthButtons />}
-                        <AuthBackButton
-                            backButtonString={backButtonString}
-                            backButtonHref={backButtonHref}
-                            backButtonLabel={backButtonLabel}
-                        />
+                        {showFooter && (
+                            <AuthBackButton
+                                backButtonString={backButtonString}
+                                backButtonHref={backButtonHref}
+                                backButtonLabel={backButtonLabel}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

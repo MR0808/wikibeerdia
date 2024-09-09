@@ -10,6 +10,7 @@ const NewVerificationPage = () => {
             backButtonString="Proceed to login"
             backButtonHref="/login"
             backButtonLabel="Login"
+            showFooter={false}
         >
             <VerificationForm />
         </AuthWrapper>

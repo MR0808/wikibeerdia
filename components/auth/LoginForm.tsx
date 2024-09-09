@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useTransition, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 
 import {
     Form,
@@ -20,7 +21,7 @@ import {
     InputOTPGroup,
     InputOTPSlot,
     InputOTPSeparator
-  } from "@/components/ui/input-otp"
+} from '@/components/ui/input-otp';
 
 import FormError from '@/components/form/FormError';
 import {
@@ -30,6 +31,7 @@ import {
 import { AuthSubmitButton } from '@/components/form/Buttons';
 import { LoginSchema } from '@/schemas/auth';
 import login from '@/actions/login';
+import { cn } from '@/lib/utils';
 
 const LoginForm = () => {
     const searchParams = useSearchParams();
@@ -40,6 +42,7 @@ const LoginForm = () => {
             : '';
 
     const [showTwoFactor, setShowTwoFactor] = useState(false);
+    const [showBackupCode, setShowBackupCode] = useState(false);
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
@@ -55,6 +58,18 @@ const LoginForm = () => {
         }
     });
 
+    const backupCode = () => {
+        setShowTwoFactor(false);
+        setShowBackupCode(true);
+        form.resetField('token');
+    };
+
+    const phoneCode = () => {
+        setShowTwoFactor(true);
+        setShowBackupCode(false);
+        form.resetField('backupCode');
+    };
+
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError('');
         setSuccess('');
@@ -65,11 +80,6 @@ const LoginForm = () => {
                     if (data?.error) {
                         form.reset();
                         setError(data.error);
-                    }
-
-                    if (data?.success) {
-                        form.reset();
-                        setSuccess(data.success);
                     }
 
                     if (data?.twoFactor) {
@@ -85,78 +95,130 @@ const LoginForm = () => {
             <FormError message={error || urlError} />
             <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                 <input type="hidden" name="callbackUrl" value="placeholder" />
-                {showTwoFactor ? (
-                    <div className="relative">
+                {showTwoFactor && (
+                    <div className="grid justify-center relative items-center">
                         <FormField
                             control={form.control}
                             name="token"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormControl>
-                                    <InputOTP maxLength={6} {...field}>
-                                    <InputOTPGroup>
-                                        <InputOTPSlot index={0} />
-                                        <InputOTPSlot index={1} />
-                                        <InputOTPSlot index={2} />
-                                        </InputOTPGroup>
-                                    <InputOTPSeparator />
-                                    <InputOTPGroup>
-                                        <InputOTPSlot index={3} />
-                                        <InputOTPSlot index={4} />
-                                        <InputOTPSlot index={5} />
-                                    </InputOTPGroup>
-                                    </InputOTP>
-                                </FormControl>
-                                <FormDescription>
-                                    Please enter the one-time password sent to your phone.
-                                </FormDescription>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>) : 
-                (<>
-                    <div className="relative">
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
                                     <FormControl>
-                                        <FormInputAuth
+                                        <InputOTP
+                                            maxLength={6}
                                             {...field}
-                                            label="Email"
-                                            name="email"
-                                            type="text"
-                                            defaultValue=""
-                                        />
+                                            className={cn(
+                                                'flex items-center justify-center'
+                                            )}
+                                        >
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={0} />
+                                                <InputOTPSlot index={1} />
+                                                <InputOTPSlot index={2} />
+                                            </InputOTPGroup>
+                                            <InputOTPSeparator />
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={3} />
+                                                <InputOTPSlot index={4} />
+                                                <InputOTPSlot index={5} />
+                                            </InputOTPGroup>
+                                        </InputOTP>
                                     </FormControl>
-                                    <FormMessage className={errorClass} />
+                                    <FormDescription>
+                                        Please enter the one-time password sent
+                                        to your phone.
+                                    </FormDescription>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
-                    <div className="relative">
+                )}
+                {showBackupCode && (
+                    <div className="grid justify-center relative items-center">
                         <FormField
                             control={form.control}
-                            name="password"
+                            name="backupCode"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <PasswordInputAuth
+                                        <InputOTP
+                                            maxLength={6}
                                             {...field}
-                                            label="Password"
-                                            name="password"
-                                            type="password"
-                                            defaultValue=""
-                                        />
+                                            className={cn(
+                                                'flex items-center justify-center'
+                                            )}
+                                            pattern={
+                                                REGEXP_ONLY_DIGITS_AND_CHARS
+                                            }
+                                        >
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={0} />
+                                                <InputOTPSlot index={1} />
+                                                <InputOTPSlot index={2} />
+                                            </InputOTPGroup>
+                                            <InputOTPSeparator />
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={3} />
+                                                <InputOTPSlot index={4} />
+                                                <InputOTPSlot index={5} />
+                                            </InputOTPGroup>
+                                        </InputOTP>
                                     </FormControl>
-                                    <FormMessage className={errorClass} />
+                                    <FormDescription>
+                                        Please enter one of your backup codes.
+                                        This code will no longer be able to be
+                                        used after login.
+                                    </FormDescription>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
-                </>)}
+                )}
+                {!showTwoFactor && !showBackupCode && (
+                    <>
+                        <div className="relative">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <FormInputAuth
+                                                {...field}
+                                                label="Email"
+                                                name="email"
+                                                type="text"
+                                                defaultValue=""
+                                            />
+                                        </FormControl>
+                                        <FormMessage className={errorClass} />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="relative">
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <PasswordInputAuth
+                                                {...field}
+                                                label="Password"
+                                                name="password"
+                                                type="password"
+                                                defaultValue=""
+                                            />
+                                        </FormControl>
+                                        <FormMessage className={errorClass} />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </>
+                )}
                 <div className="flex items-center justify-between">
                     {/* <div className="flex items-center">
                         <FormField
@@ -185,15 +247,39 @@ const LoginForm = () => {
                             )}
                         />
                     </div> */}
-                    &nbsp;
-                    <div className="text-sm">
-                        <Link
-                            href="/forgot"
-                            className="text-indigo-400 hover:text-blue-500"
-                        >
-                            Forgot your password?
-                        </Link>
-                    </div>
+                    {showTwoFactor && (
+                        <div className="text-sm">
+                            <div
+                                className="text-indigo-400 hover:text-blue-500 cursor-pointer"
+                                onClick={backupCode}
+                            >
+                                Use backup code
+                            </div>
+                        </div>
+                    )}
+                    {showBackupCode && (
+                        <div className="text-sm">
+                            <div
+                                className="text-indigo-400 hover:text-blue-500 cursor-pointer"
+                                onClick={phoneCode}
+                            >
+                                Use phone code
+                            </div>
+                        </div>
+                    )}
+                    {!showTwoFactor && !showBackupCode && (
+                        <>
+                            &nbsp;
+                            <div className="text-sm">
+                                <Link
+                                    href="/forgotpassword"
+                                    className="text-indigo-400 hover:text-blue-500"
+                                >
+                                    Forgot your password?
+                                </Link>
+                            </div>
+                        </>
+                    )}
                 </div>
                 <div>
                     <AuthSubmitButton text="Login" isPending={isPending} />

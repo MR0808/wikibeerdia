@@ -8,7 +8,8 @@ export const LoginSchema = z.object({
         message: 'Password is required'
     }),
     token: z.optional(z.string()),
-    rememberMe: z.optional(z.boolean())
+    rememberMe: z.optional(z.boolean()),
+    backupCode: z.optional(z.string())
 });
 
 export const RegisterSchema = z

@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
 import db from '@/lib/db';
-import { getVerificationTokenByEmail } from '@/data/verification-token';
-import { getPasswordResetTokenByEmail } from '@/data/password-reset-token';
+import { getVerificationTokenByEmail } from '@/data/verificationToken';
+import { getPasswordResetTokenByEmail } from '@/data/passwordResetToken';
 
 export const generateVerificationToken = async (email: string) => {
     const token = uuidv4();

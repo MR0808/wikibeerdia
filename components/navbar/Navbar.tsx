@@ -34,7 +34,9 @@ const Navbar = ({ whiteBackground, session }: NavBarProps) => {
         >
             <div className="container flex h-16 items-center space-x-4 sm:justify-between justify-between sm:space-x-0">
                 <div className="flex">
-                    <Logo whiteBackground={whiteBackground} />
+                    <Logo
+                        whiteBackground={scrollActive ? whiteBackground : false}
+                    />
                 </div>
                 <div className="sm:flex gap-6 md:gap-10 hidden">
                     <NavLinks />
