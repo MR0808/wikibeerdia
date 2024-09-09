@@ -5,23 +5,18 @@ import { useSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
 
 import { Button } from '@/components/ui/button';
-import { useTwoFactorDialog } from '@/hooks/useTwoFactorDialog';
-import {}
 import { cn } from '@/lib/utils';
 
+import TwoFactorSetupDialog from './TwoFactorSetupDialog';
 import TwoFactorDisableDialog from './TwoFactorDisableDialog';
 
 const TwoFactorForm = ({ session }: { session: Session | null }) => {
     const [user, setUser] = useState(session?.user);
     const [twoFactor, setTwoFactor] = useState(user?.otpEnabled);
     const { data: newSession, update } = useSession();
-    const { onOpen, onEdit, isUpdate } = useTwoFactorDialog();
+    const [openSetup, setOpenSetup] = useState(false);
     const [openDisable, setOpenDisable] = useState(false);
     const [openBackup, setOpenBackup] = useState(false);
-
-    useEffect(() => {
-        update();
-    }, [isUpdate]);
 
     useEffect(() => {
         if (newSession && newSession.user) {
@@ -29,8 +24,6 @@ const TwoFactorForm = ({ session }: { session: Session | null }) => {
             setTwoFactor(user?.otpEnabled);
         }
     }, [newSession]);
-
-    const generateBackupCo
 
     return (
         <div className="flex flex-col gap-5 pb-8 mt-8">
@@ -57,10 +50,7 @@ const TwoFactorForm = ({ session }: { session: Session | null }) => {
                         </Button>
                         <Button
                             className={cn('')}
-                            onClick={() => {
-                                onOpen();
-                                onEdit(true);
-                            }}
+                            onClick={() => setOpenBackup(true)}
                         >
                             Reset Recovery Codes
                         </Button>
@@ -70,15 +60,19 @@ const TwoFactorForm = ({ session }: { session: Session | null }) => {
                         />
                     </div>
                 ) : (
-                    <Button
-                        className={cn('')}
-                        onClick={() => {
-                            onOpen();
-                            onEdit(true);
-                        }}
-                    >
-                        Setup 2FA
-                    </Button>
+                    <>
+                        <Button
+                            className={cn('')}
+                            onClick={() => setOpenSetup(true)}
+                        >
+                            Setup 2FA
+                        </Button>
+                        <TwoFactorSetupDialog
+                        openSetup={openSetup}
+                        setOpenSetup={setOpenSetup}
+                        session={session}
+                    />
+                </>
                 )}
             </div>
         </div>

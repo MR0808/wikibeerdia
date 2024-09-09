@@ -1,10 +1,10 @@
-import { boolean, z } from 'zod';
-
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState, useTransition } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, useTransition } from 'react';
 import type { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
-import { zodResolver } from '@hookform/resolvers/zod';
+
 import QRCode from 'react-qr-code';
 
 import {
@@ -14,7 +14,6 @@ import {
     DialogHeader,
     DialogTitle
 } from '@/components/ui/dialog';
-import { useTwoFactorDialog } from '@/hooks/useTwoFactorDialog';
 
 import {
     Form,
@@ -32,9 +31,14 @@ import { TwoFactorSchema } from '@/schemas/auth';
 import { SubmitButton } from '@/components/form/Buttons';
 import { setupTwoFactor } from '@/actions/security';
 
-const TwoFactorModal = ({ session }: { session: Session | null }) => {
+interface TwoFactorSetupDialogProps {
+    openSetup: boolean;
+    setOpenSetup: Dispatch<SetStateAction<boolean>>;
+    session: Session | null
+}
+
+const TwoFactorSetupDialog = ({ openSetup, setOpenSetup, session }: TwoFactorSetupDialogProps ) => {
     const [user, setUser] = useState(session?.user);
-    const { isOpen, onClose, isEdit, onUpdate } = useTwoFactorDialog();
     const [qrData, setQRData] = useState<string>();
     const [qrSecret, setQRSecret] = useState<string>();
     const [backupCodes, setBackupCodes] = useState<string[]>();
@@ -55,8 +59,7 @@ const TwoFactorModal = ({ session }: { session: Session | null }) => {
         setQRData('');
         setQRSecret('');
         setBackupCodes([]);
-        onUpdate(true);
-        onClose();
+        setOpenSetup(false)
     };
 
     useEffect(() => {
@@ -80,8 +83,8 @@ const TwoFactorModal = ({ session }: { session: Session | null }) => {
             setQRData(data.otpurl);
             setQRSecret(data.secret);
         };
-        isEdit && fetchQRCode();
-    }, [isEdit]);
+        openSetup && fetchQRCode();
+    }, [openSetup]);
 
     const verifyOtp = async (token: string) => {
         const response = await fetch(`/api/2fa/verify`, {
@@ -122,7 +125,7 @@ const TwoFactorModal = ({ session }: { session: Session | null }) => {
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={openSetup} onOpenChange={() => setOpenSetup(false)}>
             <DialogContent
                 className={cn(
                     'p-0 overflow-hidden max-w-[700px] mx-4 sm:mx-6 md:mx-8 lg:mx-10'
@@ -207,7 +210,7 @@ const TwoFactorModal = ({ session }: { session: Session | null }) => {
                                         type="button"
                                         variant="outline"
                                         disabled={isPending}
-                                        onClick={onClose}
+                                        onClick={closeDialog}
                                         className={cn('capitalize')}
                                         size="lg"
                                     >
@@ -251,4 +254,4 @@ const TwoFactorModal = ({ session }: { session: Session | null }) => {
         </Dialog>
     );
 };
-export default TwoFactorModal;
+export default TwoFactorSetupDialog;

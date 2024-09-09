@@ -44,10 +44,16 @@ export interface TwoFactorDialogsProp {
     onEdit: (edit: boolean) => void;
     onOpen: () => void;
     onClose: () => void;
-    data: any;
-    setData(data: any): void;
     isUpdate: boolean;
     onUpdate: (update: boolean) => void;
+}
+
+export interface BackupCodesDialogsProp {
+    isOpen: boolean;
+    isEdit: boolean;
+    onEdit: (edit: boolean) => void;
+    onOpen: () => void;
+    onClose: () => void;
 }
 
 export interface TwoFactorProps {
