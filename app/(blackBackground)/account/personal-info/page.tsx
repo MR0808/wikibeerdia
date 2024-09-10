@@ -61,8 +61,8 @@ const PersonalInfoPage = async () => {
             <div className="mt-8 mb-14">
                 <h1 className="text-4xl font-semibold">Personal Info</h1>
             </div>
-            <div className="flex flex-row gap-x-16">
-                <div className="flex flex-col w-3/5">
+            <div className="flex flex-col-reverse sm:flex-row gap-x-16">
+                <div className="flex flex-col sm:w-3/5 w-80">
                     <DisplayNameForm session={session} />
                     {!user?.isOAuth && <NameForm session={session} />}
                     <GenderForm genderProp={userDb?.gender || undefined} />

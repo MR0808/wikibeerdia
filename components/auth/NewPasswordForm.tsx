@@ -3,6 +3,7 @@
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { useState, useTransition } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
@@ -13,35 +14,42 @@ import {
     FormMessage
 } from '@/components/ui/form';
 
-import { EmailSchema } from '@/schemas/auth';
+import { ResetPasswordSchema } from '@/schemas/auth';
 import AuthWrapper from './AuthWrapper';
-import { FormInputAuth } from '@/components/form/FormInputAuth';
+import { PasswordInputAuth } from '@/components/form/FormInputAuth';
 import { AuthSubmitButton } from '@/components/form/Buttons';
-import { resetPassword } from '@/actions/resetPassword';
+import { updatePassword } from '@/actions/resetPassword';
 import FormError from '@/components/form/FormError';
 import FormSuccess from '../form/FormSuccess';
 
 const NewPasswordForm = () => {
+    const searchParams = useSearchParams();
+    const token = searchParams.get('token');
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
 
-    const form = useForm<z.infer<typeof EmailSchema>>({
-        resolver: zodResolver(EmailSchema),
+    const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+        resolver: zodResolver(ResetPasswordSchema),
         defaultValues: {
-            email: ''
+            password: '',
+            confirmPassword: ''
         }
     });
     const errorClass = 'pl-6';
 
-    const onSubmit = (values: z.infer<typeof EmailSchema>) => {
+    const onSubmit = (values: z.infer<typeof ResetPasswordSchema>) => {
         setError('');
         setSuccess('');
 
         startTransition(() => {
-            resetPassword(values).then((data) => {
+            updatePassword(values, token).then((data) => {
                 setError(data?.error);
-                setSuccess(data?.success);
+                setSuccess(
+                    data?.success
+                        ? 'Your password has been updated.'
+                        : undefined
+                );
             });
         });
     };
@@ -67,15 +75,35 @@ const NewPasswordForm = () => {
                         <div className="relative">
                             <FormField
                                 control={form.control}
-                                name="email"
+                                name="password"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <FormInputAuth
+                                            <PasswordInputAuth
                                                 {...field}
-                                                label="Email"
-                                                name="email"
-                                                type="text"
+                                                label="Password"
+                                                name="password"
+                                                type="password"
+                                                defaultValue=""
+                                            />
+                                        </FormControl>
+                                        <FormMessage className={errorClass} />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="relative">
+                            <FormField
+                                control={form.control}
+                                name="confirmPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <PasswordInputAuth
+                                                {...field}
+                                                label="Confirm Password"
+                                                name="confirmPassword"
+                                                type="password"
                                                 defaultValue=""
                                             />
                                         </FormControl>
@@ -87,7 +115,7 @@ const NewPasswordForm = () => {
 
                         <div>
                             <AuthSubmitButton
-                                text="Login"
+                                text="Reset"
                                 isPending={isPending}
                             />
                         </div>

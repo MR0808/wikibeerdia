@@ -1,7 +1,8 @@
-import { Typewriter } from 'nextjs-simple-typewriter';
-import logo from '@/public/images/logo.png';
 import Link from 'next/link';
 import Image from 'next/image';
+
+import { Typewriter } from 'nextjs-simple-typewriter';
+import logo from '@/public/images/logo.png';
 
 const AuthContainer = ({ paragraph }: { paragraph: string }) => {
     const cheers = [

@@ -51,7 +51,7 @@ const ProfilePictureForm = ({ session }: { session: Session | null }) => {
 
     return (
         <>
-            <Card className="w-[400px]">
+            <Card className="sm:w-[400px] w-80 mb-6">
                 <CardHeader>
                     <CardTitle>
                         <div className="flex flex-row justify-center">

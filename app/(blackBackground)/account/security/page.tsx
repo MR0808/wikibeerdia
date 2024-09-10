@@ -38,12 +38,11 @@ const SecurityPage = async () => {
                 <h1 className="text-4xl font-semibold">Login and Security</h1>
             </div>
             <div className="flex flex-row gap-x-16">
-                <div className="flex flex-col w-3/5">
+                <div className="flex flex-col sm:w-3/5 w-80">
                     <EmailForm session={session} />
                     <PasswordForm session={session} />
                     <TwoFactorForm session={session} />
                 </div>
-                <div className="flex flex-col w-2/5">More goes here</div>
             </div>
         </div>
     );
