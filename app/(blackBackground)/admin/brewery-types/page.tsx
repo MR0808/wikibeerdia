@@ -1,5 +1,5 @@
-import EmailForm from "@/components/account/security/EmailForm";
-import PasswordForm from "@/components/account/security/PasswordForm";
+import { Suspense } from "react";
+
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -9,40 +9,41 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import TwoFactorForm from "@/components/account/security/TwoFactorForm";
-import getSession from "@/lib/session";
+import LoadingTable from "@/components/global/LoadingTable";
+import BreweryTypesTable from "@/components/admin/brewery-types/BreweryTypesTable";
+import BreweryTypesDialog from "@/components/admin/brewery-types/BreweryTypesDialog";
 
-const SecurityPage = async () => {
-    const session = await getSession();
-
+const BreweryTypesPage = () => {
     return (
         <div className="container mt-36 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0">
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                        <BreadcrumbLink className="text-base" href="/account">
-                            Account
+                        <BreadcrumbLink className="text-base" href="/admin">
+                            Admin
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="text-base" />
                     <BreadcrumbItem>
                         <BreadcrumbPage className="text-base">
-                            Login and Security
+                            Brewery Types
                         </BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mb-14 mt-8">
-                <h1 className="text-4xl font-semibold">Login and Security</h1>
+            <div className="mb-14 mt-8 flex w-80 flex-row justify-between sm:w-1/2">
+                <h1 className="text-4xl font-semibold">Brewery Types</h1>
+                <BreweryTypesDialog />
             </div>
-            <div className="flex flex-row gap-x-16">
+            <div className="flex flex-col-reverse gap-x-16 sm:flex-row">
                 <div className="flex w-80 flex-col sm:w-3/5">
-                    <EmailForm session={session} />
-                    <PasswordForm session={session} />
-                    <TwoFactorForm session={session} />
+                    <Suspense fallback={<LoadingTable />}>
+                        <BreweryTypesTable />
+                    </Suspense>
                 </div>
             </div>
         </div>
     );
 };
-export default SecurityPage;
+
+export default BreweryTypesPage;

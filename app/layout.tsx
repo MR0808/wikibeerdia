@@ -1,20 +1,21 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { SessionProvider } from 'next-auth/react';
-import './globals.css';
-import { Toaster } from '@/components/ui/sonner';
-import { auth } from '@/auth';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
+import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import { auth } from "@/auth";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import ReactQueryProvider from "@/Providers/ReactQueryProvider";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: 'Wikibeerdia',
-    description: 'Everything you needed to know about beer'
+    title: "Wikibeerdia",
+    description: "Everything you needed to know about beer",
 };
 
 export default async function RootLayout({
-    children
+    children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
@@ -26,8 +27,9 @@ export default async function RootLayout({
                     className={inter.className}
                     suppressHydrationWarning={true}
                 >
-                    {children}
+                    <ReactQueryProvider>{children}</ReactQueryProvider>
                     <Toaster richColors />
+
                     <SpeedInsights />
                 </body>
             </html>

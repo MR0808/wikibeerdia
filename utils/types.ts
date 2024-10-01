@@ -1,11 +1,13 @@
-import { ExtendedUser } from '@/next-auth';
-import { Country, Gender, State } from '@prisma/client';
-import type { Session } from 'next-auth';
+import { ExtendedUser } from "@/next-auth";
+import { Country, Gender, State, Status } from "@prisma/client";
+import type { Session } from "next-auth";
+import { Dispatch, SetStateAction } from "react";
 
 export type NavLink = {
     href: string;
     label: string;
     subMenu?: NavLink[];
+    border?: boolean;
 };
 
 export type actionFunction = (
@@ -60,4 +62,21 @@ export interface TwoFactorProps {
     otpAuthUrl: string;
     otpBase32: string;
     otpBackups: string[];
+}
+
+export const statusLabels: { value: Status; label: string }[] = [
+    { value: Status.DRAFT, label: "Draft" },
+    { value: Status.PENDING, label: "Pending" },
+    { value: Status.APPROVED, label: "Approved" }
+];
+
+export interface BreweryTypeProps {
+    nameProp?: string;
+    statusProp?: Status;
+    id?: string;
+}
+
+export interface BreweryFormProps extends BreweryTypeProps {
+    className?: string;
+    setOpen: Dispatch<SetStateAction<boolean>>;
 }

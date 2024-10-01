@@ -1,35 +1,35 @@
-import GenderForm from '@/components/account/personal-info/GenderForm';
-import DisplayNameForm from '@/components/account/personal-info/DisplayNameForm';
-import NameForm from '@/components/account/personal-info/NameForm';
-import LocationForm from '@/components/account/personal-info/LocationForm';
-import DateOfBirthForm from '@/components/account/personal-info/DateOfBirthForm';
-import ProfilePictureForm from '@/components/account/personal-info/ProfilePictureForm';
+import GenderForm from "@/components/account/personal-info/GenderForm";
+import DisplayNameForm from "@/components/account/personal-info/DisplayNameForm";
+import NameForm from "@/components/account/personal-info/NameForm";
+import LocationForm from "@/components/account/personal-info/LocationForm";
+import DateOfBirthForm from "@/components/account/personal-info/DateOfBirthForm";
+import ProfilePictureForm from "@/components/account/personal-info/ProfilePictureForm";
 import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbLink,
     BreadcrumbList,
     BreadcrumbPage,
-    BreadcrumbSeparator
-} from '@/components/ui/breadcrumb';
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
-import { auth } from '@/auth';
-import { getUserById } from '@/data/user';
-import { currentUser } from '@/lib/auth';
+import getSession from "@/lib/session";
+import { getUserById } from "@/data/user";
+import { currentUser } from "@/lib/auth";
 import {
     getAllCountries,
     getCountryByName,
     getStatesByCountry,
     getStateById,
-    getCountryById
-} from '@/data/location';
+    getCountryById,
+} from "@/data/location";
 
 const PersonalInfoPage = async () => {
     const user = await currentUser();
-    const session = await auth();
+    const session = await getSession();
     const userDb = await getUserById(user?.id!);
     const countries = await getAllCountries();
-    const defaultCountry = await getCountryByName('Australia');
+    const defaultCountry = await getCountryByName("Australia");
     const initialValueProp = userDb?.countryId ? true : false;
     const states = userDb?.countryId
         ? await getStatesByCountry(userDb.countryId)
@@ -42,7 +42,7 @@ const PersonalInfoPage = async () => {
         : await getStateById(defaultCountry?.id!);
 
     return (
-        <div className="container flex flex-col h-16 sm:justify-between justify-between sm:space-x-0 mt-36">
+        <div className="container mt-36 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0">
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
@@ -58,11 +58,11 @@ const PersonalInfoPage = async () => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mt-8 mb-14">
+            <div className="mb-14 mt-8">
                 <h1 className="text-4xl font-semibold">Personal Info</h1>
             </div>
-            <div className="flex flex-col-reverse sm:flex-row gap-x-16">
-                <div className="flex flex-col sm:w-3/5 w-80">
+            <div className="flex flex-col-reverse gap-x-16 sm:flex-row">
+                <div className="flex w-80 flex-col sm:w-3/5">
                     <DisplayNameForm session={session} />
                     {!user?.isOAuth && <NameForm session={session} />}
                     <GenderForm genderProp={userDb?.gender || undefined} />
@@ -77,7 +77,7 @@ const PersonalInfoPage = async () => {
                         dateOfBirthProp={userDb?.dateOfBirth || undefined}
                     />
                 </div>
-                <div className="flex flex-col w-2/5">
+                <div className="flex w-2/5 flex-col">
                     <ProfilePictureForm session={session} />
                 </div>
             </div>

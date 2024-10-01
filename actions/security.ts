@@ -1,34 +1,34 @@
-'use server';
+"use server";
 
-import * as z from 'zod';
-import bcrypt from 'bcryptjs';
+import * as z from "zod";
+import { hash } from "bcrypt-ts";
 
-import db from '@/lib/db';
-import { EmailSchema, ResetPasswordSchema } from '@/schemas/auth';
-import { TwoFactorProps } from '@/utils/types';
-import { getUserById, getUserByEmail } from '@/data/user';
-import { unstable_update as update } from '@/auth';
-import { currentUser } from '@/lib/auth';
-import { sendVerificationEmail } from '@/lib/mail';
-import { generateVerificationToken, generateRecoveryCodes } from '@/lib/tokens';
+import db from "@/lib/db";
+import { EmailSchema, ResetPasswordSchema } from "@/schemas/auth";
+import { TwoFactorProps } from "@/utils/types";
+import { getUserById, getUserByEmail } from "@/data/user";
+import { unstable_update as update } from "@/auth";
+import { currentUser } from "@/lib/auth";
+import { sendVerificationEmail } from "@/lib/mail";
+import { generateVerificationToken, generateRecoveryCodes } from "@/lib/tokens";
 
 export const updateEmail = async (values: z.infer<typeof EmailSchema>) => {
     const user = await currentUser();
 
     if (!user) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     const dbUser = await getUserById(user.id!);
 
     if (!dbUser) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     const validatedFields = EmailSchema.safeParse(values);
 
     if (!validatedFields.success) {
-        return { error: 'Invalid fields!' };
+        return { error: "Invalid fields!" };
     }
 
     values.email = values.email.toLowerCase();
@@ -36,7 +36,7 @@ export const updateEmail = async (values: z.infer<typeof EmailSchema>) => {
     const existingUser = await getUserByEmail(values.email);
 
     if (existingUser) {
-        return { error: 'Email already in use!' };
+        return { error: "Email already in use!" };
     }
 
     const verificationToken = await generateVerificationToken(values.email);
@@ -60,7 +60,7 @@ export const updateEmail = async (values: z.infer<typeof EmailSchema>) => {
         }
     });
 
-    return { success: 'Email updated' };
+    return { success: "Email updated" };
 };
 
 export const updatePassword = async (
@@ -69,24 +69,24 @@ export const updatePassword = async (
     const user = await currentUser();
 
     if (!user) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     const dbUser = await getUserById(user.id!);
 
     if (!dbUser) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     const validatedFields = ResetPasswordSchema.safeParse(values);
 
     if (!validatedFields.success) {
-        return { error: 'Invalid fields!' };
+        return { error: "Invalid fields!" };
     }
 
     const { password } = validatedFields.data;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hash(password, 10);
 
     await db.user.update({
         where: { id: dbUser.id },
@@ -95,7 +95,7 @@ export const updatePassword = async (
         }
     });
 
-    return { success: 'Password updated' };
+    return { success: "Password updated" };
 };
 
 export const setupTwoFactor = async ({
@@ -106,13 +106,13 @@ export const setupTwoFactor = async ({
     const user = await currentUser();
 
     if (!user) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     const dbUser = await getUserById(user.id!);
 
     if (!dbUser) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     await db.user.update({
@@ -132,20 +132,20 @@ export const setupTwoFactor = async ({
         }
     });
 
-    return { success: 'Two factor updated' };
+    return { success: "Two factor updated" };
 };
 
 export const disableTwoFactor = async () => {
     const user = await currentUser();
 
     if (!user) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     const dbUser = await getUserById(user.id!);
 
     if (!dbUser) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     await db.user.update({
@@ -164,23 +164,24 @@ export const disableTwoFactor = async () => {
             otpEnabled: false
         }
     });
-    return { success: 'Two factor disabled' };
+    return { success: "Two factor disabled" };
 };
 
 export const resetBackupCodes = async () => {
     const user = await currentUser();
 
     if (!user) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
     const dbUser = await getUserById(user.id!);
 
     if (!dbUser) {
-        return { error: 'Unauthorized' };
+        return { error: "Unauthorized" };
     }
 
-    const { recoveryCodes, recoveryCodesHashed } = await generateRecoveryCodes();
+    const { recoveryCodes, recoveryCodesHashed } =
+        await generateRecoveryCodes();
 
     await db.user.update({
         where: { id: dbUser.id },
@@ -189,5 +190,5 @@ export const resetBackupCodes = async () => {
         }
     });
 
-    return {recoveryCodes}
+    return { recoveryCodes };
 };

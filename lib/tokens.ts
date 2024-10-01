@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from "uuid";
+import { hash } from "bcrypt-ts";
 
-import db from '@/lib/db';
-import { getVerificationTokenByEmail } from '@/data/verificationToken';
-import { getPasswordResetTokenByEmail } from '@/data/passwordResetToken';
+import db from "@/lib/db";
+import { getVerificationTokenByEmail } from "@/data/verificationToken";
+import { getPasswordResetTokenByEmail } from "@/data/passwordResetToken";
 
 export const generateVerificationToken = async (email: string) => {
     const token = uuidv4();
@@ -54,8 +54,8 @@ export const generatePasswordResetToken = async (email: string) => {
 };
 
 export const generateRandomString = (length: number) => {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
         result += characters.charAt(
@@ -71,9 +71,9 @@ export const generateRecoveryCodes = async () => {
     for (let i = 0; i < 6; i++) {
         const recoveryCode = generateRandomString(6);
         let chars = [...recoveryCode];
-        chars.splice(3, 0, '-');
-        const hashedCode = await bcrypt.hash(recoveryCode, 12);
-        recoveryCodes.push(chars.join(''));
+        chars.splice(3, 0, "-");
+        const hashedCode = await hash(recoveryCode, 12);
+        recoveryCodes.push(chars.join(""));
         recoveryCodesHashed.push(hashedCode);
     }
     return { recoveryCodes, recoveryCodesHashed };

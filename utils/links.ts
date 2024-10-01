@@ -1,48 +1,53 @@
-import { NavLink } from './types';
+import { NavLink } from "./types";
 
 export const links: NavLink[] = [
     // { href: '/', label: 'home' },
     {
-        href: '/education',
-        label: 'education',
+        href: "/education",
+        label: "education",
         subMenu: [
             {
-                href: '/education/beer',
-                label: 'how beer is made'
-            }
-        ]
+                href: "/education/beer",
+                label: "how beer is made",
+            },
+        ],
     },
     {
-        href: '/breweries',
-        label: 'breweries',
+        href: "/breweries",
+        label: "breweries",
         subMenu: [
             {
-                href: '/breweries/popular',
-                label: 'popular'
+                href: "/breweries/popular",
+                label: "popular",
             },
             {
-                href: '/breweries/az',
-                label: 'A-Z'
-            }
-        ]
+                href: "/breweries/az",
+                label: "A-Z",
+            },
+            {
+                href: "/breweries/submit",
+                label: "Submit Brewery",
+                border: true,
+            },
+        ],
     },
     {
-        href: '/beer',
-        label: 'beer',
+        href: "/beer",
+        label: "beer",
 
         subMenu: [
             {
-                href: '/beer/popular',
-                label: 'popular'
-            }
-        ]
+                href: "/beer/popular",
+                label: "popular",
+            },
+        ],
     },
-    { href: '/blog', label: 'blog' }
+    { href: "/blog", label: "blog" },
     // { href: '/contact', label: 'contact' }
 ];
 
 export const accountLinks: NavLink[] = [
-    { href: '/profile', label: 'profile' },
-    { href: '/account', label: 'account' },
-    { href: '/logout', label: 'logout' }
+    { href: "/profile", label: "profile" },
+    { href: "/account", label: "account" },
+    { href: "/logout", label: "logout" },
 ];
