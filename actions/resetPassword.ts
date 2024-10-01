@@ -1,20 +1,20 @@
-'use server';
+"use server";
 
-import * as z from 'zod';
-import bcrypt from 'bcryptjs';
+import * as z from "zod";
+import { hash } from "bcrypt-ts";
 
-import { EmailSchema, ResetPasswordSchema } from '@/schemas/auth';
-import { getUserByEmail } from '@/data/user';
-import { sendPasswordResetEmail } from '@/lib/mail';
-import { generatePasswordResetToken } from '@/lib/tokens';
-import { getPasswordResetTokenByToken } from '@/data/passwordResetToken';
-import db from '@/lib/db';
+import { EmailSchema, ResetPasswordSchema } from "@/schemas/auth";
+import { getUserByEmail } from "@/data/user";
+import { sendPasswordResetEmail } from "@/lib/mail";
+import { generatePasswordResetToken } from "@/lib/tokens";
+import { getPasswordResetTokenByToken } from "@/data/passwordResetToken";
+import db from "@/lib/db";
 
 export const resetPassword = async (values: z.infer<typeof EmailSchema>) => {
     const validatedFields = EmailSchema.safeParse(values);
 
     if (!validatedFields.success) {
-        return { error: 'Invalid emaiL!' };
+        return { error: "Invalid emaiL!" };
     }
 
     const { email } = validatedFields.data;
@@ -22,7 +22,7 @@ export const resetPassword = async (values: z.infer<typeof EmailSchema>) => {
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
-        return { error: 'Email not found!' };
+        return { error: "Email not found!" };
     }
 
     const passwordResetToken = await generatePasswordResetToken(email);
@@ -31,7 +31,7 @@ export const resetPassword = async (values: z.infer<typeof EmailSchema>) => {
         passwordResetToken.token
     );
 
-    return { success: 'Reset email sent!' };
+    return { success: "Reset email sent!" };
 };
 
 export const updatePassword = async (
@@ -39,13 +39,13 @@ export const updatePassword = async (
     token?: string | null
 ) => {
     if (!token) {
-        return { error: 'Missing token!' };
+        return { error: "Missing token!" };
     }
 
     const validatedFields = ResetPasswordSchema.safeParse(values);
 
     if (!validatedFields.success) {
-        return { error: 'Invalid fields!' };
+        return { error: "Invalid fields!" };
     }
 
     const { password } = validatedFields.data;
@@ -53,22 +53,22 @@ export const updatePassword = async (
     const existingToken = await getPasswordResetTokenByToken(token);
 
     if (!existingToken) {
-        return { error: 'Invalid token!' };
+        return { error: "Invalid token!" };
     }
 
     const hasExpired = new Date(existingToken.expires) < new Date();
 
     if (hasExpired) {
-        return { error: 'Token has expired!' };
+        return { error: "Token has expired!" };
     }
 
     const existingUser = await getUserByEmail(existingToken.email);
 
     if (!existingUser) {
-        return { error: 'Email does not exist!' };
+        return { error: "Email does not exist!" };
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hash(password, 10);
 
     await db.user.update({
         where: { id: existingUser.id },
@@ -81,5 +81,5 @@ export const updatePassword = async (
         where: { id: existingToken.id }
     });
 
-    return { success: 'Password updated' };
+    return { success: "Password updated" };
 };
