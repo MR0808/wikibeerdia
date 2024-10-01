@@ -37,8 +37,10 @@ model User {
   image                   String?
   gender                  Gender?
   password                String?
-  stateId                 Int?
-  countryId               Int? 
+  country                 Country? @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  countryId               String?
+  state                   State? @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId                 String?
   dateOfBirth             DateTime?
   breweries               Brewery[]
   beers                   Beer[]
@@ -112,6 +114,7 @@ model Country {
   name      String
   currency  String
   states    State[]
+  users     User[]
 }
 
 model State {
@@ -121,6 +124,8 @@ model State {
   country   Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId String
   cities    City[]
+  users     User[]
+
 }
 
 model City {
