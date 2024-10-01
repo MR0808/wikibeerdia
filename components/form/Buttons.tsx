@@ -1,144 +1,93 @@
-'use client';
+"use client";
 
-import { ReloadIcon } from '@radix-ui/react-icons';
-import { FaRegHeart, FaHeart } from 'react-icons/fa';
-import { LuTrash2, LuPenSquare } from 'react-icons/lu';
-import { useFormStatus } from 'react-dom';
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useFormStatus } from "react-dom";
 
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-type btnSize = 'default' | 'lg' | 'sm';
+type btnSize = "default" | "lg" | "sm";
 
 type SubmitButtonProps = {
-    className?: string;
-    text?: string;
-    size?: btnSize;
-    isPending: boolean;
-    disabledCheck?: boolean;
+  className?: string;
+  text?: string;
+  size?: btnSize;
+  isPending: boolean;
+  disabledCheck?: boolean;
 };
 
 type ProfileButtonProps = {
-    text?: string;
-    newImage: boolean;
+  text?: string;
+  newImage: boolean;
 };
 
 export const SubmitButton = ({
-    className = '',
-    text = 'submit',
-    size = 'lg',
-    isPending,
-    disabledCheck = true
+  className = "",
+  text = "submit",
+  size = "lg",
+  isPending,
+  disabledCheck = true,
 }: SubmitButtonProps) => {
-    return (
-        <Button
-            type="submit"
-            disabled={isPending || !disabledCheck}
-            className={cn('capitalize', className)}
-            size={size}
-        >
-            {isPending ? (
-                <>
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait...
-                </>
-            ) : (
-                text
-            )}
-        </Button>
-    );
+  return (
+    <Button
+      type="submit"
+      disabled={isPending || !disabledCheck}
+      className={cn("capitalize", className)}
+      size={size}
+    >
+      {isPending ? (
+        <>
+          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        text
+      )}
+    </Button>
+  );
 };
 
 export const AuthSubmitButton = ({
-    className = '',
-    text = 'submit',
-    size = 'lg',
-    isPending
+  className = "",
+  text = "submit",
+  size = "lg",
+  isPending,
 }: SubmitButtonProps) => {
-    return (
-        <Button
-            type="submit"
-            disabled={isPending}
-            className={cn('capitalize w-full rounded-full h-12', className)}
-            size={size}
-        >
-            {isPending ? (
-                <>
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait...
-                </>
-            ) : (
-                text
-            )}
-        </Button>
-    );
-};
-
-type actionType = 'edit' | 'delete';
-
-export const IconButton = ({ actionType }: { actionType: actionType }) => {
-    const pending = true;
-
-    const renderIcon = () => {
-        switch (actionType) {
-            case 'edit':
-                return <LuPenSquare />;
-            case 'delete':
-                return <LuTrash2 />;
-            default:
-                const never: never = actionType;
-                throw new Error(`Invalid action type: ${never}`);
-        }
-    };
-
-    return (
-        <Button
-            type="submit"
-            size="icon"
-            variant="link"
-            className="p-2 cursor-pointer"
-        >
-            {pending ? <ReloadIcon className=" animate-spin" /> : renderIcon()}
-        </Button>
-    );
-};
-
-export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
-    const pending = true;
-    return (
-        <Button
-            type="submit"
-            size="icon"
-            variant="outline"
-            className=" p-2 cursor-pointer"
-        >
-            {pending ? (
-                <ReloadIcon className=" animate-spin" />
-            ) : isFavorite ? (
-                <FaHeart />
-            ) : (
-                <FaRegHeart />
-            )}
-        </Button>
-    );
+  return (
+    <Button
+      type="submit"
+      disabled={isPending}
+      className={cn("h-12 w-full rounded-full capitalize", className)}
+      size={size}
+    >
+      {isPending ? (
+        <>
+          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        text
+      )}
+    </Button>
+  );
 };
 
 export function ProfileButton({
-    text = 'submit',
-    newImage
+  text = "submit",
+  newImage,
 }: ProfileButtonProps) {
-    const { pending } = useFormStatus();
+  const { pending } = useFormStatus();
 
-    return (
-        <Button type="submit" disabled={!newImage || pending}>
-            {pending ? (
-                <>
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait...
-                </>
-            ) : (
-                text
-            )}
-        </Button>
-    );
+  return (
+    <Button type="submit" disabled={!newImage || pending}>
+      {pending ? (
+        <>
+          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        text
+      )}
+    </Button>
+  );
 }

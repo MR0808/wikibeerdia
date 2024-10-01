@@ -21,32 +21,42 @@ enum Gender {
   NOTSAY
 }
 
+enum Status {
+  DRAFT
+  PENDING
+  APPROVED
+}
+
 model User {
-  id            String    @id @default(cuid())
-  firstName     String?   
-  lastName      String?
-  displayName   String?   @unique
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  gender        Gender?
-  password      String?
-  stateId       Int?
-  countryId     Int? 
-  dateOfBirth   DateTime?
-  role          UserRole @default(USER)
-  accounts      Account[]
-  emailOld      String?
-  passwordResetToken String?
-  passwordResetExpires DateTime?
-  otpEnabled    Boolean @default(false)
-  otpVerified   Boolean @default(false)
-  otpBase32     String?
-  otpAuthUrl    String?
-  otpBackups    String[]
-  twoFactorConfirmation TwoFactorConfirmation?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                      String    @id @default(cuid())
+  firstName               String?   
+  lastName                String?
+  displayName             String?   @unique
+  email                   String?   @unique
+  emailVerified           DateTime?
+  image                   String?
+  gender                  Gender?
+  password                String?
+  stateId                 Int?
+  countryId               Int? 
+  dateOfBirth             DateTime?
+  breweries               Brewery[]
+  beers                   Beer[]
+  breweryReviews          BreweryReview[]
+  beerReviews             BeerReview[]
+  role                    UserRole @default(USER)
+  accounts                Account[]
+  emailOld                String?
+  passwordResetToken      String?
+  passwordResetExpires    DateTime?
+  otpEnabled              Boolean @default(false)
+  otpVerified             Boolean @default(false)
+  otpBase32               String?
+  otpAuthUrl              String?
+  otpBackups              String[]
+  twoFactorConfirmation   TwoFactorConfirmation?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
 model Account {
@@ -71,25 +81,33 @@ model Account {
 }
 
 model VerificationToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String @id @default(cuid())
+  email   String
+  token   String @unique
   expires DateTime
 
   @@unique([email, token])
 }
 
 model PasswordResetToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String @id @default(cuid())
+  email   String
+  token   String @unique
   expires DateTime
 
   @@unique([email, token])
 }
 
+model TwoFactorConfirmation {
+  id        String @id @default(cuid())
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([userId])
+}
+
 model Country {
-  id        Int    @id @default(autoincrement())
+  id        String  @id @default(cuid())
   isoCode   String
   name      String
   currency  String
@@ -97,18 +115,117 @@ model Country {
 }
 
 model State {
-  id        Int    @id @default(autoincrement())
+  id        String  @id @default(cuid())
   isoCode   String
   name      String
   country   Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
-  countryId Int
+  countryId String
+  cities    City[]
 }
 
-model TwoFactorConfirmation {
-  id String @id @default(cuid())
+model City {
+  id          String  @id @default(cuid())
+  name        String
+  state       State @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId     String
+  breweries   Brewery[]
+}
 
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Brewery {
+  id                String   @id @default(uuid())
+  name              String
+  status            Status
+  city              City @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  cityId            String
+  description       String
+  website           String
+  logoUrl           String
+  images            String[]
+  beers             Beer[]
+  breweryReviews    BreweryReview[]
+  breweryType       BreweryType @relation(fields: [breweryTypeId], references: [id], onDelete: Cascade)
+  breweryTypeId     String
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
 
-  @@unique([userId])
+model BreweryReview {
+  id          String   @id @default(uuid())
+  rating      Int
+  comment     String?
+  brewery     Brewery @relation(fields: [breweryId], references: [id], onDelete: Cascade)
+  breweryId   String
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  status      Status @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BreweryType {
+  id          String   @id @default(uuid())
+  name        String
+  status      Status
+  breweries   Brewery[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Beer {
+  id          String   @id @default(uuid())
+  name        String
+  status      Status
+  description String
+  abv         String
+  ibu         String?
+  yearCreated Int?
+  available   Boolean
+  beerReviews BeerReview[]
+  brewery     Brewery @relation(fields: [breweryId], references: [id], onDelete: Cascade)
+  breweryId   String
+  style       Style @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  styleId     String
+  subStyle    SubStyle? @relation(fields: [subStyleId], references: [id], onDelete: Cascade)
+  subStyleId  String?
+  images      String[]
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BeerReview {
+  id          String   @id @default(uuid())
+  rating      Int
+  comment     String?
+  beer        Beer @relation(fields: [beerId], references: [id], onDelete: Cascade)
+  beerId      String
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  status      Status @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Style {
+  id              String   @id @default(uuid())
+  name            String
+  description     String
+  subStyles       SubStyle[]
+  beers           Beer[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SubStyle {
+  id              String   @id @default(uuid())
+  name            String
+  description     String
+  style           Style @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  styleId         String
+  beers           Beer[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
