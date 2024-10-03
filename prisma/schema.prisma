@@ -25,6 +25,8 @@ enum Status {
   DRAFT
   PENDING
   APPROVED
+  DISABLED
+  REJECTED
 }
 
 model User {
@@ -46,6 +48,9 @@ model User {
   beers                   Beer[]
   breweryReviews          BreweryReview[]
   beerReviews             BeerReview[]
+  breweryTypes            BreweryType[]
+  styles                  Style[]
+  subStyles               SubStyle[]
   role                    UserRole @default(USER)
   accounts                Account[]
   emailOld                String?
@@ -174,6 +179,8 @@ model BreweryType {
   name        String
   status      Status
   breweries   Brewery[]
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -220,6 +227,8 @@ model Style {
   description     String
   subStyles       SubStyle[]
   beers           Beer[]
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -231,6 +240,8 @@ model SubStyle {
   style           Style @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId         String
   beers           Beer[]
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

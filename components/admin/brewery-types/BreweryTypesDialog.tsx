@@ -4,7 +4,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
-import { Status } from "@prisma/client";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
@@ -209,16 +208,17 @@ const BreweryTypeForm = ({
                                     </FormControl>
                                     <SelectContent>
                                         <SelectGroup>
-                                            <SelectLabel>Genders</SelectLabel>
-                                            <SelectItem value={Status.DRAFT}>
-                                                Draft
-                                            </SelectItem>
-                                            <SelectItem value={Status.PENDING}>
-                                                Pending
-                                            </SelectItem>
-                                            <SelectItem value={Status.APPROVED}>
-                                                Approved
-                                            </SelectItem>
+                                            <SelectLabel>Statuses</SelectLabel>
+                                            {statusLabels.map((status) => {
+                                                return (
+                                                    <SelectItem
+                                                        value={status.value}
+                                                        key={status.value}
+                                                    >
+                                                        {status.label}
+                                                    </SelectItem>
+                                                );
+                                            })}
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>

@@ -1,6 +1,32 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { Status } from "@prisma/client";
+import {
+    CheckCircledIcon,
+    CircleIcon,
+    CrossCircledIcon,
+    QuestionMarkCircledIcon,
+    StopwatchIcon,
+    MinusCircledIcon
+} from "@radix-ui/react-icons";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+
+/**
+ * Returns the appropriate status icon based on the provided status.
+ * @param status - The status of the task.
+ * @returns A React component representing the status icon.
+ */
+export const getStatusIcon = (status: Status) => {
+    const statusIcons = {
+        REJECTED: CrossCircledIcon,
+        APPROVED: CheckCircledIcon,
+        PENDING: StopwatchIcon,
+        DRAFT: QuestionMarkCircledIcon,
+        DISABLED: MinusCircledIcon
+    };
+
+    return statusIcons[status] || CircleIcon;
+};

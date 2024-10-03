@@ -1,7 +1,10 @@
+import * as z from "zod";
 import { ExtendedUser } from "@/next-auth";
 import { Country, Gender, State, Status } from "@prisma/client";
 import type { Session } from "next-auth";
 import { Dispatch, SetStateAction } from "react";
+
+import { typesSearchParamsSchema } from "@/schemas/admin";
 
 export type NavLink = {
     href: string;
@@ -67,7 +70,9 @@ export interface TwoFactorProps {
 export const statusLabels: { value: Status; label: string }[] = [
     { value: Status.DRAFT, label: "Draft" },
     { value: Status.PENDING, label: "Pending" },
-    { value: Status.APPROVED, label: "Approved" }
+    { value: Status.APPROVED, label: "Approved" },
+    { value: Status.DISABLED, label: "Disabled" },
+    { value: Status.REJECTED, label: "Rejected" }
 ];
 
 export interface BreweryTypeProps {
@@ -79,4 +84,38 @@ export interface BreweryTypeProps {
 export interface BreweryFormProps extends BreweryTypeProps {
     className?: string;
     setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface SearchParams {
+    [key: string]: string | string[] | undefined;
+}
+
+export interface SearchParamsProps {
+    searchParams: SearchParams;
+}
+
+export type GetTypesSchema = z.infer<typeof typesSearchParamsSchema>;
+
+export interface Option {
+    label: string;
+    value: string;
+    icon?: React.ComponentType<{ className?: string }>;
+    withCount?: boolean;
+}
+
+export interface DataTableFilterField<TData> {
+    label: string;
+    value: keyof TData;
+    placeholder?: string;
+    options?: Option[];
+}
+
+export interface DataTableFilterOption<TData> {
+    id: string;
+    label: string;
+    value: keyof TData;
+    options: Option[];
+    filterValues?: string[];
+    filterOperator?: string;
+    isMulti?: boolean;
 }
