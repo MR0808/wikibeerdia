@@ -4,7 +4,7 @@ import { Country, Gender, State, Status } from "@prisma/client";
 import type { Session } from "next-auth";
 import { Dispatch, SetStateAction } from "react";
 
-import { typesSearchParamsSchema } from "@/schemas/admin";
+import { typesSearchParamsSchema, SearchParamsSchema } from "@/schemas/admin";
 
 export type NavLink = {
     href: string;
@@ -96,6 +96,8 @@ export interface SearchParamsProps {
 
 export type GetTypesSchema = z.infer<typeof typesSearchParamsSchema>;
 
+export type GetSearchSchema = z.infer<typeof SearchParamsSchema>;
+
 export interface Option {
     label: string;
     value: string;
@@ -118,4 +120,21 @@ export interface DataTableFilterOption<TData> {
     filterValues?: string[];
     filterOperator?: string;
     isMulti?: boolean;
+}
+
+export interface StyleProps {
+    subStyles: {
+        name: string;
+        status: Status;
+        id: string;
+    }[];
+    parentStyle: {
+        name: string;
+        id: string;
+    };
+    id: string;
+    name: string;
+    status: Status;
+    description: string | null;
+    createdAt: Date;
 }

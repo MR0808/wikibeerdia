@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BreweryType } from "@prisma/client";
+import { Status } from "@prisma/client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
@@ -17,9 +17,10 @@ import {
 import { DataTableColumnHeader } from "@/components/datatable/DataTableColumnHeader";
 
 import { getStatusIcon } from "@/lib/utils";
-import { UpdateTypeSheet } from "./UpdateTypeSheet";
+import { UpdateStyleSheet } from "./UpdateStyleSheet";
+import { StyleProps } from "@/utils/types";
 
-export const getColumns = (): ColumnDef<BreweryType>[] => {
+export const getColumns = (): ColumnDef<StyleProps>[] => {
     return [
         {
             id: "select",
@@ -47,6 +48,22 @@ export const getColumns = (): ColumnDef<BreweryType>[] => {
             ),
             enableSorting: false,
             enableHiding: false
+        },
+        {
+            accessorKey: "parentStyle.name",
+            id: "parentStyle",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Parent Style" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <div className="flex space-x-2">
+                        <span className="max-w-[31.25rem] truncate font-medium">
+                            {row.original.parentStyle.name}
+                        </span>
+                    </div>
+                );
+            }
         },
         {
             accessorKey: "name",
@@ -90,6 +107,29 @@ export const getColumns = (): ColumnDef<BreweryType>[] => {
             }
         },
         {
+            id: "subStyles",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Sub Styles" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <div className="flex space-x-2">
+                        <span className="max-w-[31.25rem] truncate font-medium">
+                            <ul className="list-none">
+                                {row.original.subStyles.map((subStyle) => {
+                                    return (
+                                        <li key={subStyle.id}>
+                                            {subStyle.name}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </span>
+                    </div>
+                );
+            }
+        },
+        {
             accessorKey: "createdAt",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Created At" />
@@ -104,11 +144,11 @@ export const getColumns = (): ColumnDef<BreweryType>[] => {
 
                 return (
                     <>
-                        <UpdateTypeSheet
+                        {/* <UpdateStyleSheet
                             open={showUpdateTypeSheet}
                             onOpenChange={setShowUpdateTypeSheet}
                             type={row.original}
-                        />
+                        /> */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button

@@ -49,6 +49,7 @@ model User {
   breweryReviews          BreweryReview[]
   beerReviews             BeerReview[]
   breweryTypes            BreweryType[]
+  parentStyles            ParentStyle[]
   styles                  Style[]
   subStyles               SubStyle[]
   role                    UserRole @default(USER)
@@ -144,7 +145,7 @@ model City {
 model Brewery {
   id                String   @id @default(uuid())
   name              String
-  status            Status
+  status            Status @default(PENDING)
   city              City @relation(fields: [cityId], references: [id], onDelete: Cascade)
   cityId            String
   description       String
@@ -177,7 +178,8 @@ model BreweryReview {
 model BreweryType {
   id          String   @id @default(uuid())
   name        String
-  status      Status
+  desription  String?
+  status      Status @default(PENDING)
   breweries   Brewery[]
   user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
@@ -188,7 +190,7 @@ model BreweryType {
 model Beer {
   id          String   @id @default(uuid())
   name        String
-  status      Status
+  status      Status @default(PENDING)
   description String
   abv         String
   ibu         String?
@@ -197,8 +199,6 @@ model Beer {
   beerReviews BeerReview[]
   brewery     Brewery @relation(fields: [breweryId], references: [id], onDelete: Cascade)
   breweryId   String
-  style       Style @relation(fields: [styleId], references: [id], onDelete: Cascade)
-  styleId     String
   subStyle    SubStyle? @relation(fields: [subStyleId], references: [id], onDelete: Cascade)
   subStyleId  String?
   images      String[]
@@ -221,12 +221,26 @@ model BeerReview {
   updatedAt   DateTime @updatedAt
 }
 
+model ParentStyle {
+  id              String   @id @default(uuid())
+  name            String
+  description     String?
+  status          Status @default(PENDING)
+  styles          Style[]
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 model Style {
   id              String   @id @default(uuid())
   name            String
-  description     String
+  description     String?
+  status          Status @default(PENDING)
   subStyles       SubStyle[]
-  beers           Beer[]
+  parentStyle     ParentStyle @relation(fields: [parentStyleId], references: [id], onDelete: Cascade)
+  parentStyleId   String
   user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
   createdAt       DateTime @default(now())
@@ -236,7 +250,8 @@ model Style {
 model SubStyle {
   id              String   @id @default(uuid())
   name            String
-  description     String
+  description     String?
+  status          Status @default(PENDING)
   style           Style @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId         String
   beers           Beer[]

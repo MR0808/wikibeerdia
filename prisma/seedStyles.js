@@ -37,34 +37,72 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
-var types_1 = require("./types");
+var styles_1 = require("./styles");
 var prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var _i, _a, type, typeDb;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _i, styles_2, parent_1, parentStyle, _a, _b, style, styleDb, _c, _d, subStyle, subStyleDb;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
-                    _i = 0, _a = types_1.types.type;
-                    _b.label = 1;
+                    _i = 0, styles_2 = styles_1.styles;
+                    _e.label = 1;
                 case 1:
-                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                    type = _a[_i];
-                    return [4 /*yield*/, prisma.breweryType.create({
+                    if (!(_i < styles_2.length)) return [3 /*break*/, 10];
+                    parent_1 = styles_2[_i];
+                    return [4 /*yield*/, prisma.parentStyle.create({
                             data: {
-                                name: type.name,
+                                name: parent_1.name,
                                 status: "APPROVED",
                                 userId: "cm1q68hds0000146zv7kkvnnu"
                             }
                         })];
                 case 2:
-                    typeDb = _b.sent();
-                    console.log(typeDb.id, typeDb.name);
-                    _b.label = 3;
+                    parentStyle = _e.sent();
+                    console.log(parentStyle.id, parentStyle.name);
+                    _a = 0, _b = parent_1.style;
+                    _e.label = 3;
                 case 3:
+                    if (!(_a < _b.length)) return [3 /*break*/, 9];
+                    style = _b[_a];
+                    return [4 /*yield*/, prisma.style.create({
+                            data: {
+                                name: style.name,
+                                status: "APPROVED",
+                                userId: "cm1q68hds0000146zv7kkvnnu",
+                                parentStyleId: parentStyle.id
+                            }
+                        })];
+                case 4:
+                    styleDb = _e.sent();
+                    console.log(styleDb.id, styleDb.name);
+                    _c = 0, _d = style.subStyle;
+                    _e.label = 5;
+                case 5:
+                    if (!(_c < _d.length)) return [3 /*break*/, 8];
+                    subStyle = _d[_c];
+                    return [4 /*yield*/, prisma.subStyle.create({
+                            data: {
+                                name: subStyle.name,
+                                status: "APPROVED",
+                                userId: "cm1q68hds0000146zv7kkvnnu",
+                                styleId: styleDb.id
+                            }
+                        })];
+                case 6:
+                    subStyleDb = _e.sent();
+                    console.log(subStyleDb.id, subStyleDb.name);
+                    _e.label = 7;
+                case 7:
+                    _c++;
+                    return [3 /*break*/, 5];
+                case 8:
+                    _a++;
+                    return [3 /*break*/, 3];
+                case 9:
                     _i++;
                     return [3 /*break*/, 1];
-                case 4: return [2 /*return*/];
+                case 10: return [2 /*return*/];
             }
         });
     });

@@ -1,25 +1,18 @@
-import { faker } from "@faker-js/faker";
-import { PrismaClient, Status } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { types } from "./types";
 
 const prisma = new PrismaClient();
 
 async function main() {
-    const statuses = [
-        Status.DRAFT,
-        Status.PENDING,
-        Status.APPROVED,
-        Status.DISABLED,
-        Status.REJECTED
-    ];
-
-    for (let i = 0; i < 200; i++) {
-        await prisma.breweryType.create({
+    for (const type of types.type) {
+        const typeDb = await prisma.breweryType.create({
             data: {
-                name: faker.lorem.word(),
-                status: statuses[Math.floor(Math.random() * statuses.length)],
+                name: type.name,
+                status: "APPROVED",
                 userId: "cm1q68hds0000146zv7kkvnnu"
             }
         });
+        console.log(typeDb.id, typeDb.name);
     }
 }
 main()

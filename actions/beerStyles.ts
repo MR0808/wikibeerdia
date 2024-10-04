@@ -3,26 +3,42 @@
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
-import { BreweryType, type BreweryType as TypeType } from "@prisma/client";
+import { Style, type Style as StyleType } from "@prisma/client";
 import { format } from "date-fns";
 
 import db from "@/lib/db";
 import { currentUser } from "@/lib/auth";
-import { BreweryTypeSchema } from "@/schemas/admin";
-import { GetTypesSchema } from "@/utils/types";
+import { BeerStyleSchema } from "@/schemas/admin";
+import { GetSearchSchema } from "@/utils/types";
 import { filterColumn } from "@/lib/filterColumn";
+import { filterSubColumn } from "@/lib/filterSubColumn";
 import { getErrorMessage } from "@/lib/handleError";
 
-export const getBreweryTypes = async (input: GetTypesSchema) => {
+export const getBeerStyles = async (input: GetSearchSchema) => {
     noStore();
-    const { page, per_page, sort, name, status, operator, from, to } = input;
+    let {
+        page,
+        per_page,
+        sort,
+        name,
+        status,
+        description,
+        subStyles,
+        parentStyle,
+        operator,
+        from,
+        to
+    } = input;
 
     try {
         const offset = (page - 1) * per_page;
         const [column, order] = (sort?.split(".").filter(Boolean) ?? [
             "name",
             "asc"
-        ]) as [keyof BreweryType | undefined, "asc" | "desc" | undefined];
+        ]) as [
+            keyof Style | "parentStyle" | undefined,
+            "asc" | "desc" | undefined
+        ];
 
         const fromDay = from ? format(new Date(from), "yyyy-MM-dd") : undefined;
         const toDay = to ? format(new Date(to), "yyyy-MM-dd") : undefined;
@@ -36,6 +52,32 @@ export const getBreweryTypes = async (input: GetTypesSchema) => {
                     value: name
                 })
             );
+
+        parentStyle &&
+            whereFilter.push(
+                filterColumn({
+                    column: "parentStyleId",
+                    value: parentStyle,
+                    isSelectable: true
+                })
+            );
+
+        subStyles &&
+            whereFilter.push(
+                filterSubColumn({
+                    parentColumn: "subStyles",
+                    column: "name",
+                    value: subStyles
+                })
+            );
+
+        // description &&
+        //     whereFilter.push(
+        //         filterColumn({
+        //             column: "description",
+        //             value: description
+        //         })
+        //     );
 
         status &&
             whereFilter.push(
@@ -56,27 +98,60 @@ export const getBreweryTypes = async (input: GetTypesSchema) => {
             ? (usedFilter = { AND: [...whereFilter] })
             : (usedFilter = { OR: [...whereFilter] });
 
-        const orderBy = [{ [`${column}`]: `${order}` }];
+        let orderBy = [{ [`${column}`]: `${order}` }];
 
-        const data = await db.breweryType.findMany({
+        if (column === "parentStyle") {
+            sort = undefined;
+        }
+
+        const data = await db.style.findMany({
             where: usedFilter,
+            include: {
+                subStyles: {
+                    select: {
+                        name: true,
+                        id: true,
+                        status: true
+                    }
+                },
+                parentStyle: {
+                    select: {
+                        name: true,
+                        id: true
+                    }
+                }
+            },
             skip: offset,
             take: per_page,
-            orderBy
+            orderBy: sort ? orderBy : { parentStyle: { name: "asc" } }
         });
 
-        const total = await db.breweryType.count({ where: usedFilter });
+        const total = await db.style.count({ where: usedFilter });
 
         const pageCount = Math.ceil(total / per_page);
-        console.log("pagecount", pageCount);
         return { data, pageCount };
     } catch (err) {
         return { data: [], pageCount: 0 };
     }
 };
 
-export const createBreweryType = async (
-    values: z.infer<typeof BreweryTypeSchema>
+export const getParentStyles = async () => {
+    noStore();
+    const data = await db.parentStyle.findMany({
+        select: {
+            id: true,
+            name: true
+        },
+        where: {
+            status: "APPROVED"
+        }
+    });
+    return { data };
+};
+
+export const createBeerStyle = async (
+    values: z.infer<typeof BeerStyleSchema>,
+    parentStyleId: string
 ) => {
     noStore();
     const user = await currentUser();
@@ -102,7 +177,7 @@ export const createBreweryType = async (
         };
     }
 
-    const validatedFields = BreweryTypeSchema.safeParse(values);
+    const validatedFields = BeerStyleSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return {
@@ -112,14 +187,15 @@ export const createBreweryType = async (
     }
 
     try {
-        await db.breweryType.create({
+        await db.style.create({
             data: {
                 userId: user.id,
+                parentStyleId: parentStyleId,
                 ...values
             }
         });
 
-        revalidatePath("/admin/brewery-types");
+        revalidatePath("/admin/beer-styles");
 
         return {
             data: null,
@@ -133,8 +209,8 @@ export const createBreweryType = async (
     }
 };
 
-export const updateBreweryType = async (
-    values: z.infer<typeof BreweryTypeSchema>,
+export const updateBeerStyle = async (
+    values: z.infer<typeof BeerStyleSchema>,
     id: string
 ) => {
     noStore();
@@ -161,7 +237,7 @@ export const updateBreweryType = async (
         };
     }
 
-    const validatedFields = BreweryTypeSchema.safeParse(values);
+    const validatedFields = BeerStyleSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return {
@@ -170,14 +246,14 @@ export const updateBreweryType = async (
         };
     }
     try {
-        await db.breweryType.update({
+        await db.style.update({
             where: { id },
             data: {
                 ...values
             }
         });
 
-        revalidatePath("/admin/brewery-types");
+        revalidatePath("/admin/beer-styles");
 
         return {
             data: null,
@@ -191,19 +267,19 @@ export const updateBreweryType = async (
     }
 };
 
-export const updateBreweryTypes = async (input: {
+export const updateBeerStyles = async (input: {
     ids: string[];
-    status?: TypeType["status"];
+    status?: StyleType["status"];
 }) => {
     noStore();
 
     try {
-        await db.breweryType.updateMany({
+        await db.style.updateMany({
             where: { id: { in: input.ids } },
             data: { status: input.status }
         });
 
-        revalidatePath("/admin/brewery-types");
+        revalidatePath("/admin/beer-styles");
 
         return {
             data: null,
@@ -221,14 +297,14 @@ export const getChunkedTypes = async (input: { chunkSize?: number } = {}) => {
     try {
         const chunkSize = input.chunkSize ?? 1000;
 
-        const totalTypes = await db.breweryType.count();
+        const totalTypes = await db.style.count();
 
         const totalChunks = Math.ceil(totalTypes / chunkSize);
 
         let chunkedTasks;
 
         for (let i = 0; i < totalChunks; i++) {
-            const chunked = await db.breweryType.findMany({
+            const chunked = await db.style.findMany({
                 take: chunkSize,
                 skip: i
             });

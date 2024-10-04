@@ -12,31 +12,31 @@ import {
 
 type FeatureFlagValue = DataTableConfig["featureFlags"][number]["value"];
 
-interface TypesTableContextProps {
+interface StylesTableContextProps {
     featureFlags: FeatureFlagValue[];
     setFeatureFlags: React.Dispatch<React.SetStateAction<FeatureFlagValue[]>>;
 }
 
-const TypesTableContext = createContext<TypesTableContextProps>({
+const StylesTableContext = createContext<StylesTableContextProps>({
     featureFlags: [],
     setFeatureFlags: () => {}
 });
 
-export const useTypesTable = () => {
-    const context = useContext(TypesTableContext);
+export const useStylesTable = () => {
+    const context = useContext(StylesTableContext);
     if (!context) {
         throw new Error(
-            "useTasksTable must be used within a TasksTableProvider"
+            "useStylesTable must be used within a StylesTableProvider"
         );
     }
     return context;
 };
 
-export const TypesTableProvider = ({ children }: React.PropsWithChildren) => {
+export const StylesTableProvider = ({ children }: React.PropsWithChildren) => {
     const [featureFlags, setFeatureFlags] = useState<FeatureFlagValue[]>([]);
 
     return (
-        <TypesTableContext.Provider
+        <StylesTableContext.Provider
             value={{
                 featureFlags,
                 setFeatureFlags
@@ -84,6 +84,6 @@ export const TypesTableProvider = ({ children }: React.PropsWithChildren) => {
                 </ToggleGroup>
             </div>
             {children}
-        </TypesTableContext.Provider>
+        </StylesTableContext.Provider>
     );
 };
