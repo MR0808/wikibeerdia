@@ -2,7 +2,7 @@
 "use memo";
 
 import { use, useMemo } from "react";
-import { BreweryType, Status } from "@prisma/client";
+import { BreweryType } from "@prisma/client";
 
 import { type DataTableFilterField } from "@/utils/types";
 import { statusLabels } from "@/utils/types";
@@ -12,12 +12,12 @@ import { DataTableAdvancedToolbar } from "@/components/datatable/advanced/DataTa
 import { DataTable } from "@/components/datatable/DataTable";
 import { DataTableToolbar } from "@/components/datatable/DataTableToolbar";
 
-import { type getBreweryTypes } from "@/actions/admin";
+import { type getBreweryTypes } from "@/actions/breweryTypes";
 import { getStatusIcon } from "@/lib/utils";
-import { getColumns } from "./tasks-table-columns";
-import { TasksTableFloatingBar } from "./tasks-table-floating-bar";
+import { getColumns } from "./TypesTableColumns";
+import { TypesTableFloatingBar } from "./TypesTableFloatingBar";
 import { useTypesTable } from "@/components/admin/brewery-types/TypesTableProviders";
-import { TasksTableToolbarActions } from "./tasks-table-toolbar-actions";
+import { TypeTableToolbarActions } from "./TypesTableToolbarActions";
 
 interface TypesTableProps {
     typesPromise: ReturnType<typeof getBreweryTypes>;
@@ -54,7 +54,7 @@ export const TypesTable = ({ typesPromise }: TypesTableProps) => {
             value: "status",
             options: statusLabels.map((status) => ({
                 label: status.label,
-                value: status,
+                value: status.value,
                 icon: getStatusIcon(status.value),
                 withCount: true
             }))
@@ -69,7 +69,7 @@ export const TypesTable = ({ typesPromise }: TypesTableProps) => {
         filterFields,
         enableAdvancedFilter: featureFlags.includes("advancedFilter"),
         initialState: {
-            sorting: [{ id: "createdAt", desc: true }],
+            sorting: [{ id: "name", desc: false }],
             columnPinning: { right: ["actions"] }
         },
         // For remembering the previous row selection on page change
@@ -82,7 +82,7 @@ export const TypesTable = ({ typesPromise }: TypesTableProps) => {
             table={table}
             floatingBar={
                 featureFlags.includes("floatingBar") ? (
-                    <TasksTableFloatingBar table={table} />
+                    <TypesTableFloatingBar table={table} />
                 ) : null
             }
         >
@@ -91,11 +91,11 @@ export const TypesTable = ({ typesPromise }: TypesTableProps) => {
                     table={table}
                     filterFields={filterFields}
                 >
-                    <TasksTableToolbarActions table={table} />
+                    <TypeTableToolbarActions table={table} />
                 </DataTableAdvancedToolbar>
             ) : (
                 <DataTableToolbar table={table} filterFields={filterFields}>
-                    <TasksTableToolbarActions table={table} />
+                    <TypeTableToolbarActions table={table} />
                 </DataTableToolbar>
             )}
         </DataTable>

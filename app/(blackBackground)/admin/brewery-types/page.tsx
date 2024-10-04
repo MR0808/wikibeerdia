@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import type { SearchParamsProps } from "@/utils/types";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -11,13 +10,12 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 
-// import LoadingTable from "@/components/global/LoadingTable";
-// import BreweryTypesTable from "@/components/admin/brewery-types/BreweryTypesTable";
-// import BreweryTypesDialog from "@/components/admin/brewery-types/BreweryTypesDialog";
+import type { SearchParamsProps } from "@/utils/types";
+import { TypesTable } from "@/components/admin/brewery-types/TypesTable";
 import { TypesTableProvider } from "@/components/admin/brewery-types/TypesTableProviders";
 import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
 import { typesSearchParamsSchema } from "@/schemas/admin";
-import { getBreweryTypes } from "@/actions/admin";
+import { getBreweryTypes } from "@/actions/breweryTypes";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 
 const BreweryTypesPage = ({ searchParams }: SearchParamsProps) => {
@@ -46,7 +44,7 @@ const BreweryTypesPage = ({ searchParams }: SearchParamsProps) => {
                 <h1 className="text-4xl font-semibold">Brewery Types</h1>
             </div>
             <div className="flex flex-col-reverse gap-x-16 sm:flex-row">
-                <div className="flex w-80 flex-col sm:w-3/5">
+                <div className="flex w-80 flex-col sm:w-full">
                     <TypesTableProvider>
                         <Suspense fallback={<Skeleton className="h-7 w-52" />}>
                             <DateRangePicker
@@ -72,6 +70,10 @@ const BreweryTypesPage = ({ searchParams }: SearchParamsProps) => {
                                 />
                             }
                         >
+                            {/* <TypesTable
+                                data={typesPromise.data}
+                                pageCount={typesPromise.pageCount}
+                            /> */}
                             <TypesTable typesPromise={typesPromise} />
                         </Suspense>
                     </TypesTableProvider>

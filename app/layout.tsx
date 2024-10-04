@@ -6,16 +6,17 @@ import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import ReactQueryProvider from "@/Providers/ReactQueryProvider";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "Wikibeerdia",
-    description: "Everything you needed to know about beer",
+    description: "Everything you needed to know about beer"
 };
 
 export default async function RootLayout({
-    children,
+    children
 }: Readonly<{
     children: React.ReactNode;
 }>) {
@@ -27,7 +28,9 @@ export default async function RootLayout({
                     className={inter.className}
                     suppressHydrationWarning={true}
                 >
-                    <ReactQueryProvider>{children}</ReactQueryProvider>
+                    <ReactQueryProvider>
+                        <TooltipProvider>{children}</TooltipProvider>
+                    </ReactQueryProvider>
                     <Toaster richColors />
 
                     <SpeedInsights />
