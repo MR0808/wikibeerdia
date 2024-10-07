@@ -1,6 +1,5 @@
-import { AddressType } from "@/components/ui/address-autocomplete";
+import { AddressType } from "@/types/autocomplete";
 import { type NextRequest, NextResponse } from "next/server";
-import { Component } from "react";
 
 export async function GET(req: NextRequest) {
     const apiKey = process.env.GOOGLE_PLACES_API_KEY as string;
