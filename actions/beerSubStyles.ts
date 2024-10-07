@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
-import { Style, type Style as StyleType } from "@prisma/client";
+import { SubStyle, type SubStyle as SubStyleType } from "@prisma/client";
 import { format } from "date-fns";
 
 import db from "@/lib/db";
@@ -11,10 +11,12 @@ import { currentUser } from "@/lib/auth";
 import { BeerStyleSchema } from "@/schemas/admin";
 import { GetSearchSchema } from "@/utils/types";
 import { filterColumn } from "@/lib/filterColumn";
-import { filterSubColumn } from "@/lib/filterSubColumn";
 import { getErrorMessage } from "@/lib/handleError";
 
-export const getBeerStyles = async (input: GetSearchSchema) => {
+export const getBeerSubStyles = async (
+    input: GetSearchSchema,
+    styleId: string
+) => {
     noStore();
     let {
         page,
@@ -23,7 +25,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
         name,
         status,
         description,
-        subStyles,
         parentStyle,
         operator,
         from,
@@ -36,7 +37,7 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
             "name",
             "asc"
         ]) as [
-            keyof Style | "parentStyle" | undefined,
+            keyof SubStyle | "parentStyle" | undefined,
             "asc" | "desc" | undefined
         ];
 
@@ -59,15 +60,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
                     column: "parentStyleId",
                     value: parentStyle,
                     isSelectable: true
-                })
-            );
-
-        subStyles &&
-            whereFilter.push(
-                filterSubColumn({
-                    parentColumn: "subStyles",
-                    column: "name",
-                    value: subStyles
                 })
             );
 
@@ -95,38 +87,19 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
         let usedFilter;
 
         !operator || operator === "and"
-            ? (usedFilter = { AND: [...whereFilter] })
-            : (usedFilter = { OR: [...whereFilter] });
+            ? (usedFilter = { AND: [{ styleId }, ...whereFilter] })
+            : (usedFilter = { OR: [...whereFilter], AND: { styleId } });
 
         let orderBy = [{ [`${column}`]: `${order}` }];
 
-        if (column === "parentStyle") {
-            sort = undefined;
-        }
-
-        const data = await db.style.findMany({
+        const data = await db.subStyle.findMany({
             where: usedFilter,
-            include: {
-                subStyles: {
-                    select: {
-                        name: true,
-                        id: true,
-                        status: true
-                    }
-                },
-                parentStyle: {
-                    select: {
-                        name: true,
-                        id: true
-                    }
-                }
-            },
             skip: offset,
             take: per_page,
-            orderBy: sort ? orderBy : { parentStyle: { name: "asc" } }
+            orderBy
         });
 
-        const total = await db.style.count({ where: usedFilter });
+        const total = await db.subStyle.count({ where: usedFilter });
 
         const pageCount = Math.ceil(total / per_page);
         return { data, pageCount };
@@ -135,48 +108,9 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
     }
 };
 
-export const getBeerStyle = async (id: string) => {
-    noStore();
-    const data = await db.style.findUnique({
-        where: {
-            id
-        },
-        include: {
-            subStyles: {
-                select: {
-                    name: true,
-                    id: true,
-                    status: true
-                }
-            },
-            parentStyle: {
-                select: {
-                    name: true,
-                    id: true
-                }
-            }
-        }
-    });
-    return { data };
-};
-
-export const getParentStyles = async () => {
-    noStore();
-    const data = await db.parentStyle.findMany({
-        select: {
-            id: true,
-            name: true
-        },
-        where: {
-            status: "APPROVED"
-        }
-    });
-    return { data };
-};
-
-export const createBeerStyle = async (
+export const createBeerSubStyle = async (
     values: z.infer<typeof BeerStyleSchema>,
-    parentStyleId: string
+    styleId: string
 ) => {
     noStore();
     const user = await currentUser();
@@ -212,15 +146,15 @@ export const createBeerStyle = async (
     }
 
     try {
-        await db.style.create({
+        await db.subStyle.create({
             data: {
                 userId: user.id,
-                parentStyleId: parentStyleId,
+                styleId: styleId,
                 ...values
             }
         });
 
-        revalidatePath("/admin/beer-styles");
+        revalidatePath(`/admin/beer-styles/${styleId}`);
 
         return {
             data: null,
@@ -234,9 +168,10 @@ export const createBeerStyle = async (
     }
 };
 
-export const updateBeerStyle = async (
+export const updateBeerSubStyle = async (
     values: z.infer<typeof BeerStyleSchema>,
-    id: string
+    id: string,
+    styleId: string
 ) => {
     noStore();
     const user = await currentUser();
@@ -271,14 +206,14 @@ export const updateBeerStyle = async (
         };
     }
     try {
-        await db.style.update({
+        await db.subStyle.update({
             where: { id },
             data: {
                 ...values
             }
         });
 
-        revalidatePath("/admin/beer-styles");
+        revalidatePath(`/admin/beer-styles/${styleId}`);
 
         return {
             data: null,
@@ -292,19 +227,22 @@ export const updateBeerStyle = async (
     }
 };
 
-export const updateBeerStyles = async (input: {
-    ids: string[];
-    status?: StyleType["status"];
-}) => {
+export const updateBeerSubStyles = async (
+    input: {
+        ids: string[];
+        status?: SubStyleType["status"];
+    },
+    styleId: string
+) => {
     noStore();
 
     try {
-        await db.style.updateMany({
+        await db.subStyle.updateMany({
             where: { id: { in: input.ids } },
             data: { status: input.status }
         });
 
-        revalidatePath("/admin/beer-styles");
+        revalidatePath(`/admin/beer-styles/${styleId}`);
 
         return {
             data: null,
@@ -329,7 +267,7 @@ export const getChunkedTypes = async (input: { chunkSize?: number } = {}) => {
         let chunkedTasks;
 
         for (let i = 0; i < totalChunks; i++) {
-            const chunked = await db.style.findMany({
+            const chunked = await db.subStyle.findMany({
                 take: chunkSize,
                 skip: i
             });

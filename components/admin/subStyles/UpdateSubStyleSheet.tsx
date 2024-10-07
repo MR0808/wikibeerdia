@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { SubStyle } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,17 +36,21 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/global/Icons";
 
-import { updateBeerStyle } from "@/actions/beerStyles";
+import { updateBeerSubStyle } from "@/actions/beerSubStyles";
 import { BeerStyleSchema } from "@/schemas/admin";
 import { statusLabels } from "@/utils/types";
-import { StyleProps } from "@/utils/types";
 
-interface UpdateStyleSheetProps
+interface UpdateSubStyleSheetProps
     extends React.ComponentPropsWithRef<typeof Sheet> {
-    type: StyleProps;
+    type: SubStyle;
+    styleId: string;
 }
 
-export const UpdateStyleSheet = ({ type, ...props }: UpdateStyleSheetProps) => {
+export const UpdateSubStyleSheet = ({
+    type,
+    styleId,
+    ...props
+}: UpdateSubStyleSheetProps) => {
     const [isUpdatePending, startUpdateTransition] = useTransition();
 
     const form = useForm<z.infer<typeof BeerStyleSchema>>({
@@ -67,7 +72,7 @@ export const UpdateStyleSheet = ({ type, ...props }: UpdateStyleSheetProps) => {
 
     function onSubmit(input: z.infer<typeof BeerStyleSchema>) {
         startUpdateTransition(async () => {
-            const { error } = await updateBeerStyle(input, type.id);
+            const { error } = await updateBeerSubStyle(input, type.id, styleId);
 
             if (error) {
                 toast.error(error);

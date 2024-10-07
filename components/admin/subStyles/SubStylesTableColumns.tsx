@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
+import { SubStyle } from "@prisma/client";
 
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -16,11 +17,13 @@ import {
 import { DataTableColumnHeader } from "@/components/datatable/DataTableColumnHeader";
 
 import { getStatusIcon } from "@/lib/utils";
-import { UpdateStyleSheet } from "./UpdateStyleSheet";
-import { StyleProps } from "@/utils/types";
-import Link from "next/link";
+import { UpdateSubStyleSheet } from "./UpdateSubStyleSheet";
 
-export const getColumns = (): ColumnDef<StyleProps>[] => {
+export const getColumns = ({
+    styleId
+}: {
+    styleId: string;
+}): ColumnDef<SubStyle>[] => {
     return [
         {
             id: "select",
@@ -50,22 +53,6 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
             enableHiding: false
         },
         {
-            accessorKey: "parentStyle.name",
-            id: "parentStyle",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Parent Style" />
-            ),
-            cell: ({ row }) => {
-                return (
-                    <div className="flex space-x-2">
-                        <span className="max-w-[31.25rem] truncate font-medium">
-                            {row.original.parentStyle.name}
-                        </span>
-                    </div>
-                );
-            }
-        },
-        {
             accessorKey: "name",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Name" />
@@ -74,11 +61,7 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
                 return (
                     <div className="flex space-x-2">
                         <span className="max-w-[31.25rem] truncate font-medium">
-                            <Link
-                                href={`/admin/beer-styles/${row.original.id}`}
-                            >
-                                {row.getValue("name")}
-                            </Link>
+                            {row.getValue("name")}
                         </span>
                     </div>
                 );
@@ -99,38 +82,15 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
                 return (
                     <div className="flex w-[6.25rem] items-center">
                         <Icon
-                            className="size-4 text-muted-foreground"
+                            className="mr-2 size-4 text-muted-foreground"
                             aria-hidden="true"
                         />
-                        <span className="ml-2 capitalize">{status}</span>
+                        <span className="capitalize">{status}</span>
                     </div>
                 );
             },
             filterFn: (row, id, value) => {
                 return Array.isArray(value) && value.includes(row.getValue(id));
-            }
-        },
-        {
-            id: "subStyles",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Sub Styles" />
-            ),
-            cell: ({ row }) => {
-                return (
-                    <div className="flex space-x-2">
-                        <span className="max-w-[31.25rem] truncate font-medium">
-                            <ul className="list-none">
-                                {row.original.subStyles.map((subStyle) => {
-                                    return (
-                                        <li key={subStyle.id}>
-                                            {subStyle.name}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </span>
-                    </div>
-                );
             }
         },
         {
@@ -143,15 +103,16 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
         {
             id: "actions",
             cell: function Cell({ row }) {
-                const [showUpdateStyleSheet, setShowUpdateStyleSheet] =
+                const [showUpdateSubStyleSheet, setShowUpdateSubStyleSheet] =
                     useState(false);
 
                 return (
                     <>
-                        <UpdateStyleSheet
-                            open={showUpdateStyleSheet}
-                            onOpenChange={setShowUpdateStyleSheet}
+                        <UpdateSubStyleSheet
+                            open={showUpdateSubStyleSheet}
+                            onOpenChange={setShowUpdateSubStyleSheet}
                             type={row.original}
+                            styleId={styleId}
                         />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -169,7 +130,7 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
                             <DropdownMenuContent align="end" className="w-40">
                                 <DropdownMenuItem
                                     onSelect={() =>
-                                        setShowUpdateStyleSheet(true)
+                                        setShowUpdateSubStyleSheet(true)
                                     }
                                 >
                                     Edit

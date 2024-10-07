@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -11,19 +12,32 @@ import {
 } from "@/components/ui/breadcrumb";
 
 import type { SearchParamsProps } from "@/utils/types";
-import { StylesTable } from "@/components/admin/beer-styles/StylesTable";
-import { StylesTableProvider } from "@/components/admin/beer-styles/StylesTableProviders";
+import { SubStylesTable } from "@/components/admin/subStyles/SubStylesTable";
+import { SubStylesTableProvider } from "@/components/admin/subStyles/SubStylesTableProviders";
 import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
 import { SearchParamsSchema } from "@/schemas/admin";
-import { getBeerStyles, getParentStyles } from "@/actions/beerStyles";
+import { getBeerSubStyles } from "@/actions/beerSubStyles";
+import { getBeerStyle } from "@/actions/beerStyles";
+import { getStatusIcon } from "@/lib/utils";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
+import EditLink from "./EditLink";
 
-const BeerStylesPage = ({ searchParams }: SearchParamsProps) => {
+const BeerStylePage = async ({
+    searchParams,
+    params
+}: {
+    searchParams: SearchParamsProps;
+    params: { id: string };
+}) => {
     const search = SearchParamsSchema.parse(searchParams);
 
-    const stylesPromise = getBeerStyles(search);
+    const { data: styleDetails } = await getBeerStyle(params.id);
 
-    const parentStyles = getParentStyles();
+    if (!styleDetails) redirect("/admin/beer-styles");
+
+    const subStylesPromise = getBeerSubStyles(search, params.id);
+
+    const Icon = getStatusIcon(styleDetails.status);
 
     return (
         <div className="container mt-36 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0">
@@ -36,18 +50,49 @@ const BeerStylesPage = ({ searchParams }: SearchParamsProps) => {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="text-base" />
                     <BreadcrumbItem>
-                        <BreadcrumbPage className="text-base">
+                        <BreadcrumbLink
+                            className="text-base"
+                            href="/admin/beer-styles"
+                        >
                             Beer Styles
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="text-base" />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink
+                            className="text-base"
+                            href="/admin/beer-styles"
+                        >
+                            {styleDetails.parentStyle.name}
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="text-base" />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage className="text-base">
+                            {styleDetails.name}
                         </BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mb-14 mt-8 flex w-80 flex-row justify-between sm:w-1/2">
-                <h1 className="text-4xl font-semibold">Beer Styles</h1>
+            <div className="mb-14 mt-8 flex w-80 flex-col justify-between gap-y-4 sm:w-1/2">
+                <h1 className="text-4xl font-semibold">
+                    {`${styleDetails.parentStyle.name} - ${styleDetails.name}`}
+                </h1>
+                <div className="flex w-[6.25rem] items-center">
+                    <Icon
+                        className="size-4 text-muted-foreground"
+                        aria-hidden="true"
+                    />
+                    <span className="ml-2 capitalize">
+                        {styleDetails.status}
+                    </span>
+                </div>
+                <div>{styleDetails.description}</div>
+                <EditLink data={styleDetails} />
             </div>
             <div className="flex flex-col-reverse gap-x-16 sm:flex-row">
                 <div className="flex w-80 flex-col sm:w-full">
-                    <StylesTableProvider>
+                    <SubStylesTableProvider>
                         <Suspense fallback={<Skeleton className="h-7 w-52" />}>
                             <DateRangePicker
                                 triggerSize="sm"
@@ -72,16 +117,16 @@ const BeerStylesPage = ({ searchParams }: SearchParamsProps) => {
                                 />
                             }
                         >
-                            <StylesTable
-                                stylesPromise={stylesPromise}
-                                parentStyles={parentStyles}
+                            <SubStylesTable
+                                subStylesPromise={subStylesPromise}
+                                styleId={params.id}
                             />
                         </Suspense>
-                    </StylesTableProvider>
+                    </SubStylesTableProvider>
                 </div>
             </div>
         </div>
     );
 };
 
-export default BeerStylesPage;
+export default BeerStylePage;

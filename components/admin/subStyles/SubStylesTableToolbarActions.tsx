@@ -1,27 +1,26 @@
 "use client";
 
-import { Style } from "@prisma/client";
+import { SubStyle } from "@prisma/client";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { type Table } from "@tanstack/react-table";
 
 import { exportTableToCSV } from "@/lib/export";
 import { Button } from "@/components/ui/button";
-import { StyleProps } from "@/utils/types";
 
-import { CreateStyleDialog } from "./CreateStyleDialog";
+import { CreateSubStyleDialog } from "./CreateSubStyleDialog";
 
-interface StylesTableToolbarActionsProps {
-    table: Table<StyleProps>;
-    parentStyleId: string;
+interface SubStylesTableToolbarActionsProps {
+    table: Table<SubStyle>;
+    styleId: string;
 }
 
-export const StylesTableToolbarActions = ({
+export const SubStylesTableToolbarActions = ({
     table,
-    parentStyleId
-}: StylesTableToolbarActionsProps) => {
+    styleId
+}: SubStylesTableToolbarActionsProps) => {
     return (
         <div className="flex items-center gap-2">
-            <CreateStyleDialog parentStyleId={parentStyleId} />
+            <CreateSubStyleDialog styleId={styleId} />
             <Button
                 variant="outline"
                 size="sm"

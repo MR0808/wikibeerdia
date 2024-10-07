@@ -1,4 +1,4 @@
-import { Style } from "@prisma/client";
+import { SubStyle } from "@prisma/client";
 import { useTransition, useState, useEffect } from "react";
 import {
     CheckCircledIcon,
@@ -26,16 +26,17 @@ import {
 } from "@/components/ui/tooltip";
 import { Kbd } from "@/components/global/kbd";
 import { statusLabels } from "@/utils/types";
-import { updateBeerStyles } from "@/actions/beerStyles";
-import { StyleProps } from "@/utils/types";
+import { updateBeerSubStyles } from "@/actions/beerSubStyles";
 
-interface StylesTableFloatingBarProps {
-    table: Table<StyleProps>;
+interface SubStylesTableFloatingBarProps {
+    table: Table<SubStyle>;
+    styleId: string;
 }
 
-export const StylesTableFloatingBar = ({
-    table
-}: StylesTableFloatingBarProps) => {
+export const SubStylesTableFloatingBar = ({
+    table,
+    styleId
+}: SubStylesTableFloatingBarProps) => {
     const rows = table.getFilteredSelectedRowModel().rows;
 
     const [isPending, startTransition] = useTransition();
@@ -95,14 +96,19 @@ export const StylesTableFloatingBar = ({
                     />
                     <div className="flex items-center gap-1.5">
                         <Select
-                            onValueChange={(value: Style["status"]) => {
+                            onValueChange={(value: SubStyle["status"]) => {
                                 setMethod("update-status");
 
                                 startTransition(async () => {
-                                    const { error } = await updateBeerStyles({
-                                        ids: rows.map((row) => row.original.id),
-                                        status: value
-                                    });
+                                    const { error } = await updateBeerSubStyles(
+                                        {
+                                            ids: rows.map(
+                                                (row) => row.original.id
+                                            ),
+                                            status: value
+                                        },
+                                        styleId
+                                    );
 
                                     if (error) {
                                         toast.error(error);

@@ -69,9 +69,10 @@ export const CreateTypeDialog = () => {
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Create task</DialogTitle>
+                        <DialogTitle>Create Brewery Type</DialogTitle>
                         <DialogDescription>
-                            Fill in the details below to create a new task.
+                            Fill in the details below to create a new brewery
+                            type.
                         </DialogDescription>
                     </DialogHeader>
                     <CreateTypeForm form={form} onSubmit={onSubmit}>

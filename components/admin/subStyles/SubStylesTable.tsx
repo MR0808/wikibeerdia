@@ -2,7 +2,7 @@
 "use memo";
 
 import { use, useMemo } from "react";
-import { Style } from "@prisma/client";
+import { SubStyle } from "@prisma/client";
 
 import { type DataTableFilterField } from "@/utils/types";
 import { statusLabels } from "@/utils/types";
@@ -12,32 +12,29 @@ import { DataTableAdvancedToolbar } from "@/components/datatable/advanced/DataTa
 import { DataTable } from "@/components/datatable/DataTable";
 import { DataTableToolbar } from "@/components/datatable/DataTableToolbar";
 
-import { type getBeerStyles, getParentStyles } from "@/actions/beerStyles";
-import { StyleProps } from "@/utils/types";
+import { type getBeerSubStyles } from "@/actions/beerSubStyles";
 import { getStatusIcon } from "@/lib/utils";
-import { getColumns } from "./StylesTableColumns";
-import { StylesTableFloatingBar } from "./StylesTableFloatingBar";
-import { useStylesTable } from "@/components/admin/beer-styles/StylesTableProviders";
-import { StylesTableToolbarActions } from "./StylesTableToolbarActions";
+import { getColumns } from "./SubStylesTableColumns";
+import { SubStylesTableFloatingBar } from "./SubStylesTableFloatingBar";
+import { useSubStylesTable } from "@/components/admin/subStyles/SubStylesTableProviders";
+import { SubStylesTableToolbarActions } from "./SubStylesTableToolbarActions";
 
-interface StylesTableProps {
-    stylesPromise: ReturnType<typeof getBeerStyles>;
-    parentStyles: ReturnType<typeof getParentStyles>;
+interface SubStylesTableProps {
+    subStylesPromise: ReturnType<typeof getBeerSubStyles>;
+    styleId: string;
 }
 
-export const StylesTable = ({
-    stylesPromise,
-    parentStyles
-}: StylesTableProps) => {
+export const SubStylesTable = ({
+    subStylesPromise,
+    styleId
+}: SubStylesTableProps) => {
     // Feature flags for showcasing some additional features. Feel free to remove them.
-    const { featureFlags } = useStylesTable();
+    const { featureFlags } = useSubStylesTable();
 
-    const { data, pageCount } = use(stylesPromise);
-
-    const { data: parentData } = use(parentStyles);
+    const { data, pageCount } = use(subStylesPromise);
 
     // Memoize the columns so they don't re-render on every render
-    const columns = useMemo(() => getColumns(), []);
+    const columns = useMemo(() => getColumns({ styleId }), []);
 
     /**
      * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -50,25 +47,11 @@ export const StylesTable = ({
      * @prop {React.ReactNode} [icon] - An optional icon to display next to the label.
      * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
      */
-    const filterFields: DataTableFilterField<StyleProps>[] = [
+    const filterFields: DataTableFilterField<SubStyle>[] = [
         {
             label: "Name",
             value: "name",
             placeholder: "Filter names..."
-        },
-        {
-            label: "Sub Style",
-            value: "subStyles",
-            placeholder: "Filter sub styles..."
-        },
-        {
-            label: "Style",
-            value: "parentStyle",
-            options: parentData.map((style) => ({
-                label: style.name,
-                value: style.id,
-                withCount: true
-            }))
         },
         {
             label: "Status",
@@ -90,7 +73,7 @@ export const StylesTable = ({
         filterFields,
         enableAdvancedFilter: featureFlags.includes("advancedFilter"),
         initialState: {
-            sorting: [{ id: "parentStyle", desc: false }],
+            sorting: [{ id: "name", desc: false }],
             columnPinning: { right: ["actions"] }
         },
         // For remembering the previous row selection on page change
@@ -103,7 +86,10 @@ export const StylesTable = ({
             table={table}
             floatingBar={
                 featureFlags.includes("floatingBar") ? (
-                    <StylesTableFloatingBar table={table} />
+                    <SubStylesTableFloatingBar
+                        table={table}
+                        styleId={styleId}
+                    />
                 ) : null
             }
         >
@@ -112,16 +98,16 @@ export const StylesTable = ({
                     table={table}
                     filterFields={filterFields}
                 >
-                    <StylesTableToolbarActions
+                    <SubStylesTableToolbarActions
                         table={table}
-                        parentStyleId={parentData[0].id}
+                        styleId={styleId}
                     />
                 </DataTableAdvancedToolbar>
             ) : (
                 <DataTableToolbar table={table} filterFields={filterFields}>
-                    <StylesTableToolbarActions
+                    <SubStylesTableToolbarActions
                         table={table}
-                        parentStyleId={parentData[0].id}
+                        styleId={styleId}
                     />
                 </DataTableToolbar>
             )}

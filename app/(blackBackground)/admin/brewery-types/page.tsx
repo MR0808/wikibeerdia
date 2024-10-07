@@ -70,10 +70,6 @@ const BreweryTypesPage = ({ searchParams }: SearchParamsProps) => {
                                 />
                             }
                         >
-                            {/* <TypesTable
-                                data={typesPromise.data}
-                                pageCount={typesPromise.pageCount}
-                            /> */}
                             <TypesTable typesPromise={typesPromise} />
                         </Suspense>
                     </TypesTableProvider>

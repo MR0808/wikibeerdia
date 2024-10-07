@@ -30,15 +30,11 @@ import {
     DrawerTrigger
 } from "@/components/ui/drawer";
 
-import { createBeerStyle } from "@/actions/beerStyles";
+import { createBeerSubStyle } from "@/actions/beerSubStyles";
 import { BeerStyleSchema } from "@/schemas/admin";
-import { CreateStyleForm } from "./CreateStyleForm";
+import { CreateSubStyleForm } from "./CreateSubStyleForm";
 
-export const CreateStyleDialog = ({
-    parentStyleId
-}: {
-    parentStyleId: string;
-}) => {
+export const CreateSubStyleDialog = ({ styleId }: { styleId: string }) => {
     const [open, setOpen] = useState(false);
     const [isCreatePending, startCreateTransition] = useTransition();
     const isDesktop = useMediaQuery("(min-width: 640px)");
@@ -49,7 +45,7 @@ export const CreateStyleDialog = ({
 
     function onSubmit(input: z.infer<typeof BeerStyleSchema>) {
         startCreateTransition(async () => {
-            const { error } = await createBeerStyle(input, parentStyleId);
+            const { error } = await createBeerSubStyle(input, styleId);
 
             if (error) {
                 toast.error(error);
@@ -79,7 +75,7 @@ export const CreateStyleDialog = ({
                             style.
                         </DialogDescription>
                     </DialogHeader>
-                    <CreateStyleForm form={form} onSubmit={onSubmit}>
+                    <CreateSubStyleForm form={form} onSubmit={onSubmit}>
                         <DialogFooter className="gap-2 pt-2 sm:space-x-0">
                             <DialogClose asChild>
                                 <Button type="button" variant="outline">
@@ -96,7 +92,7 @@ export const CreateStyleDialog = ({
                                 Create
                             </Button>
                         </DialogFooter>
-                    </CreateStyleForm>
+                    </CreateSubStyleForm>
                 </DialogContent>
             </Dialog>
         );
@@ -112,7 +108,7 @@ export const CreateStyleDialog = ({
 
             <DrawerContent>
                 <DrawerHeader>
-                    <DrawerTitle>Create task</DrawerTitle>
+                    <DrawerTitle>Create Style</DrawerTitle>
                     <DrawerDescription>
                         Fill in the details below to create a new task.
                     </DrawerDescription>

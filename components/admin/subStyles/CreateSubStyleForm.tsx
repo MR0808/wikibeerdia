@@ -23,18 +23,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { BeerStyleSchema } from "@/schemas/admin";
 import { statusLabels } from "@/utils/types";
 
-interface CreateStyleFormProps
+interface CreateSubStyleFormProps
     extends Omit<React.ComponentPropsWithRef<"form">, "onSubmit"> {
     children: React.ReactNode;
     form: UseFormReturn<z.infer<typeof BeerStyleSchema>>;
     onSubmit: (data: z.infer<typeof BeerStyleSchema>) => void;
 }
 
-export const CreateStyleForm = ({
+export const CreateSubStyleForm = ({
     form,
     onSubmit,
     children
-}: CreateStyleFormProps) => {
+}: CreateSubStyleFormProps) => {
     return (
         <Form {...form}>
             <form

@@ -19,7 +19,7 @@ export function cn(...inputs: ClassValue[]) {
  * @param status - The status of the task.
  * @returns A React component representing the status icon.
  */
-export const getStatusIcon = (status: Status) => {
+export const getStatusIcon = (status: Status | undefined) => {
     const statusIcons = {
         REJECTED: CrossCircledIcon,
         APPROVED: CheckCircledIcon,
@@ -28,7 +28,7 @@ export const getStatusIcon = (status: Status) => {
         DISABLED: MinusCircledIcon
     };
 
-    return statusIcons[status] || CircleIcon;
+    return status ? statusIcons[status] : CircleIcon;
 };
 
 export const formatDate = (
