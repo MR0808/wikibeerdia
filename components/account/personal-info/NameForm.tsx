@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useTransition, useState, useEffect } from 'react';
-import { toast } from 'sonner';
-import { useSession } from 'next-auth/react';
-import type { Session } from 'next-auth';
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useTransition, useState, useEffect } from "react";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import type { Session } from "next-auth";
 
 import {
     Form,
@@ -14,14 +14,14 @@ import {
     FormField,
     FormItem,
     FormMessage
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 
-import { SubmitButton } from '@/components/form/Buttons';
-import { AccountFormInput } from '@/components/form/FormInput';
-import FormError from '@/components/form/FormError';
-import { NameSchema } from '@/schemas/personal-info';
-import { cn } from '@/lib/utils';
-import { updateName } from '@/actions/personalInfo';
+import { SubmitButton } from "@/components/form/Buttons";
+import { AccountFormInput } from "@/components/form/FormInput";
+import FormError from "@/components/form/FormError";
+import { NameSchema } from "@/schemas/personal-info";
+import { cn } from "@/lib/utils";
+import { updateName } from "@/actions/personalInfo";
 
 const NameForm = ({ session }: { session: Session | null }) => {
     const [user, setUser] = useState(session?.user);
@@ -36,13 +36,13 @@ const NameForm = ({ session }: { session: Session | null }) => {
         }
     }, [newSession]);
 
-    const errorClass = 'pl-6';
+    const errorClass = "pl-6";
 
     const form = useForm<z.infer<typeof NameSchema>>({
         resolver: zodResolver(NameSchema),
         defaultValues: {
-            firstName: user?.firstName || '',
-            lastName: user?.lastName || ''
+            firstName: user?.firstName || "",
+            lastName: user?.lastName || ""
         }
     });
 
@@ -63,29 +63,29 @@ const NameForm = ({ session }: { session: Session | null }) => {
                         setEdit(false);
                         update();
                         form.reset(values);
-                        toast.success('Name successfully updated');
+                        toast.success("Name successfully updated");
                     }
                 })
-                .catch(() => setError('Something went wrong!'));
+                .catch(() => setError("Something went wrong!"));
         });
     };
 
     return (
-        <div className="flex flex-col gap-5 border-b border-b-gray-200 pb-8 mt-8">
+        <div className="mt-8 flex flex-col gap-5 border-b border-b-gray-200 pb-8">
             <div className="flex justify-between">
-                <h3 className="font-semibold text-base">Name</h3>
+                <h3 className="text-base font-semibold">Name</h3>
                 <div
                     className="cursor-pointer text-base font-normal hover:underline"
                     onClick={cancel}
                 >
-                    {edit ? 'Cancel' : 'Edit'}
+                    {edit ? "Cancel" : "Edit"}
                 </div>
             </div>
             {edit ? (
                 <Form {...form}>
                     <FormError message={error} />
                     <form
-                        className="space-y-6 w-full"
+                        className="w-full space-y-6"
                         onSubmit={form.handleSubmit(onSubmit)}
                     >
                         <div className="flex flex-row gap-x-6">
@@ -93,7 +93,7 @@ const NameForm = ({ session }: { session: Session | null }) => {
                                 control={form.control}
                                 name="firstName"
                                 render={({ field }) => (
-                                    <FormItem className={cn('w-full')}>
+                                    <FormItem className={cn("w-full")}>
                                         <FormControl>
                                             <AccountFormInput
                                                 {...field}
@@ -110,7 +110,7 @@ const NameForm = ({ session }: { session: Session | null }) => {
                                 control={form.control}
                                 name="lastName"
                                 render={({ field }) => (
-                                    <FormItem className={cn('w-full')}>
+                                    <FormItem className={cn("w-full")}>
                                         <FormControl>
                                             <AccountFormInput
                                                 {...field}
@@ -132,12 +132,12 @@ const NameForm = ({ session }: { session: Session | null }) => {
             ) : (
                 <div
                     className={`${
-                        !user?.firstName && 'italic'
+                        !user?.firstName && "italic"
                     } text-base font-normal`}
                 >
                     {user?.firstName && user?.lastName
                         ? `${user.firstName} ${user.lastName}`
-                        : 'Not specified'}
+                        : "Not specified"}
                 </div>
             )}
         </div>

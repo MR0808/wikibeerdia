@@ -1,5 +1,9 @@
 "use client";
 
+import { type FormEvent, useEffect, useState } from "react";
+import { type ZodError, z } from "zod";
+import { Loader2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -12,30 +16,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type React from "react";
-import { type FormEvent, useEffect, useState } from "react";
-import { type ZodError, z } from "zod";
-import type { AddressType } from ".";
 import { FormMessages } from "@/components/form/FormMessages";
-import { Loader2 } from "lucide-react";
 
-interface AddressDialogProps {
-    open: boolean;
-    setOpen: (open: boolean) => void;
-    address: AddressType;
-    setAddress: (address: AddressType) => void;
-    adrAddress: string;
-    dialogTitle: string;
-    isLoading: boolean;
-}
-
-interface AddressFields {
-    address1?: string;
-    address2?: string;
-    city?: string;
-    region?: string;
-    postalCode?: string;
-}
+import { AddressFields, AddressDialogProps } from "@/types/autocomplete";
 
 /**
  * Create a Zod schema for validating address fields.

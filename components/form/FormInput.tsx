@@ -1,12 +1,13 @@
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 type FormInputProps = {
     name: string;
-    type: string;
+    type?: string;
     label?: string;
     defaultValue?: string;
     placeholder?: string;
@@ -44,7 +45,37 @@ export const AccountFormInput = forwardRef<HTMLInputElement, FormInputProps>(
                 type={type}
                 placeholder={placeholder}
                 {...props}
-                className={cn('rounded-xl py-3 px-6 text-sm font-normal h-12')}
+                className={cn("h-12 rounded-xl px-6 py-3 text-sm font-normal")}
+            />
+        );
+    }
+);
+
+export const AddFormInput = forwardRef<HTMLInputElement, FormInputProps>(
+    function AddFormInput({ name, type, placeholder, ...props }, ref) {
+        return (
+            <Input
+                name={name}
+                type={type}
+                placeholder={placeholder}
+                {...props}
+                className={cn(
+                    "block h-14 w-full rounded-lg border-neutral-200 bg-white px-5"
+                )}
+            />
+        );
+    }
+);
+
+export const AddFormTextArea = forwardRef<HTMLInputElement, FormInputProps>(
+    function AddFormTextArea({ name, ...props }, ref) {
+        return (
+            <Textarea
+                name={name}
+                {...props}
+                className={cn(
+                    "block h-28 w-full rounded-lg border-neutral-200 bg-white p-5"
+                )}
             />
         );
     }

@@ -13,6 +13,21 @@ import { GetTypesSchema } from "@/utils/types";
 import { filterColumn } from "@/lib/filterColumn";
 import { getErrorMessage } from "@/lib/handleError";
 
+export const getBreweryTypesForms = async () => {
+    noStore();
+    const data = await db.breweryType.findMany({
+        where: {
+            status: "APPROVED"
+        },
+        select: {
+            id: true,
+            name: true
+        },
+        orderBy: { name: "asc" }
+    });
+    return { data };
+};
+
 export const getBreweryTypes = async (input: GetTypesSchema) => {
     noStore();
     const { page, per_page, sort, name, status, operator, from, to } = input;
