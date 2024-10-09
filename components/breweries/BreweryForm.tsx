@@ -56,6 +56,7 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
             logoUrl: []
         }
     });
+
     const {
         fields: imageFields,
         append: appendImage,
