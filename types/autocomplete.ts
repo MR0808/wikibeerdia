@@ -16,7 +16,6 @@ export interface AddressAutoCompleteProps {
     setAddress: (address: AddressType) => void;
     searchInput: string;
     setSearchInput: (searchInput: string) => void;
-    dialogTitle: string;
     showInlineError?: boolean;
     placeholder?: string;
 }
@@ -24,21 +23,16 @@ export interface AddressAutoCompleteProps {
 export interface CommonProps {
     selectedPlaceId: string;
     setSelectedPlaceId: (placeId: string) => void;
-    setIsOpenDialog: (isOpen: boolean) => void;
     showInlineError?: boolean;
     searchInput: string;
     setSearchInput: (searchInput: string) => void;
     placeholder?: string;
 }
 
-export interface AddressDialogProps {
-    open: boolean;
-    setOpen: (open: boolean) => void;
+export interface AddressFormProps {
     address: AddressType;
     setAddress: (address: AddressType) => void;
     adrAddress: string;
-    dialogTitle: string;
-    isLoading: boolean;
 }
 
 export interface AddressFields {
