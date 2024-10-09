@@ -89,7 +89,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
             );
 
         fromDay && whereFilter.push({ createdAt: { gte: fromDay } });
-
         toDay && whereFilter.push({ createdAt: { lte: toDay } });
 
         let usedFilter;
