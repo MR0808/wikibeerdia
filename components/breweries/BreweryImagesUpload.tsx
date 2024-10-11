@@ -19,15 +19,15 @@ import { Button } from "@/components/ui/button";
 import { BrewerySchema } from "@/schemas/brewery";
 import { cn } from "@/lib/utils";
 
-const BreweryLogoUpload = () => {
+const BreweryImagesUpload = () => {
     const form = useFormContext<z.infer<typeof BrewerySchema>>();
-    const maxFiles = 1;
+    const maxFiles = 15;
     const {
         fields: imageFields,
         append: appendImage,
         remove: removeImage
     } = useFieldArray({
-        name: "logoUrl",
+        name: "images",
         control: form.control
     });
 
@@ -100,7 +100,7 @@ const BreweryLogoUpload = () => {
                                 "block text-lg font-medium leading-6 text-gray-900"
                             )}
                         >
-                            Brewery Images (maximum 15)
+                            Brewery Logo
                         </FormLabel>
                         <FormControl>
                             <div
@@ -204,4 +204,4 @@ const BreweryLogoUpload = () => {
     );
 };
 
-export default BreweryLogoUpload;
+export default BreweryImagesUpload;

@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { BreweryTypeForm } from "@/types/breweryTypes";
 import Autocomplete from "@/components/autocomplete/Autocomplete";
 import BreweryLogoUpload from "./BreweryLogoUpload";
+import BreweryImagesUpload from "./BreweryImagesUpload";
 
 type Props = {
     id?: string;
@@ -207,6 +208,16 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="col-span-full">
                             <Autocomplete />
+                        </div>
+                    </div>
+                </div>
+                <div className="mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-violet-50 px-12 py-10 sm:justify-between sm:space-x-0 md:space-x-4">
+                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                        Brewery Address
+                    </h1>
+                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="col-span-full">
+                            <BreweryImagesUpload />
                         </div>
                     </div>
                 </div>
