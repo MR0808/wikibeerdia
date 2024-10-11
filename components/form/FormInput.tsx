@@ -11,6 +11,7 @@ type FormInputProps = {
     label?: string;
     defaultValue?: string;
     placeholder?: string;
+    disabled?: boolean;
 };
 
 export const FormInput = ({

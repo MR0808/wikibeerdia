@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import { toast } from "sonner";
 import { useState, useTransition, useCallback, useEffect, useRef } from "react";
 import type { Session } from "next-auth";
@@ -53,7 +53,15 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
             name: "",
             description: "",
             website: "",
-            logoUrl: []
+            logoUrl: [],
+            address1: "",
+            address2: "",
+            region: "",
+            postalCode: "",
+            country: "",
+            city: "",
+            formattedAddress: "",
+            countrycode: ""
         }
     });
 

@@ -15,6 +15,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { fetcher } from "@/utils/fetcher";
 import { FormMessages } from "@/components/form/FormMessages";
 import { CommonProps } from "@/types/autocomplete";
+import { cn } from "@/lib/utils";
 
 const AddressAutoCompleteInput = (props: CommonProps) => {
     const {
@@ -52,7 +53,7 @@ const AddressAutoCompleteInput = (props: CommonProps) => {
         <Command
             shouldFilter={false}
             onKeyDown={handleKeyDown}
-            className="overflow-visible"
+            className={cn("h-auto overflow-visible")}
         >
             <div className="flex w-full items-center justify-between rounded-lg border bg-background text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                 <CommandPrimitive.Input
@@ -61,7 +62,8 @@ const AddressAutoCompleteInput = (props: CommonProps) => {
                     onBlur={close}
                     onFocus={open}
                     placeholder={placeholder || "Enter address"}
-                    className="w-full rounded-lg p-3 outline-none"
+                    // className="h-14 w-full rounded-lg p-3 outline-none"
+                    className="block h-14 w-full rounded-lg border-neutral-200 bg-white px-5"
                 />
             </div>
             {searchInput !== "" &&

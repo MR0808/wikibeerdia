@@ -31,8 +31,6 @@ export interface CommonProps {
 
 export interface AddressFormProps {
     address: AddressType;
-    setAddress: (address: AddressType) => void;
-    adrAddress: string;
 }
 
 export interface AddressFields {

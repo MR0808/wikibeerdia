@@ -1,8 +1,9 @@
 "use client";
 
-import { Delete, Pencil } from "lucide-react";
+import { Delete } from "lucide-react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { useFormContext } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import { fetcher } from "@/utils/fetcher";
 import { AddressAutoCompleteProps, AddressType } from "@/types/autocomplete";
 import AddressAutoCompleteInput from "./AddressAutoCompleteInput";
 import AddressForm from "./AddressForm";
+import { cn } from "@/lib/utils";
 
 const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
     const {
@@ -20,6 +22,8 @@ const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
         setSearchInput,
         placeholder
     } = props;
+
+    const form = useFormContext();
 
     const [selectedPlaceId, setSelectedPlaceId] = useState("");
     const { data, isLoading } = useSWR(
@@ -32,19 +36,42 @@ const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
         }
     );
 
-    const adrAddress = data?.data.adrAddress;
-
     useEffect(() => {
         if (data?.data.address) {
             setAddress(data.data.address as AddressType);
+            const adrInputs = data.data.address as AddressType;
+            form.setValue("address1", adrInputs.address1);
+            form.setValue("address2", adrInputs.address2);
+            form.setValue("city", adrInputs.city);
+            form.setValue("region", adrInputs.region);
+            form.setValue("postalCode", adrInputs.postalCode);
+            form.setValue("country", adrInputs.country);
+            form.setValue("formattedAddress", adrInputs.formattedAddress);
+            form.setValue("countryCode", adrInputs.countryCode);
         }
     }, [data, setAddress]);
 
     return (
         <>
-            {selectedPlaceId !== "" || address.formattedAddress ? (
+            {isLoading ? (
                 <div className="flex items-center gap-2">
-                    <Input value={address?.formattedAddress} readOnly />
+                    <Input
+                        value="Loading..."
+                        readOnly
+                        className={cn(
+                            "block h-14 w-full rounded-lg border-neutral-200 bg-white px-5"
+                        )}
+                    />
+                </div>
+            ) : selectedPlaceId !== "" || address.formattedAddress ? (
+                <div className="flex items-center gap-2">
+                    <Input
+                        value={address?.formattedAddress}
+                        readOnly
+                        className={cn(
+                            "block h-14 w-full rounded-lg border-neutral-200 bg-white px-5"
+                        )}
+                    />
                     <Button
                         type="reset"
                         onClick={() => {
@@ -62,11 +89,10 @@ const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
                                 countryCode: ""
                             });
                         }}
-                        size="icon"
                         variant="outline"
-                        className="shrink-0"
+                        className="h-14 w-14 shrink-0"
                     >
-                        <Delete className="size-4" />
+                        <Delete className="size-6" />
                     </Button>
                 </div>
             ) : (
@@ -79,11 +105,7 @@ const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
                     placeholder={placeholder}
                 />
             )}
-            <AddressForm
-                adrAddress={adrAddress}
-                address={address}
-                setAddress={setAddress}
-            />
+            <AddressForm address={address} />
         </>
     );
 };
