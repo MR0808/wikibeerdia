@@ -12,7 +12,6 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormMessage,
     FormLabel
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -100,7 +99,7 @@ const BreweryLogoUpload = () => {
                                 "block text-lg font-medium leading-6 text-gray-900"
                             )}
                         >
-                            Brewery Images (maximum 15)
+                            Brewery Logo
                         </FormLabel>
                         <FormControl>
                             <div
@@ -119,7 +118,7 @@ const BreweryLogoUpload = () => {
                             >
                                 <input {...getInputProps()} id="logoUrl" />
                                 {imageFields.length === 0 ? (
-                                    <div className="py-10">
+                                    <div className="flex flex-col items-center justify-center py-10">
                                         <ImageUpIcon className="h-12 w-12 fill-primary/75" />
                                         <div className="mb-2 mt-4">
                                             Drop or{" "}

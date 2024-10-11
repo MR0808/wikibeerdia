@@ -8,13 +8,7 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { ImageUpIcon } from "lucide-react";
 
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-    FormLabel
-} from "@/components/ui/form";
+import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { BrewerySchema } from "@/schemas/brewery";
 import { cn } from "@/lib/utils";
@@ -92,16 +86,9 @@ const BreweryImagesUpload = () => {
         <>
             <FormField
                 control={form.control}
-                name="logoUrl"
+                name="images"
                 render={() => (
                     <FormItem className={cn("w-full")}>
-                        <FormLabel
-                            className={cn(
-                                "block text-lg font-medium leading-6 text-gray-900"
-                            )}
-                        >
-                            Brewery Logo
-                        </FormLabel>
                         <FormControl>
                             <div
                                 className={cn(
@@ -117,9 +104,9 @@ const BreweryImagesUpload = () => {
                                 {...getRootProps()}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <input {...getInputProps()} id="logoUrl" />
+                                <input {...getInputProps()} id="images" />
                                 {imageFields.length === 0 ? (
-                                    <div className="py-10">
+                                    <div className="flex flex-col items-center justify-center py-10">
                                         <ImageUpIcon className="h-12 w-12 fill-primary/75" />
                                         <div className="mb-2 mt-4">
                                             Drop or{" "}

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import type { Session } from "next-auth";
+import { ErrorMessage } from "@hookform/error-message";
 
 import {
     Form,
@@ -30,6 +31,9 @@ import { BreweryTypeForm } from "@/types/breweryTypes";
 import Autocomplete from "@/components/autocomplete/Autocomplete";
 import BreweryLogoUpload from "./BreweryLogoUpload";
 import BreweryImagesUpload from "./BreweryImagesUpload";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { createBrewery } from "@/actions/breweries";
 
 type Props = {
     id?: string;
@@ -63,8 +67,27 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
     });
 
     const onSubmit = (values: z.infer<typeof BrewerySchema>) => {
-        console.log(values);
-        startTransition(() => {});
+        startTransition(() => {
+            const formData = new FormData();
+            formData.append("logoUrl", values.logoUrl[0].value);
+            values?.images?.map((image) => {
+                formData.append("images", image.value);
+            });
+            formData.append("name", values.name);
+            formData.append("address1", values.address1);
+            formData.append("formattedAddress", values.formattedAddress);
+            formData.append("city", values.city);
+            formData.append("region", values.region);
+            formData.append("postalCode", values.postalCode);
+            formData.append("country", values.country);
+            formData.append("description", values.description);
+            formData.append("breweryType", values.breweryType);
+            formData.append("website", values.website);
+            values.address2 && formData.append("address2", values.address2);
+            values.countryCode &&
+                formData.append("countryCode", values.countryCode);
+            createBrewery(formData);
+        });
     };
 
     return (
@@ -213,13 +236,24 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
                 </div>
                 <div className="mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-violet-50 px-12 py-10 sm:justify-between sm:space-x-0 md:space-x-4">
                     <h1 className="text-2xl font-semibold leading-7 text-gray-900">
-                        Brewery Address
+                        Brewery Images
                     </h1>
+                    <h3 className="text-lg leading-7 text-gray-900">
+                        Maximum 15 images
+                    </h3>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="col-span-full">
                             <BreweryImagesUpload />
                         </div>
                     </div>
+                </div>
+                <div className="mx-auto mb-10 flex w-[55%] flex-row justify-end px-12 pb-16 sm:space-x-0 md:space-x-4">
+                    <Link href="/">
+                        <Button type="button" variant="outline" size="lg">
+                            Cancel
+                        </Button>
+                    </Link>
+                    <SubmitButton isPending={isPending} />
                 </div>
             </form>
         </Form>
