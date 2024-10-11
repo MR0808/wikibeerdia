@@ -1,5 +1,6 @@
 "use client";
 
+import * as z from "zod";
 import { Delete } from "lucide-react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -11,6 +12,7 @@ import { fetcher } from "@/utils/fetcher";
 import { AddressAutoCompleteProps, AddressType } from "@/types/autocomplete";
 import AddressAutoCompleteInput from "./AddressAutoCompleteInput";
 import AddressForm from "./AddressForm";
+import { BrewerySchema } from "@/schemas/brewery";
 import { cn } from "@/lib/utils";
 
 const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
@@ -23,7 +25,7 @@ const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
         placeholder
     } = props;
 
-    const form = useFormContext();
+    const form = useFormContext<z.infer<typeof BrewerySchema>>();
 
     const [selectedPlaceId, setSelectedPlaceId] = useState("");
     const { data, isLoading } = useSWR(

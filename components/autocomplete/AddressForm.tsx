@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import * as z from "zod";
 import { useFormContext } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
@@ -12,15 +12,14 @@ import {
     FormMessage
 } from "@/components/ui/form";
 
-import { Label } from "@/components/ui/label";
-import { FormMessages } from "@/components/form/FormMessages";
 import { cn } from "@/lib/utils";
+import { BrewerySchema } from "@/schemas/brewery";
 import { AddressFormProps } from "@/types/autocomplete";
 
 const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
     const { address } = props;
     const errorClass = "pl-6";
-    const form = useFormContext();
+    const form = useFormContext<z.infer<typeof BrewerySchema>>();
 
     return (
         <div className="space-y-4 py-7">
