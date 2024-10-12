@@ -128,9 +128,8 @@ export const login = async (
             redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT
         });
     } catch (error) {
-        console.log(error);
         if (isRedirectError(error)) {
-            throw error;
+            return;
         }
 
         if (error instanceof AuthError) {

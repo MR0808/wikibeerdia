@@ -12,7 +12,7 @@ import { getUserById } from "@/data/user";
 import { getErrorMessage } from "@/lib/handleError";
 
 export const createBrewery = async (formData: FormData) => {
-    console.log("values", formData);
+    let data: Brewery;
     try {
         const user = await currentUser();
 
@@ -49,7 +49,6 @@ export const createBrewery = async (formData: FormData) => {
             city,
             region,
             postalCode,
-            country,
             countryCode,
             description,
             breweryType,
@@ -59,13 +58,6 @@ export const createBrewery = async (formData: FormData) => {
         } = BrewerySchemaFormData.parse(formData);
 
         const logoFullPath = await uploadImage(logoUrl[0], "logos-bucket");
-        let imagesUrls: string[] = [];
-        if (images && images?.length > 0) {
-            for (const image of images) {
-                const url = await uploadImage(image, "images-bucket");
-                imagesUrls.push(url);
-            }
-        }
         const countryId = await db.country.findFirst({
             where: { isoCode: countryCode }
         });
@@ -77,7 +69,7 @@ export const createBrewery = async (formData: FormData) => {
             };
         }
 
-        const data = await db.brewery.create({
+        data = await db.brewery.create({
             data: {
                 name,
                 address1,
@@ -91,7 +83,6 @@ export const createBrewery = async (formData: FormData) => {
                 breweryTypeId: breweryType,
                 website: website || "",
                 logoUrl: logoFullPath,
-                images: imagesUrls,
                 userId: dbUser.id
             }
         });
@@ -101,11 +92,43 @@ export const createBrewery = async (formData: FormData) => {
                 error: getErrorMessage("Error with fields")
             };
         }
-
-        redirect(`/breweries/${data.id}`);
+        if (images && images?.length > 0) {
+            let i = 1;
+            for (const image of images) {
+                const url = await uploadImage(image, "images-bucket");
+                await db.breweryImages.create({
+                    data: {
+                        image: url,
+                        order: i,
+                        breweryId: data.id
+                    }
+                });
+                i++;
+            }
+        }
     } catch (error) {
         return renderError(error);
     }
+
+    redirect(`/breweries/${data.id}`);
+};
+
+export const getBrewery = async (id: string) => {
+    const data = await db.brewery.findUnique({
+        where: {
+            id
+        },
+        include: {
+            beers: true,
+            breweryReviews: true,
+            breweryType: {
+                select: { name: true }
+            },
+            images: true,
+            user: { select: { id: true, displayName: true } }
+        }
+    });
+    return { data };
 };
 
 const renderError = (
