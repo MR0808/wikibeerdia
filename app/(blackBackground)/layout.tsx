@@ -1,7 +1,7 @@
-'use server';
+"use server";
 
-import { auth } from '@/auth';
-import Navbar from '@/components/navbar/Navbar';
+import { auth } from "@/auth";
+import Navbar from "@/components/navbar/Navbar";
 
 const PublicLayout = async ({ children }: { children: React.ReactNode }) => {
     const session = await auth();
@@ -9,7 +9,7 @@ const PublicLayout = async ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="relative flex min-h-screen flex-col">
             <Navbar whiteBackground={false} session={session} />
-            <div className="flex-1">{children}</div>
+            <div className="flex-1 bg-slate-100">{children}</div>
         </div>
     );
 };

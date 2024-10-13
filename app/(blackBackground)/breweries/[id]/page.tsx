@@ -18,10 +18,12 @@ const BreweryDetailsPage = async ({ params }: { params: { id: string } }) => {
         redirect("/breweries/");
 
     return (
-        <div className="container mt-60 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0">
-            <Suspense>
-                <BreweryHeader data={data} />
-            </Suspense>
+        <div>
+            <div className="container mt-60 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0">
+                <Suspense fallback={<div>Loading</div>}>
+                    <BreweryHeader data={data} />
+                </Suspense>
+            </div>
         </div>
     );
 };

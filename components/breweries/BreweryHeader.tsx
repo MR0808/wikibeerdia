@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin, Share2, Heart } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { BreweryType } from "@/types/breweries";
+import Image from "next/image";
 
 const BreweryHeader = ({ data }: { data: BreweryType }) => {
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row justify-between">
             <div className="w-1/2">
                 <h3 className="text-6xl font-semibold">{data.name}</h3>
                 <div className="mt-10 flex flex-wrap">
@@ -17,43 +18,23 @@ const BreweryHeader = ({ data }: { data: BreweryType }) => {
                     </div>
                 </div>
             </div>
-            <div className="col-lg-6 text-lg-end">
-                <div className="d-inline-block md-mt-40">
-                    <div className="price color-dark fw-500">
-                        Price: $1,67,000
-                    </div>
-                    <div className="est-price fs-20 mt-25 mb-35 md-mb-30">
-                        Est. Payment{" "}
-                        <span className="fw-500 color-dark">$8,343/mo*</span>
-                    </div>
-                    <ul className="style-none d-flex align-items-center action-btns">
-                        <li className="fw-500 color-dark me-auto">
-                            <i className="fa-sharp fa-regular fa-share-nodes me-2"></i>
+            <div className="w-1/2 text-center">
+                <div className="inline-block">
+                    <Image
+                        src={data.logoUrl}
+                        alt={`${data.name} logo`}
+                        width={200}
+                        height={200}
+                    />
+                    <ul className="mt-9 flex list-none items-center">
+                        <li className="text-dark mr-auto flex flex-row text-lg font-medium">
+                            <Share2 className="mr-2" />
                             Share
                         </li>
                         <li>
-                            <Link
-                                href="#"
-                                className={`d-flex align-items-center justify-content-center tran3s rounded-circle`}
-                            >
-                                <i className="fa-light fa-heart"></i>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="#"
-                                className={`d-flex align-items-center justify-content-center tran3s rounded-circle`}
-                            >
-                                <i className="fa-light fa-bookmark"></i>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="#"
-                                className={`d-flex align-items-center justify-content-center tran3s rounded-circle`}
-                            >
-                                <i className="fa-light fa-circle-plus"></i>
-                            </Link>
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full border-black bg-white text-lg text-black transition-all">
+                                <Heart />
+                            </div>
                         </li>
                     </ul>
                 </div>
