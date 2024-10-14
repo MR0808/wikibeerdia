@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useFormState } from 'react-dom';
-import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useFormState } from "react-dom";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
-import { toast } from 'sonner';
-import { actionFunction } from '@/utils/types';
+import { toast } from "sonner";
+import { actionFunction } from "@/utils/types";
 
 const initialState = {
     result: null,
-    message: ''
+    message: ""
 };
 
 function FormContainer({
@@ -19,7 +19,7 @@ function FormContainer({
 }: {
     action: actionFunction;
     children: React.ReactNode;
-    sendDataToParent: (data: string) => void;
+    sendDataToParent?: (data: string) => void;
 }) {
     const [state, formAction] = useFormState(action, initialState);
     const { update } = useSession();
@@ -27,7 +27,7 @@ function FormContainer({
         if (state.result && state.message) {
             update();
             toast.success(state.message);
-            sendDataToParent('updated');
+            if (sendDataToParent) sendDataToParent("updated");
         }
         if (!state.result && state.message) {
             toast.error(state.message);

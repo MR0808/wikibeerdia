@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { AuthError } from "next-auth";
 import * as OTPAuth from "otpauth";
-import { compare, hash } from "bcrypt-ts";
+import { compare } from "bcrypt-ts";
 import { isRedirectError } from "next/dist/client/components/redirect";
 
 import db from "@/lib/db";

@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import { match } from "path-to-regexp";
 
 import authConfig from "@/auth.config";
 
@@ -7,7 +8,7 @@ import {
     apiAuthPrefix,
     authRoutes,
     publicRoutes,
-    adminPrefix,
+    adminPrefix
 } from "@/routes";
 
 const { auth } = NextAuth(authConfig);
@@ -18,12 +19,9 @@ export default auth((req) => {
     const role = req.auth?.user.role;
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-    const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+    // const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
     const isAdminRoute = nextUrl.pathname.startsWith(adminPrefix);
-
-    const headers = new Headers(req.headers);
-    headers.set("x-current-path", req.nextUrl.pathname);
 
     if (isApiAuthRoute) {
         return;
@@ -39,7 +37,7 @@ export default auth((req) => {
             const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
             return Response.redirect(
-                new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
+                new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
             );
         }
         if (isLoggedIn && role !== "ADMIN") {
@@ -55,25 +53,54 @@ export default auth((req) => {
         return;
     }
 
-    if (!isLoggedIn && !isPublicRoute) {
-        let callbackUrl = nextUrl.pathname;
-        if (nextUrl.search) {
-            callbackUrl += nextUrl.search;
-        }
+    // if (!isLoggedIn && !isPublicRoute) {
+    //     let callbackUrl = nextUrl.pathname;
+    //     if (nextUrl.search) {
+    //         callbackUrl += nextUrl.search;
+    //     }
 
-        const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+    //     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-        return Response.redirect(
-            new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
-        );
-    }
+    //     return Response.redirect(
+    //         new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
+    //     );
+    // }
+
+    const getRouteInfo = (route: string) => {
+        return publicRoutes.find((publicRoute) => {
+            if (publicRoute.isDynamic) {
+                const checkPath = match(publicRoute.path);
+
+                return Boolean(checkPath(route));
+            }
+
+            return publicRoute.path === route;
+        });
+    };
+
+    // const route = getRouteInfo(req.nextUrl.pathname);
+
+    // console.log(route);
+
+    // if (!isLoggedIn && !route) {
+    //     let callbackUrl = nextUrl.pathname;
+    //     if (nextUrl.search) {
+    //         callbackUrl += nextUrl.search;
+    //     }
+
+    //     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+
+    //     return Response.redirect(
+    //         new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+    //     );
+    // }
 
     return;
 });
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"]
 };
 
 // export function middleware(request: NextRequest) {

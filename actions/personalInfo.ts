@@ -9,29 +9,26 @@ import {
     LocationSchema,
     DateOfBirthSchema,
     DisplayNameSchema,
-    ProfilePictureSchema,
+    ProfilePictureSchema
 } from "@/schemas/personal-info";
 import { validateWithZodSchema } from "@/schemas";
 import { getUserById } from "@/data/user";
 import { unstable_update as update } from "@/auth";
 import { currentUser } from "@/lib/auth";
+import { checkAuth } from "@/lib/auth";
 import { State } from "@prisma/client";
 import { uploadImage, deleteImage } from "@/utils/supabase";
 
 export const updateDisplayName = async (
-    values: z.infer<typeof DisplayNameSchema>,
+    values: z.infer<typeof DisplayNameSchema>
 ) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     const validatedFields = DisplayNameSchema.safeParse(values);
 
@@ -40,34 +37,29 @@ export const updateDisplayName = async (
     }
 
     const updatedUser = await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
-            ...values,
-        },
+            ...values
+        }
     });
 
     update({
         user: {
-            displayName: updatedUser.displayName as string,
-        },
+            displayName: updatedUser.displayName as string
+        }
     });
 
     return { success: "Display name updated" };
 };
 
 export const updateName = async (values: z.infer<typeof NameSchema>) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
-
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
     const validatedFields = NameSchema.safeParse(values);
 
     if (!validatedFields.success) {
@@ -75,34 +67,30 @@ export const updateName = async (values: z.infer<typeof NameSchema>) => {
     }
 
     const updatedUser = await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
-            ...values,
-        },
+            ...values
+        }
     });
 
     update({
         user: {
             firstName: updatedUser.firstName as string,
-            lastName: updatedUser.lastName as string,
-        },
+            lastName: updatedUser.lastName as string
+        }
     });
 
     return { success: "Name updated" };
 };
 
 export const updateGender = async (values: z.infer<typeof GenderSchema>) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     const validatedFields = GenderSchema.safeParse(values);
 
@@ -111,29 +99,25 @@ export const updateGender = async (values: z.infer<typeof GenderSchema>) => {
     }
 
     await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
-            ...values,
-        },
+            ...values
+        }
     });
 
     return { success: "Gender updated" };
 };
 
 export const updateLocation = async (
-    values: z.infer<typeof LocationSchema>,
+    values: z.infer<typeof LocationSchema>
 ) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     const validatedFields = LocationSchema.safeParse(values);
 
@@ -149,41 +133,37 @@ export const updateLocation = async (
         stateDb = null;
     } else {
         const tempState = await db.state.findFirst({
-            where: { id: values.state },
+            where: { id: values.state }
         });
         state = tempState ? tempState : undefined;
         stateDb = values.state;
     }
 
     await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
             countryId: values.country,
-            stateId: stateDb,
-        },
+            stateId: stateDb
+        }
     });
 
     const country = await db.country.findFirst({
-        where: { id: values.country },
+        where: { id: values.country }
     });
 
     return { success: "Location updated", country, state };
 };
 
 export const updateDateOfBirth = async (
-    values: z.infer<typeof DateOfBirthSchema>,
+    values: z.infer<typeof DateOfBirthSchema>
 ) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     const validatedFields = DateOfBirthSchema.safeParse(values);
 
@@ -192,10 +172,10 @@ export const updateDateOfBirth = async (
     }
 
     await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
-            ...values,
-        },
+            ...values
+        }
     });
 
     return { success: "Date of birth updated" };
@@ -203,37 +183,33 @@ export const updateDateOfBirth = async (
 
 export const updateProfilePicture = async (
     prevState: any,
-    formData: FormData,
+    formData: FormData
 ) => {
     try {
-        const user = await currentUser();
+        const user = await checkAuth();
 
-        if (!user) {
-            return { result: false, message: "Unauthorized" };
-        }
-
-        const dbUser = await getUserById(user.id!);
-
-        if (!dbUser) {
-            return { result: false, message: "Unauthorized" };
-        }
+        if (!user)
+            return {
+                data: null,
+                error: "Unauthorized"
+            };
 
         const image = formData.get("image") as File;
 
         const validatedFile = validateWithZodSchema(ProfilePictureSchema, {
-            image,
+            image
         });
 
         const fullPath = await uploadImage(
             validatedFile.image,
-            "profile-bucket",
+            "profile-bucket"
         );
-        if (dbUser?.image) await deleteImage(dbUser?.image, "profile-bucket");
+        if (user?.image) await deleteImage(user?.image, "profile-bucket");
         await db.user.update({
-            where: { id: dbUser.id },
+            where: { id: user.id },
             data: {
-                image: fullPath,
-            },
+                image: fullPath
+            }
         });
         return { result: true, message: "Profile image updated successfully" };
     } catch (error) {
@@ -242,11 +218,11 @@ export const updateProfilePicture = async (
 };
 
 const renderError = (
-    error: unknown,
+    error: unknown
 ): { result: boolean | null; message: string } => {
     console.log(error);
     return {
         result: false,
-        message: error instanceof Error ? error.message : "An error occurred",
+        message: error instanceof Error ? error.message : "An error occurred"
     };
 };

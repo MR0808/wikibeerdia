@@ -47,6 +47,8 @@ model User {
   beers                 Beer[]
   breweryReviews        BreweryReview[]
   beerReviews           BeerReview[]
+  breweryFavourites     BreweryFavorite[]
+  beerFavourites        BeerFavorite[]
   breweryTypes          BreweryType[]
   parentStyles          ParentStyle[]
   styles                Style[]
@@ -140,30 +142,51 @@ model City {
   stateId String
 }
 
+model BreweryFavorite {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  brewery   Brewery  @relation(fields: [breweryId], references: [id], onDelete: Cascade)
+  breweryId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BeerFavorite {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  beer      Beer     @relation(fields: [beerId], references: [id], onDelete: Cascade)
+  beerId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Brewery {
-  id               String          @id @default(uuid())
-  name             String
-  status           Status          @default(PENDING)
-  address1         String
-  address2         String?
-  city             String
-  region           String
-  postalCode       String
-  country          Country         @relation(fields: [countryId], references: [id], onDelete: Cascade)
-  countryId        String
-  formattedAddress String
-  description      String
-  website          String
-  logoUrl          String
-  images           BreweryImages[]
-  beers            Beer[]
-  breweryReviews   BreweryReview[]
-  breweryType      BreweryType     @relation(fields: [breweryTypeId], references: [id], onDelete: Cascade)
-  breweryTypeId    String
-  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId           String
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  id                String            @id @default(uuid())
+  name              String
+  status            Status            @default(PENDING)
+  address1          String
+  address2          String?
+  city              String
+  region            String
+  postalCode        String
+  country           Country           @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  countryId         String
+  formattedAddress  String
+  description       String
+  website           String
+  logoUrl           String
+  images            BreweryImages[]
+  beers             Beer[]
+  breweryReviews    BreweryReview[]
+  breweryFavourites BreweryFavorite[]
+  breweryType       BreweryType       @relation(fields: [breweryTypeId], references: [id], onDelete: Cascade)
+  breweryTypeId     String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 }
 
 model BreweryImages {
@@ -200,24 +223,25 @@ model BreweryType {
 }
 
 model Beer {
-  id          String       @id @default(uuid())
-  name        String
-  status      Status       @default(PENDING)
-  description String
-  abv         String
-  ibu         String?
-  yearCreated Int?
-  available   Boolean
-  beerReviews BeerReview[]
-  brewery     Brewery      @relation(fields: [breweryId], references: [id], onDelete: Cascade)
-  breweryId   String
-  subStyle    SubStyle?    @relation(fields: [subStyleId], references: [id], onDelete: Cascade)
-  subStyleId  String?
-  images      String[]
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id             String         @id @default(uuid())
+  name           String
+  status         Status         @default(PENDING)
+  description    String
+  abv            String
+  ibu            String?
+  yearCreated    Int?
+  available      Boolean
+  beerReviews    BeerReview[]
+  beerFavourites BeerFavorite[]
+  brewery        Brewery        @relation(fields: [breweryId], references: [id], onDelete: Cascade)
+  breweryId      String
+  subStyle       SubStyle?      @relation(fields: [subStyleId], references: [id], onDelete: Cascade)
+  subStyleId     String?
+  images         String[]
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model BeerReview {

@@ -3,34 +3,24 @@
 import * as z from "zod";
 import { Brewery } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import db from "@/lib/db";
-import { currentUser } from "@/lib/auth";
+import { checkAuth, currentUser } from "@/lib/auth";
 import { BrewerySchemaFormData } from "@/schemas/brewery";
 import { uploadImage, deleteImage } from "@/utils/supabase";
-import { getUserById } from "@/data/user";
 import { getErrorMessage } from "@/lib/handleError";
 
 export const createBrewery = async (formData: FormData) => {
     let data: Brewery;
     try {
-        const user = await currentUser();
+        const user = await checkAuth();
 
-        if (!user) {
+        if (!user)
             return {
                 data: null,
                 error: getErrorMessage("Unauthorized")
             };
-        }
-
-        const dbUser = await getUserById(user.id!);
-
-        if (!dbUser) {
-            return {
-                data: null,
-                error: getErrorMessage("Unauthorized")
-            };
-        }
 
         const form = BrewerySchemaFormData.safeParse(formData);
 
@@ -83,7 +73,7 @@ export const createBrewery = async (formData: FormData) => {
                 breweryTypeId: breweryType,
                 website: website || "",
                 logoUrl: logoFullPath,
-                userId: dbUser.id
+                userId: user.id
             }
         });
         if (!data) {
@@ -129,6 +119,59 @@ export const getBrewery = async (id: string) => {
         }
     });
     return { data };
+};
+
+export const fetchBreweryFavoriteId = async ({
+    breweryId
+}: {
+    breweryId: string;
+}) => {
+    const user = await checkAuth();
+
+    if (!user) return null;
+
+    const breweryFavorite = await db.breweryFavorite.findFirst({
+        where: {
+            breweryId,
+            userId: user.id
+        },
+        select: {
+            id: true
+        }
+    });
+    return breweryFavorite?.id || null;
+};
+
+export const toggleBreweryFavoriteAction = async (
+    breweryId: string,
+    breweryFavoriteId: string | null,
+    pathname: string
+) => {
+    const user = await currentUser();
+
+    try {
+        if (breweryFavoriteId) {
+            await db.breweryFavorite.delete({
+                where: {
+                    id: breweryFavoriteId
+                }
+            });
+        } else {
+            await db.breweryFavorite.create({
+                data: {
+                    breweryId,
+                    userId: user?.id!
+                }
+            });
+        }
+        revalidatePath(pathname);
+        return {
+            result: breweryFavoriteId ? false : true,
+            message: breweryFavoriteId ? "Removed from Faves" : "Added to Faves"
+        };
+    } catch (error) {
+        return renderError(error);
+    }
 };
 
 const renderError = (

@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
     // Check if your hosting provider gives you the country code
     const country = await getGeolocation();
     const input = searchParams.get("input");
+    if (!input) return NextResponse.json({ error: "Error", data: null });
     const url = "https://places.googleapis.com/v1/places:autocomplete";
     // const url = "https://maps.googleapis.com/maps/api/place/autocomplete/";
 
@@ -48,7 +49,7 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json({ data: data.suggestions, error: null });
     } catch (error) {
-        console.error("Error fetching autocomplete suggestions:", error);
+        // console.error("Error fetching autocomplete suggestions:", error);
         return NextResponse.json({ error: error, data: null });
     }
 }

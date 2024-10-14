@@ -9,21 +9,18 @@ import { TwoFactorProps } from "@/utils/types";
 import { getUserById, getUserByEmail } from "@/data/user";
 import { unstable_update as update } from "@/auth";
 import { currentUser } from "@/lib/auth";
+import { checkAuth } from "@/lib/auth";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken, generateRecoveryCodes } from "@/lib/tokens";
 
 export const updateEmail = async (values: z.infer<typeof EmailSchema>) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     const validatedFields = EmailSchema.safeParse(values);
 
@@ -47,7 +44,7 @@ export const updateEmail = async (values: z.infer<typeof EmailSchema>) => {
     );
 
     const updatedUser = await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
             ...values,
             emailVerified: null
@@ -66,17 +63,13 @@ export const updateEmail = async (values: z.infer<typeof EmailSchema>) => {
 export const updatePassword = async (
     values: z.infer<typeof ResetPasswordSchema>
 ) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     const validatedFields = ResetPasswordSchema.safeParse(values);
 
@@ -89,7 +82,7 @@ export const updatePassword = async (
     const hashedPassword = await hash(password, 10);
 
     await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
             password: hashedPassword
         }
@@ -103,20 +96,16 @@ export const setupTwoFactor = async ({
     otpBase32,
     otpBackups
 }: TwoFactorProps) => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
             otpEnabled: true,
             otpVerified: true,
@@ -136,20 +125,16 @@ export const setupTwoFactor = async ({
 };
 
 export const disableTwoFactor = async () => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
             otpEnabled: false,
             otpVerified: false,
@@ -168,23 +153,19 @@ export const disableTwoFactor = async () => {
 };
 
 export const resetBackupCodes = async () => {
-    const user = await currentUser();
+    const user = await checkAuth();
 
-    if (!user) {
-        return { error: "Unauthorized" };
-    }
-
-    const dbUser = await getUserById(user.id!);
-
-    if (!dbUser) {
-        return { error: "Unauthorized" };
-    }
+    if (!user)
+        return {
+            data: null,
+            error: "Unauthorized"
+        };
 
     const { recoveryCodes, recoveryCodesHashed } =
         await generateRecoveryCodes();
 
     await db.user.update({
-        where: { id: dbUser.id },
+        where: { id: user.id },
         data: {
             otpBackups: recoveryCodesHashed
         }

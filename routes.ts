@@ -3,7 +3,13 @@
  * These routes do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ["/", "/verification", "/error", "/breweries"];
+export const publicRoutes = [
+    { path: "/", isDynamic: false },
+    { path: "/verification", isDynamic: false },
+    { path: "/error", isDynamic: false },
+    { path: "/breweries", isDynamic: false },
+    { path: "/breweries/:id", isDynamic: true }
+];
 
 /**
  * An array of routes that are used for authentication

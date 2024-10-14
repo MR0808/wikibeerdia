@@ -7,7 +7,7 @@ import { SubStyle, type SubStyle as SubStyleType } from "@prisma/client";
 import { format } from "date-fns";
 
 import db from "@/lib/db";
-import { currentUser } from "@/lib/auth";
+import { checkAuth } from "@/lib/auth";
 import { BeerStyleSchema } from "@/schemas/admin";
 import { GetSearchSchema } from "@/utils/types";
 import { filterColumn } from "@/lib/filterColumn";
@@ -113,28 +113,13 @@ export const createBeerSubStyle = async (
     styleId: string
 ) => {
     noStore();
-    const user = await currentUser();
+    const user = await checkAuth(true);
 
-    if (!user) {
+    if (!user)
         return {
             data: null,
             error: getErrorMessage("Unauthorized")
         };
-    }
-
-    if (!user.id) {
-        return {
-            data: null,
-            error: getErrorMessage("Unauthorized")
-        };
-    }
-
-    if (user.role !== "ADMIN") {
-        return {
-            data: null,
-            error: getErrorMessage("Unauthorized")
-        };
-    }
 
     const validatedFields = BeerStyleSchema.safeParse(values);
 
@@ -174,28 +159,13 @@ export const updateBeerSubStyle = async (
     styleId: string
 ) => {
     noStore();
-    const user = await currentUser();
+    const user = await checkAuth(true);
 
-    if (!user) {
+    if (!user)
         return {
             data: null,
             error: getErrorMessage("Unauthorized")
         };
-    }
-
-    if (!user.id) {
-        return {
-            data: null,
-            error: getErrorMessage("Unauthorized")
-        };
-    }
-
-    if (user.role !== "ADMIN") {
-        return {
-            data: null,
-            error: getErrorMessage("Unauthorized")
-        };
-    }
 
     const validatedFields = BeerStyleSchema.safeParse(values);
 
@@ -235,6 +205,13 @@ export const updateBeerSubStyles = async (
     styleId: string
 ) => {
     noStore();
+    const user = await checkAuth(true);
+
+    if (!user)
+        return {
+            data: null,
+            error: getErrorMessage("Unauthorized")
+        };
 
     try {
         await db.subStyle.updateMany({
