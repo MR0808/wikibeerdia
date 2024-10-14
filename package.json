@@ -46,6 +46,7 @@
         "country-state-city": "^3.2.1",
         "date-fns": "^4.1.0",
         "date-fns-tz": "^3.2.0",
+        "embla-carousel": "^8.3.0",
         "embla-carousel-react": "^8.3.0",
         "input-otp": "^1.2.4",
         "libphonenumber-js": "^1.11.11",
