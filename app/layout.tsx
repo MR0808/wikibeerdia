@@ -25,7 +25,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
             <html lang="en" suppressHydrationWarning={true}>
                 <body
-                    className={inter.className}
+                    className={`${inter.className} bg-slate-100`}
                     suppressHydrationWarning={true}
                 >
                     <ReactQueryProvider>

@@ -1,11 +1,4 @@
-import { MapPin, Mail } from "lucide-react";
-import {
-    EmailShareButton,
-    FacebookShareButton,
-    TwitterShareButton,
-    WhatsappShareButton,
-    RedditShareButton
-} from "react-share";
+import { MapPin } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { BreweryType } from "@/types/breweries";

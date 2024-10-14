@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import type { Session } from "next-auth";
-import { ErrorMessage } from "@hookform/error-message";
 
 import {
     Form,

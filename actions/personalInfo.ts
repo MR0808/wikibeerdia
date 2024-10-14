@@ -181,17 +181,14 @@ export const updateDateOfBirth = async (
     return { success: "Date of birth updated" };
 };
 
-export const updateProfilePicture = async (
-    prevState: any,
-    formData: FormData
-) => {
+export const updateProfilePicture = async (formData: FormData) => {
     try {
         const user = await checkAuth();
 
         if (!user)
             return {
-                data: null,
-                error: "Unauthorized"
+                result: false,
+                message: "Unauthorized"
             };
 
         const image = formData.get("image") as File;
@@ -211,6 +208,13 @@ export const updateProfilePicture = async (
                 image: fullPath
             }
         });
+
+        update({
+            user: {
+                image: fullPath as string
+            }
+        });
+
         return { result: true, message: "Profile image updated successfully" };
     } catch (error) {
         return renderError(error);

@@ -19,7 +19,7 @@ function FormContainer({
 }: {
     action: actionFunction;
     children: React.ReactNode;
-    sendDataToParent?: (data: string) => void;
+    sendDataToParent: (data: string) => void;
 }) {
     const [state, formAction] = useFormState(action, initialState);
     const { update } = useSession();
@@ -27,7 +27,7 @@ function FormContainer({
         if (state.result && state.message) {
             update();
             toast.success(state.message);
-            if (sendDataToParent) sendDataToParent("updated");
+            sendDataToParent("updated");
         }
         if (!state.result && state.message) {
             toast.error(state.message);

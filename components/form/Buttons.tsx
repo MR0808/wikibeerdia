@@ -20,6 +20,7 @@ type SubmitButtonProps = {
 type ProfileButtonProps = {
     text?: string;
     newImage: boolean;
+    isPending: boolean;
 };
 
 export const SubmitButton = ({
@@ -75,13 +76,12 @@ export const AuthSubmitButton = ({
 
 export function ProfileButton({
     text = "submit",
-    newImage
+    newImage,
+    isPending
 }: ProfileButtonProps) {
-    const { pending } = useFormStatus();
-
     return (
-        <Button type="submit" disabled={!newImage || pending}>
-            {pending ? (
+        <Button type="submit" disabled={!newImage || isPending}>
+            {isPending ? (
                 <>
                     <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                     Please wait...
