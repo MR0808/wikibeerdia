@@ -51,20 +51,22 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
         <>
             <Carousel
                 opts={{ loop: true }}
-                className={cn("mt-24 flex flex-row space-x-3")}
+                className={cn(
+                    "mt-12 flex flex-col md:mt-24 md:flex-row md:space-x-3"
+                )}
                 setApi={setApi}
             >
-                <div className="w-5/6 rounded-lg bg-white p-8 shadow-lg md:mb-20">
+                <div className="mb-5 h-56 w-full rounded-lg bg-white p-5 shadow-lg md:mb-20 md:h-auto md:w-5/6 md:p-8">
                     <div className="relative z-[1] overflow-hidden rounded-3xl">
                         <CarouselContent>
                             {images.map((image, index) => (
                                 <CarouselItem key={index}>
-                                    <div className="flex h-[600px] w-full items-center justify-center rounded-xl bg-background outline outline-1 outline-border">
+                                    <div className="flex h-44 w-full items-center justify-center rounded-xl bg-background outline outline-1 outline-border md:h-[600px]">
                                         <Image
                                             src={image.image}
                                             alt={`${data.name} - Image ${index + 1}`}
                                             className={cn(
-                                                "h-[600px] w-full rounded-xl"
+                                                "h-44 w-full rounded-xl md:h-[600px]"
                                             )}
                                             height={600}
                                             width={600}
@@ -74,22 +76,22 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                             ))}
                         </CarouselContent>
                         <Button
-                            className="absolute bottom-0 left-7 top-7 z-[1] flex h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black"
+                            className="absolute bottom-0 left-7 top-7 z-[1] hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
                             onClick={() => api?.scrollPrev()}
                         >
                             <ChevronLeftIcon />
                         </Button>
                         <Button
-                            className="absolute bottom-0 left-28 right-0 top-7 z-[1] flex h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black"
+                            className="absolute bottom-0 left-28 right-0 top-7 z-[1] hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
                             onClick={() => api?.scrollNext()}
                         >
                             <ChevronRightIcon />
                         </Button>
                     </div>
                 </div>
-                <div className="w-1/6 rounded-lg bg-white p-5 shadow-lg md:mb-20">
+                <div className="w-full rounded-lg bg-white p-5 shadow-lg md:mb-20 md:w-1/6">
                     <div className="block overflow-hidden" ref={emblaThumbsRef}>
-                        <div className="flex h-[600px] flex-col space-y-6">
+                        <div className="flex h-24 flex-row space-x-2 md:h-[600px] md:flex-col md:space-y-6">
                             {images.map((image, index) => (
                                 <BreweryImagesThumbnail
                                     key={index}
