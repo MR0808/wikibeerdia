@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -17,8 +18,12 @@ import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
 import { typesSearchParamsSchema } from "@/schemas/admin";
 import { getBreweryTypes } from "@/actions/breweryTypes";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
+import { checkAuthenticated } from "@/lib/auth";
 
 const BreweryTypesPage = ({ searchParams }: SearchParamsProps) => {
+    const user = checkAuthenticated(true)
+    if (!user) { redirect("/login");}
+
     const search = typesSearchParamsSchema.parse(searchParams);
 
     const typesPromise = getBreweryTypes(search);

@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import EmailForm from "@/components/account/security/EmailForm";
 import PasswordForm from "@/components/account/security/PasswordForm";
 import {
@@ -11,8 +13,12 @@ import {
 
 import TwoFactorForm from "@/components/account/security/TwoFactorForm";
 import getSession from "@/lib/session";
+import { checkAuthenticated } from "@/lib/auth";
 
 const SecurityPage = async () => {
+    const user = await checkAuthenticated()
+    if (!user) { redirect("/login");}
+    
     const session = await getSession();
 
     return (

@@ -21,6 +21,7 @@ import { getBeerStyle } from "@/actions/beerStyles";
 import { getStatusIcon } from "@/lib/utils";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import EditLink from "./EditLink";
+import { checkAuthenticated } from "@/lib/auth";
 
 const BeerStylePage = async ({
     searchParams,
@@ -29,6 +30,9 @@ const BeerStylePage = async ({
     searchParams: SearchParamsProps;
     params: { id: string };
 }) => {
+    const user = await checkAuthenticated(true)
+    if (!user) { redirect("/login");}
+    
     const search = SearchParamsSchema.parse(searchParams);
 
     const { data: styleDetails } = await getBeerStyle(params.id);

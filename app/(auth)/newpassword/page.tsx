@@ -1,6 +1,12 @@
-import NewPasswordForm from '@/components/auth/NewPasswordForm';
+import { redirect } from "next/navigation";
 
-const NewPasswordPage = () => {
+import NewPasswordForm from '@/components/auth/NewPasswordForm';
+import { checkAuthenticated } from "@/lib/auth";
+
+const NewPasswordPage = async () => {
+    const user = await checkAuthenticated()
+    if (user) { redirect("/");}
+    
     return <NewPasswordForm />;
 };
 

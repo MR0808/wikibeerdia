@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -17,8 +18,12 @@ import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
 import { SearchParamsSchema } from "@/schemas/admin";
 import { getBeerStyles, getParentStyles } from "@/actions/beerStyles";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
+import { checkAuthenticated } from "@/lib/auth";
 
-const BeerStylesPage = ({ searchParams }: SearchParamsProps) => {
+const BeerStylesPage = async ({ searchParams }: SearchParamsProps) => {
+    const user = await checkAuthenticated(true)
+    if (!user) { redirect("/login");}
+
     const search = SearchParamsSchema.parse(searchParams);
 
     const stylesPromise = getBeerStyles(search);

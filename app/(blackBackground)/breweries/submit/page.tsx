@@ -1,8 +1,14 @@
+import { redirect } from "next/navigation";
+
 import { getBreweryTypesForms } from "@/actions/breweryTypes";
 import BreweryForm from "@/components/breweries/BreweryForm";
 import getSession from "@/lib/session";
+import { checkAuthenticated } from "@/lib/auth";
 
 const SubmitBreweryPage = async () => {
+    const user = await checkAuthenticated()
+    if (!user) { redirect("/login");}
+
     const session = await getSession();
     const breweryTypes = await getBreweryTypesForms();
 

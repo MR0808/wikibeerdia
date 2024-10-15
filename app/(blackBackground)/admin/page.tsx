@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Factory, Beer } from "lucide-react";
+import { redirect } from "next/navigation";
 
 import {
     Card,
@@ -7,8 +8,12 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { checkAuthenticated } from "@/lib/auth";
 
 const AdminPage = async () => {
+    const user = await checkAuthenticated(true)
+    if (!user) { redirect("/login");}
+
     return (
         <div className="container mt-36 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0 md:space-x-4">
             <div className="flex w-full flex-col justify-between">

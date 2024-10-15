@@ -32,3 +32,17 @@ export const checkAuth = async (admin = false) => {
 
     return dbUser;
 };
+
+export const checkAuthenticated = async (admin = false) => {
+    const user = await currentUser();
+
+    if (!user) {
+        return null;
+    }
+
+    if (admin && user.role !== "ADMIN") {
+        return null;
+    }
+
+    return user;
+};

@@ -1,6 +1,12 @@
-import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm';
+import { redirect } from "next/navigation";
 
-const ForgotPasswordPage = () => {
+import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm';
+import { checkAuthenticated } from "@/lib/auth";
+
+const ForgotPasswordPage = async () => {
+    const user = await checkAuthenticated()
+    if (user) { redirect("/");}
+
     return <ForgotPasswordForm />;
 };
 

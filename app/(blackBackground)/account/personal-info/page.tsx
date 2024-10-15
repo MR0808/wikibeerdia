@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import GenderForm from "@/components/account/personal-info/GenderForm";
 import DisplayNameForm from "@/components/account/personal-info/DisplayNameForm";
 import NameForm from "@/components/account/personal-info/NameForm";
@@ -26,6 +28,7 @@ import {
 
 const PersonalInfoPage = async () => {
     const user = await currentUser();
+    if (!user) { redirect("/login");}
     const session = await getSession();
     const userDb = await getUserById(user?.id!);
     const countries = await getAllCountries();
