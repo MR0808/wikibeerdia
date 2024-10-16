@@ -1,4 +1,5 @@
-import { MapPin } from "lucide-react";
+import Link from "next/link";
+import { MapPin, ExternalLink } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { BreweryType } from "@/types/breweries";
@@ -13,7 +14,13 @@ const BreweryHeader = ({ data }: { data: BreweryType }) => {
             <div className="flex flex-row justify-between">
                 <div className="w-1/2">
                     <h3 className="text-balance text-3xl font-semibold md:text-6xl">
-                        {data.name}
+                        <Link
+                            href={data.website}
+                            target="_blank"
+                            className="hover:underline"
+                        >
+                            {data.name}
+                        </Link>
                     </h3>
                     <BreweryRating reviews={data.breweryReviews} />
                     <div className="mt-20 hidden flex-wrap text-wrap md:mt-10 md:flex">

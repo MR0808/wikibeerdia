@@ -1,6 +1,14 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
 import { currentUser } from "@/lib/auth";
 import { getBrewery } from "@/actions/breweries";
 import BreweryHeader from "@/components/breweries/BreweryHeader";
@@ -20,12 +28,29 @@ const BreweryDetailsPage = async ({ params }: { params: { id: string } }) => {
         redirect("/breweries/");
 
     return (
-        <div className="mt-32 flex h-16 flex-col justify-between px-3 md:container sm:justify-between sm:space-x-0 md:mt-60">
-            <Suspense fallback={<div>Loading</div>}>
-                <BreweryHeader data={data} />
-                <BreweryImages data={data} />
-                <BreweryMain data={data} />
-            </Suspense>
+        <div className="container mt-32 flex h-16 flex-col justify-between px-4 sm:justify-between sm:space-x-0 md:px-28">
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink className="text-base" href="/breweries">
+                            Breweries
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="text-base" />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage className="text-base">
+                            {data.name}
+                        </BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+            <div className="mt-10 flex flex-col justify-between sm:justify-between sm:space-x-0">
+                <Suspense fallback={<div>Loading</div>}>
+                    <BreweryHeader data={data} />
+                    <BreweryImages data={data} />
+                    <BreweryMain data={data} />
+                </Suspense>
+            </div>
         </div>
     );
 };
