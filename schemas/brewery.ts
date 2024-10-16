@@ -35,6 +35,7 @@ export const BrewerySchema = z.object({
     country: z.string().min(1, "Country is required"),
     countryCode: z.optional(z.string()),
     description: z.string().min(1, "Description is required"),
+    headline: z.string().min(1, "Headline is required"),
     breweryType: z.string().min(1, "Brewery type is required"),
     website: z.union([z.literal(""), z.string().url()]),
     logoUrl: z
@@ -55,6 +56,7 @@ export const BrewerySchemaFormData = zfd.formData({
     country: zfd.text(),
     countryCode: zfd.text(),
     description: zfd.text(),
+    headline: zfd.text(),
     breweryType: zfd.text(),
     website: zfd.text(z.string().optional()),
     logoUrl: zfd.repeatable(z.array(zfd.file()).min(1)),

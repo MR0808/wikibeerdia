@@ -41,6 +41,7 @@ export const createBrewery = async (formData: FormData) => {
             postalCode,
             countryCode,
             description,
+            headline,
             breweryType,
             website,
             logoUrl,
@@ -70,6 +71,7 @@ export const createBrewery = async (formData: FormData) => {
                 postalCode,
                 countryId: countryId.id,
                 description,
+                headline,
                 breweryTypeId: breweryType,
                 website: website || "",
                 logoUrl: logoFullPath,
@@ -115,7 +117,8 @@ export const getBrewery = async (id: string) => {
                 select: { name: true }
             },
             images: true,
-            user: { select: { id: true, displayName: true } }
+            user: { select: { id: true, displayName: true } },
+            country: true
         }
     });
     return { data };

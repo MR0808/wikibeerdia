@@ -52,6 +52,7 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
             breweryType: "",
             name: "",
             description: "",
+            headline: "",
             website: "",
             logoUrl: [],
             address1: "",
@@ -80,6 +81,7 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
             formData.append("postalCode", values.postalCode);
             formData.append("country", values.country);
             formData.append("description", values.description);
+            formData.append("headline", values.headline);
             formData.append("breweryType", values.breweryType);
             formData.append("website", values.website);
             values.address2 && formData.append("address2", values.address2);
@@ -149,6 +151,32 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
                                             Write a few sentences about the
                                             brewery.
                                         </p>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="col-span-full">
+                            <FormField
+                                control={form.control}
+                                name="headline"
+                                render={({ field }) => (
+                                    <FormItem className={cn("w-full")}>
+                                        <FormLabel
+                                            className={cn(
+                                                "block text-lg font-medium leading-6 text-gray-900"
+                                            )}
+                                        >
+                                            Brewery Headline - a one liner that
+                                            describes the brewery perfectly
+                                        </FormLabel>
+                                        <FormControl>
+                                            <AddFormInput
+                                                type="text"
+                                                placeholder="Brewery headline"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage className={errorClass} />
                                     </FormItem>
                                 )}
                             />

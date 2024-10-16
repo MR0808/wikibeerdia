@@ -60,7 +60,7 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                 )}
                 setApi={setApi}
             >
-                <div className="mb-5 h-56 w-full rounded-lg bg-white p-5 shadow-lg md:mb-20 md:h-auto md:w-5/6 md:p-8">
+                <div className="h-56 w-full rounded-lg bg-white p-5 shadow-lg md:h-[664px] md:w-5/6 md:p-8">
                     <div className="relative z-[1] overflow-hidden rounded-3xl">
                         <CarouselContent>
                             {images.map((image, index) => (
@@ -93,7 +93,7 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                         </Button>
                     </div>
                 </div>
-                <div className="w-full rounded-lg bg-white p-5 shadow-lg md:mb-20 md:w-1/6">
+                <div className="mt-5 w-full rounded-lg bg-white p-5 shadow-lg md:mt-0 md:h-[664px] md:w-1/6 md:p-8">
                     <div
                         className="overflow-hidden md:block"
                         ref={emblaThumbsRef}

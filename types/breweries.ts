@@ -12,6 +12,7 @@ export interface BreweryType {
     countryId: string;
     formattedAddress: string;
     description: string;
+    headline: string;
     website: string;
     logoUrl: string;
     breweryTypeId: string;
@@ -56,6 +57,12 @@ export interface BreweryType {
     user: {
         id: string;
         displayName: string | null;
+    };
+    country: {
+        id: string;
+        name: string;
+        isoCode: string;
+        currency: string;
     };
 }
 

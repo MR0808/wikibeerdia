@@ -177,6 +177,7 @@ model Brewery {
   description       String
   website           String
   logoUrl           String
+  headline          String
   images            BreweryImages[]
   beers             Beer[]
   breweryReviews    BreweryReview[]
