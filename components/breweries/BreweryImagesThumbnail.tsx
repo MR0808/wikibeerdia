@@ -17,7 +17,7 @@ export const BreweryImagesThumbnail: React.FC<PropType> = (props) => {
         <button
             onClick={onClick}
             type="button"
-            className="block md:h-40 md:w-auto"
+            className="block w-full min-w-32 md:h-40 md:w-auto"
         >
             <Image
                 src={src}

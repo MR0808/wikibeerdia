@@ -129,7 +129,7 @@ export const login = async (
         });
     } catch (error) {
         if (isRedirectError(error)) {
-            return;
+            throw error;
         }
 
         if (error instanceof AuthError) {

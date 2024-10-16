@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
+import { EmblaOptionsType } from "embla-carousel";
 
 import {
     Carousel,
@@ -23,7 +24,10 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
     const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
         containScroll: "keepSnaps",
         dragFree: true,
-        axis: "y"
+        axis: "x",
+        breakpoints: {
+            "(min-width: 640px)": { axis: "y" }
+        }
     });
 
     const onThumbClick = useCallback(
@@ -90,18 +94,23 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                     </div>
                 </div>
                 <div className="w-full rounded-lg bg-white p-5 shadow-lg md:mb-20 md:w-1/6">
-                    <div className="block overflow-hidden" ref={emblaThumbsRef}>
+                    <div
+                        className="overflow-hidden md:block"
+                        ref={emblaThumbsRef}
+                    >
                         <div className="flex h-24 flex-row space-x-2 md:h-[600px] md:flex-col md:space-y-6">
-                            {images.map((image, index) => (
-                                <BreweryImagesThumbnail
-                                    key={index}
-                                    onClick={() => onThumbClick(index)}
-                                    selected={index === selectedIndex}
-                                    index={index}
-                                    src={image.image}
-                                    name={data.name}
-                                />
-                            ))}
+                            {images.map((image, index) => {
+                                return (
+                                    <BreweryImagesThumbnail
+                                        key={index}
+                                        onClick={() => onThumbClick(index)}
+                                        selected={index === selectedIndex}
+                                        index={index}
+                                        src={image.image}
+                                        name={data.name}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
                 </div>

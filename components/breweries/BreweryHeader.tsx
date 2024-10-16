@@ -5,6 +5,7 @@ import { BreweryType } from "@/types/breweries";
 import Image from "next/image";
 import BreweryFavoriteToggleButton from "./BreweryFavouriteToggleButton";
 import BreweryShare from "./BreweryShare";
+import BreweryRating from "./BreweryRating";
 
 const BreweryHeader = ({ data }: { data: BreweryType }) => {
     return (
@@ -14,6 +15,7 @@ const BreweryHeader = ({ data }: { data: BreweryType }) => {
                     <h3 className="text-balance text-3xl font-semibold md:text-6xl">
                         {data.name}
                     </h3>
+                    <BreweryRating reviews={data.breweryReviews} />
                     <div className="mt-20 hidden flex-wrap text-wrap md:mt-10 md:flex">
                         {data.status !== "APPROVED" && (
                             <Badge className="mr-4">{data.status}</Badge>

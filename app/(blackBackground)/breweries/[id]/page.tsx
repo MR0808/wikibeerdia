@@ -5,6 +5,7 @@ import { currentUser } from "@/lib/auth";
 import { getBrewery } from "@/actions/breweries";
 import BreweryHeader from "@/components/breweries/BreweryHeader";
 import BreweryImages from "@/components/breweries/BreweryImages";
+import BreweryMain from "@/components/breweries/BreweryMain";
 
 const BreweryDetailsPage = async ({ params }: { params: { id: string } }) => {
     const { data } = await getBrewery(params.id);
@@ -23,6 +24,7 @@ const BreweryDetailsPage = async ({ params }: { params: { id: string } }) => {
             <Suspense fallback={<div>Loading</div>}>
                 <BreweryHeader data={data} />
                 <BreweryImages data={data} />
+                <BreweryMain data={data} />
             </Suspense>
         </div>
     );

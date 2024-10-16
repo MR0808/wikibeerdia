@@ -58,3 +58,14 @@ export interface BreweryType {
         displayName: string | null;
     };
 }
+
+export interface BreweryTypeReviews {
+    id: string;
+    status: Status;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    breweryId: string;
+    rating: number;
+    comment: string | null;
+}
