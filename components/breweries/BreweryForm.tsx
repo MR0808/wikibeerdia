@@ -98,7 +98,7 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
                 className="w-full space-y-6"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <div className="mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-violet-50 px-12 py-10 sm:justify-between sm:space-x-0 md:space-x-4">
+                <div className="form-card">
                     <h1 className="text-2xl font-semibold leading-7 text-gray-900">
                         Brewery Overview
                     </h1>
@@ -251,7 +251,7 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
                         </div>
                     </div>
                 </div>
-                <div className="mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-violet-50 px-12 py-10 sm:justify-between sm:space-x-0 md:space-x-4">
+                <div className="form-card">
                     <h1 className="text-2xl font-semibold leading-7 text-gray-900">
                         Brewery Address
                     </h1>
@@ -261,7 +261,7 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
                         </div>
                     </div>
                 </div>
-                <div className="mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-violet-50 px-12 py-10 sm:justify-between sm:space-x-0 md:space-x-4">
+                <div className="form-card">
                     <h1 className="text-2xl font-semibold leading-7 text-gray-900">
                         Brewery Images
                     </h1>

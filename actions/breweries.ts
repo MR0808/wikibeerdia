@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import { Brewery } from "@prisma/client";
+import { Brewery, Status } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -10,6 +10,17 @@ import { checkAuth, currentUser } from "@/lib/auth";
 import { BrewerySchemaFormData } from "@/schemas/brewery";
 import { uploadImage, deleteImage } from "@/utils/supabase";
 import { getErrorMessage } from "@/lib/handleError";
+
+export const getBreweries = async () => {
+    const data = await db.brewery.findMany({
+        where: {
+            status: "APPROVED"
+        },
+        select: { name: true, id: true },
+        orderBy: { name: "asc" }
+    });
+    return { data };
+};
 
 export const createBrewery = async (formData: FormData) => {
     let data: Brewery;
@@ -174,6 +185,35 @@ export const toggleBreweryFavoriteAction = async (
         };
     } catch (error) {
         return renderError(error);
+    }
+};
+
+export const updateBreweryStatus = async (id: string, status: Status) => {
+    const user = await checkAuth(true);
+
+    if (!user)
+        return {
+            data: null,
+            error: getErrorMessage("Unauthorized")
+        };
+
+    try {
+        await db.brewery.update({
+            where: { id },
+            data: {
+                status
+            }
+        });
+
+        revalidatePath(`/breweries/${id}`);
+
+        return {
+            error: null
+        };
+    } catch (err) {
+        return {
+            error: getErrorMessage(err)
+        };
     }
 };
 

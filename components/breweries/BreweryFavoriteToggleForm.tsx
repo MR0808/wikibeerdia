@@ -12,10 +12,10 @@ type BreweryFavoriteToggleFormProps = {
     breweryFavoriteId: string | null;
 };
 
-function BreweryFavoriteToggleForm({
+const BreweryFavoriteToggleForm = ({
     breweryId,
     breweryFavoriteId
-}: BreweryFavoriteToggleFormProps) {
+}: BreweryFavoriteToggleFormProps) => {
     const [isFavorite, setIsFavorite] = useState(
         breweryFavoriteId ? true : false
     );
@@ -61,5 +61,5 @@ function BreweryFavoriteToggleForm({
             )}
         </>
     );
-}
+};
 export default BreweryFavoriteToggleForm;

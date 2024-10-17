@@ -1,10 +1,6 @@
-import Image from "next/image";
-import { Factory, Beer, Earth, Star, ExternalLink } from "lucide-react";
+import { Factory, Beer, Earth, Star } from "lucide-react";
 
 import { BreweryType } from "@/types/breweries";
-import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 
 const BreweryMain = ({ data }: { data: BreweryType }) => {
     const ratings = data.breweryReviews.map((review) => {
@@ -19,27 +15,29 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
     return (
         <>
             <div className="mt-12 h-auto w-full items-center rounded-lg bg-white p-10 align-middle shadow-lg md:mt-16">
-                <ul className="-mx-2 flex list-none flex-wrap items-center justify-center">
-                    <li className="relative w-1/6 p-2 text-base">&nbsp;</li>
-                    <li className="relative w-1/5 p-2 text-base">
+                <ul className="mx-auto flex list-none flex-wrap items-center justify-center">
+                    <li className="relative hidden w-1/6 p-2 text-base md:block">
+                        &nbsp;
+                    </li>
+                    <li className="relative mt-2 w-1/2 p-2 text-base md:mt-0 md:w-1/5">
                         <Factory className="mb-3 h-8 w-8" />
                         <span className="text-xl text-black">
                             {data.breweryType.name}
                         </span>
                     </li>
-                    <li className="relative w-1/5 p-2 text-base before:absolute before:-left-1/4 before:h-20 before:w-[1px] before:-translate-x-1/2 before:rotate-[17deg] before:bg-black before:opacity-40 before:content-['']">
+                    <li className="overview-icons">
                         <Beer className="mb-3 h-8 w-8" />
                         <span className="text-xl text-black">
                             {`${data.beers.length} beer${data.beers.length !== 1 && "s"}`}
                         </span>
                     </li>
-                    <li className="relative w-1/5 p-2 text-base before:absolute before:-left-1/4 before:h-20 before:w-[1px] before:-translate-x-1/2 before:rotate-[17deg] before:bg-black before:opacity-40 before:content-['']">
+                    <li className="overview-icons">
                         <Earth className="mb-3 h-8 w-8" />
                         <span className="text-xl text-black">
                             {data.country.name}
                         </span>
                     </li>
-                    <li className="relative w-1/5 p-2 text-base before:absolute before:-left-1/4 before:h-20 before:w-[1px] before:-translate-x-1/2 before:rotate-[17deg] before:bg-black before:opacity-40 before:content-['']">
+                    <li className="overview-icons">
                         <Star className="mb-3 h-8 w-8" />
                         <span className="text-xl text-black">
                             {`${rating} (${data.breweryReviews.length})`}
@@ -48,15 +46,15 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                 </ul>
             </div>
             <div className="mt-12 flex flex-row md:mt-16 md:space-x-3">
-                <div className="w-2/3">
-                    <div className="mb-5 h-auto w-full rounded-lg bg-white p-14 shadow-lg md:mb-20">
+                <div className="w-full">
+                    <div className="h-auto w-full rounded-lg bg-white p-5 shadow-lg md:p-14">
                         <h4 className="mb-5 text-4xl">{`"${data.headline}"`}</h4>
                         <p className="whitespace-pre-wrap text-lg leading-8">
                             {data.description}
                         </p>
                     </div>
                 </div>
-                <div className="w-1/3 px-2">
+                {/* <div className="w-1/3 px-2">
                     <div className="sticky top-0 w-full bg-[url('/sidebackground.svg')] p-7">
                         <div className="rounded-lg bg-white p-7">
                             <Image
@@ -104,7 +102,7 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     );

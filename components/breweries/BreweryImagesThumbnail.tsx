@@ -17,7 +17,7 @@ export const BreweryImagesThumbnail: React.FC<PropType> = (props) => {
         <button
             onClick={onClick}
             type="button"
-            className="block w-full min-w-32 md:h-40 md:w-auto"
+            className="block h-24 min-h-24 w-24 min-w-24 md:h-32 md:min-h-32 md:w-32 md:min-w-32"
         >
             <Image
                 src={src}
@@ -26,7 +26,7 @@ export const BreweryImagesThumbnail: React.FC<PropType> = (props) => {
                 sizes="100vw"
                 alt={`${name} - Image ${index + 1}`}
                 className={cn(
-                    `h-24 w-full rounded-xl md:h-[160px] md:w-auto ${selected && "border-2 border-primary"}`
+                    `h-24 min-h-24 w-24 min-w-24 rounded-xl border-2 md:h-32 md:min-h-32 md:w-32 md:min-w-32 ${selected ? "border-primary" : "border-slate-500"}`
                 )}
             />
         </button>

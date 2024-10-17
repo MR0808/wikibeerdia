@@ -98,7 +98,7 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                         className="overflow-hidden md:block"
                         ref={emblaThumbsRef}
                     >
-                        <div className="flex h-24 flex-row space-x-2 md:h-[600px] md:flex-col md:space-y-6">
+                        <div className="flex h-24 flex-row space-x-2 space-y-0 md:h-[600px] md:flex-col md:space-x-0 md:space-y-6">
                             {images.map((image, index) => {
                                 return (
                                     <BreweryImagesThumbnail

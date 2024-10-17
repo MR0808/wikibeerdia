@@ -72,6 +72,12 @@
     .align-element {
         @apply mx-auto max-w-7xl px-8;
     }
+    .overview-icons {
+        @apply relative mt-2 w-1/2 p-2 text-base md:mt-0 md:w-1/5 md:before:absolute md:before:-left-1/4 md:before:h-20 md:before:w-[1px] md:before:-translate-x-1/2 md:before:rotate-[17deg] md:before:bg-black md:before:opacity-40 md:before:content-[''];
+    }
+    .form-card {
+        @apply mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-white px-12 py-10 shadow-md sm:justify-between sm:space-x-0 md:space-x-4;
+    }
     .circles {
         position: absolute;
         top: 0;
@@ -183,6 +189,13 @@
     }
 }
 
+@layer utilities {
+    .popover-content-width-full {
+        width: var(--radix-popover-trigger-width);
+        max-height: var(--radix-popover-content-available-height);
+    }
+}
+
 .rdp-vhidden {
     @apply hidden;
-  }
+}

@@ -232,6 +232,7 @@ model Beer {
   ibu            String?
   yearCreated    Int?
   available      Boolean
+  headline       String
   beerReviews    BeerReview[]
   beerFavourites BeerFavorite[]
   brewery        Brewery        @relation(fields: [breweryId], references: [id], onDelete: Cascade)

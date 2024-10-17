@@ -14,6 +14,7 @@ import { getBrewery } from "@/actions/breweries";
 import BreweryHeader from "@/components/breweries/BreweryHeader";
 import BreweryImages from "@/components/breweries/BreweryImages";
 import BreweryMain from "@/components/breweries/BreweryMain";
+import BreweryBeers from "@/components/breweries/BreweryBeers";
 
 const BreweryDetailsPage = async ({ params }: { params: { id: string } }) => {
     const { data } = await getBrewery(params.id);
@@ -46,9 +47,10 @@ const BreweryDetailsPage = async ({ params }: { params: { id: string } }) => {
             </Breadcrumb>
             <div className="mt-10 flex flex-col justify-between sm:justify-between sm:space-x-0">
                 <Suspense fallback={<div>Loading</div>}>
-                    <BreweryHeader data={data} />
+                    <BreweryHeader data={data} user={user} />
                     <BreweryImages data={data} />
                     <BreweryMain data={data} />
+                    <BreweryBeers data={data} user={user} />
                 </Suspense>
             </div>
         </div>
