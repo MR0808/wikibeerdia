@@ -11,15 +11,19 @@ export const BeerSchema = z.object({
         message: "Headline is required"
     }),
     description: z.string().min(1, "Description is required"),
-    abv: z.string().min(1, "ABV is required"),
-    ibu: z.string().min(1, "IBU is required"),
-    year: z
+    abv: z
         .number({
-            required_error: "Year created is required",
-            invalid_type_error: "Year must be valid"
+            required_error: "ABV is required",
+            invalid_type_error: "ABV must be valid"
         })
-        .int()
-        .lte(getYear()),
+        .int(),
+    ibu: z
+        .number({
+            required_error: "IBU is required",
+            invalid_type_error: "IBU must be valid"
+        })
+        .int(),
+    year: z.string().optional(),
     available: z.boolean({
         required_error: "Available is required",
         invalid_type_error: "Available must be a boolean"

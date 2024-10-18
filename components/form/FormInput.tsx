@@ -14,6 +14,16 @@ type FormInputProps = {
     disabled?: boolean;
 };
 
+type FormSliderInputProps = {
+    name: string;
+    type?: string;
+    min?: number;
+    max?: number;
+    value?: number;
+    step?: number;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
 export const FormInput = ({
     label,
     name,
@@ -67,6 +77,30 @@ export const AddFormInput = forwardRef<HTMLInputElement, FormInputProps>(
         );
     }
 );
+
+export const AddFormSliderInput = forwardRef<
+    HTMLInputElement,
+    FormSliderInputProps
+>(function AddFormSliderInput(
+    { name, type, min, max, value, step, onChange, ...props },
+    ref
+) {
+    return (
+        <Input
+            name={name}
+            type={type}
+            {...props}
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            onChange={onChange}
+            className={cn(
+                "block h-14 w-24 rounded-lg border-neutral-200 bg-white px-5"
+            )}
+        />
+    );
+});
 
 export const AddFormTextArea = forwardRef<HTMLInputElement, FormInputProps>(
     function AddFormTextArea({ name, ...props }, ref) {

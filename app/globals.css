@@ -199,3 +199,8 @@
 .rdp-vhidden {
     @apply hidden;
 }
+
+#__next {
+    @apply h-full;
+    overflow-y: scroll;
+}

@@ -159,6 +159,30 @@ export const getBeerStyle = async (id: string) => {
     return { data };
 };
 
+export const getBeerStylesForm = async (parentStyleId: string) => {
+    noStore();
+    const data = await db.style.findMany({
+        where: {
+            parentStyleId,
+            status: "APPROVED"
+        },
+        select: {
+            id: true,
+            name: true,
+            subStyles: {
+                where: {
+                    status: "APPROVED"
+                },
+                select: {
+                    name: true,
+                    id: true
+                }
+            }
+        }
+    });
+    return { data };
+};
+
 export const getParentStyles = async () => {
     noStore();
     const data = await db.parentStyle.findMany({

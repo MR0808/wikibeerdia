@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import getSession from "@/lib/session";
 import { checkAuthenticated } from "@/lib/auth";
 import { getBreweries } from "@/actions/breweries";
+import { getBeerStylesForm, getParentStyles } from "@/actions/beerStyles";
 import BeerForm from "@/components/beers/BeerForm";
 import { BeerSubmitSearchParams } from "@/types/beers";
 
@@ -19,6 +20,8 @@ const SubmitBeerPage = async ({
     const breweryId = searchParams?.brewery || undefined;
     const session = await getSession();
     const breweries = await getBreweries();
+    const parentStyles = await getParentStyles();
+    const styles = await getBeerStylesForm(parentStyles.data[0].id);
 
     return (
         <>
@@ -33,6 +36,8 @@ const SubmitBeerPage = async ({
                 breweryId={breweryId}
                 session={session}
                 breweries={breweries.data}
+                parentStyles={parentStyles.data}
+                styles={styles.data}
             />
         </>
     );
