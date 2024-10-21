@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { ImageUpIcon } from "lucide-react";
