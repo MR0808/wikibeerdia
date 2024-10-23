@@ -1,6 +1,5 @@
 "use client";
 
-import { useFormState } from "react-dom";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 
@@ -21,7 +20,7 @@ function FormContainer({
     children: React.ReactNode;
     sendDataToParent: (data: string) => void;
 }) {
-    const [state, formAction] = useFormState(action, initialState);
+    const [state, formAction] = useActionState(action, initialState);
     const { update } = useSession();
     useEffect(() => {
         if (state.result && state.message) {
