@@ -16,7 +16,10 @@ import BreweryImages from "@/components/breweries/BreweryImages";
 import BreweryMain from "@/components/breweries/BreweryMain";
 import BreweryBeers from "@/components/breweries/BreweryBeers";
 
-const BreweryDetailsPage = async ({ params }: { params: { id: string } }) => {
+const BreweryDetailsPage = async (props: {
+    params: Promise<{ id: string }>;
+}) => {
+    const params = await props.params;
     const { data } = await getBrewery(params.id);
     const user = await currentUser();
 

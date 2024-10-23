@@ -25,14 +25,17 @@ import { checkAuthenticated } from "@/lib/auth";
 
 const BeerStylePage = async ({
     searchParams,
-    params
+    props
 }: {
     searchParams: SearchParamsProps;
-    params: { id: string };
+    props: { params: Promise<{ id: string }> };
 }) => {
-    const user = await checkAuthenticated(true)
-    if (!user) { redirect("/login");}
-    
+    const params = await props.params;
+    const user = await checkAuthenticated(true);
+    if (!user) {
+        redirect("/login");
+    }
+
     const search = SearchParamsSchema.parse(searchParams);
 
     const { data: styleDetails } = await getBeerStyle(params.id);
