@@ -11,6 +11,7 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 
+import { Params, SearchParams } from "@/utils/types";
 import { SubStylesTable } from "@/components/admin/subStyles/SubStylesTable";
 import { SubStylesTableProvider } from "@/components/admin/subStyles/SubStylesTableProviders";
 import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
@@ -21,9 +22,6 @@ import { getStatusIcon } from "@/lib/utils";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import EditLink from "./EditLink";
 import { checkAuthenticated } from "@/lib/auth";
-
-type Params = Promise<{ id: string }>;
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 const BeerStylePage = async (props: {
     params: Params;

@@ -86,13 +86,10 @@ export interface BreweryFormProps extends BreweryTypeProps {
     setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface SearchParams {
+export type Params = Promise<{ id: string }>;
+export type SearchParams = Promise<{
     [key: string]: string | string[] | undefined;
-}
-
-export interface SearchParamsProps {
-    searchParams: SearchParams;
-}
+}>;
 
 export type GetTypesSchema = z.infer<typeof typesSearchParamsSchema>;
 

@@ -11,7 +11,7 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 
-import type { SearchParamsProps } from "@/utils/types";
+import { SearchParams } from "@/utils/types";
 import { TypesTable } from "@/components/admin/brewery-types/TypesTable";
 import { TypesTableProvider } from "@/components/admin/brewery-types/TypesTableProviders";
 import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
@@ -20,10 +20,12 @@ import { getBreweryTypes } from "@/actions/breweryTypes";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import { checkAuthenticated } from "@/lib/auth";
 
-const BreweryTypesPage = async (props: SearchParamsProps) => {
+const BreweryTypesPage = async (props: { searchParams: SearchParams }) => {
     const searchParams = await props.searchParams;
-    const user = checkAuthenticated(true)
-    if (!user) { redirect("/login");}
+    const user = checkAuthenticated(true);
+    if (!user) {
+        redirect("/login");
+    }
 
     const search = typesSearchParamsSchema.parse(searchParams);
 
