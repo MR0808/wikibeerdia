@@ -11,7 +11,6 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 
-import type { SearchParamsProps } from "@/utils/types";
 import { SubStylesTable } from "@/components/admin/subStyles/SubStylesTable";
 import { SubStylesTableProvider } from "@/components/admin/subStyles/SubStylesTableProviders";
 import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
