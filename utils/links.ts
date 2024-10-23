@@ -8,9 +8,9 @@ export const links: NavLink[] = [
         subMenu: [
             {
                 href: "/education/beer",
-                label: "how beer is made",
-            },
-        ],
+                label: "how beer is made"
+            }
+        ]
     },
     {
         href: "/breweries",
@@ -18,18 +18,19 @@ export const links: NavLink[] = [
         subMenu: [
             {
                 href: "/breweries/popular",
-                label: "popular",
+                label: "popular"
             },
             {
                 href: "/breweries/az",
-                label: "A-Z",
+                label: "A-Z"
             },
             {
                 href: "/breweries/submit",
                 label: "Submit Brewery",
                 border: true,
-            },
-        ],
+                auth: true
+            }
+        ]
     },
     {
         href: "/beer",
@@ -37,17 +38,23 @@ export const links: NavLink[] = [
 
         subMenu: [
             {
-                href: "/beer/popular",
-                label: "popular",
+                href: "/beers/popular",
+                label: "popular"
             },
-        ],
+            {
+                href: "/beers/submit",
+                label: "Submit Beer",
+                border: true,
+                auth: true
+            }
+        ]
     },
-    { href: "/blog", label: "blog" },
+    { href: "/blog", label: "blog" }
     // { href: '/contact', label: 'contact' }
 ];
 
 export const accountLinks: NavLink[] = [
     { href: "/profile", label: "profile" },
     { href: "/account", label: "account" },
-    { href: "/logout", label: "logout" },
+    { href: "/logout", label: "logout" }
 ];

@@ -11,6 +11,7 @@ export type NavLink = {
     label: string;
     subMenu?: NavLink[];
     border?: boolean;
+    auth?: boolean;
 };
 
 export type actionFunction = (

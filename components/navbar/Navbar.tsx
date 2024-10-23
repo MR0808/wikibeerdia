@@ -39,7 +39,7 @@ const Navbar = ({ whiteBackground, session }: NavBarProps) => {
                     />
                 </div>
                 <div className="hidden gap-6 sm:flex md:gap-10">
-                    <NavLinks />
+                    <NavLinks session={session} />
                 </div>
 
                 <div className="hidden items-center justify-end space-x-4 sm:flex">
