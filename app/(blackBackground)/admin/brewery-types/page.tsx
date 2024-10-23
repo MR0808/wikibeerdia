@@ -20,7 +20,8 @@ import { getBreweryTypes } from "@/actions/breweryTypes";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import { checkAuthenticated } from "@/lib/auth";
 
-const BreweryTypesPage = ({ searchParams }: SearchParamsProps) => {
+const BreweryTypesPage = async (props: SearchParamsProps) => {
+    const searchParams = await props.searchParams;
     const user = checkAuthenticated(true)
     if (!user) { redirect("/login");}
 

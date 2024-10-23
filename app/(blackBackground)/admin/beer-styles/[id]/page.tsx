@@ -23,13 +23,18 @@ import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import EditLink from "./EditLink";
 import { checkAuthenticated } from "@/lib/auth";
 
-const BeerStylePage = async ({
-    searchParams,
-    props
-}: {
-    searchParams: SearchParamsProps;
-    props: { params: Promise<{ id: string }> };
-}) => {
+const BeerStylePage = async (
+    props0: {
+        searchParams: Promise<SearchParamsProps>;
+        props: { params: Promise<{ id: string }> };
+    }
+) => {
+    const searchParams = await props0.searchParams;
+
+    const {
+        props
+    } = props0;
+
     const params = await props.params;
     const user = await checkAuthenticated(true);
     if (!user) {

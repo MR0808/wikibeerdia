@@ -7,11 +7,12 @@ import { getBeerStylesForm, getParentStyles } from "@/actions/beerStyles";
 import BeerForm from "@/components/beers/BeerForm";
 import { BeerSubmitSearchParams } from "@/types/beers";
 
-const SubmitBeerPage = async ({
-    searchParams
-}: {
-    searchParams?: BeerSubmitSearchParams;
-}) => {
+const SubmitBeerPage = async (
+    props: {
+        searchParams?: Promise<BeerSubmitSearchParams>;
+    }
+) => {
+    const searchParams = await props.searchParams;
     const user = await checkAuthenticated();
     if (!user) {
         redirect("/login");

@@ -20,7 +20,8 @@ import { getBeerStyles, getParentStyles } from "@/actions/beerStyles";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import { checkAuthenticated } from "@/lib/auth";
 
-const BeerStylesPage = async ({ searchParams }: SearchParamsProps) => {
+const BeerStylesPage = async (props: SearchParamsProps) => {
+    const searchParams = await props.searchParams;
     const user = await checkAuthenticated(true)
     if (!user) { redirect("/login");}
 
