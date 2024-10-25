@@ -54,7 +54,7 @@ const BreweryLogoUpload = () => {
     } = useDropzone({
         onDrop,
         maxFiles,
-        maxSize: 10 * 1024 * 1024,
+        maxSize: 1 * 1024 * 1024,
         accept: {
             "image/jpeg": [],
             "image/jpg": [],

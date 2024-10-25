@@ -28,18 +28,16 @@ export interface BreweryType {
     beers: {
         id: string;
         name: string;
-        status: Status;
-        description: string;
-        userId: string;
-        createdAt: Date;
-        updatedAt: Date;
-        images: string[];
-        breweryId: string;
+        images: {
+            id: string;
+            image: string;
+            order: number;
+            beerId: string | null;
+        }[];
         abv: string;
-        ibu: string | null;
-        yearCreated: number | null;
-        available: boolean;
-        subStyleId: string | null;
+        subStyle: {
+            name: string;
+        } | null;
     }[];
     breweryReviews: {
         id: string;

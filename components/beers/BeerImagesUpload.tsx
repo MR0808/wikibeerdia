@@ -10,11 +10,11 @@ import { ImageUpIcon } from "lucide-react";
 
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { BrewerySchema } from "@/schemas/brewery";
+import { BeerSchema } from "@/schemas/beer";
 import { cn } from "@/lib/utils";
 
-const BreweryImagesUpload = () => {
-    const form = useFormContext<z.infer<typeof BrewerySchema>>();
+const BeerImagesUpload = () => {
+    const form = useFormContext<z.infer<typeof BeerSchema>>();
     const maxFiles = 15;
     const {
         fields: imageFields,
@@ -49,7 +49,7 @@ const BreweryImagesUpload = () => {
     } = useDropzone({
         onDrop,
         maxFiles,
-        maxSize: 1 * 1024 * 1024,
+        maxSize: 5 * 1024 * 1024,
         accept: {
             "image/jpeg": [],
             "image/jpg": [],
@@ -134,7 +134,7 @@ const BreweryImagesUpload = () => {
                                                 }
                                             )}
                                         >
-                                            Max size: 1MB, JPG or PNG
+                                            Max size: 5MB, JPG or PNG
                                         </span>
                                     </div>
                                 ) : (
@@ -191,4 +191,4 @@ const BreweryImagesUpload = () => {
     );
 };
 
-export default BreweryImagesUpload;
+export default BeerImagesUpload;

@@ -54,55 +54,6 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                         </p>
                     </div>
                 </div>
-                {/* <div className="w-1/3 px-2">
-                    <div className="sticky top-0 w-full bg-[url('/sidebackground.svg')] p-7">
-                        <div className="rounded-lg bg-white p-7">
-                            <Image
-                                src={data.logoUrl}
-                                alt={`${data.name} logo`}
-                                width={100}
-                                height={100}
-                                className="mx-auto"
-                            />
-                            <div className="mt-6">
-                                <div className="flex items-center justify-center">
-                                    <Link
-                                        href={data.website}
-                                        target="_blank"
-                                        className={cn(
-                                            "text-xl font-medium hover:underline"
-                                        )}
-                                    >
-                                        {data.name}
-                                    </Link>
-                                </div>
-                                <ul className="mt-4 flex list-none items-center justify-center">
-                                    <li className="px-3">
-                                        <Link
-                                            href={data.website}
-                                            target="_blank"
-                                        >
-                                            <ExternalLink className="h-5 w-5 hover:text-primary" />
-                                        </Link>
-                                    </li>
-                                </ul>
-                                <Separator className="my-10" />
-                                <ul className="list-none">
-                                    <li>
-                                        Location:
-                                        <span className="float-right font-medium">{`${data.region}, ${data.country.name}`}</span>
-                                    </li>
-                                    <li className="pt-6">
-                                        Brewery Type:
-                                        <span className="float-right font-medium">
-                                            {data.breweryType.name}
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </>
     );

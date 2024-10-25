@@ -23,3 +23,13 @@ export function showErrorToast(err: unknown) {
     const errorMessage = getErrorMessage(err);
     return toast.error(errorMessage);
 }
+
+export const renderError = (
+    error: unknown
+): { result: boolean | null; message: string } => {
+    console.log(error);
+    return {
+        result: false,
+        message: error instanceof Error ? error.message : "An error occurred"
+    };
+};

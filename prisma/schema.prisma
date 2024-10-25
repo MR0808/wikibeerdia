@@ -191,11 +191,11 @@ model Brewery {
 }
 
 model BreweryImages {
-  id        String  @id @default(uuid())
-  image     String
+  id        String   @id @default(uuid())
+  image     String   @unique
   order     Int
-  brewery   Brewery @relation(fields: [breweryId], references: [id], onDelete: Cascade)
-  breweryId String
+  brewery   Brewery? @relation(fields: [breweryId], references: [id], onDelete: Cascade)
+  breweryId String?
 }
 
 model BreweryReview {
@@ -239,11 +239,19 @@ model Beer {
   breweryId      String
   subStyle       SubStyle?      @relation(fields: [subStyleId], references: [id], onDelete: Cascade)
   subStyleId     String?
-  images         String[]
+  images         BeerImages[]
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+}
+
+model BeerImages {
+  id     String  @id @default(uuid())
+  image  String  @unique
+  order  Int
+  beer   Beer?   @relation(fields: [beerId], references: [id], onDelete: Cascade)
+  beerId String?
 }
 
 model BeerReview {

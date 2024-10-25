@@ -1,5 +1,6 @@
 import { ExtendedUser } from "@/next-auth";
 import Link from "next/link";
+import Image from "next/image";
 
 import { BreweryType } from "@/types/breweries";
 import { Button } from "@/components/ui/button";
@@ -23,11 +24,29 @@ const BreweryBeers = ({
                             </Link>
                         )}
                     </div>
-                    <p className="whitespace-pre-wrap text-lg leading-8">
-                        {data.description}
-                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                        {data.beers.map((beer) => {
+                            console.log(beer);
+                            return (
+                                <div
+                                    key={beer.id}
+                                    className="flex flex-col space-y-2"
+                                >
+                                    <Image
+                                        src={beer.images[0].image}
+                                        alt={beer.name}
+                                        height={100}
+                                        width={100}
+                                        className="block h-28 w-28 rounded-lg object-cover object-center"
+                                    />
+                                    <div>{beer.name}</div>
+                                    <div>{beer.abv}%</div>
+                                    <div>{beer.subStyle?.name}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-                s
             </div>
         </div>
     );

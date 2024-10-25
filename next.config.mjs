@@ -3,8 +3,8 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                protocol: 'https',
-                hostname: 'ijtvuxdbxfqssvyrwmla.supabase.co'
+                protocol: "https",
+                hostname: "ijtvuxdbxfqssvyrwmla.supabase.co"
             }
         ]
     },
@@ -12,8 +12,8 @@ const nextConfig = {
         serverSourceMaps: true,
         serverActions: {
             allowedOrigins: [
-                'organic-space-rotary-phone-5r5w4qxq6qh7r9j-3000.app.github.dev',
-                'localhost:3000'
+                "organic-space-rotary-phone-5r5w4qxq6qh7r9j-3000.app.github.dev",
+                "localhost:3000"
             ]
         }
     }

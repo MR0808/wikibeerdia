@@ -7,7 +7,10 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState, useTransition, useEffect } from "react";
 import type { Session } from "next-auth";
+import { ErrorMessage } from "@hookform/error-message";
+
 import { toast } from "sonner";
+import BeerImagesUpload from "./BeerImagesUpload";
 
 import {
     Form,
@@ -52,6 +55,10 @@ import Link from "next/link";
 import { BreweriesForm, ParentStylesForm, StylesForm } from "@/types/beers";
 import { getBeerStylesForm } from "@/actions/beerStyles";
 import getYear from "@/utils/getYear";
+import { createBeer, createBeerImages } from "@/actions/beers";
+import { ImagesUpload } from "@/types/global";
+import { uploadImage } from "@/utils/supabase";
+import db from "@/lib/db";
 
 type Props = {
     breweryId?: string;
@@ -61,13 +68,7 @@ type Props = {
     styles: StylesForm[];
 };
 
-const BeerForm = ({
-    breweryId,
-    session,
-    breweries,
-    parentStyles,
-    styles
-}: Props) => {
+const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
     const [error, setError] = useState<string | undefined>();
     const [ibuValue, setIbuValue] = useState(60);
     const [abvValue, setAbvValue] = useState(10);
@@ -152,28 +153,28 @@ const BeerForm = ({
         return name;
     };
 
+    useEffect(() => {
+        console.log(form.formState.errors);
+    }, [form.formState.errors]);
+
     const onSubmit = (values: z.infer<typeof BeerSchema>) => {
-        startTransition(() => {
-            // const formData = new FormData();
-            // formData.append("logoUrl", values.logoUrl[0].value);
-            // values?.images?.map((image) => {
-            //     formData.append("images", image.value);
-            // });
-            // formData.append("name", values.name);
-            // formData.append("address1", values.address1);
-            // formData.append("formattedAddress", values.formattedAddress);
-            // formData.append("city", values.city);
-            // formData.append("region", values.region);
-            // formData.append("postalCode", values.postalCode);
-            // formData.append("country", values.country);
-            // formData.append("description", values.description);
-            // formData.append("headline", values.headline);
-            // formData.append("breweryType", values.breweryType);
-            // formData.append("website", values.website);
-            // values.address2 && formData.append("address2", values.address2);
-            // values.countryCode &&
-            //     formData.append("countryCode", values.countryCode);
-            // createBrewery(formData);
+        startTransition(async () => {
+            const images: ImagesUpload[] = [];
+
+            if (values.images) {
+                let order = 1;
+                for (const imageItem of values.images) {
+                    const image = await uploadImage(
+                        imageItem.value,
+                        "images-bucket"
+                    );
+                    images.push({ image, order });
+                    order++;
+                }
+            }
+            await createBeerImages(images);
+            const formData = { ...values, images };
+            createBeer(formData);
         });
     };
 
@@ -756,8 +757,7 @@ const BeerForm = ({
                         </div>
                     </div>
                 </div>
-
-                {/* <div className="mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-violet-50 px-12 py-10 sm:justify-between sm:space-x-0 md:space-x-4">
+                <div className="form-card">
                     <h1 className="text-2xl font-semibold leading-7 text-gray-900">
                         Brewery Images
                     </h1>
@@ -766,10 +766,10 @@ const BeerForm = ({
                     </h3>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="col-span-full">
-                            <BreweryImagesUpload />
+                            <BeerImagesUpload />
                         </div>
                     </div>
-                </div> */}
+                </div>
                 <div className="mx-auto mb-10 flex w-[55%] flex-row justify-end px-12 pb-16 sm:space-x-0 md:space-x-4">
                     <Link href="/">
                         <Button type="button" variant="outline" size="lg">

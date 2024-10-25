@@ -18,6 +18,7 @@ import { currentUser } from "@/lib/auth";
 import { checkAuth } from "@/lib/auth";
 import { State } from "@prisma/client";
 import { uploadImage, deleteImage } from "@/utils/supabase";
+import { renderError } from "@/lib/handleError";
 
 export const updateDisplayName = async (
     values: z.infer<typeof DisplayNameSchema>
@@ -219,14 +220,4 @@ export const updateProfilePicture = async (formData: FormData) => {
     } catch (error) {
         return renderError(error);
     }
-};
-
-const renderError = (
-    error: unknown
-): { result: boolean | null; message: string } => {
-    console.log(error);
-    return {
-        result: false,
-        message: error instanceof Error ? error.message : "An error occurred"
-    };
 };

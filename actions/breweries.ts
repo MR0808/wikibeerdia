@@ -9,7 +9,7 @@ import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
 import { BrewerySchemaFormData } from "@/schemas/brewery";
 import { uploadImage, deleteImage } from "@/utils/supabase";
-import { getErrorMessage } from "@/lib/handleError";
+import { getErrorMessage, renderError } from "@/lib/handleError";
 
 export const getBreweries = async () => {
     const data = await db.brewery.findMany({
@@ -122,12 +122,26 @@ export const getBrewery = async (id: string) => {
             id
         },
         include: {
-            beers: true,
+            beers: {
+                select: {
+                    id: true,
+                    name: true,
+                    abv: true,
+                    subStyle: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    images: { orderBy: { order: "asc" } }
+                },
+                where: { status: "APPROVED" },
+                orderBy: { name: "asc" }
+            },
             breweryReviews: true,
             breweryType: {
                 select: { name: true }
             },
-            images: true,
+            images: { orderBy: { order: "asc" } },
             user: { select: { id: true, displayName: true } },
             country: true
         }
@@ -215,14 +229,4 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
             error: getErrorMessage(err)
         };
     }
-};
-
-const renderError = (
-    error: unknown
-): { result: boolean | null; message: string } => {
-    console.log(error);
-    return {
-        result: false,
-        message: error instanceof Error ? error.message : "An error occurred"
-    };
 };
