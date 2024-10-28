@@ -49,7 +49,7 @@ const BreweryImagesUpload = () => {
     } = useDropzone({
         onDrop,
         maxFiles,
-        maxSize: 1 * 1024 * 1024,
+        maxSize: 5 * 1024 * 1024,
         accept: {
             "image/jpeg": [],
             "image/jpg": [],
@@ -134,7 +134,7 @@ const BreweryImagesUpload = () => {
                                                 }
                                             )}
                                         >
-                                            Max size: 1MB, JPG or PNG
+                                            Max size: 5MB, JPG or PNG
                                         </span>
                                     </div>
                                 ) : (

@@ -4,14 +4,12 @@ import getSession from "@/lib/session";
 import { checkAuthenticated } from "@/lib/auth";
 import { getBreweries } from "@/actions/breweries";
 import { getBeerStylesForm, getParentStyles } from "@/actions/beerStyles";
-import BeerForm from "@/components/beers/BeerForm";
+import BeerForm from "@/components/beers/submit/BeerForm";
 import { BeerSubmitSearchParams } from "@/types/beers";
 
-const SubmitBeerPage = async (
-    props: {
-        searchParams?: Promise<BeerSubmitSearchParams>;
-    }
-) => {
+const SubmitBeerPage = async (props: {
+    searchParams?: Promise<BeerSubmitSearchParams>;
+}) => {
     const searchParams = await props.searchParams;
     const user = await checkAuthenticated();
     if (!user) {

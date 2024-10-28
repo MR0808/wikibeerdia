@@ -10,17 +10,19 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { currentUser } from "@/lib/auth";
-import { getBrewery } from "@/actions/breweries";
-import BreweryHeader from "@/components/breweries/BreweryHeader";
-import BreweryImages from "@/components/breweries/BreweryImages";
-import BreweryMain from "@/components/breweries/BreweryMain";
-import BreweryBeers from "@/components/breweries/BreweryBeers";
+import { getBrewery, getBreweryBeers } from "@/actions/breweries";
+import BreweryHeader from "@/components/breweries/view/BreweryHeader";
+import BreweryImages from "@/components/breweries/view/BreweryImages";
+import BreweryMain from "@/components/breweries/view/BreweryMain";
+import BreweryBeers from "@/components/breweries/view/BreweryBeers";
 import { Params } from "@/utils/types";
 
 const BreweryDetailsPage = async (props: { params: Params }) => {
     const params = await props.params;
     const { data } = await getBrewery(params.id);
     const user = await currentUser();
+    const INITIAL_NUMBER_OF_BEERS = 8;
+    const beers = await getBreweryBeers(params.id, 0, INITIAL_NUMBER_OF_BEERS);
 
     if (!data) redirect("/breweries/");
 
@@ -52,7 +54,12 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
                     <BreweryHeader data={data} user={user} />
                     <BreweryImages data={data} />
                     <BreweryMain data={data} />
-                    <BreweryBeers data={data} user={user} />
+                    <BreweryBeers
+                        initialBeers={beers}
+                        breweryId={params.id}
+                        user={user}
+                        totalBeers={data._count.beers}
+                    />
                 </Suspense>
             </div>
         </div>

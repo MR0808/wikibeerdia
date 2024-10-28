@@ -19,33 +19,25 @@ export interface BreweryType {
     userId: string;
     createdAt: Date;
     updatedAt: Date;
-    images: {
-        id: string;
-        image: string;
-        order: number;
-        breweryId: string;
-    }[];
-    beers: {
+    country: {
         id: string;
         name: string;
-        images: {
-            id: string;
-            image: string;
-            order: number;
-            beerId: string | null;
-        }[];
-        abv: string;
-        subStyle: {
-            name: string;
-        } | null;
+        isoCode: string;
+        currency: string;
+    };
+    images: {
+        id: string;
+        order: number;
+        image: string;
+        breweryId: string | null;
     }[];
     breweryReviews: {
         id: string;
+        breweryId: string;
         status: Status;
         userId: string;
         createdAt: Date;
         updatedAt: Date;
-        breweryId: string;
         rating: number;
         comment: string | null;
     }[];
@@ -56,11 +48,8 @@ export interface BreweryType {
         id: string;
         displayName: string | null;
     };
-    country: {
-        id: string;
-        name: string;
-        isoCode: string;
-        currency: string;
+    _count: {
+        beers: number;
     };
 }
 
@@ -73,4 +62,19 @@ export interface BreweryTypeReviews {
     breweryId: string;
     rating: number;
     comment: string | null;
+}
+
+export interface BreweryBeersType {
+    id: string;
+    name: string;
+    abv: string;
+    subStyle: {
+        name: string;
+    } | null;
+    images: {
+        id: string;
+        order: number;
+        image: string;
+        beerId: string | null;
+    }[];
 }

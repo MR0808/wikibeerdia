@@ -30,18 +30,19 @@ import { BreweryTypeForm } from "@/types/breweryTypes";
 import Autocomplete from "@/components/autocomplete/Autocomplete";
 import BreweryLogoUpload from "./BreweryLogoUpload";
 import BreweryImagesUpload from "./BreweryImagesUpload";
+import { uploadImage } from "@/utils/supabase";
 import { Button } from "@/components/ui/button";
+import { ImagesUpload } from "@/types/global";
 import Link from "next/link";
-import { createBrewery } from "@/actions/breweries";
+import { createBrewery, createBreweryImages } from "@/actions/breweries";
 
 type Props = {
     id?: string;
-    edit: boolean;
     session: Session | null;
     breweryTypes: BreweryTypeForm[];
 };
 
-const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
+const BreweryForm = ({ id, session, breweryTypes }: Props) => {
     const [error, setError] = useState<string | undefined>();
     const [isPending, startTransition] = useTransition();
     const errorClass = "pl-6";
@@ -67,26 +68,27 @@ const BreweryForm = ({ id, edit, session, breweryTypes }: Props) => {
     });
 
     const onSubmit = (values: z.infer<typeof BrewerySchema>) => {
-        startTransition(() => {
-            const formData = new FormData();
-            formData.append("logoUrl", values.logoUrl[0].value);
-            values?.images?.map((image) => {
-                formData.append("images", image.value);
-            });
-            formData.append("name", values.name);
-            formData.append("address1", values.address1);
-            formData.append("formattedAddress", values.formattedAddress);
-            formData.append("city", values.city);
-            formData.append("region", values.region);
-            formData.append("postalCode", values.postalCode);
-            formData.append("country", values.country);
-            formData.append("description", values.description);
-            formData.append("headline", values.headline);
-            formData.append("breweryType", values.breweryType);
-            formData.append("website", values.website);
-            values.address2 && formData.append("address2", values.address2);
-            values.countryCode &&
-                formData.append("countryCode", values.countryCode);
+        startTransition(async () => {
+            const images: ImagesUpload[] = [];
+
+            const logoUrl = await uploadImage(
+                values.logoUrl[0].value,
+                "logos-bucket"
+            );
+
+            if (values.images) {
+                let order = 1;
+                for (const imageItem of values.images) {
+                    const image = await uploadImage(
+                        imageItem.value,
+                        "images-bucket"
+                    );
+                    images.push({ image, order });
+                    order++;
+                }
+            }
+            await createBreweryImages(images);
+            const formData = { ...values, images, logoUrl };
             createBrewery(formData);
         });
     };

@@ -28,7 +28,7 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                     <li className="overview-icons">
                         <Beer className="mb-3 h-8 w-8" />
                         <span className="text-xl text-black">
-                            {`${data.beers.length} beer${data.beers.length !== 1 && "s"}`}
+                            {`${data._count.beers} beer${data._count.beers !== 1 && "s"}`}
                         </span>
                     </li>
                     <li className="overview-icons">

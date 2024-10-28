@@ -3,7 +3,7 @@ import { zfd } from "zod-form-data";
 
 export const BeerSchema = z.object({
     name: z.string().min(1, {
-        message: "Brewery name is required"
+        message: "Beer name is required"
     }),
     headline: z.string().min(1, {
         message: "Headline is required"
@@ -32,7 +32,7 @@ export const BeerSchema = z.object({
 
 export const BeerSchemaCreate = z.object({
     name: z.string().min(1, {
-        message: "Brewery name is required"
+        message: "Beer name is required"
     }),
     headline: z.string().min(1, {
         message: "Headline is required"

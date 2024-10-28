@@ -3,14 +3,9 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState, useTransition, useEffect } from "react";
 import type { Session } from "next-auth";
-import { ErrorMessage } from "@hookform/error-message";
-
-import { toast } from "sonner";
-import BeerImagesUpload from "./BeerImagesUpload";
 
 import {
     Form,
@@ -58,7 +53,7 @@ import getYear from "@/utils/getYear";
 import { createBeer, createBeerImages } from "@/actions/beers";
 import { ImagesUpload } from "@/types/global";
 import { uploadImage } from "@/utils/supabase";
-import db from "@/lib/db";
+import BeerImagesUpload from "./BeerImagesUpload";
 
 type Props = {
     breweryId?: string;

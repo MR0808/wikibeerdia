@@ -7,9 +7,10 @@ import { revalidatePath } from "next/cache";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
-import { BrewerySchemaFormData } from "@/schemas/brewery";
+import { BrewerySchemaCreate } from "@/schemas/brewery";
 import { uploadImage, deleteImage } from "@/utils/supabase";
 import { getErrorMessage, renderError } from "@/lib/handleError";
+import { ImagesUpload } from "@/types/global";
 
 export const getBreweries = async () => {
     const data = await db.brewery.findMany({
@@ -22,7 +23,9 @@ export const getBreweries = async () => {
     return { data };
 };
 
-export const createBrewery = async (formData: FormData) => {
+export const createBrewery = async (
+    values: z.infer<typeof BrewerySchemaCreate>
+) => {
     let data: Brewery;
     try {
         const user = await checkAuth();
@@ -33,12 +36,12 @@ export const createBrewery = async (formData: FormData) => {
                 error: getErrorMessage("Unauthorized")
             };
 
-        const form = BrewerySchemaFormData.safeParse(formData);
+        const validatedFields = BrewerySchemaCreate.safeParse(values);
 
-        if (form.error) {
+        if (!validatedFields.success) {
             return {
                 data: null,
-                error: getErrorMessage("Error with fields")
+                error: getErrorMessage("Invalid fields!")
             };
         }
 
@@ -57,9 +60,8 @@ export const createBrewery = async (formData: FormData) => {
             website,
             logoUrl,
             images
-        } = BrewerySchemaFormData.parse(formData);
+        } = validatedFields.data;
 
-        const logoFullPath = await uploadImage(logoUrl[0], "logos-bucket");
         const countryId = await db.country.findFirst({
             where: { isoCode: countryCode }
         });
@@ -85,7 +87,7 @@ export const createBrewery = async (formData: FormData) => {
                 headline,
                 breweryTypeId: breweryType,
                 website: website || "",
-                logoUrl: logoFullPath,
+                logoUrl,
                 userId: user.id
             }
         });
@@ -96,17 +98,15 @@ export const createBrewery = async (formData: FormData) => {
             };
         }
         if (images && images?.length > 0) {
-            let i = 1;
             for (const image of images) {
-                const url = await uploadImage(image, "images-bucket");
-                await db.breweryImages.create({
+                await db.breweryImages.update({
+                    where: {
+                        image: image.image
+                    },
                     data: {
-                        image: url,
-                        order: i,
                         breweryId: data.id
                     }
                 });
-                i++;
             }
         }
     } catch (error) {
@@ -116,26 +116,44 @@ export const createBrewery = async (formData: FormData) => {
     redirect(`/breweries/${data.id}`);
 };
 
+export const createBreweryImages = async (images: ImagesUpload[]) => {
+    try {
+        const user = await checkAuth();
+
+        if (!user)
+            return {
+                data: null,
+                error: getErrorMessage("Unauthorized")
+            };
+
+        const data = await db.breweryImages.createMany({
+            data: images
+        });
+
+        if (!data)
+            return { data: null, error: getErrorMessage("There was an error") };
+
+        return {
+            data,
+            error: null
+        };
+    } catch (error) {
+        return renderError(error);
+    }
+};
+
 export const getBrewery = async (id: string) => {
     const data = await db.brewery.findUnique({
         where: {
             id
         },
         include: {
-            beers: {
+            _count: {
                 select: {
-                    id: true,
-                    name: true,
-                    abv: true,
-                    subStyle: {
-                        select: {
-                            name: true
-                        }
-                    },
-                    images: { orderBy: { order: "asc" } }
-                },
-                where: { status: "APPROVED" },
-                orderBy: { name: "asc" }
+                    beers: {
+                        where: { status: "APPROVED" }
+                    }
+                }
             },
             breweryReviews: true,
             breweryType: {
@@ -147,6 +165,31 @@ export const getBrewery = async (id: string) => {
         }
     });
     return { data };
+};
+
+export const getBreweryBeers = async (
+    breweryId: string,
+    skip: number,
+    take: number
+) => {
+    const data = await db.beer.findMany({
+        where: { breweryId, status: "APPROVED" },
+        skip,
+        take,
+        select: {
+            id: true,
+            images: true,
+            name: true,
+            abv: true,
+            subStyle: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
+
+    return data;
 };
 
 export const fetchBreweryFavoriteId = async ({
