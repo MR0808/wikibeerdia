@@ -1,12 +1,12 @@
-import NextAuth, { User } from 'next-auth';
-import { UserRole } from '@prisma/client';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import NextAuth, { User } from "next-auth";
+import { UserRole } from "@prisma/client";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
-import db from './lib/db';
-import authConfig from '@/auth.config';
-import { getUserById } from './data/user';
-import { getAccountByUserId } from '@/data/account';
-import getTwoFactorConfirmationByUserId from './data/twoFactorConfirmation';
+import db from "./lib/db";
+import authConfig from "@/auth.config";
+import { getUserById } from "./data/user";
+import { getAccountByUserId } from "@/data/account";
+import getTwoFactorConfirmationByUserId from "./data/twoFactorConfirmation";
 
 export const {
     handlers: { GET, POST },
@@ -16,8 +16,8 @@ export const {
     unstable_update
 } = NextAuth({
     pages: {
-        signIn: '/login',
-        error: '/error'
+        signIn: "/login",
+        error: "/error"
     },
     events: {
         async linkAccount({ user }) {
@@ -30,7 +30,7 @@ export const {
     callbacks: {
         async signIn({ user, account }) {
             // Allow OAuth without email verification
-            if (account?.provider !== 'credentials') return true;
+            if (account?.provider !== "credentials") return true;
 
             const existingUser = await getUserById(user.id!);
 
@@ -52,8 +52,8 @@ export const {
             return true;
         },
         async session({ token, session }) {
-            if (token.sub && session.user) {
-                session.user.id = token.sub;
+            if (token.userid && session.user) {
+                session.user.id = token.userid as string;
             }
 
             if (token.role && session.user) {
@@ -92,9 +92,10 @@ export const {
 
             const existingAccount = await getAccountByUserId(existingUser.id);
 
+            token.userid = (existingUser.id as string) || "";
             token.isOAuth = !!existingAccount;
-            token.firstName = (existingUser.firstName as string) || '';
-            token.lastName = (existingUser.lastName as string) || '';
+            token.firstName = (existingUser.firstName as string) || "";
+            token.lastName = (existingUser.lastName as string) || "";
             token.email = existingUser.email;
             token.role = existingUser.role;
             token.image = existingUser.image;
@@ -105,6 +106,6 @@ export const {
         }
     },
     adapter: PrismaAdapter(db),
-    session: { strategy: 'jwt' },
+    session: { strategy: "jwt" },
     ...authConfig
 });

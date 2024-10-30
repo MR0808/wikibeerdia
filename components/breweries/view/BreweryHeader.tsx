@@ -13,10 +13,14 @@ import BreweryAdminMenu from "./BreweryAdminMenu";
 
 const BreweryHeader = ({
     data,
-    user
+    user,
+    rating,
+    totalReviews
 }: {
     data: BreweryType;
     user?: ExtendedUser;
+    rating: number;
+    totalReviews: number;
 }) => {
     return (
         <>
@@ -31,7 +35,10 @@ const BreweryHeader = ({
                             {data.name}
                         </Link>
                     </h3>
-                    <BreweryRating reviews={data.breweryReviews} />
+                    <BreweryRating
+                        rating={rating}
+                        totalReviews={totalReviews}
+                    />
                     <div className="mt-20 hidden flex-wrap text-wrap md:mt-10 md:flex">
                         {data.status !== "APPROVED" && (
                             <Badge className="mr-4">{data.status}</Badge>

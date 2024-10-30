@@ -1,14 +1,14 @@
 "use server";
 
 import * as z from "zod";
-import { Brewery, Status } from "@prisma/client";
+import { Brewery, Status, BreweryReview } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
 import { BrewerySchemaCreate } from "@/schemas/brewery";
-import { uploadImage, deleteImage } from "@/utils/supabase";
+import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
 
@@ -155,7 +155,11 @@ export const getBrewery = async (id: string) => {
                     }
                 }
             },
-            breweryReviews: true,
+            breweryReviews: {
+                select: {
+                    rating: true
+                }
+            },
             breweryType: {
                 select: { name: true }
             },
@@ -165,6 +169,80 @@ export const getBrewery = async (id: string) => {
         }
     });
     return { data };
+};
+
+export const findExistingReview = async (userId: string, breweryId: string) => {
+    return db.breweryReview.findFirst({
+        where: {
+            userId,
+            breweryId
+        }
+    });
+};
+
+export const createBreweryReview = async (
+    values: z.infer<typeof ReviewSchema>
+) => {
+    let data: BreweryReview;
+    try {
+        const user = await checkAuth();
+
+        if (!user)
+            return {
+                data: null,
+                error: getErrorMessage("Unauthorized")
+            };
+
+        const validatedFields = ReviewSchemaCreate.safeParse(values);
+
+        if (!validatedFields.success) {
+            return {
+                data: null,
+                error: getErrorMessage("Invalid fields!")
+            };
+        }
+
+        const { rating, comment, id } = validatedFields.data;
+
+        data = await db.breweryReview.create({
+            data: {
+                rating,
+                comment,
+                breweryId: id,
+                userId: user.id,
+                status: "APPROVED"
+            }
+        });
+
+        if (!data) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+
+        const returnData = {
+            id: data.id,
+            rating: data.rating,
+            comment: data.comment,
+            createdAt: data.createdAt,
+            user: {
+                id: user.id,
+                displayName: user.displayName,
+                image: user.image
+            }
+        };
+
+        return {
+            data: returnData,
+            error: null
+        };
+    } catch (error) {
+        return {
+            data: null,
+            error: getErrorMessage(error)
+        };
+    }
 };
 
 export const getBreweryBeers = async (
@@ -189,6 +267,41 @@ export const getBreweryBeers = async (
         }
     });
 
+    return data;
+};
+
+export const getBreweryReviews = async (
+    breweryId: string,
+    skip: number,
+    take: number
+) => {
+    const data = await db.breweryReview.findMany({
+        where: { breweryId, status: "APPROVED" },
+        skip,
+        take,
+        select: {
+            id: true,
+            rating: true,
+            comment: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    displayName: true,
+                    image: true
+                }
+            }
+        },
+        orderBy: { createdAt: "desc" }
+    });
+
+    return data;
+};
+
+export const totalNumberOfReviews = async (breweryId: string) => {
+    const data = db.breweryReview.count({
+        where: { breweryId, status: "APPROVED" }
+    });
     return data;
 };
 

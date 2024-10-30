@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
-import { EmblaOptionsType } from "embla-carousel";
 
 import {
     Carousel,

@@ -32,14 +32,7 @@ export interface BreweryType {
         breweryId: string | null;
     }[];
     breweryReviews: {
-        id: string;
-        breweryId: string;
-        status: Status;
-        userId: string;
-        createdAt: Date;
-        updatedAt: Date;
         rating: number;
-        comment: string | null;
     }[];
     breweryType: {
         name: string;
@@ -53,15 +46,16 @@ export interface BreweryType {
     };
 }
 
-export interface BreweryTypeReviews {
+export interface BreweryReviewsType {
     id: string;
-    status: Status;
-    userId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    breweryId: string;
     rating: number;
     comment: string | null;
+    createdAt: Date;
+    user: {
+        id: string;
+        displayName: string | null;
+        image: string | null;
+    };
 }
 
 export interface BreweryBeersType {
