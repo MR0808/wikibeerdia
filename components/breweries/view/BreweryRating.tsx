@@ -13,11 +13,11 @@ const BreweryRating = ({
     return (
         <div className="mt-2 flex items-center gap-1">
             <Star fill="#000000" className="h-3 w-3" />
-            {`${rating} - `}
+            {`${rating.toFixed(1)} - `}
             <Link
                 href="#reviews"
                 className={cn("hover:underline")}
-            >{`${totalReviews} reviews`}</Link>
+            >{`${totalReviews.toLocaleString()} reviews`}</Link>
         </div>
     );
 };

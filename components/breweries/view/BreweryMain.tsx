@@ -40,7 +40,7 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                     <li className="overview-icons">
                         <Star className="mb-3 h-8 w-8" />
                         <span className="text-xl text-black">
-                            {`${rating} (${data.breweryReviews.length})`}
+                            {rating.toFixed(1)}
                         </span>
                     </li>
                 </ul>

@@ -233,6 +233,8 @@ export const createBreweryReview = async (
             }
         };
 
+        revalidatePath(`/breweries/${id}`);
+
         return {
             data: returnData,
             error: null
@@ -273,8 +275,26 @@ export const getBreweryBeers = async (
 export const getBreweryReviews = async (
     breweryId: string,
     skip: number,
-    take: number
+    take: number,
+    order: string = "recent"
 ) => {
+    let orderBy = {};
+
+    switch (order) {
+        case "recent":
+            orderBy = { createdAt: "desc" };
+            break;
+        case "asc":
+            orderBy = { rating: "asc" };
+            break;
+        case "desc":
+            orderBy = { rating: "desc" };
+            break;
+        default:
+            orderBy = { createdAt: "desc" };
+            break;
+    }
+
     const data = await db.breweryReview.findMany({
         where: { breweryId, status: "APPROVED" },
         skip,
@@ -292,7 +312,7 @@ export const getBreweryReviews = async (
                 }
             }
         },
-        orderBy: { createdAt: "desc" }
+        orderBy
     });
 
     return data;

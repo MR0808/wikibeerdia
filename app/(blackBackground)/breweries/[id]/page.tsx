@@ -22,6 +22,7 @@ import BreweryMain from "@/components/breweries/view/BreweryMain";
 import BreweryBeers from "@/components/breweries/view/BreweryBeers";
 import BreweryReviews from "@/components/breweries/view/BreweryReviews";
 import { Params } from "@/utils/types";
+import getRatings from "@/lib/ratings";
 
 const BreweryDetailsPage = async (props: { params: Params }) => {
     const params = await props.params;
@@ -43,11 +44,7 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
         return review.rating;
     });
 
-    let countElements = (arr: Array<any>): Object =>
-        arr.reduce((acc, val) => ((acc[val] = (acc[val] || 0) + 1), acc), {});
-
-    const ratingGroups = countElements(ratings);
-    console.log(ratingGroups);
+    const ratingValues = getRatings(ratings);
 
     let rating = 0;
 
@@ -94,8 +91,8 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
                         initialReviews={reviews}
                         breweryId={params.id}
                         totalReviews={ratings.length}
-                        rating={rating}
                         reviewDoesNotExist={reviewDoesNotExist}
+                        ratingValues={ratingValues}
                     />
                 </Suspense>
             </div>

@@ -2,6 +2,12 @@ import Link from "next/link";
 import { MapPin, ExternalLink } from "lucide-react";
 import { ExtendedUser } from "@/next-auth";
 
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { BreweryType } from "@/types/breweries";
 import Image from "next/image";
@@ -64,19 +70,48 @@ const BreweryHeader = ({
                 <div className="w-1/2">
                     <ul className="mt-9 hidden list-none space-x-3 md:flex">
                         <li>
-                            <BreweryFavoriteToggleButton breweryId={data.id} />
+                            <TooltipProvider delayDuration={0}>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <BreweryFavoriteToggleButton
+                                            breweryId={data.id}
+                                        />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Add to favourites</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </li>
                         <li>
-                            <Link
-                                href={data.website}
-                                target="_blank"
-                                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:bg-primary hover:text-white"
-                            >
-                                <ExternalLink />
-                            </Link>
+                            <TooltipProvider delayDuration={0}>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <Link
+                                            href={data.website}
+                                            target="_blank"
+                                            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:bg-primary hover:text-white"
+                                        >
+                                            <ExternalLink />
+                                        </Link>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Go to website</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </li>
                         <li>
-                            <BreweryCopyURL />
+                            <TooltipProvider delayDuration={0}>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <BreweryCopyURL />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Copy current page link</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </li>
                         {user && user.role === "ADMIN" && (
                             <li>

@@ -43,7 +43,7 @@ const BreweryBeers = ({
     return (
         <div className="mt-12 flex flex-row md:mt-16 md:space-x-3">
             <div className="w-full">
-                <div className="mb-5 h-auto w-full items-center rounded-lg bg-white p-5 shadow-lg md:mb-20 md:p-14">
+                <div className="h-auto w-full items-center rounded-lg bg-white p-5 shadow-lg md:p-14">
                     <div className="mb-10 flex flex-row justify-between">
                         <h4 className="mb-5 text-4xl">Available Beers</h4>
                         {user && (
