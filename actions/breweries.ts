@@ -282,16 +282,16 @@ export const getBreweryReviews = async (
 
     switch (order) {
         case "recent":
-            orderBy = { createdAt: "desc" };
+            orderBy = [{ createdAt: "desc" }, { id: "desc" }];
             break;
         case "asc":
-            orderBy = { rating: "asc" };
+            orderBy = [{ rating: "asc" }, { id: "desc" }];
             break;
         case "desc":
-            orderBy = { rating: "desc" };
+            orderBy = [{ rating: "desc" }, { id: "desc" }];
             break;
         default:
-            orderBy = { createdAt: "desc" };
+            orderBy = [{ createdAt: "desc" }, { id: "desc" }];
             break;
     }
 

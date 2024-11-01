@@ -28,6 +28,13 @@ enum Status {
   REJECTED
 }
 
+enum ReportTypes {
+  BEER
+  BREWERY
+  BREWERYREVIEW
+  BEERREVIEW
+}
+
 model User {
   id                    String                 @id @default(cuid())
   firstName             String?
@@ -55,6 +62,7 @@ model User {
   subStyles             SubStyle[]
   role                  UserRole               @default(USER)
   accounts              Account[]
+  reports               Report[]
   emailOld              String?
   passwordResetToken    String?
   passwordResetExpires  DateTime?
@@ -188,6 +196,7 @@ model Brewery {
   userId            String
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
+  Report            Report[]
 }
 
 model BreweryImages {
@@ -209,6 +218,7 @@ model BreweryReview {
   status    Status   @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Report    Report[]
 }
 
 model BreweryType {
@@ -244,6 +254,7 @@ model Beer {
   userId         String
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+  Report         Report[]
 }
 
 model BeerImages {
@@ -265,6 +276,7 @@ model BeerReview {
   status    Status   @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Report    Report[]
 }
 
 model ParentStyle {
@@ -305,4 +317,21 @@ model SubStyle {
   userId      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Report {
+  id              String         @id @default(uuid())
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  type            ReportTypes
+  beer            Beer?          @relation(fields: [beerId], references: [id], onDelete: Cascade)
+  beerId          String?
+  beerReview      BeerReview?    @relation(fields: [beerReviewId], references: [id], onDelete: Cascade)
+  beerReviewId    String?
+  brewery         Brewery?       @relation(fields: [breweryId], references: [id], onDelete: Cascade)
+  breweryId       String?
+  breweryReview   BreweryReview? @relation(fields: [breweryReviewId], references: [id], onDelete: Cascade)
+  breweryReviewId String?
+  comment         String
+  Status          Status
 }

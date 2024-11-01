@@ -30,12 +30,12 @@ const BreweryBeers = ({
 
     const loadMoreBeers = () => {
         startTransition(async () => {
-            const apiUsers = await getBreweryBeers(
+            const moreBeers = await getBreweryBeers(
                 breweryId,
                 offset,
                 NUMBER_OF_BEERS_TO_FETCH
             );
-            setBeers((beers) => [...beers, ...apiUsers]);
+            setBeers((beers) => [...beers, ...moreBeers]);
             setOffset((offset) => offset + NUMBER_OF_BEERS_TO_FETCH);
         });
     };

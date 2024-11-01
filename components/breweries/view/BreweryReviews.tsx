@@ -10,13 +10,11 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card } from "@/components/ui/card";
+import ReviewSkeleton from "@/components/reviews/ReviewSkeleton";
 import { Button } from "@/components/ui/button";
 import { BreweryReviewsType } from "@/types/breweries";
 import ReviewCard from "@/components/reviews/ReviewCard";
-import { getBreweryReviews, totalNumberOfReviews } from "@/actions/breweries";
-import { cn } from "@/lib/utils";
+import { getBreweryReviews } from "@/actions/breweries";
 import AddReviewDialog from "@/components/reviews/AddReviewDialog";
 import Link from "next/link";
 
@@ -60,7 +58,7 @@ const BreweryReviews = ({
         <div className="mt-12 flex flex-row md:mt-16 md:space-x-3" id="reviews">
             <div className="w-full">
                 <div className="mb-5 h-auto w-full items-center rounded-lg bg-white p-5 shadow-lg md:mb-20 md:p-14">
-                    <div className="mb-10 flex flex-row justify-between">
+                    <div className="mb-10 flex flex-col justify-between md:flex-row">
                         <h4 className="mb-5 text-4xl">Reviews</h4>
                         <div>
                             <Select
@@ -84,8 +82,8 @@ const BreweryReviews = ({
                             </Select>
                         </div>
                     </div>
-                    <div className="flex flex-row space-x-10">
-                        <div className="flex w-1/3 flex-col">
+                    <div className="flex flex-col space-y-5 md:flex-row md:space-x-10 md:space-y-0">
+                        <div className="flex flex-col md:w-1/3">
                             <RatingSummary
                                 ratings={ratingValues}
                                 thousandsSeparator=","
@@ -104,17 +102,9 @@ const BreweryReviews = ({
                                     borderColor: "#f97316"
                                 }}
                             />
-                            {reviewDoesNotExist && (
+                            {!reviewDoesNotExist && (
                                 <div className="mt-4">
-                                    <Button
-                                        type="button"
-                                        onClick={() => setOpenAddReview(true)}
-                                    >
-                                        Add Review
-                                    </Button>
                                     <AddReviewDialog
-                                        openAddReview={openAddReview}
-                                        setOpenAddReview={setOpenAddReview}
                                         type="brewery"
                                         id={breweryId}
                                         refreshReviewsOnSubmit={
@@ -124,7 +114,7 @@ const BreweryReviews = ({
                                 </div>
                             )}
                         </div>
-                        <div className="flex w-2/3 flex-col space-y-6">
+                        <div className="flex flex-col space-y-6 md:w-2/3">
                             {isPending ? (
                                 <>
                                     <ReviewSkeleton />
@@ -160,28 +150,6 @@ const BreweryReviews = ({
                 </div>
             </div>
         </div>
-    );
-};
-
-const ReviewSkeleton = () => {
-    return (
-        <Card className="relative p-6">
-            <div className={`flex h-20 flex-row content-start items-start p-2`}>
-                <div className="flex w-1/3 flex-row space-x-1">
-                    <Skeleton className="h-12 w-12 rounded-full object-cover" />
-                    <div className="flex flex-col space-y-2">
-                        <Skeleton className="h-4 w-28" />
-                        <Skeleton className="h-4 w-28" />
-                        <Skeleton className="h-4 w-28" />
-                    </div>
-                </div>
-                <div className="w-2/3 space-y-2">
-                    <Skeleton className="h-4 w-[400px]" />
-                    <Skeleton className="h-4 w-[400px]" />
-                    <Skeleton className="h-4 w-[400px]" />
-                </div>
-            </div>
-        </Card>
     );
 };
 

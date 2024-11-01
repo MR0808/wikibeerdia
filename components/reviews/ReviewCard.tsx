@@ -16,11 +16,11 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
     const displayDate = format(review.createdAt, "dd MMM yyyy");
 
     return (
-        <Card className="relative p-6">
+        <Card className="relative p-2 md:p-6">
             <div
-                className={`flex flex-row content-start items-start p-2 ${isExpanded ? "h-full" : "h-20"}`}
+                className={`flex flex-col content-start items-start space-y-5 p-2 md:flex-row md:space-y-0 ${isExpanded ? "h-full" : "h-52 md:h-20"}`}
             >
-                <div className="flex w-1/3 flex-row space-x-1">
+                <div className="flex flex-row space-x-1 md:w-1/3">
                     <Image
                         src={review.user.image || profile}
                         alt={review.user.displayName!}
@@ -38,7 +38,7 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                         <div className="text-sm">{displayDate}</div>
                     </div>
                 </div>
-                <div className="w-2/3">
+                <div className="md:w-2/3">
                     <Comment
                         comment={review.comment || ""}
                         isExpanded={isExpanded}
