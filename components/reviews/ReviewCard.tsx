@@ -4,7 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
+import { Ellipsis } from "lucide-react";
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
 import Rating from "@/components/reviews/Rating";
 import Comment from "@/components/reviews/Comment";
@@ -20,7 +29,7 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
             <div
                 className={`flex flex-col content-start items-start space-y-5 p-2 md:flex-row md:space-y-0 ${isExpanded ? "h-full" : "h-52 md:h-20"}`}
             >
-                <div className="flex flex-row space-x-1 md:w-1/3">
+                <div className="flex w-full flex-row space-x-2 md:w-1/3">
                     <Image
                         src={review.user.image || profile}
                         alt={review.user.displayName!}
@@ -37,6 +46,20 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                         <Rating rating={review.rating} />
                         <div className="text-sm">{displayDate}</div>
                     </div>
+                    <div className="ml-3 flex w-full flex-row items-start justify-end md:hidden">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <div className="flex cursor-pointer items-center justify-end align-top text-lg text-black">
+                                    <Ellipsis />
+                                </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent side="bottom" align="start">
+                                <DropdownMenuItem>
+                                    <div>Report</div>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
                 <div className="md:w-2/3">
                     <Comment
@@ -44,6 +67,20 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                         isExpanded={isExpanded}
                         setIsExpanded={setIsExpanded}
                     />
+                </div>
+                <div className="ml-3 hidden md:block">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <div className="flex cursor-pointer items-center justify-end align-top text-lg text-black">
+                                <Ellipsis />
+                            </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side="bottom" align="start">
+                            <DropdownMenuItem>
+                                <div>Report</div>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
         </Card>

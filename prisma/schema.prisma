@@ -321,8 +321,8 @@ model SubStyle {
 
 model Report {
   id              String         @id @default(uuid())
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
+  user            User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String?
   type            ReportTypes
   beer            Beer?          @relation(fields: [beerId], references: [id], onDelete: Cascade)
   beerId          String?
@@ -333,5 +333,5 @@ model Report {
   breweryReview   BreweryReview? @relation(fields: [breweryReviewId], references: [id], onDelete: Cascade)
   breweryReviewId String?
   comment         String
-  Status          Status
+  Status          Status         @default(PENDING)
 }

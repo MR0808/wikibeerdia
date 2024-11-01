@@ -2,7 +2,7 @@ import * as z from "zod";
 
 export const ReviewSchema = z.object({
     rating: z.string().min(1, {
-        message: "Comment is required"
+        message: "Rating is required"
     }),
     comment: z.string().min(1, {
         message: "Comment is required"
