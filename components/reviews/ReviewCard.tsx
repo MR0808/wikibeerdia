@@ -10,8 +10,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
@@ -19,13 +17,26 @@ import Rating from "@/components/reviews/Rating";
 import Comment from "@/components/reviews/Comment";
 import { BreweryReviewsType } from "@/types/breweries";
 import profile from "@/public/images/profile.jpg";
+import AddReportDialog from "./ReportReviewDialog";
 
 const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [open, setOpen] = useState(false);
     const displayDate = format(review.createdAt, "dd MMM yyyy");
+
+    const openDialog = () => {
+        console.log("here");
+        setOpen(true);
+    };
 
     return (
         <Card className="relative p-2 md:p-6">
+            <AddReportDialog
+                open={open}
+                setOpen={setOpen}
+                id={review.id}
+                type="BREWERYREVIEW"
+            />
             <div
                 className={`flex flex-col content-start items-start space-y-5 p-2 md:flex-row md:space-y-0 ${isExpanded ? "h-full" : "h-52 md:h-20"}`}
             >
@@ -54,8 +65,8 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                                 </div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="bottom" align="start">
-                                <DropdownMenuItem>
-                                    <div>Report</div>
+                                <DropdownMenuItem onClick={openDialog}>
+                                    Report
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -76,8 +87,8 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent side="bottom" align="start">
-                            <DropdownMenuItem>
-                                <div>Report</div>
+                            <DropdownMenuItem onClick={openDialog}>
+                                Report
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

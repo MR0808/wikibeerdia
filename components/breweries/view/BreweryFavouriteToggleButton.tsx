@@ -25,7 +25,7 @@ const BreweryFavoriteToggleButton = async ({
     if (!user) {
         return (
             <AlertDialog>
-                <AlertDialogTrigger>
+                <AlertDialogTrigger asChild>
                     <div className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:bg-primary hover:text-white">
                         <Heart />
                     </div>
