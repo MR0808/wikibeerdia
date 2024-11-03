@@ -12,14 +12,14 @@ import {
 } from "@/components/ui/select";
 import ReviewSkeleton from "@/components/reviews/ReviewSkeleton";
 import { Button } from "@/components/ui/button";
-import { BreweryReviewsType } from "@/types/breweries";
+import { ReviewsType } from "@/types/breweries";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import { getBreweryReviews } from "@/actions/breweries";
 import AddReviewDialog from "@/components/reviews/AddReviewDialog";
 import Link from "next/link";
 
 interface BreweryReviewsProps {
-    initialReviews: BreweryReviewsType[];
+    initialReviews: ReviewsType[];
     breweryId: string;
     totalReviews: number;
     reviewDoesNotExist: boolean | undefined;
@@ -35,8 +35,7 @@ const BreweryReviews = ({
 }: BreweryReviewsProps) => {
     const maxReviews = 5;
     const [openAddReview, setOpenAddReview] = useState(false);
-    const [reviews, setReviews] =
-        useState<BreweryReviewsType[]>(initialReviews);
+    const [reviews, setReviews] = useState<ReviewsType[]>(initialReviews);
     const [isPending, setIsPending] = useState(false);
 
     const updateReviews = async (value: string) => {
@@ -46,7 +45,7 @@ const BreweryReviews = ({
         setIsPending(false);
     };
 
-    const refreshReviewsOnSubmit = async (review: BreweryReviewsType) => {
+    const refreshReviewsOnSubmit = async (review: ReviewsType) => {
         setIsPending(true);
         const copyReviews = [...reviews];
         if (copyReviews.length === 5) copyReviews.pop();
@@ -130,6 +129,7 @@ const BreweryReviews = ({
                                             <ReviewCard
                                                 key={review.id}
                                                 review={review}
+                                                type="BREWERYREVIEW"
                                             />
                                         );
                                     })}

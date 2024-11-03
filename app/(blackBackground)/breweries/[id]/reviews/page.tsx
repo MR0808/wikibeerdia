@@ -19,6 +19,7 @@ import { Params } from "@/utils/types";
 import getRatings from "@/lib/ratings";
 import BreweryReviews from "@/components/breweries/reviews/BreweryReviews";
 import BreweryReviewsHeading from "@/components/breweries/reviews/BreweryReviewsHeading";
+import BreweryReviewsSkeleton from "@/components/breweries/reviews/BreweryReviewsSkeleton";
 
 const BreweryReviewsPage = async (props: { params: Params }) => {
     const params = await props.params;
@@ -69,7 +70,7 @@ const BreweryReviewsPage = async (props: { params: Params }) => {
                 </BreadcrumbList>
             </Breadcrumb>
             <div className="mt-10 flex flex-col justify-between sm:justify-between sm:space-x-0">
-                <Suspense fallback={<div>Loading</div>}>
+                <Suspense fallback={<BreweryReviewsSkeleton />}>
                     <div
                         className="mt-12 flex flex-row md:mt-16 md:space-x-3"
                         id="reviews"

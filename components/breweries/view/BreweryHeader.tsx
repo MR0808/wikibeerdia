@@ -16,6 +16,7 @@ import BreweryShare from "./BreweryShare";
 import BreweryRating from "./BreweryRating";
 import BreweryCopyURL from "./BreweryCopyURL";
 import BreweryAdminMenu from "./BreweryAdminMenu";
+import BreweryReport from "./BreweryReport";
 
 const BreweryHeader = ({
     data,
@@ -45,6 +46,7 @@ const BreweryHeader = ({
                         rating={rating}
                         totalReviews={totalReviews}
                     />
+                    <BreweryReport breweryId={data.id} />
                     <div className="mt-20 hidden flex-wrap text-wrap md:mt-10 md:flex">
                         {data.status !== "APPROVED" && (
                             <Badge className="mr-4">{data.status}</Badge>

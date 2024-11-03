@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { Ellipsis } from "lucide-react";
+import { ReportTypes } from "@prisma/client";
 
 import {
     DropdownMenu,
@@ -15,19 +16,20 @@ import {
 import { Card } from "@/components/ui/card";
 import Rating from "@/components/reviews/Rating";
 import Comment from "@/components/reviews/Comment";
-import { BreweryReviewsType } from "@/types/breweries";
+import { ReviewsType } from "@/types/breweries";
 import profile from "@/public/images/profile.jpg";
-import AddReportDialog from "./ReportReviewDialog";
+import AddReportDialog from "@/components/reports/ReportDialog";
 
-const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
+const ReviewCard = ({
+    review,
+    type
+}: {
+    review: ReviewsType;
+    type: ReportTypes;
+}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [open, setOpen] = useState(false);
     const displayDate = format(review.createdAt, "dd MMM yyyy");
-
-    const openDialog = () => {
-        console.log("here");
-        setOpen(true);
-    };
 
     return (
         <Card className="relative p-2 md:p-6">
@@ -35,7 +37,7 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                 open={open}
                 setOpen={setOpen}
                 id={review.id}
-                type="BREWERYREVIEW"
+                type={type}
             />
             <div
                 className={`flex flex-col content-start items-start space-y-5 p-2 md:flex-row md:space-y-0 ${isExpanded ? "h-full" : "h-52 md:h-20"}`}
@@ -65,7 +67,7 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                                 </div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="bottom" align="start">
-                                <DropdownMenuItem onClick={openDialog}>
+                                <DropdownMenuItem onClick={() => setOpen(true)}>
                                     Report
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -87,7 +89,7 @@ const ReviewCard = ({ review }: { review: BreweryReviewsType }) => {
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent side="bottom" align="start">
-                            <DropdownMenuItem onClick={openDialog}>
+                            <DropdownMenuItem onClick={() => setOpen(true)}>
                                 Report
                             </DropdownMenuItem>
                         </DropdownMenuContent>

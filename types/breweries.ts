@@ -46,7 +46,7 @@ export interface BreweryType {
     };
 }
 
-export interface BreweryReviewsType {
+export interface ReviewsType {
     id: string;
     rating: number;
     comment: string | null;
