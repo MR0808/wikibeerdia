@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
-import { BreweryReviewsType } from "@/types/breweries";
+import { ReviewsType } from "@/types/breweries";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import { getBreweryReviews } from "@/actions/breweries";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ import AddReviewDialog from "@/components/reviews/AddReviewDialog";
 import ReviewSkeleton from "@/components/reviews/ReviewSkeleton";
 
 interface BreweryReviewsProps {
-    initialReviews: BreweryReviewsType[];
+    initialReviews: ReviewsType[];
     breweryId: string;
     totalReviews: number;
     reviewDoesNotExist: boolean | undefined;
@@ -40,8 +40,7 @@ const BreweryReviews = ({
     const maxReviews = 20;
     const [openAddReview, setOpenAddReview] = useState(false);
     const [order, setOrder] = useState("recent");
-    const [reviews, setReviews] =
-        useState<BreweryReviewsType[]>(initialReviews);
+    const [reviews, setReviews] = useState<ReviewsType[]>(initialReviews);
     const [isPending, setIsPending] = useState(false);
     const [offset, setOffset] = useState(NUMBER_OF_REVIEWS_TO_FETCH);
     const [isPendingReviews, startTransition] = useTransition();
@@ -74,7 +73,7 @@ const BreweryReviews = ({
         });
     };
 
-    const refreshReviewsOnSubmit = async (review: BreweryReviewsType) => {
+    const refreshReviewsOnSubmit = async (review: ReviewsType) => {
         setIsPending(true);
         const copyReviews = [...reviews];
         setReviews([review, ...copyReviews]);
@@ -153,6 +152,7 @@ const BreweryReviews = ({
                                     <ReviewCard
                                         key={review.id}
                                         review={review}
+                                        type="BREWERYREVIEW"
                                     />
                                 );
                             })}
