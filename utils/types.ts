@@ -1,10 +1,7 @@
-import * as z from "zod";
 import { ExtendedUser } from "@/next-auth";
 import { Country, Gender, State, Status } from "@prisma/client";
 import type { Session } from "next-auth";
 import { Dispatch, SetStateAction } from "react";
-
-import { typesSearchParamsSchema, SearchParamsSchema } from "@/schemas/admin";
 
 export type NavLink = {
     href: string;
@@ -91,10 +88,6 @@ export type Params = Promise<{ id: string }>;
 export type SearchParams = Promise<{
     [key: string]: string | string[] | undefined;
 }>;
-
-export type GetTypesSchema = z.infer<typeof typesSearchParamsSchema>;
-
-export type GetSearchSchema = z.infer<typeof SearchParamsSchema>;
 
 export interface Option {
     label: string;

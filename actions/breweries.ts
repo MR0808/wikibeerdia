@@ -1,16 +1,25 @@
 "use server";
 
 import * as z from "zod";
-import { Brewery, Status, BreweryReview } from "@prisma/client";
+import {
+    Brewery,
+    type Brewery as BreweryType,
+    Status,
+    BreweryReview
+} from "@prisma/client";
 import { redirect } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 import { revalidatePath } from "next/cache";
+import { format } from "date-fns";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
 import { BrewerySchemaCreate } from "@/schemas/brewery";
+import { GetBreweriesSchema } from "@/types/admin";
 import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
+import { filterColumn } from "@/lib/filterColumn";
 
 export const getBreweries = async () => {
     const data = await db.brewery.findMany({
@@ -21,6 +30,101 @@ export const getBreweries = async () => {
         orderBy: { name: "asc" }
     });
     return { data };
+};
+
+export const getBreweriesSearch = async (input: GetBreweriesSchema) => {
+    noStore();
+    const { page, per_page, sort, name, status, operator, from, to } = input;
+
+    try {
+        const offset = (page - 1) * per_page;
+        const [column, order] = (sort?.split(".").filter(Boolean) ?? [
+            "name",
+            "asc"
+        ]) as [keyof Brewery | undefined, "asc" | "desc" | undefined];
+
+        const fromDay = from ? format(new Date(from), "yyyy-MM-dd") : undefined;
+        const toDay = to ? format(new Date(to), "yyyy-MM-dd") : undefined;
+
+        let whereFilter = [];
+
+        name &&
+            whereFilter.push(
+                filterColumn({
+                    column: "name",
+                    value: name
+                })
+            );
+
+        status &&
+            whereFilter.push(
+                filterColumn({
+                    column: "status",
+                    value: status,
+                    isSelectable: true
+                })
+            );
+
+        fromDay && whereFilter.push({ createdAt: { gte: fromDay } });
+
+        toDay && whereFilter.push({ createdAt: { lte: toDay } });
+
+        let usedFilter;
+
+        !operator || operator === "and"
+            ? (usedFilter = { AND: [...whereFilter] })
+            : (usedFilter = { OR: [...whereFilter] });
+
+        const orderBy = [{ [`${column}`]: `${order}` }];
+
+        const data = await db.brewery.findMany({
+            where: usedFilter,
+            skip: offset,
+            take: per_page,
+            orderBy
+        });
+
+        const total = await db.brewery.count({ where: usedFilter });
+
+        const pageCount = Math.ceil(total / per_page);
+        console.log("pagecount", pageCount);
+        return { data, pageCount };
+    } catch (err) {
+        return { data: [], pageCount: 0 };
+    }
+};
+
+export const updateBreweryStatusAdmin = async (input: {
+    ids: string[];
+    status?: BreweryType["status"];
+}) => {
+    noStore();
+    const user = await checkAuth(true);
+
+    if (!user)
+        return {
+            data: null,
+            error: getErrorMessage("Unauthorized")
+        };
+
+    try {
+        await db.brewery.updateMany({
+            where: { id: { in: input.ids } },
+            data: { status: input.status }
+        });
+
+        revalidatePath("/admin/breweries");
+
+        return {
+            data: null,
+            error: null
+        };
+    } catch (err) {
+        return {
+            data: null,
+            error: getErrorMessage(err)
+        };
+    }
 };
 
 export const createBrewery = async (

@@ -1,18 +1,20 @@
 import Link from "next/link";
-import { Factory, Beer } from "lucide-react";
+import { Factory, Beer, Hop } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import {
     Card,
     CardDescription,
     CardHeader,
-    CardTitle,
+    CardTitle
 } from "@/components/ui/card";
 import { checkAuthenticated } from "@/lib/auth";
 
 const AdminPage = async () => {
-    const user = await checkAuthenticated(true)
-    if (!user) { redirect("/login");}
+    const user = await checkAuthenticated(true);
+    if (!user) {
+        redirect("/login");
+    }
 
     return (
         <div className="container mt-36 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0 md:space-x-4">
@@ -27,7 +29,7 @@ const AdminPage = async () => {
                         <Card className="w-[350px] shadow-md hover:shadow-lg">
                             <CardHeader>
                                 <CardTitle className="mb-4">
-                                    <Factory className="size-7" />
+                                    <Hop className="size-7" />
                                 </CardTitle>
                                 <CardDescription className="text-base font-medium text-black">
                                     Brewery Types
@@ -43,6 +45,18 @@ const AdminPage = async () => {
                                 </CardTitle>
                                 <CardDescription className="text-base font-medium text-black">
                                     Beer Styles
+                                </CardDescription>
+                            </CardHeader>
+                        </Card>
+                    </Link>
+                    <Link href="/admin/breweries">
+                        <Card className="w-[350px] shadow-md hover:shadow-lg">
+                            <CardHeader>
+                                <CardTitle className="mb-4">
+                                    <Factory className="size-7" />
+                                </CardTitle>
+                                <CardDescription className="text-base font-medium text-black">
+                                    Breweries
                                 </CardDescription>
                             </CardHeader>
                         </Card>

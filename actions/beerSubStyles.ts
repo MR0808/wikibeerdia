@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import db from "@/lib/db";
 import { checkAuth } from "@/lib/auth";
 import { BeerStyleSchema } from "@/schemas/admin";
-import { GetSearchSchema } from "@/utils/types";
+import { GetSearchSchema } from "@/types/admin";
 import { filterColumn } from "@/lib/filterColumn";
 import { getErrorMessage } from "@/lib/handleError";
 

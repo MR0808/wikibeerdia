@@ -7,10 +7,9 @@ import { BreweryType, type BreweryType as TypeType } from "@prisma/client";
 import { format } from "date-fns";
 
 import db from "@/lib/db";
-import { currentUser } from "@/lib/auth";
 import { checkAuth } from "@/lib/auth";
 import { BreweryTypeSchema } from "@/schemas/admin";
-import { GetTypesSchema } from "@/utils/types";
+import { GetTypesSchema } from "@/types/admin";
 import { filterColumn } from "@/lib/filterColumn";
 import { getErrorMessage } from "@/lib/handleError";
 
