@@ -4,6 +4,7 @@ import { Ellipsis, Watch } from "lucide-react";
 import { useTransition } from "react";
 import { Status } from "@prisma/client";
 import { toast } from "sonner";
+import Link from "next/link";
 
 import {
     DropdownMenu,
@@ -71,6 +72,9 @@ const BreweryAdminMenu = ({ id, status }: { id: string; status: Status }) => {
                         </div>
                     </DropdownMenuItem>
                 )}
+                <DropdownMenuItem>
+                    <Link href={`/breweries/edit/${id}`}>Edit</Link>
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

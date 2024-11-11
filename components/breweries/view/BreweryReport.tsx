@@ -19,7 +19,7 @@ const BreweryReport = ({ breweryId }: { breweryId: string }) => {
                 className="mt-2 flex cursor-pointer items-center gap-1 hover:underline"
                 onClick={() => setOpen(true)}
             >
-                Report
+                Report / Request changes
             </div>
         </>
     );

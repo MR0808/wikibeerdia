@@ -5,19 +5,21 @@ import { useState } from "react";
 import { AddressType } from "@/types/autocomplete";
 import AddressAutoComplete from "./AddressAutoComplete";
 
-const Autocomplete = () => {
-    const [address, setAddress] = useState<AddressType>({
-        address1: "",
-        address2: "",
-        formattedAddress: "",
-        city: "",
-        region: "",
-        postalCode: "",
-        country: "",
-        lat: 0,
-        lng: 0,
-        countryCode: ""
-    });
+const Autocomplete = ({ addressData }: { addressData?: AddressType }) => {
+    const [address, setAddress] = useState<AddressType>(
+        addressData || {
+            address1: "",
+            address2: "",
+            formattedAddress: "",
+            city: "",
+            region: "",
+            postalCode: "",
+            country: "",
+            lat: 0,
+            lng: 0,
+            countryCode: ""
+        }
+    );
     const [searchInput, setSearchInput] = useState("");
     return (
         <AddressAutoComplete

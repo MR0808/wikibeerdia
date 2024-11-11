@@ -1,3 +1,5 @@
+"use client";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -141,7 +143,6 @@ const ReviewForm = ({
     });
 
     const onSubmit = (values: z.infer<typeof ReviewSchema>) => {
-        console.log("here");
         startTransition(async () => {
             const data = await createBreweryReview(values);
 

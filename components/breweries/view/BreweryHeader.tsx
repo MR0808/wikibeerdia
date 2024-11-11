@@ -17,6 +17,7 @@ import BreweryRating from "./BreweryRating";
 import BreweryCopyURL from "./BreweryCopyURL";
 import BreweryAdminMenu from "./BreweryAdminMenu";
 import BreweryReport from "./BreweryReport";
+import BreweryEditLogoDialog from "./BreweryEditLogoDialog";
 
 const BreweryHeader = ({
     data,
@@ -65,6 +66,9 @@ const BreweryHeader = ({
                             width={200}
                             height={200}
                         />
+                        {user && user.role === "ADMIN" && (
+                            <BreweryEditLogoDialog data={data} />
+                        )}
                     </div>
                 </div>
             </div>

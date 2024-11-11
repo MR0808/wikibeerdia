@@ -14,11 +14,12 @@ import { format } from "date-fns";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
-import { BrewerySchemaCreate } from "@/schemas/brewery";
+import { BrewerySchemaCreate, BreweryEditSchema } from "@/schemas/brewery";
 import { GetBreweriesSchema } from "@/types/admin";
 import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
+import { deleteImage } from "@/utils/supabase";
 import { filterColumn } from "@/lib/filterColumn";
 
 export const getBreweries = async () => {
@@ -218,6 +219,130 @@ export const createBrewery = async (
     }
 
     redirect(`/breweries/${data.id}`);
+};
+
+export const updateBrewery = async (
+    values: z.infer<typeof BreweryEditSchema>,
+    id: string
+) => {
+    let data: Brewery;
+    try {
+        const user = await checkAuth();
+
+        if (!user)
+            return {
+                data: null,
+                error: getErrorMessage("Unauthorized")
+            };
+
+        const validatedFields = BreweryEditSchema.safeParse(values);
+
+        if (!validatedFields.success) {
+            return {
+                data: null,
+                error: getErrorMessage("Invalid fields!")
+            };
+        }
+
+        const {
+            name,
+            address1,
+            address2,
+            formattedAddress,
+            city,
+            region,
+            postalCode,
+            countryCode,
+            description,
+            headline,
+            breweryType,
+            website
+        } = validatedFields.data;
+
+        const countryId = await db.country.findFirst({
+            where: { isoCode: countryCode }
+        });
+
+        if (!countryId) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+
+        data = await db.brewery.update({
+            where: { id },
+            data: {
+                name,
+                address1,
+                address2,
+                formattedAddress,
+                city,
+                region,
+                postalCode,
+                countryId: countryId.id,
+                description,
+                headline,
+                breweryTypeId: breweryType,
+                website: website || ""
+            }
+        });
+        if (!data) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+    } catch (error) {
+        const err = renderError(error);
+        return { data: null, error: err.message };
+    }
+
+    redirect(`/breweries/${data.id}`);
+};
+
+export const updateBreweryLogo = async (
+    logoUrl: string,
+    id: string,
+    oldUrl: string
+) => {
+    try {
+        const user = await checkAuth();
+
+        if (!user)
+            return {
+                result: false,
+                message: "Unauthorized"
+            };
+
+        const data = await db.brewery.update({
+            where: { id },
+            data: {
+                logoUrl
+            }
+        });
+
+        if (!data) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+        const oldLogo = await deleteImage(oldUrl, "logos-bucket");
+        if (oldLogo.error) {
+            return {
+                data: null,
+                error: oldLogo.error.message
+            };
+        }
+
+        revalidatePath(`/breweries/${id}`);
+
+        return { data, error: null };
+    } catch (error) {
+        const err = renderError(error);
+        return { data: null, error: err.message };
+    }
 };
 
 export const createBreweryImages = async (images: ImagesUpload[]) => {

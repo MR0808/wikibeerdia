@@ -54,9 +54,7 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
         <>
             <Carousel
                 opts={{ loop: true }}
-                className={cn(
-                    "mt-12 flex flex-col md:mt-24 md:flex-row md:space-x-3"
-                )}
+                className={cn("mt-12 flex flex-col md:flex-row md:space-x-3")}
                 setApi={setApi}
             >
                 <div className="h-56 w-full rounded-lg bg-white p-5 shadow-lg md:h-[664px] md:w-5/6 md:p-8">
