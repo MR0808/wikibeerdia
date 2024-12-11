@@ -10,38 +10,28 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { currentUser } from "@/lib/auth";
-import {
-    getBrewery,
-    getBreweryBeers,
-    getBreweryReviews,
-    findExistingReview
-} from "@/actions/breweries";
-import BreweryHeader from "@/components/breweries/view/BreweryHeader";
-import BreweryImages from "@/components/breweries/view/BreweryImages";
-import BreweryMain from "@/components/breweries/view/BreweryMain";
-import BreweryBeers from "@/components/breweries/view/BreweryBeers";
-import BreweryReviews from "@/components/breweries/view/BreweryReviews";
+
 import { Params } from "@/utils/types";
 import getRatings from "@/lib/ratings";
-import BrewerySkeleton from "@/components/breweries/view/BrewerySkeleton";
+import { getBeer, getBeerReviews, findExistingReview } from "@/actions/beers";
+import BeerSkeleton from "@/components/beers/view/BeerSkeleton";
+import BeerHeader from "@/components/beers/view/BeerHeader";
 
-const BreweryDetailsPage = async (props: { params: Params }) => {
+const BeerDetailsPage = async (props: { params: Params }) => {
     const params = await props.params;
-    const { data } = await getBrewery(params.id);
-    if (!data) redirect("/breweries/");
+    const { data } = await getBeer(params.id);
+    if (!data) redirect("/beers/");
 
     const user = await currentUser();
     if (
         data.status !== "APPROVED" &&
         (data.userId !== user?.id || user.role !== "ADMIN")
     )
-        redirect("/breweries/");
+        redirect("/beers/");
 
-    const INITIAL_NUMBER_OF_BEERS = 8;
-    const beers = await getBreweryBeers(params.id, 0, INITIAL_NUMBER_OF_BEERS);
-    const reviews = await getBreweryReviews(params.id, 0, 5);
+    const reviews = await getBeerReviews(params.id, 0, 5);
 
-    const ratings = data.breweryReviews.map((review) => {
+    const ratings = data.beerReviews.map((review) => {
         return review.rating;
     });
 
@@ -60,8 +50,17 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                        <BreadcrumbLink className="text-base" href="/breweries">
+                        <BreadcrumbLink className="text-base" href="/beers">
                             Breweries
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="text-base" />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink
+                            className="text-base"
+                            href={`/breweries/${data.breweryId}`}
+                        >
+                            {data.brewery.name}
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="text-base" />
@@ -73,27 +72,12 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
                 </BreadcrumbList>
             </Breadcrumb>
             <div className="mt-10 flex flex-col justify-between sm:justify-between sm:space-x-0">
-                <Suspense fallback={<BrewerySkeleton />}>
-                    <BreweryHeader
+                <Suspense fallback={<BeerSkeleton />}>
+                    <BeerHeader
                         data={data}
                         user={user}
                         rating={rating}
                         totalReviews={ratings.length}
-                    />
-                    <BreweryImages data={data} />
-                    <BreweryMain data={data} />
-                    <BreweryBeers
-                        initialBeers={beers}
-                        breweryId={params.id}
-                        user={user}
-                        totalBeers={data._count.beers}
-                    />
-                    <BreweryReviews
-                        initialReviews={reviews}
-                        breweryId={params.id}
-                        totalReviews={ratings.length}
-                        reviewDoesNotExist={reviewDoesNotExist}
-                        ratingValues={ratingValues}
                     />
                 </Suspense>
             </div>
@@ -101,4 +85,4 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
     );
 };
 
-export default BreweryDetailsPage;
+export default BeerDetailsPage;
