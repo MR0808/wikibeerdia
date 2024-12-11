@@ -79,6 +79,7 @@ const BeerDetailsPage = async (props: { params: Params }) => {
                         rating={rating}
                         totalReviews={ratings.length}
                     />
+                    <div className="h-24">lots</div>
                 </Suspense>
             </div>
         </div>

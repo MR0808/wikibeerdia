@@ -4,7 +4,7 @@ import * as z from "zod";
 import { AuthError } from "next-auth";
 import * as OTPAuth from "otpauth";
 import { compare } from "bcrypt-ts";
-import { isRedirectError } from "next/dist/client/components/redirect";
+// import { getRedirectError } from "next/dist/client/components/redirect";
 
 import db from "@/lib/db";
 import { signIn } from "@/auth";
@@ -128,9 +128,9 @@ export const login = async (
             redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT
         });
     } catch (error) {
-        if (isRedirectError(error)) {
-            throw error;
-        }
+        // if (getRedirectError(error)) {
+        //     throw error;
+        // }
 
         if (error instanceof AuthError) {
             switch (error.type) {
