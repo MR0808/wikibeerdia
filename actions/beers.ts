@@ -246,72 +246,72 @@ export const findExistingReview = async (userId: string, beerId: string) => {
     });
 };
 
-// export const createBreweryReview = async (
-//     values: z.infer<typeof ReviewSchema>
-// ) => {
-//     let data: BreweryReview;
-//     try {
-//         const user = await checkAuth();
+export const createBeerReview = async (
+    values: z.infer<typeof ReviewSchema>
+) => {
+    let data: BeerReview;
+    try {
+        const user = await checkAuth();
 
-//         if (!user)
-//             return {
-//                 data: null,
-//                 error: getErrorMessage("Unauthorized")
-//             };
+        if (!user)
+            return {
+                data: null,
+                error: getErrorMessage("Unauthorized")
+            };
 
-//         const validatedFields = ReviewSchemaCreate.safeParse(values);
+        const validatedFields = ReviewSchemaCreate.safeParse(values);
 
-//         if (!validatedFields.success) {
-//             return {
-//                 data: null,
-//                 error: getErrorMessage("Invalid fields!")
-//             };
-//         }
+        if (!validatedFields.success) {
+            return {
+                data: null,
+                error: getErrorMessage("Invalid fields!")
+            };
+        }
 
-//         const { rating, comment, id } = validatedFields.data;
+        const { rating, comment, id } = validatedFields.data;
 
-//         data = await db.breweryReview.create({
-//             data: {
-//                 rating,
-//                 comment,
-//                 breweryId: id,
-//                 userId: user.id,
-//                 status: "APPROVED"
-//             }
-//         });
+        data = await db.beerReview.create({
+            data: {
+                rating,
+                comment,
+                beerId: id,
+                userId: user.id,
+                status: "APPROVED"
+            }
+        });
 
-//         if (!data) {
-//             return {
-//                 data: null,
-//                 error: getErrorMessage("Error with fields")
-//             };
-//         }
+        if (!data) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
 
-//         const returnData = {
-//             id: data.id,
-//             rating: data.rating,
-//             comment: data.comment,
-//             createdAt: data.createdAt,
-//             user: {
-//                 id: user.id,
-//                 displayName: user.displayName,
-//                 image: user.image
-//             }
-//         };
+        const returnData = {
+            id: data.id,
+            rating: data.rating,
+            comment: data.comment,
+            createdAt: data.createdAt,
+            user: {
+                id: user.id,
+                displayName: user.displayName,
+                image: user.image
+            }
+        };
 
-//         revalidatePath(`/breweries/${id}`);
+        revalidatePath(`/beers/${id}`);
 
-//         return {
-//             data: returnData,
-//             error: null
-//         };
-//     } catch (error) {
-//         return {
-//             data: null,
-//             error: getErrorMessage(error)
-//         };
-//     }
-// };
+        return {
+            data: returnData,
+            error: null
+        };
+    } catch (error) {
+        return {
+            data: null,
+            error: getErrorMessage(error)
+        };
+    }
+};
 
 export const getBeerReviews = async (
     beerId: string,
@@ -359,65 +359,61 @@ export const getBeerReviews = async (
     return data;
 };
 
-// export const totalNumberOfReviews = async (breweryId: string) => {
-//     const data = db.breweryReview.count({
-//         where: { breweryId, status: "APPROVED" }
-//     });
-//     return data;
-// };
+export const totalNumberOfReviews = async (beerId: string) => {
+    const data = db.beerReview.count({
+        where: { beerId, status: "APPROVED" }
+    });
+    return data;
+};
 
-// export const fetchBreweryFavoriteId = async ({
-//     breweryId
-// }: {
-//     breweryId: string;
-// }) => {
-//     const user = await checkAuth();
+export const fetchBeerFavoriteId = async ({ beerId }: { beerId: string }) => {
+    const user = await checkAuth();
 
-//     if (!user) return null;
+    if (!user) return null;
 
-//     const breweryFavorite = await db.breweryFavorite.findFirst({
-//         where: {
-//             breweryId,
-//             userId: user.id
-//         },
-//         select: {
-//             id: true
-//         }
-//     });
-//     return breweryFavorite?.id || null;
-// };
+    const beerFavorite = await db.beerFavorite.findFirst({
+        where: {
+            beerId,
+            userId: user.id
+        },
+        select: {
+            id: true
+        }
+    });
+    return beerFavorite?.id || null;
+};
 
-// export const toggleBreweryFavoriteAction = async (
-//     breweryId: string,
-//     breweryFavoriteId: string | null,
-//     pathname: string
-// ) => {
-//     const user = await currentUser();
+export const toggleBeerFavoriteAction = async (
+    beerId: string,
+    beerFavoriteId: string | null,
+    pathname: string
+) => {
+    const user = await currentUser();
 
-//     try {
-//         if (breweryFavoriteId) {
-//             await db.breweryFavorite.delete({
-//                 where: {
-//                     id: breweryFavoriteId
-//                 }
-//             });
-//         } else {
-//             await db.breweryFavorite.create({
-//                 data: {
-//                     breweryId,
-//                     userId: user?.id!
-//                 }
-//             });
-//         }
-//         revalidatePath(pathname);
-//         return {
-//             result: breweryFavoriteId ? false : true,
-//             message: breweryFavoriteId ? "Removed from Faves" : "Added to Faves"
-//         };
-//     } catch (error) {
-//         return renderError(error);
-//     }
-// };
+    try {
+        if (beerFavoriteId) {
+            await db.beerFavorite.delete({
+                where: {
+                    id: beerFavoriteId
+                }
+            });
+        } else {
+            await db.beerFavorite.create({
+                data: {
+                    beerId,
+                    userId: user?.id!
+                }
+            });
+        }
+        revalidatePath(pathname);
+        return {
+            result: beerFavoriteId ? false : true,
+            message: beerFavoriteId ? "Removed from Faves" : "Added to Faves"
+        };
+    } catch (error) {
+        return renderError(error);
+    }
+};
 
 // export const updateBreweryStatus = async (id: string, status: Status) => {
 //     const user = await checkAuth(true);

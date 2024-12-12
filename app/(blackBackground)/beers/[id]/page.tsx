@@ -16,6 +16,7 @@ import getRatings from "@/lib/ratings";
 import { getBeer, getBeerReviews, findExistingReview } from "@/actions/beers";
 import BeerSkeleton from "@/components/beers/view/BeerSkeleton";
 import BeerHeader from "@/components/beers/view/BeerHeader";
+import BeerReviews from "@/components/beers/view/BeerReviews";
 
 const BeerDetailsPage = async (props: { params: Params }) => {
     const params = await props.params;
@@ -45,6 +46,8 @@ const BeerDetailsPage = async (props: { params: Params }) => {
     const reviewDoesNotExist =
         user && !(await findExistingReview(user.id, params.id));
 
+    console.log(reviewDoesNotExist);
+
     return (
         <div className="container mt-32 flex h-16 flex-col justify-between px-4 sm:justify-between sm:space-x-0 md:px-28">
             <Breadcrumb>
@@ -71,7 +74,7 @@ const BeerDetailsPage = async (props: { params: Params }) => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mt-10 flex flex-col justify-between sm:justify-between sm:space-x-0">
+            <div className="mt-10 flex flex-col justify-between space-y-10 sm:justify-between sm:space-x-0">
                 <Suspense fallback={<BeerSkeleton />}>
                     <BeerHeader
                         data={data}
@@ -79,7 +82,19 @@ const BeerDetailsPage = async (props: { params: Params }) => {
                         rating={rating}
                         totalReviews={ratings.length}
                     />
-                    <div className="h-24">lots</div>
+                    <div className="h-auto w-full rounded-lg bg-white p-5 shadow-lg md:p-14">
+                        <h4 className="mb-5 text-4xl">{`"${data.headline}"`}</h4>
+                        <p className="whitespace-pre-wrap text-lg leading-8">
+                            {data.description}
+                        </p>
+                    </div>
+                    <BeerReviews
+                        initialReviews={reviews}
+                        beerId={params.id}
+                        totalReviews={ratings.length}
+                        reviewDoesNotExist={reviewDoesNotExist}
+                        ratingValues={ratingValues}
+                    />
                 </Suspense>
             </div>
         </div>

@@ -9,16 +9,16 @@ import {
     XIcon
 } from "react-share";
 
-import { BreweryType } from "@/types/breweries";
+import { BeerType } from "@/types/beers";
 
-const BreweryShare = ({ data }: { data: BreweryType }) => {
+const BeerShare = ({ data }: { data: BeerType }) => {
     return (
         <>
             <li>
                 <EmailShareButton
                     url={`${process.env.NEXT_PUBLIC_APP_URL}/breweries/${data.id}`}
-                    subject={`Check out this awesome brewery I found on Wikibeerdia - ${data.name}`}
-                    body={`I found this cool brewery on Wikibeerdia.com, it's call ${data.name}. Check it out at the link below`}
+                    subject={`Check out this awesome beer I found on Wikibeerdia - ${data.name}`}
+                    body={`I found this cool beer on Wikibeerdia.com, it's call ${data.name}. Check it out at the link below`}
                 >
                     <EmailIcon size={48} round={true} />
                 </EmailShareButton>
@@ -55,4 +55,4 @@ const BreweryShare = ({ data }: { data: BreweryType }) => {
         </>
     );
 };
-export default BreweryShare;
+export default BeerShare;

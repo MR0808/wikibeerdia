@@ -46,7 +46,8 @@ import { AddFormTextArea } from "@/components/form/FormInput";
 import FormError from "@/components/form/FormError";
 import { ReviewSchema } from "@/schemas/reviews";
 import { createBreweryReview } from "@/actions/breweries";
-import { ReviewsType } from "@/types/breweries";
+import { createBeerReview } from "@/actions/beers";
+import { ReviewsType } from "@/types/reviews";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 
@@ -144,7 +145,18 @@ const ReviewForm = ({
 
     const onSubmit = (values: z.infer<typeof ReviewSchema>) => {
         startTransition(async () => {
-            const data = await createBreweryReview(values);
+            let data;
+            switch (type) {
+                case "brewery":
+                    data = await createBreweryReview(values);
+                    break;
+                case "beer":
+                    data = await createBeerReview(values);
+                    break;
+                default:
+                    data = await createBeerReview(values);
+                    break;
+            }
 
             if (data?.error) {
                 setError(data.error);

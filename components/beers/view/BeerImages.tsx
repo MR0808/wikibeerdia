@@ -54,7 +54,9 @@ const BeerImages = ({ data }: { data: BeerType }) => {
         <>
             <Carousel
                 opts={{ loop: true }}
-                className={cn("flex flex-col md:space-x-3")}
+                className={cn(
+                    "flex h-full flex-col justify-between md:space-x-3"
+                )}
                 setApi={setApi}
             >
                 <div className="relative z-[1] overflow-hidden rounded-3xl">

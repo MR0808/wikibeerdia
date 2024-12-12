@@ -14,25 +14,25 @@ import ReviewSkeleton from "@/components/reviews/ReviewSkeleton";
 import { Button } from "@/components/ui/button";
 import { ReviewsType } from "@/types/reviews";
 import ReviewCard from "@/components/reviews/ReviewCard";
-import { getBreweryReviews } from "@/actions/breweries";
+import { getBeerReviews } from "@/actions/beers";
 import AddReviewDialog from "@/components/reviews/AddReviewDialog";
 import Link from "next/link";
 
-interface BreweryReviewsProps {
+interface BeerReviewsProps {
     initialReviews: ReviewsType[];
-    breweryId: string;
+    beerId: string;
     totalReviews: number;
     reviewDoesNotExist: boolean | undefined;
     ratingValues: Object;
 }
 
-const BreweryReviews = ({
+const BeerReviews = ({
     initialReviews,
-    breweryId,
+    beerId,
     totalReviews,
     reviewDoesNotExist,
     ratingValues
-}: BreweryReviewsProps) => {
+}: BeerReviewsProps) => {
     const maxReviews = 5;
     const [openAddReview, setOpenAddReview] = useState(false);
     const [reviews, setReviews] = useState<ReviewsType[]>(initialReviews);
@@ -40,7 +40,7 @@ const BreweryReviews = ({
 
     const updateReviews = async (value: string) => {
         setIsPending(true);
-        const data = await getBreweryReviews(breweryId, 0, 5, value);
+        const data = await getBeerReviews(beerId, 0, 5, value);
         setReviews([...data]);
         setIsPending(false);
     };
@@ -101,11 +101,11 @@ const BreweryReviews = ({
                                     borderColor: "#f97316"
                                 }}
                             />
-                            {!reviewDoesNotExist && (
+                            {reviewDoesNotExist && (
                                 <div className="mt-4">
                                     <AddReviewDialog
-                                        type="brewery"
-                                        id={breweryId}
+                                        type="beer"
+                                        id={beerId}
                                         refreshReviewsOnSubmit={
                                             refreshReviewsOnSubmit
                                         }
@@ -137,7 +137,7 @@ const BreweryReviews = ({
                                         className={`mx-auto mt-10 flex flex-row items-center justify-center ${maxReviews >= totalReviews && "hidden"}`}
                                     >
                                         <Link
-                                            href={`/breweries/${breweryId}/reviews`}
+                                            href={`/beers/${beerId}/reviews`}
                                             className="hover:underline"
                                         >
                                             Show more reviews
@@ -153,4 +153,4 @@ const BreweryReviews = ({
     );
 };
 
-export default BreweryReviews;
+export default BeerReviews;
