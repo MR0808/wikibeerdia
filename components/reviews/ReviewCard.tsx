@@ -16,7 +16,7 @@ import {
 import { Card } from "@/components/ui/card";
 import Rating from "@/components/reviews/Rating";
 import Comment from "@/components/reviews/Comment";
-import { ReviewsType } from "@/types/breweries";
+import { ReviewsType } from "@/types/reviews";
 import profile from "@/public/images/profile.jpg";
 import AddReportDialog from "@/components/reports/ReportDialog";
 
