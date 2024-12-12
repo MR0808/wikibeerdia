@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
-import { ReviewsType } from "@/types/breweries";
+import { ReviewsType } from "@/types/reviews";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import { getBreweryReviews } from "@/actions/breweries";
 import { cn } from "@/lib/utils";
