@@ -1,20 +1,13 @@
 "use server";
 
 import * as z from "zod";
-import {
-    Beer,
-    type Beer as BeerType,
-    Status,
-    BeerReview
-} from "@prisma/client";
+import { Beer, Status, BeerReview } from "@prisma/client";
 import { redirect } from "next/navigation";
-import { unstable_noStore as noStore } from "next/cache";
 import { revalidatePath } from "next/cache";
-import { format } from "date-fns";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
-import { BeerSchemaCreate } from "@/schemas/beer";
+import { BeerSchemaCreate, BeerEditSchema } from "@/schemas/beer";
 import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
@@ -197,6 +190,73 @@ export const createBeerImages = async (images: ImagesUpload[]) => {
 //     redirect(`/beer/${data.id}`);
 // };
 
+export const updateBeer = async (
+    values: z.infer<typeof BeerEditSchema>,
+    id: string
+) => {
+    let data: Beer;
+    try {
+        const user = await checkAuth();
+
+        if (!user)
+            return {
+                data: null,
+                error: getErrorMessage("Unauthorized")
+            };
+
+        const validatedFields = BeerEditSchema.safeParse(values);
+
+        if (!validatedFields.success) {
+            return {
+                data: null,
+                error: getErrorMessage("Invalid fields!")
+            };
+        }
+
+        const {
+            name,
+            description,
+            headline,
+            abv,
+            ibu,
+            year,
+            available,
+            parentStyle,
+            subStyle,
+            brewery
+        } = validatedFields.data;
+
+        const yearCreated = year ? parseInt(year) : null;
+
+        data = await db.beer.update({
+            where: { id },
+            data: {
+                name,
+                description,
+                headline,
+                abv: String(abv),
+                ibu: String(ibu),
+                yearCreated,
+                available,
+                subStyleId: subStyle,
+                breweryId: brewery
+            }
+        });
+
+        if (!data) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+    } catch (error) {
+        const err = renderError(error);
+        return { data: null, error: err.message };
+    }
+
+    redirect(`/beers/${data.id}`);
+};
+
 export const getBeer = async (id: string) => {
     const data = await db.beer.findUnique({
         where: {
@@ -228,7 +288,14 @@ export const getBeer = async (id: string) => {
                     id: true,
                     name: true,
                     logoUrl: true,
-                    country: { select: { name: true } }
+                    country: { select: { name: true } },
+                    _count: {
+                        select: {
+                            beers: {
+                                where: { status: "APPROVED" }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -415,31 +482,31 @@ export const toggleBeerFavoriteAction = async (
     }
 };
 
-// export const updateBreweryStatus = async (id: string, status: Status) => {
-//     const user = await checkAuth(true);
+export const updateBeerStatus = async (id: string, status: Status) => {
+    const user = await checkAuth(true);
 
-//     if (!user)
-//         return {
-//             data: null,
-//             error: getErrorMessage("Unauthorized")
-//         };
+    if (!user)
+        return {
+            data: null,
+            error: getErrorMessage("Unauthorized")
+        };
 
-//     try {
-//         await db.brewery.update({
-//             where: { id },
-//             data: {
-//                 status
-//             }
-//         });
+    try {
+        await db.beer.update({
+            where: { id },
+            data: {
+                status
+            }
+        });
 
-//         revalidatePath(`/breweries/${id}`);
+        revalidatePath(`/breweries/${id}`);
 
-//         return {
-//             error: null
-//         };
-//     } catch (err) {
-//         return {
-//             error: getErrorMessage(err)
-//         };
-//     }
-// };
+        return {
+            error: null
+        };
+    } catch (err) {
+        return {
+            error: getErrorMessage(err)
+        };
+    }
+};

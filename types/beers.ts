@@ -52,6 +52,9 @@ export interface BeerType {
             name: string;
         };
         logoUrl: string;
+        _count: {
+            beers: number;
+        };
     };
     subStyle: {
         id: string;

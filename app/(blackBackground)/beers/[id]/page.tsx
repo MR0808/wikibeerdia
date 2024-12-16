@@ -10,13 +10,14 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { currentUser } from "@/lib/auth";
-
+import { getBreweryBeers } from "@/actions/breweries";
 import { Params } from "@/utils/types";
 import getRatings from "@/lib/ratings";
 import { getBeer, getBeerReviews, findExistingReview } from "@/actions/beers";
 import BeerSkeleton from "@/components/beers/view/BeerSkeleton";
 import BeerHeader from "@/components/beers/view/BeerHeader";
 import BeerReviews from "@/components/beers/view/BeerReviews";
+import BeerOtherBeers from "@/components/beers/view/BeerOtherBeers";
 
 const BeerDetailsPage = async (props: { params: Params }) => {
     const params = await props.params;
@@ -30,6 +31,12 @@ const BeerDetailsPage = async (props: { params: Params }) => {
     )
         redirect("/beers/");
 
+    const INITIAL_NUMBER_OF_BEERS = 8;
+    const beers = await getBreweryBeers(
+        data.breweryId,
+        0,
+        INITIAL_NUMBER_OF_BEERS
+    );
     const reviews = await getBeerReviews(params.id, 0, 5);
 
     const ratings = data.beerReviews.map((review) => {
@@ -45,8 +52,6 @@ const BeerDetailsPage = async (props: { params: Params }) => {
 
     const reviewDoesNotExist =
         user && !(await findExistingReview(user.id, params.id));
-
-    console.log(reviewDoesNotExist);
 
     return (
         <div className="container mt-32 flex h-16 flex-col justify-between px-4 sm:justify-between sm:space-x-0 md:px-28">
@@ -74,7 +79,7 @@ const BeerDetailsPage = async (props: { params: Params }) => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mt-10 flex flex-col justify-between space-y-10 sm:justify-between sm:space-x-0">
+            <div className="mt-5 flex flex-col justify-between space-y-5 sm:justify-between sm:space-x-0 md:space-y-10">
                 <Suspense fallback={<BeerSkeleton />}>
                     <BeerHeader
                         data={data}
@@ -94,6 +99,12 @@ const BeerDetailsPage = async (props: { params: Params }) => {
                         totalReviews={ratings.length}
                         reviewDoesNotExist={reviewDoesNotExist}
                         ratingValues={ratingValues}
+                    />
+                    <BeerOtherBeers
+                        initialBeers={beers}
+                        breweryId={data.breweryId}
+                        user={user}
+                        totalBeers={data.brewery._count.beers}
                     />
                 </Suspense>
             </div>

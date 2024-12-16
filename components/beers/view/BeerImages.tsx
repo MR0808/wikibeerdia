@@ -90,7 +90,7 @@ const BeerImages = ({ data }: { data: BeerType }) => {
                         <ChevronRightIcon />
                     </Button>
                     <div
-                        className="overflow-hidden md:block"
+                        className="mt-5 overflow-hidden md:block"
                         ref={emblaThumbsRef}
                     >
                         <div className="flex h-min flex-row space-x-2 space-y-0 p-1">
