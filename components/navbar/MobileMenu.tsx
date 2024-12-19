@@ -34,7 +34,7 @@ const MobileMenu = () => {
               <input
                 type="search"
                 placeholder="Search Beers..."
-                className="ml-4 w-full border-none bg-transparent text-[15px] text-foreground focus:border-none focus:outline-none"
+                className="ml-4 w-full border-none bg-transparent text-[15px] text-foreground focus:border-none focus:outline-hidden"
               />
             </div>
           </div>

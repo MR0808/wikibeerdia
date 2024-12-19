@@ -38,7 +38,7 @@
         "@radix-ui/react-toggle-group": "^1.1.1",
         "@radix-ui/react-tooltip": "^1.1.6",
         "@react-hook/window-size": "^3.1.1",
-        "@supabase/supabase-js": "^2.47.8",
+        "@supabase/supabase-js": "^2.47.9",
         "@tanstack/react-query": "^5.62.8",
         "@tanstack/react-query-devtools": "^5.62.8",
         "@tanstack/react-table": "^8.20.6",
@@ -78,11 +78,11 @@
         "unique-username-generator": "^1.4.0",
         "uuid": "^11.0.3",
         "vaul": "^1.1.2",
-        "zod": "^3.24.1",
-        "zod-form-data": "^2.0.2"
+        "zod": "^3.24.1"
     },
     "devDependencies": {
         "@faker-js/faker": "^9.3.0",
+        "@tailwindcss/postcss": "^4.0.0-beta.8",
         "@types/node": "^22.10.2",
         "@types/react": "^19",
         "@types/react-dom": "^19",
@@ -96,7 +96,7 @@
         "prettier-plugin-prisma": "^5.0.0",
         "prettier-plugin-tailwindcss": "^0.6.9",
         "prisma": "^6.1.0",
-        "tailwindcss": "^3.4.17",
+        "tailwindcss": "^4.0.0-beta.8",
         "ts-node": "^10.9.2",
         "typescript": "^5.7.2"
     }

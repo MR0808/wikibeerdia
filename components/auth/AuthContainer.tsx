@@ -33,11 +33,11 @@ const AuthContainer = ({ paragraph }: { paragraph: string }) => {
             //     backgroundImage: 'url(/signup-bg.jpg)'
             // }}
         >
-            <div className="absolute bg-gradient-to-b from-blue-900 to-gray-900 opacity-75 inset-0 z-0" />
+            <div className="absolute bg-linear-to-b from-blue-900 to-gray-900 opacity-75 inset-0 z-0" />
             <div className="absolute triangle min-h-screen right-0 w-15" />
             <Link
                 href="/"
-                className="pt-20 flex absolute top-5 text-center text-gray-100 focus:outline-none"
+                className="pt-20 flex absolute top-5 text-center text-gray-100 focus:outline-hidden"
             >
                 <Image
                     src={logo}

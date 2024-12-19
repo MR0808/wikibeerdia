@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { zfd } from "zod-form-data";
 
 export const BeerSchema = z.object({
     name: z.string().min(1, {
@@ -87,17 +86,4 @@ export const BeerSchemaCreate = z.object({
     images: z
         .array(z.object({ order: z.number(), image: z.string() }))
         .optional()
-});
-
-export const BeerSchemaFormData = zfd.formData({
-    name: zfd.text(),
-    headline: zfd.text(),
-    description: zfd.text(),
-    abv: zfd.text(),
-    ibu: zfd.text(),
-    year: zfd.text(),
-    available: zfd.text(),
-    subStyle: zfd.text(),
-    brewery: zfd.text(),
-    images: zfd.repeatable(z.array(zfd.file()).optional())
 });

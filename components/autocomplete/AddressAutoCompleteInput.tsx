@@ -62,7 +62,7 @@ const AddressAutoCompleteInput = (props: CommonProps) => {
                     onBlur={close}
                     onFocus={open}
                     placeholder={placeholder || "Enter address"}
-                    // className="h-14 w-full rounded-lg p-3 outline-none"
+                    // className="h-14 w-full rounded-lg p-3 outline-hidden"
                     className="block h-14 w-full rounded-lg border-neutral-200 bg-white px-5"
                 />
             </div>

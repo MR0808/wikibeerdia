@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { zfd } from "zod-form-data";
 
 export const BrewerySchema = z.object({
     name: z.string().min(1, {
@@ -62,24 +61,6 @@ export const BrewerySchemaCreate = z.object({
     images: z
         .array(z.object({ order: z.number(), image: z.string() }))
         .optional()
-});
-
-export const BrewerySchemaFormData = zfd.formData({
-    name: zfd.text(),
-    address1: zfd.text(),
-    address2: zfd.text(z.string().optional()),
-    formattedAddress: zfd.text(),
-    city: zfd.text(),
-    region: zfd.text(),
-    postalCode: zfd.text(),
-    country: zfd.text(),
-    countryCode: zfd.text(),
-    description: zfd.text(),
-    headline: zfd.text(),
-    breweryType: zfd.text(),
-    website: zfd.text(z.string().optional()),
-    logoUrl: zfd.repeatable(z.array(zfd.file()).min(1)),
-    images: zfd.repeatable(z.array(zfd.file()).optional())
 });
 
 export const BreweryLogoSchema = z.object({

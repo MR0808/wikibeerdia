@@ -58,7 +58,7 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                 setApi={setApi}
             >
                 <div className="h-56 w-full rounded-lg bg-white p-5 shadow-lg md:h-[664px] md:w-5/6 md:p-8">
-                    <div className="relative z-[1] overflow-hidden rounded-3xl">
+                    <div className="relative z-1 overflow-hidden rounded-3xl">
                         <CarouselContent>
                             {images.map((image, index) => (
                                 <CarouselItem key={index}>
@@ -77,13 +77,13 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                             ))}
                         </CarouselContent>
                         <Button
-                            className="absolute bottom-0 left-7 top-7 z-[1] hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
+                            className="absolute bottom-0 left-7 top-7 z-1 hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
                             onClick={() => api?.scrollPrev()}
                         >
                             <ChevronLeftIcon />
                         </Button>
                         <Button
-                            className="absolute bottom-0 left-28 right-0 top-7 z-[1] hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
+                            className="absolute bottom-0 left-28 right-0 top-7 z-1 hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
                             onClick={() => api?.scrollNext()}
                         >
                             <ChevronRightIcon />

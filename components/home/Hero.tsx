@@ -33,7 +33,7 @@ const Hero = () => {
                                 <div className="sm:flex items-center bg-white rounded-lg overflow-hidden px-2 py-3 justify-between">
                                     <div className="items-center mr-4 md:w-4/12 pb-2 md:pb-0">
                                         <input
-                                            className="text-base text-gray-400 flex-grow px-4 w-full outline-none"
+                                            className="text-base text-gray-400 grow px-4 w-full outline-hidden"
                                             type="text"
                                             placeholder="What beer are you looking for?"
                                         />

@@ -112,84 +112,6 @@ export const createBeerImages = async (images: ImagesUpload[]) => {
     }
 };
 
-// export const createBeer = async (formData: FormData) => {
-//     console.log("here");
-//     let data: Beer;
-//     try {
-//         const user = await checkAuth();
-
-//         if (!user)
-//             return {
-//                 data: null,
-//                 error: getErrorMessage("Unauthorized")
-//             };
-
-//         const form = BeerSchemaFormData.safeParse(formData);
-
-//         if (form.error) {
-//             return {
-//                 data: null,
-//                 error: getErrorMessage("Error with fields")
-//             };
-//         }
-
-//         const {
-//             name,
-//             headline,
-//             description,
-//             abv,
-//             ibu,
-//             year,
-//             available,
-//             subStyle,
-//             brewery,
-//             images
-//         } = BeerSchemaFormData.parse(formData);
-
-//         const availableBool = available?.toLowerCase?.() === "true";
-//         const yearCreated = parseInt(year);
-
-//         data = await db.beer.create({
-//             data: {
-//                 name,
-//                 description,
-//                 headline,
-//                 abv,
-//                 ibu,
-//                 yearCreated,
-//                 subStyleId: subStyle,
-//                 breweryId: brewery,
-//                 available: availableBool,
-//                 userId: user.id
-//             }
-//         });
-//         if (!data) {
-//             return {
-//                 data: null,
-//                 error: getErrorMessage("Error with fields")
-//             };
-//         }
-//         if (images && images?.length > 0) {
-//             let i = 1;
-//             for (const image of images) {
-//                 const url = await uploadImage(image, "images-bucket");
-//                 await db.beerImages.create({
-//                     data: {
-//                         image: url,
-//                         order: i,
-//                         beerId: data.id
-//                     }
-//                 });
-//                 i++;
-//             }
-//         }
-//     } catch (error) {
-//         return renderError(error);
-//     }
-
-//     redirect(`/beer/${data.id}`);
-// };
-
 export const updateBeer = async (
     values: z.infer<typeof BeerEditSchema>,
     id: string
@@ -221,7 +143,6 @@ export const updateBeer = async (
             ibu,
             year,
             available,
-            parentStyle,
             subStyle,
             brewery
         } = validatedFields.data;

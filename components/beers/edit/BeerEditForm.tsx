@@ -80,6 +80,7 @@ const BeerEditForm = ({
     const [openParentStyles, setOpenParentStyles] = useState(false);
     const [openStyles, setOpenStyles] = useState(false);
     const [stylesList, setStylesList] = useState<StylesForm[]>(beerStyles);
+    const [firstLoad, setFirstLoad] = useState(true);
 
     const errorClass = "pl-6";
 
@@ -122,6 +123,7 @@ const BeerEditForm = ({
             ibu: data.ibu ? parseInt(data.ibu) : undefined,
             year: data.yearCreated ? data.yearCreated.toString() : undefined,
             available: data.available,
+            parentStyle: data.subStyle?.style.parentStyle.id,
             subStyle: data.subStyleId || undefined,
             brewery: data.breweryId
         }
@@ -130,11 +132,15 @@ const BeerEditForm = ({
     useEffect(() => {
         const fetchStyles = async () => {
             try {
-                const result = await getBeerStylesForm(
-                    form.getValues("parentStyle")
-                );
-                form.setValue("subStyle", "");
-                setStylesList(result.data);
+                if (!firstLoad) {
+                    const result = await getBeerStylesForm(
+                        form.getValues("parentStyle")
+                    );
+                    form.setValue("subStyle", "");
+                    setStylesList(result.data);
+                } else {
+                    setFirstLoad(false);
+                }
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -176,7 +182,7 @@ const BeerEditForm = ({
                 onSubmit={form.handleSubmit(onSubmit)}
             >
                 <div className="form-card">
-                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                    <h1 className="text-2xl leading-7 font-semibold text-gray-900">
                         Beer Overview
                     </h1>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -190,7 +196,7 @@ const BeerEditForm = ({
                                     >
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Brewery
@@ -284,7 +290,7 @@ const BeerEditForm = ({
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Beer Name
@@ -309,7 +315,7 @@ const BeerEditForm = ({
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Description of beer
@@ -336,7 +342,7 @@ const BeerEditForm = ({
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Beer Headline - a one liner that
@@ -357,7 +363,7 @@ const BeerEditForm = ({
                     </div>
                 </div>
                 <div className="form-card">
-                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                    <h1 className="text-2xl leading-7 font-semibold text-gray-900">
                         Beer Attributes
                     </h1>
                     <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -371,7 +377,7 @@ const BeerEditForm = ({
                                     >
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Primary Style
@@ -470,7 +476,7 @@ const BeerEditForm = ({
                                     >
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Style
@@ -576,7 +582,7 @@ const BeerEditForm = ({
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             IBU
@@ -615,7 +621,7 @@ const BeerEditForm = ({
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             ABV
@@ -657,7 +663,7 @@ const BeerEditForm = ({
                                         <FormItem>
                                             <FormLabel
                                                 className={cn(
-                                                    "block text-lg font-medium leading-6 text-gray-900"
+                                                    "block text-lg leading-6 font-medium text-gray-900"
                                                 )}
                                             >
                                                 Year Created (if known)
@@ -709,7 +715,7 @@ const BeerEditForm = ({
                                     <FormItem>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Still available?

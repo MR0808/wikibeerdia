@@ -21,9 +21,9 @@ export const OauthButtons = () => {
   return (
     <>
       <div className="relative flex items-center py-5">
-        <div className="flex-grow border-t border-gray-400"></div>
-        <span className="mx-4 flex-shrink text-gray-400">or</span>
-        <div className="flex-grow border-t border-gray-400"></div>
+        <div className="grow border-t border-gray-400"></div>
+        <span className="mx-4 shrink text-gray-400">or</span>
+        <div className="grow border-t border-gray-400"></div>
       </div>
       <div className="flex w-full items-center gap-x-2">
         <Button
