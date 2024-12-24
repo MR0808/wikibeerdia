@@ -9,12 +9,16 @@ import Logo from "./Logo";
 import MobileMenu from "./MobileMenu";
 import { NavBarProps } from "@/utils/types";
 
-const Navbar = ({ whiteBackground, session }: NavBarProps) => {
+const Navbar = ({
+    whiteBackground,
+    session,
+    blackText = false
+}: NavBarProps) => {
     const [scrollActive, setScrollActive] = useState(false);
 
     const bgClass = whiteBackground
         ? " bg-white shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-foreground"
-        : " bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white";
+        : ` bg-black shadow-[0_13px_35px_-12px_rgba(35,35,35,0.1)] text-white`;
 
     useEffect(() => {
         if (whiteBackground) {
@@ -28,14 +32,18 @@ const Navbar = ({ whiteBackground, session }: NavBarProps) => {
 
     return (
         <div
-            className={`fixed left-0 top-0 z-40 flex w-full items-center justify-center py-4 transition duration-500 ${
-                scrollActive ? bgClass : "bg-transparent text-white"
+            className={`fixed top-0 left-0 z-40 flex w-full items-center justify-center py-4 transition duration-500 ${
+                scrollActive
+                    ? bgClass
+                    : `bg-transparent ${blackText ? "text-foreground" : "text-white"}`
             }`}
         >
             <div className="container flex h-16 items-center justify-between space-x-4 sm:justify-between sm:space-x-0">
                 <div className="flex">
                     <Logo
-                        whiteBackground={scrollActive ? whiteBackground : false}
+                        whiteBackground={
+                            scrollActive || blackText ? whiteBackground : false
+                        }
                     />
                 </div>
                 <div className="hidden gap-6 sm:flex md:gap-10">

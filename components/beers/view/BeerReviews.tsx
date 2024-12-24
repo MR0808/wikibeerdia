@@ -54,7 +54,7 @@ const BeerReviews = ({
     };
 
     return (
-        <div className="mt-12 flex flex-row md:mt-16 md:space-x-3" id="reviews">
+        <div className="flex flex-row md:space-x-3" id="reviews">
             <div className="w-full">
                 <div className="h-auto w-full items-center rounded-lg bg-white p-5 shadow-lg md:p-14">
                     <div className="mb-10 flex flex-col justify-between md:flex-row">
@@ -81,7 +81,7 @@ const BeerReviews = ({
                             </Select>
                         </div>
                     </div>
-                    <div className="flex flex-col space-y-5 md:flex-row md:space-x-10 md:space-y-0">
+                    <div className="flex flex-col space-y-5 md:flex-row md:space-y-0 md:space-x-10">
                         <div className="flex flex-col md:w-1/3">
                             <RatingSummary
                                 ratings={ratingValues}

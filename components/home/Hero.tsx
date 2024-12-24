@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { Typewriter } from 'nextjs-simple-typewriter';
+import { Typewriter } from "nextjs-simple-typewriter";
 
 const Hero = () => {
     const styles = [
-        'Pale Ales',
-        'American Amber Ales',
-        'American Red Ales',
-        'India Pale Ales',
-        'American IPA'
+        "Pale Ales",
+        "American Amber Ales",
+        "American Red Ales",
+        "India Pale Ales",
+        "American IPA"
     ];
     return (
-        <div className="relative overflow-hidden bg-[url('/images/main-bg.jpg')] h-[90vh] bg-center">
-            <div className="bg-blue-950 bg-opacity-75 w-full h-full">
+        <div className="bg-main-hero relative h-[90vh] overflow-hidden bg-center">
+            <div className="h-full w-full bg-blue-950/75">
                 <div className="mx-4 flex flex-wrap items-center pt-[120px] md:pt-[130px] lg:pt-[240px]">
                     <div className="w-full px-4">
-                        <div className="mx-auto max-w-[980px] text-center items-center">
-                            <h1 className="mb-6 text-4xl font-bold leading-snug text-white sm:text-5xl sm:leading-snug lg:text-7xl lg:leading-[1.2] uppercase">
+                        <div className="mx-auto max-w-[980px] items-center text-center">
+                            <h1 className="mb-6 text-4xl leading-snug font-bold text-white uppercase sm:text-5xl sm:leading-snug lg:text-7xl lg:leading-[1.2]">
                                 Find all your favourite
                             </h1>
-                            <h1 className="mb-6 text-2xl font-bold leading-snug md:text-4xl sm:leading-snug lg:text-6xl lg:leading-[1.2] uppercase text-orange-400">
+                            <h1 className="mb-6 text-2xl leading-snug font-bold text-orange-400 uppercase sm:leading-snug md:text-4xl lg:text-6xl lg:leading-[1.2]">
                                 <Typewriter
                                     words={styles}
                                     loop={0}
@@ -29,11 +29,11 @@ const Hero = () => {
                                     delaySpeed={1000}
                                 />
                             </h1>
-                            <form className="max-w-[850px] mx-auto pt-2 md:pt-20">
-                                <div className="sm:flex items-center bg-white rounded-lg overflow-hidden px-2 py-3 justify-between">
-                                    <div className="items-center mr-4 md:w-4/12 pb-2 md:pb-0">
+                            <form className="mx-auto max-w-[850px] pt-2 md:pt-20">
+                                <div className="items-center justify-between overflow-hidden rounded-lg bg-white px-2 py-3 sm:flex">
+                                    <div className="mr-4 items-center pb-2 md:w-4/12 md:pb-0">
                                         <input
-                                            className="text-base text-gray-400 grow px-4 w-full outline-hidden"
+                                            className="w-full grow px-4 text-base text-gray-400 outline-hidden"
                                             type="text"
                                             placeholder="What beer are you looking for?"
                                         />
@@ -43,8 +43,8 @@ const Hero = () => {
                                         data={countries}
                                     />
                                     <SearchSelect name="style" data={styles} /> */}
-                                    <div className="items-center px-2 mx-auto md:border-l md:w-2/12">
-                                        <button className="btn btn-accent rounded-md w-full">
+                                    <div className="mx-auto items-center px-2 md:w-2/12 md:border-l">
+                                        <button className="btn btn-accent w-full rounded-md">
                                             Search
                                         </button>
                                     </div>

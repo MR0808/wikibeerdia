@@ -89,7 +89,7 @@ const BeerDetailsPage = async (props: { params: Params }) => {
                     />
                     <div className="h-auto w-full rounded-lg bg-white p-5 shadow-lg md:p-14">
                         <h4 className="mb-5 text-4xl">{`"${data.headline}"`}</h4>
-                        <p className="whitespace-pre-wrap text-lg leading-8">
+                        <p className="text-lg leading-8 whitespace-pre-wrap">
                             {data.description}
                         </p>
                     </div>

@@ -23,6 +23,7 @@ export interface UserProps {
 export interface NavBarProps {
     whiteBackground: boolean;
     session: Session | null;
+    blackText?: boolean;
 }
 
 export interface GenderProps {
