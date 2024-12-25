@@ -47,3 +47,9 @@ export interface BlogCalloutProps {
     children?: ReactNode;
     type?: "default" | "warning" | "danger";
 }
+
+export interface TocEntry {
+    title: string;
+    url: string;
+    items: TocEntry[];
+}
