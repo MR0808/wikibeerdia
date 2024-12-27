@@ -4,6 +4,7 @@ import GithubSlugger, { slug as slugThis } from "github-slugger";
 import { sortBlogs, getCategories } from "@/utils/blogs";
 import CategoriesListing from "@/components/blog/CategoriesListing";
 import BlogLayoutGrid from "@/components/blog/BlogLayoutGrid";
+import { capitaliseSentence } from "@/utils/case";
 
 const slugger = new GithubSlugger();
 
@@ -24,6 +25,21 @@ export async function generateStaticParams() {
     });
 
     return paths;
+}
+
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const title = capitaliseSentence(slug.replaceAll("-", " "));
+    return {
+        title: `${title} Blogs`,
+        description: `Learn more about ${
+            slug === "all" ? "beer" : slug
+        } through our collection of expert blogs and articles`
+    };
 }
 
 const CategoryPage = async ({

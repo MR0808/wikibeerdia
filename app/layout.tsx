@@ -8,7 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import ReactQueryProvider from "@/Providers/ReactQueryProvider";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
-import { siteMetadata } from "@/utils/siteMetaData";
+import siteMetadata from "@/utils/siteMetaData";
 
 const inter = Inter({ subsets: ["latin"] });
 

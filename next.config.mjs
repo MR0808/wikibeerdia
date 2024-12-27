@@ -24,6 +24,9 @@ const nextConfig = {
                 "localhost:3000"
             ]
         }
+    },
+    compiler: {
+        removeConsole: false
     }
 };
 

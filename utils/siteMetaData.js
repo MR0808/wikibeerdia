@@ -1,4 +1,4 @@
-export const siteMetadata = {
+const siteMetadata = {
     title: "Wikibeerdia",
     author: "Wikibeerdia co",
     headerTitle: "Wikibeerdia Blog",
@@ -14,3 +14,5 @@ export const siteMetadata = {
     instagram: "https://www.instagram.com/wikibeerdiabeers/",
     locale: "en-AU"
 };
+
+module.exports = siteMetadata;
