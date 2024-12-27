@@ -38,4 +38,4 @@ next-env.d.ts
 
 #velite files
 .velite
-/public/blogs
+/public/blog

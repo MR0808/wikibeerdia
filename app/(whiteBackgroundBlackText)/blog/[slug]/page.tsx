@@ -184,7 +184,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                             alt={blog.title}
                             width={blog.image.width}
                             height={blog.image.height}
-                            className="h-2/3 rounded-xl object-cover"
+                            className="h-3/5 rounded-xl object-cover"
                             sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw, 33vw"
                         />
                         <div className="text-4xl leading-10 font-black md:hidden">
