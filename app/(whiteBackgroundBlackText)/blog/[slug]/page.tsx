@@ -1,7 +1,7 @@
 import { blogs } from "@/.velite/generated";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Calendar, Eye, Hourglass, Tags } from "lucide-react";
+import { Calendar, Hourglass, Tags } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { slug as slugger } from "github-slugger";
@@ -16,6 +16,65 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import BlogViewCounter from "@/components/blog/BlogViewCounter";
+import { siteMetadata } from "@/utils/siteMetaData";
+
+export async function generateStaticParams() {
+    return blogs.map((blog) => ({ slug: blog.slug }));
+}
+
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const blog = blogs.find((blog) => blog.slug === slug);
+    if (!blog) {
+        return;
+    }
+
+    const publishedAt = new Date(blog.publishedAt).toISOString();
+    const modifiedAt = new Date(
+        blog.updatedAt || blog.publishedAt
+    ).toISOString();
+
+    let imageList = [siteMetadata.siteLogo];
+    if (blog.image) {
+        imageList = [siteMetadata.siteUrl + blog.image.src];
+        // typeof blog.image.src === "string"
+        //     ? [siteMetadata.siteUrl + blog.image.src]
+        //     : blog.image;
+    }
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+
+    const authors = blog?.author ? [blog.author] : siteMetadata.author;
+
+    return {
+        title: ` Blog | ${blog.title}`,
+        description: blog.description,
+        openGraph: {
+            title: blog.title,
+            description: blog.description,
+            url: siteMetadata.siteUrl + blog.url,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "article",
+            publishedTime: publishedAt,
+            modifiedTime: modifiedAt,
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: blog.title,
+            description: blog.description,
+            images: ogImages
+        }
+    };
+}
 
 function TableOfContentsItem({
     item,
@@ -108,10 +167,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                             <Hourglass className="text-primary my-auto size-4" />
                             {blog.readingTime.text}
                         </div>
-                        <div className="flex flex-row gap-2 text-sm">
-                            <Eye className="text-primary my-auto size-4" />
-                            500 views
-                        </div>
+
                         <div className="flex flex-row gap-2 text-sm capitalize">
                             <Tags className="text-primary my-auto size-4" />
                             {blog.tags.map((tag, index) => {
@@ -154,10 +210,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                                 <Hourglass className="text-primary my-auto size-4" />
                                 {blog.readingTime.text}
                             </div>
-                            <div className="flex flex-row gap-2 text-sm">
-                                <Eye className="text-primary my-auto size-4" />
-                                500 views
-                            </div>
+                            <BlogViewCounter slug={blog.slug} />
                             <div className="flex flex-row gap-2 text-sm capitalize">
                                 <Tags className="text-primary my-auto size-4" />
                                 {blog.tags.map((tag, index) => {

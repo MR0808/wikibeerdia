@@ -2,8 +2,29 @@ import { blogs as allBlogs } from "@/.velite/generated";
 import GithubSlugger, { slug as slugThis } from "github-slugger";
 
 import { sortBlogs, getCategories } from "@/utils/blogs";
+import CategoriesListing from "@/components/blog/CategoriesListing";
+import BlogLayoutGrid from "@/components/blog/BlogLayoutGrid";
 
 const slugger = new GithubSlugger();
+
+export async function generateStaticParams() {
+    const categories: string[] = [];
+    const paths = [{ slug: "all" }];
+
+    allBlogs.map((blog) => {
+        if (blog.isPublished) {
+            blog.tags.map((tag) => {
+                let slugified = slugger.slug(tag);
+                if (!categories.includes(slugified)) {
+                    categories.push(slugified);
+                    paths.push({ slug: slugified });
+                }
+            });
+        }
+    });
+
+    return paths;
+}
 
 const CategoryPage = async ({
     params
@@ -41,46 +62,10 @@ const CategoryPage = async ({
                 <h1 className="text-foreground mb-6 text-3xl leading-snug font-bold capitalize sm:text-4xl sm:leading-snug lg:text-6xl lg:leading-[1.2]">
                     {currentCategory[0].name}
                 </h1>
-                {/* <CategoriesListing
-                    categories={categories}
-                    category={category}
-                    setCategory={setCategory}
-                />
-                <div className="flex gap-x-4">
-                    <Button
-                        variant={layout === "grid" ? "default" : "ghost"}
-                        size="icon"
-                        asChild
-                        className={cn("cursor-pointer")}
-                        onClick={() => updateLayout("grid")}
-                    >
-                        <LayoutGrid />
-                    </Button>
-                    <Button
-                        variant={layout === "list" ? "default" : "ghost"}
-                        size="icon"
-                        asChild
-                        className={cn("cursor-pointer")}
-                        onClick={() => updateLayout("list")}
-                    >
-                        <List />
-                    </Button>
+                <CategoriesListing categories={categories} category={slug} />
+                <div className="mt-10 w-full md:w-4/5">
+                    <BlogLayoutGrid displayPosts={blogs} />
                 </div>
-                <div
-                    className={`mt-10 ${layout === "list" && "w-full md:w-4/5"}`}
-                >
-                    {layout === "grid" ? (
-                        <BlogLayoutGrid displayPosts={displayPosts} />
-                    ) : (
-                        <BlogLayoutList displayPosts={displayPosts} />
-                    )}
-                    <BlogPagination
-                        totalPages={totalPages}
-                        className="my-20 justify-center"
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                    />
-                </div> */}
             </div>
         </div>
     );

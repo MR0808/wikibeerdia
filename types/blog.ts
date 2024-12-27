@@ -7,14 +7,20 @@ export interface CategoriesProps {
         slug: string;
     }[];
     category: string;
-    setCategory: (category: string) => void;
+    setCategory?: (category: string) => void;
 }
 
-export interface CategoryProps {
+export interface CategoryButtonProps {
     name: string;
     slug: string;
     category: string;
     setCategory: (category: string) => void;
+}
+
+export interface CategoryLinkProps {
+    name: string;
+    slug: string;
+    category: string;
 }
 
 // export interface BlogPageProps {
@@ -22,6 +28,12 @@ export interface CategoryProps {
 //         page?: string;
 //     };
 // }
+
+export interface BlogViewCounterProps {
+    slug: string;
+    noCount?: boolean;
+    showCount?: boolean;
+}
 
 export interface BlogPageProps {
     blogs: Blog[];

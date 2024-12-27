@@ -20,7 +20,7 @@ const BlogLayoutGridPost = ({ blog }: { blog: Blog }) => {
             </Link>
 
             <div className="mt-4 flex w-full flex-col">
-                <div className="flex flex-row justify-start space-x-5">
+                <div className="flex flex-wrap justify-start space-x-5">
                     {blog.tags.map((tag) => (
                         <span
                             className="text-primary text-xs font-semibold uppercase sm:text-sm"
