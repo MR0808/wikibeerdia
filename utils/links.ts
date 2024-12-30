@@ -7,8 +7,12 @@ export const links: NavLink[] = [
         label: "education",
         subMenu: [
             {
-                href: "/education/beer",
+                href: "/education/beer-process",
                 label: "how beer is made"
+            },
+            {
+                href: "/education/beer-styles",
+                label: "beer styles"
             }
         ]
     },
