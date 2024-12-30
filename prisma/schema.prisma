@@ -58,6 +58,7 @@ model User {
   beerFavourites        BeerFavorite[]
   breweryTypes          BreweryType[]
   parentStyles          ParentStyle[]
+  blogVotes             BlogVote[]
   styles                Style[]
   subStyles             SubStyle[]
   role                  UserRole               @default(USER)
@@ -371,10 +372,22 @@ model Report {
   updatedAt       DateTime       @updatedAt
 }
 
-model Blog {
+model BlogView {
   id        String   @id @default(uuid())
   slug      String
   count     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model BlogVote {
+  id        String   @id @default(uuid())
+  slug      String
+  vote      Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([slug, userId])
 }

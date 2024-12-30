@@ -18,7 +18,7 @@ const BlogViewCounter = async ({
         return (
             <div className="flex flex-row gap-2 text-sm">
                 <Eye className="text-primary my-auto size-4" />
-                {`${views} ${views == 1 ? "view" : "views"}`}
+                {`${views} ${views === 1 ? "view" : "views"}`}
             </div>
         );
     } else {

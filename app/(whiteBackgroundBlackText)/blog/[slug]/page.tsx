@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import BlogViewCounter from "@/components/blog/BlogViewCounter";
 import siteMetadata from "@/utils/siteMetaData";
+import BlogVoteCounter from "@/components/blog/BlogVoteCounter";
+import { BlogRating } from "@/components/blog/BlogRating";
+import { currentUser } from "@/lib/auth";
 
 export async function generateStaticParams() {
     return blogs.map((blog) => ({ slug: blog.slug }));
@@ -113,6 +116,8 @@ function TableOfContentsItem({
 }
 
 const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+    const user = await currentUser();
+
     const { slug } = await params;
 
     const blog = blogs.find((blog) => {
@@ -176,7 +181,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    <article className="flex flex-col space-y-8 md:hidden md:w-2/3">
+                    <div className="flex flex-col space-y-8 md:hidden md:w-2/3">
                         <Image
                             src={blog.image.src}
                             placeholder="blur"
@@ -202,7 +207,8 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                                 <Hourglass className="text-primary my-auto size-4" />
                                 {blog.readingTime.text}
                             </div>
-
+                            <BlogViewCounter slug={blog.slug} />
+                            <BlogVoteCounter slug={blog.slug} />
                             <div className="flex flex-row gap-2 text-sm capitalize">
                                 <Tags className="text-primary my-auto size-4" />
                                 {blog.tags.map((tag, index) => {
@@ -217,9 +223,9 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                                 })}
                             </div>
                         </div>
-                    </article>
+                    </div>
                     <div className="flex flex-col-reverse pt-10 md:flex-row md:space-x-8">
-                        <div className="flex flex-col space-y-8 md:w-2/3">
+                        <article className="flex flex-col space-y-8 md:w-2/3">
                             <Image
                                 src={blog.image.src}
                                 placeholder="blur"
@@ -246,6 +252,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                                     {blog.readingTime.text}
                                 </div>
                                 <BlogViewCounter slug={blog.slug} />
+                                <BlogVoteCounter slug={blog.slug} />
                                 <div className="flex flex-row gap-2 text-sm capitalize">
                                     <Tags className="text-primary my-auto size-4" />
                                     {blog.tags.map((tag, index) => {
@@ -260,8 +267,9 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                                     })}
                                 </div>
                             </div>
+                            {user && <BlogRating slug={slug} />}
                             <RenderMdx blog={blog} />
-                        </div>
+                        </article>
                         <div className="space-y-10 pb-10 md:w-1/3 md:pb-0">
                             <details
                                 className="border-dark text-dark max-h-[80vh] overflow-hidden overflow-y-auto rounded-lg border-[1px] border-solid p-4 md:sticky md:top-6"

@@ -11,7 +11,6 @@ import {
     SelectValue
 } from "@/components/ui/select";
 import ReviewSkeleton from "@/components/reviews/ReviewSkeleton";
-import { Button } from "@/components/ui/button";
 import { ReviewsType } from "@/types/reviews";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import { getBeerReviews } from "@/actions/beers";
