@@ -46,7 +46,6 @@
     --background-image-blogs-hero: url("/images/blogs-bg.jpg");
     --background-image-styles-hero: url("/images/styles-bg.png");
 
-
     @keyframes accordion-down {
         from {
             height: 0;

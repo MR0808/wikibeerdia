@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -9,8 +8,7 @@ import ReactQueryProvider from "@/Providers/ReactQueryProvider";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 import siteMetadata from "@/utils/siteMetaData";
-
-const inter = Inter({ subsets: ["latin"] });
+import { inter } from "./fonts";
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteMetadata.siteUrl),
