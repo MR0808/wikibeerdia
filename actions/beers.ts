@@ -12,6 +12,17 @@ import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
 
+export const getBeers = async () => {
+    const data = await db.beer.findMany({
+        where: {
+            status: "APPROVED"
+        },
+        select: { name: true, id: true },
+        orderBy: { name: "asc" }
+    });
+    return { data };
+};
+
 export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
     let data: Beer;
     try {

@@ -13,11 +13,72 @@ import { currentUser } from "@/lib/auth";
 import { getBreweryBeers } from "@/actions/breweries";
 import { Params } from "@/utils/types";
 import getRatings from "@/lib/ratings";
-import { getBeer, getBeerReviews, findExistingReview } from "@/actions/beers";
+import {
+    getBeers,
+    getBeer,
+    getBeerReviews,
+    findExistingReview
+} from "@/actions/beers";
 import BeerSkeleton from "@/components/beers/view/BeerSkeleton";
 import BeerHeader from "@/components/beers/view/BeerHeader";
 import BeerReviews from "@/components/beers/view/BeerReviews";
 import BeerOtherBeers from "@/components/beers/view/BeerOtherBeers";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateStaticParams() {
+    const { data: beers } = await getBeers();
+    return beers.map((beer) => ({ id: beer.id }));
+}
+
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ id: string }>;
+}) {
+    const { id } = await params;
+    const { data: beer } = await getBeer(id);
+    if (!beer) {
+        return;
+    }
+
+    const publishedAt = new Date(beer.createdAt).toISOString();
+    const modifiedAt = new Date(beer.updatedAt || beer.createdAt).toISOString();
+
+    let imageList = [];
+    if (beer.images) {
+        for (const image of beer.images) {
+            imageList.push(image.image);
+        }
+    }
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+
+    const authors = siteMetadata.author;
+
+    return {
+        title: ` Beers | ${beer.name}`,
+        description: beer.headline,
+        openGraph: {
+            title: beer.name,
+            description: beer.headline,
+            url: `${siteMetadata.siteUrl}/beers/${beer.id}`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "article",
+            publishedTime: publishedAt,
+            modifiedTime: modifiedAt,
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: beer.name,
+            description: beer.headline,
+            images: ogImages
+        }
+    };
+}
 
 const BeerDetailsPage = async (props: { params: Params }) => {
     const params = await props.params;

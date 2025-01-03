@@ -37,90 +37,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
-var newStyles_1 = require("./newStyles");
 var prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var parentStyleName, parentStyleId, styleName, styleId, count, _i, newStyles_2, newStyle, parentStyle, newParentStyle, style, newBeerStyle, subStyleDb;
+        var styles, precisionABV, min, max, _i, styles_1, style, abv, ibu, abvLow, abvHigh, ibuLow, ibuHigh;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    parentStyleName = "";
-                    parentStyleId = "";
-                    styleName = "";
-                    styleId = "";
-                    count = 0;
-                    _i = 0, newStyles_2 = newStyles_1.newStyles;
-                    _a.label = 1;
+                case 0: return [4 /*yield*/, prisma.subStyle.findMany()];
                 case 1:
-                    if (!(_i < newStyles_2.length)) return [3 /*break*/, 14];
-                    newStyle = newStyles_2[_i];
-                    console.log(count);
-                    if (!(newStyle.parentStyle !== parentStyleName)) return [3 /*break*/, 6];
-                    return [4 /*yield*/, prisma.parentStyle.findFirst({
-                            where: { name: newStyle.parentStyle }
-                        })];
+                    styles = _a.sent();
+                    precisionABV = 10;
+                    min = 10;
+                    max = 100;
+                    _i = 0, styles_1 = styles;
+                    _a.label = 2;
                 case 2:
-                    parentStyle = _a.sent();
-                    if (!parentStyle) return [3 /*break*/, 3];
-                    parentStyleId = parentStyle === null || parentStyle === void 0 ? void 0 : parentStyle.id;
-                    return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, prisma.parentStyle.create({
-                        data: {
-                            name: newStyle.parentStyle,
-                            status: "APPROVED",
-                            userId: "cm1q68hds0000146zv7kkvnnu"
-                        }
-                    })];
-                case 4:
-                    newParentStyle = _a.sent();
-                    parentStyleId = newParentStyle.id;
-                    _a.label = 5;
-                case 5:
-                    parentStyleName = newStyle.parentStyle;
-                    _a.label = 6;
-                case 6:
-                    if (!(newStyle.style !== styleName)) return [3 /*break*/, 11];
-                    return [4 /*yield*/, prisma.style.findFirst({
-                            where: { name: newStyle.parentStyle }
+                    if (!(_i < styles_1.length)) return [3 /*break*/, 5];
+                    style = styles_1[_i];
+                    abv = [
+                        Math.floor(Math.random() * (10 * precisionABV - 1 * precisionABV) +
+                            1 * precisionABV) /
+                            (1 * precisionABV),
+                        Math.floor(Math.random() * (10 * precisionABV - 1 * precisionABV) +
+                            1 * precisionABV) /
+                            (1 * precisionABV)
+                    ];
+                    ibu = [
+                        Math.floor(Math.random() * (max - min + 1)) + min,
+                        Math.floor(Math.random() * (max - min + 1)) + min
+                    ];
+                    abvLow = Math.min.apply(Math, abv).toString();
+                    abvHigh = Math.max.apply(Math, abv).toString();
+                    ibuLow = Math.min.apply(Math, ibu).toString();
+                    ibuHigh = Math.max.apply(Math, ibu).toString();
+                    return [4 /*yield*/, prisma.subStyle.update({
+                            where: { id: style.id },
+                            data: {
+                                abvHigh: abvHigh,
+                                abvLow: abvLow,
+                                ibuHigh: ibuHigh,
+                                ibuLow: ibuLow
+                            }
                         })];
-                case 7:
-                    style = _a.sent();
-                    if (!style) return [3 /*break*/, 8];
-                    styleId = style === null || style === void 0 ? void 0 : style.id;
-                    return [3 /*break*/, 10];
-                case 8: return [4 /*yield*/, prisma.style.create({
-                        data: {
-                            name: newStyle.style,
-                            status: "APPROVED",
-                            userId: "cm1q68hds0000146zv7kkvnnu",
-                            parentStyleId: parentStyleId
-                        }
-                    })];
-                case 9:
-                    newBeerStyle = _a.sent();
-                    styleId = newBeerStyle.id;
-                    _a.label = 10;
-                case 10:
-                    styleName = newStyle.style;
-                    _a.label = 11;
-                case 11: return [4 /*yield*/, prisma.subStyle.create({
-                        data: {
-                            name: newStyle.subStyle,
-                            status: "APPROVED",
-                            userId: "cm1q68hds0000146zv7kkvnnu",
-                            styleId: styleId,
-                            description: newStyle.description
-                        }
-                    })];
-                case 12:
-                    subStyleDb = _a.sent();
-                    count++;
-                    _a.label = 13;
-                case 13:
+                case 3:
+                    _a.sent();
+                    _a.label = 4;
+                case 4:
                     _i++;
-                    return [3 /*break*/, 1];
-                case 14: return [2 /*return*/];
+                    return [3 /*break*/, 2];
+                case 5: return [2 /*return*/];
             }
         });
     });

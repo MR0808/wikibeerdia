@@ -1,13 +1,81 @@
 import Image from "next/image";
+import type { Metadata } from "next";
+
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@/components/ui/breadcrumb";
 
 import StylesHero from "@/components/education/StylesHero";
-import { averia, kaushan } from "@/app/fonts";
+import { getBeerStylesByParent } from "@/actions/beerStyles";
+import StylesSection from "@/components/education/StylesSection";
+import siteMetadata from "@/utils/siteMetaData";
 
-const BeerStylesPage = () => {
+export function generateMetadata(): Metadata {
+    const imageList = [`${siteMetadata.siteUrl}/images/bg-styles.jpg`];
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+    return {
+        title: ` Education | Beer Styles`,
+        description:
+            "Learn about the wonderful world of beer and the different styles that defines them.",
+        openGraph: {
+            title: "Beer styles and their details",
+            description:
+                "Learn about the wonderful world of beer and the different styles that defines them.",
+            url: `${siteMetadata.siteUrl}/education/beer-styles/`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "article",
+            publishedTime: "2024-08-15 13:00:00",
+            modifiedTime: "2024-08-15 13:00:00",
+            images: ogImages,
+            authors: [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: "Beer styles and their details",
+            description:
+                "Learn about the wonderful world of beer and the different styles that defines them.",
+            images: ogImages
+        }
+    };
+}
+
+const BeerStylesPage = async () => {
+    const { data: aleStyles } = await getBeerStylesByParent("ales");
+    const { data: lagerStyles } = await getBeerStylesByParent("lager");
+    const { data: hybridStyles } = await getBeerStylesByParent("hybrid-mixed");
+
     return (
-        <div className="bg-[#FFFFF5]">
+        <div className="bg-[#FFFFF5] pb-20">
             <StylesHero />
-            <div className="md:mt-20pb-10 container mt-10 flex flex-col justify-between sm:justify-between sm:space-x-0">
+            <div className="container flex flex-col justify-between px-8 pt-10 sm:justify-between sm:space-x-0">
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                className="text-base"
+                                href="/education"
+                            >
+                                Education
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator className="text-base" />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage className="text-base">
+                                Beer Styles
+                            </BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+            </div>
+            <div className="md:mt-20pb-10 container mt-10 flex flex-col justify-between pb-10 sm:justify-between sm:space-x-0 md:pb-0">
                 <div className="flex flex-col justify-between md:flex-row">
                     <div className="mb-10 text-center text-xl font-semibold italic md:hidden">
                         "Beer is more than just a drink — it's a story of
@@ -49,17 +117,11 @@ const BeerStylesPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-[#F7F8F9]">
-                <div className="container flex flex-col justify-between py-24 sm:justify-between sm:space-x-0 md:mt-20">
-                    <div className="flex flex-col justify-center justify-items-center md:flex-row">
-                        <div
-                            className={`${kaushan.className} text-primary text-6xl`}
-                        >
-                            Beer Styles
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <StylesSection
+                aleStyles={aleStyles}
+                lagerStyles={lagerStyles}
+                hybridStyles={hybridStyles}
+            />
         </div>
     );
 };

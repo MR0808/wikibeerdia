@@ -316,6 +316,7 @@ model BeerReview {
 model ParentStyle {
   id          String   @id @default(uuid())
   name        String
+  slug        String   @unique
   description String?
   status      Status   @default(PENDING)
   styles      Style[]
@@ -328,6 +329,7 @@ model ParentStyle {
 model Style {
   id            String      @id @default(uuid())
   name          String
+  slug          String      @unique
   description   String?
   status        Status      @default(PENDING)
   subStyles     SubStyle[]
@@ -340,17 +342,23 @@ model Style {
 }
 
 model SubStyle {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
+  slug        String  @unique
   description String?
-  status      Status   @default(PENDING)
-  style       Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
-  styleId     String
-  beers       Beer[]
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  abvLow      String?
+  abvHigh     String?
+  ibuLow      String?
+  ibuHigh     String?
+
+  status    Status   @default(PENDING)
+  style     Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  styleId   String
+  beers     Beer[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Report {

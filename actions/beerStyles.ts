@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
 import { Style, type Style as StyleType } from "@prisma/client";
 import { format } from "date-fns";
+import GithubSlugger from "github-slugger";
 
 import db from "@/lib/db";
 import { checkAuth } from "@/lib/auth";
@@ -13,6 +14,32 @@ import { GetSearchSchema } from "@/types/admin";
 import { filterColumn } from "@/lib/filterColumn";
 import { filterSubColumn } from "@/lib/filterSubColumn";
 import { getErrorMessage } from "@/lib/handleError";
+
+const slugger = new GithubSlugger();
+
+export const getBeerStylesByParent = async (slug: string) => {
+    try {
+        const data = await db.style.findMany({
+            where: { parentStyle: { slug } },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                subStyles: { orderBy: { name: "asc" } }
+            },
+            orderBy: { name: "asc" }
+        });
+        return {
+            data,
+            error: null
+        };
+    } catch (err) {
+        return {
+            data: null,
+            error: getErrorMessage(err)
+        };
+    }
+};
 
 export const getBeerStyles = async (input: GetSearchSchema) => {
     noStore();
@@ -220,10 +247,24 @@ export const createBeerStyle = async (
     }
 
     try {
+        let slug = slugger.slug(values.name);
+        let slugExists = true;
+        let slugStyle = await db.style.findFirst({ where: { slug } });
+
+        while (slugExists) {
+            if (slugStyle) {
+                slug = slugger.slug(values.name);
+                slugStyle = await db.style.findFirst({ where: { slug } });
+            } else {
+                slugExists = false;
+            }
+        }
+
         await db.style.create({
             data: {
                 userId: user.id,
                 parentStyleId: parentStyleId,
+                slug,
                 ...values
             }
         });
