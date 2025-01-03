@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
 import { SubStyle, type SubStyle as SubStyleType } from "@prisma/client";
 import { format } from "date-fns";
+import GithubSlugger from "github-slugger";
 
 import db from "@/lib/db";
 import { checkAuth } from "@/lib/auth";
@@ -12,6 +13,8 @@ import { BeerStyleSchema } from "@/schemas/admin";
 import { GetSearchSchema } from "@/types/admin";
 import { filterColumn } from "@/lib/filterColumn";
 import { getErrorMessage } from "@/lib/handleError";
+
+const slugger = new GithubSlugger();
 
 export const getBeerSubStyles = async (
     input: GetSearchSchema,
@@ -131,10 +134,24 @@ export const createBeerSubStyle = async (
     }
 
     try {
+        let slug = slugger.slug(values.name);
+        let slugExists = true;
+        let slugStyle = await db.subStyle.findFirst({ where: { slug } });
+
+        while (slugExists) {
+            if (slugStyle) {
+                slug = slugger.slug(values.name);
+                slugStyle = await db.subStyle.findFirst({ where: { slug } });
+            } else {
+                slugExists = false;
+            }
+        }
+
         await db.subStyle.create({
             data: {
                 userId: user.id,
                 styleId: styleId,
+                slug,
                 ...values
             }
         });
