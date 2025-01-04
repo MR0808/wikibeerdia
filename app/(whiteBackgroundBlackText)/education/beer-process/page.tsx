@@ -2,6 +2,53 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 import ProcessHero from "@/components/education/ProcessHero";
+import { shrikhand } from "@/app/fonts";
+import siteMetadata from "@/utils/siteMetaData";
+import BeerProcessSteps from "@/components/education/BeerProcessSteps";
+
+export function generateMetadata(): Metadata {
+    const imageList = [
+        `${siteMetadata.siteUrl}/images/ingredients.png`,
+        `${siteMetadata.siteUrl}/images/finished-beer.png`,
+        `${siteMetadata.siteUrl}/images/vat.png`,
+        `${siteMetadata.siteUrl}/images/step1-malt.jpg`,
+        `${siteMetadata.siteUrl}/images/step2-mashing.jpg`,
+        `${siteMetadata.siteUrl}/images/step3-lautering.jpg`,
+        `${siteMetadata.siteUrl}/images/step4-boiling.jpg`,
+        `${siteMetadata.siteUrl}/images/step5-fermentation.jpg`,
+        `${siteMetadata.siteUrl}/images/step6-conditioning.jpg`,
+        `${siteMetadata.siteUrl}/images/step7-filtering.jpg`,
+        `${siteMetadata.siteUrl}/images/step8-enjoying.jpg`
+    ];
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+    return {
+        title: ` Education | How Beer is Made`,
+        description:
+            "Learn about the process of making beer and how this wonderful nectar ends up in your bottles!",
+        openGraph: {
+            title: "How Beer is Made",
+            description:
+                "Learn about the process of making beer and how this wonderful nectar ends up in your bottles!",
+            url: `${siteMetadata.siteUrl}/education/beer-process/`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "article",
+            publishedTime: "2024-08-15 13:00:00",
+            modifiedTime: "2024-08-15 13:00:00",
+            images: ogImages,
+            authors: [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: "How Beer is Made",
+            description:
+                "Learn about the process of making beer and how this wonderful nectar ends up in your bottles!",
+            images: ogImages
+        }
+    };
+}
 
 const BeerProcessPage = () => {
     return (
@@ -50,6 +97,20 @@ const BeerProcessPage = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="w-full bg-white">
+                <div className="container mt-20 flex flex-col justify-between py-20">
+                    <h1
+                        className={`${shrikhand.className} text-center text-4xl leading-snug font-bold text-slate-600 uppercase drop-shadow-2xl sm:leading-snug md:text-6xl md:leading-[1.2]`}
+                    >
+                        The Beer Making Process
+                    </h1>
+                    <h2 className="text-center text-xl leading-[1.2] text-slate-600 drop-shadow-2xl">
+                        Beer making is a rewarding process that celebrates the
+                        harmony of nature's ingredients and human ingenuity.
+                    </h2>
+                </div>
+                <BeerProcessSteps />
             </div>
         </>
     );

@@ -22,3 +22,10 @@ export interface StylesSectionProps {
     lagerStyles: BeerStylesParent[] | null;
     hybridStyles: BeerStylesParent[] | null;
 }
+
+export interface BeerProcesStepProps {
+    name: string;
+    step: number;
+    description: string;
+    image: string;
+}
