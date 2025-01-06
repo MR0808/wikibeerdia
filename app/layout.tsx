@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import ReactQueryProvider from "@/Providers/ReactQueryProvider";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 import siteMetadata from "@/utils/siteMetaData";
 import { inter } from "./fonts";
@@ -59,7 +60,10 @@ export default async function RootLayout({
                     suppressHydrationWarning={true}
                 >
                     <ReactQueryProvider>
-                        <TooltipProvider>{children}</TooltipProvider>
+                        <TooltipProvider>
+                            <GoogleTagManager gtmId="G-FBQEGT4TEE" />
+                            {children}
+                        </TooltipProvider>
                     </ReactQueryProvider>
                     <Toaster richColors />
 
