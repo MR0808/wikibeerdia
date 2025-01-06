@@ -2,7 +2,8 @@ import {
     Inter,
     Averia_Serif_Libre,
     Kaushan_Script,
-    Shrikhand
+    Shrikhand,
+    Questrial
 } from "next/font/google";
 
 export const inter = Inter({ subsets: ["latin"] });
@@ -20,6 +21,12 @@ export const kaushan = Kaushan_Script({
 });
 
 export const shrikhand = Shrikhand({
+    weight: "400",
+    subsets: ["latin"],
+    display: "swap"
+});
+
+export const questrial = Questrial({
     weight: "400",
     subsets: ["latin"],
     display: "swap"
