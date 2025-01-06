@@ -16,7 +16,7 @@ export const BeerProcessStep = ({
                 </div>
             </div>
             <div
-                className={`flex items-center space-x-10 p-10 align-middle ${step % 2 == 0 ? "flex-row-reverse" : "flex-row"}`}
+                className={`flex flex-col items-center space-y-5 p-3 align-middle md:space-y-0 md:space-x-10 md:p-10 ${step % 2 == 0 ? "md:flex-row-reverse" : "md:flex-row"}`}
             >
                 <Image
                     src={image}
@@ -27,7 +27,9 @@ export const BeerProcessStep = ({
                     sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw, 33vw"
                 />
                 <div className="flex flex-col space-y-5 pr-5">
-                    <div className="text-4xl font-bold">{name}</div>
+                    <div className="text-center text-4xl font-bold md:text-left">
+                        {name}
+                    </div>
                     <div>{description}</div>
                 </div>
             </div>
@@ -37,7 +39,7 @@ export const BeerProcessStep = ({
 
 export const BeerSeparator = () => {
     return (
-        <div className="flex h-36 flex-row">
+        <div className="flex h-18 flex-row md:h-36">
             <div className="w-1/2 border-r-2 border-dashed border-gray-300"></div>
             <div className="w-1/2"></div>
         </div>

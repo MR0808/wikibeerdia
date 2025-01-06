@@ -1,5 +1,3 @@
-"use client";
-
 import {
     step1,
     step2,
@@ -14,7 +12,6 @@ import {
     BeerProcessStep,
     BeerSeparator
 } from "@/components/education/BeerProcessStep";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const BeerProcessSteps = () => {
     return (
