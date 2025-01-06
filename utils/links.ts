@@ -13,6 +13,10 @@ export const links: NavLink[] = [
             {
                 href: "/education/beer-styles",
                 label: "beer styles"
+            },
+            {
+                href: "/education/beer-tasting",
+                label: "beer tasting 101"
             }
         ]
     },

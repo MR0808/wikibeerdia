@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { averia } from "@/app/fonts";
 
-const ProcessHero = () => {
+const TastingHero = () => {
     return (
         <div className="h-full pb-2 drop-shadow-lg md:pb-0">
             <div className="container flex flex-row justify-between space-x-5 pt-24">
@@ -50,4 +50,4 @@ const ProcessHero = () => {
         </div>
     );
 };
-export default ProcessHero;
+export default TastingHero;
