@@ -34,3 +34,79 @@ export const step6 = `After fermentation, the beer enters the conditioning phase
 export const step7 = `Before distribution, the beer undergoes filtration to remove any residual yeast, proteins, or sediment. Some breweries may skip or modify this step depending on the desired clarity and style. The filtered beer is then packaged in kegs, bottles, or cans. Many breweries add carbonation during this stage to ensure a perfect level of fizz. Rigorous quality control ensures that every batch meets the brewery's high standards.`;
 
 export const step8 = `The culmination of the brewing process is enjoying the beer. Whether freshly poured at a brewery or paired with a meal, each sip reflects the dedication and expertise of the brewers. Pairing different beer styles with food enhances the experience—think stouts with chocolate desserts or IPAs with spicy dishes. Beer tastings and festivals are fantastic opportunities to discover new favorites and expand your palate.`;
+
+export const tasting1 = `<p>
+                            Pour the beer into a clear glass and take a moment
+                            to observe its color, clarity, and head (foam).
+                        </p>
+                        <ul className="ml-10 list-disc space-y-3">
+                            <li>
+                                <span className="font-semibold">Color:</span> Is it golden, amber, ruby, or deep brown?
+                                The hue gives hints about the malt and
+                                ingredients used.
+                            </li>
+                            <li>
+                                <span className="font-semibold">Clarity:</span> Is it crystal clear, hazy, or cloudy?
+                                This can indicate the brewing style and
+                                filtration process.
+                            </li>
+                            <li>
+                                <span className="font-semibold">Head:</span> Note the foam's texture and how it
+                                lingers—this reflects the beer's carbonation and
+                                quality.
+                            </li>
+                        </ul>`;
+
+export const tasting2 = `<p>
+                            Swirl the beer gently to release its aroma, then inhale deeply.
+                        </p>
+                        <ul className="ml-10 list-disc space-y-3">
+                            <li>
+                                <span className="font-semibold">Malty Notes:</span> Detect scents like bread, caramel, or chocolate.
+                            </li>
+                            <li>
+                                <span className="font-semibold">Hoppy Notes:</span> Look for floral, citrus, pine, or herbal aromas.
+                            </li>
+                            <li>
+                                <span className="font-semibold">Other Scents:</span> Some beers offer fruity, spicy, or even funky hints from yeast or added ingredients.
+                            </li>
+                        </ul>`;
+
+export const tasting3 = `<p>
+                            Take a sip and let the beer coat your palate. Pay attention to three key elements:
+                        </p>
+                        <ul className="ml-10 list-disc space-y-3">
+                            <li>
+                                <span className="font-semibold">Sweetness vs. Bitterness:</span> Is it malty sweet or hop-forward bitter?
+                            </li>
+                            <li>
+                                <span className="font-semibold">Body:</span> Does it feel light, medium, or full on your tongue?
+                            </li>
+                            <li>
+                                <span className="font-semibold">Flavours:</span> Look for specific notes like coffee, citrus, vanilla, or spices.
+                            </li>
+                        </ul>`;
+
+export const tasting4 = `<p>
+                            Notice the beer’s carbonation and weight.
+                        </p>
+                        <ul className="ml-10 list-disc space-y-3">
+                            <li>
+                                Is it smooth, creamy, or fizzy?
+                            </li>
+                            <li>
+                                Does it feel light and refreshing or heavy and robust?
+                            </li>
+                        </ul>`;
+
+export const tasting5 = `<p>
+                            After swallowing, assess the finish.
+                        </p>
+                        <ul className="ml-10 list-disc space-y-3">
+                            <li>
+                                Does the flavor linger, or does it dissipate quickly?
+                            </li>
+                            <li>
+                                Is there a pleasant aftertaste, or do bitter or sour notes dominate?
+                            </li>
+                        </ul>`;

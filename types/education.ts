@@ -23,7 +23,7 @@ export interface StylesSectionProps {
     hybridStyles: BeerStylesParent[] | null;
 }
 
-export interface BeerProcesStepProps {
+export interface StepProps {
     name: string;
     step: number;
     description: string;

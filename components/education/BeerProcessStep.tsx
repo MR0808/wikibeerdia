@@ -1,13 +1,13 @@
 import Image from "next/image";
 
-import { BeerProcesStepProps } from "@/types/education";
+import { StepProps } from "@/types/education";
 
 export const BeerProcessStep = ({
     name,
     step,
     description,
     image
-}: BeerProcesStepProps) => {
+}: StepProps) => {
     return (
         <div className="min-h-96 w-full rounded-2xl border border-black">
             <div className="relative top-0 -mt-10 -ml-9 flex-shrink-0">
