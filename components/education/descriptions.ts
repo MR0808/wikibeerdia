@@ -36,77 +36,88 @@ export const step7 = `Before distribution, the beer undergoes filtration to remo
 export const step8 = `The culmination of the brewing process is enjoying the beer. Whether freshly poured at a brewery or paired with a meal, each sip reflects the dedication and expertise of the brewers. Pairing different beer styles with food enhances the experience—think stouts with chocolate desserts or IPAs with spicy dishes. Beer tastings and festivals are fantastic opportunities to discover new favorites and expand your palate.`;
 
 export const tasting1 = `<p>
-                            Pour the beer into a clear glass and take a moment
-                            to observe its color, clarity, and head (foam).
+                            The first step in tasting beer is to observe its appearance. Pour your beer into a clean, clear glass to fully appreciate its visual characteristics. The way a beer looks can reveal much about its ingredients and brewing process.
                         </p>
                         <ul className="ml-10 list-disc space-y-3">
                             <li>
-                                <span className="font-semibold">Color:</span> Is it golden, amber, ruby, or deep brown?
-                                The hue gives hints about the malt and
-                                ingredients used.
+                                <span className="font-semibold">Color:</span> Take note of the beer’s color. Is it pale yellow, amber, ruby, or deep brown? This often reflects the types of malts used in the brewing process. For instance, pale beers often use lightly kilned malts, while darker beers may incorporate roasted malts. Some beers even have unique hues, like the reddish tint of a Flanders red ale or the jet-black depth of an imperial stout.
                             </li>
                             <li>
-                                <span className="font-semibold">Clarity:</span> Is it crystal clear, hazy, or cloudy?
-                                This can indicate the brewing style and
-                                filtration process.
+                                <span className="font-semibold">Clarity:</span> Observe the clarity of the beer. Is it brilliantly clear, slightly hazy, or completely opaque? Clarity can indicate whether the beer has been filtered or if it’s an unfiltered style like a hefeweizen or a New England IPA. Hazy beers often suggest high protein content or the presence of dry-hopping.
                             </li>
                             <li>
-                                <span className="font-semibold">Head:</span> Note the foam's texture and how it
-                                lingers—this reflects the beer's carbonation and
-                                quality.
+                                <span className="font-semibold">Head:</span> Examine the foam, also known as the beer’s head. Note its texture, size, and how long it lingers. A thick, creamy head often indicates good carbonation and quality ingredients. The head can also trap and concentrate aromas, enhancing your tasting experience.
                             </li>
-                        </ul>`;
+                        </ul>
+                        <p>
+                            Taking time to analyze a beer’s appearance can prepare you for the sensory experience to come.
+                        </p>`;
 
 export const tasting2 = `<p>
-                            Swirl the beer gently to release its aroma, then inhale deeply.
+                            A large portion of your beer-tasting experience comes from its aroma. Swirl the beer gently in your glass to release its volatile compounds and then take a deep inhale. The aroma often provides the first clue about what flavors you can expect.
                         </p>
                         <ul className="ml-10 list-disc space-y-3">
                             <li>
-                                <span className="font-semibold">Malty Notes:</span> Detect scents like bread, caramel, or chocolate.
+                                <span className="font-semibold">Malty Notes:</span> Detect scents like bread, biscuit, caramel, chocolate, or coffee, which come from the malted grains. These aromas might evoke comforting, familiar sensations, such as freshly baked bread or a cup of coffee.
                             </li>
                             <li>
-                                <span className="font-semibold">Hoppy Notes:</span> Look for floral, citrus, pine, or herbal aromas.
+                                <span className="font-semibold">Hoppy Notes:</span> Depending on the hops used, you might smell floral, citrus, pine, herbal, or earthy aromas. For example, West Coast IPAs often burst with grapefruit or pine, while English bitters might present softer, earthy hop notes.
                             </li>
                             <li>
-                                <span className="font-semibold">Other Scents:</span> Some beers offer fruity, spicy, or even funky hints from yeast or added ingredients.
+                                <span className="font-semibold">Other Scents:</span> Many beers have additional aromatic layers, such as fruity esters, spicy phenols, or unique ingredients like vanilla, cinnamon, or even chili peppers. These elements are often introduced by yeast, fermentation, or adjuncts. Specialty beers might surprise you with aromas of banana, clove, or even Brettanomyces funk.
                             </li>
-                        </ul>`;
+                        </ul>
+                        <p>
+                            Taking a moment to appreciate the aroma primes your taste buds for the flavors to follow.
+                        </p>`;
 
 export const tasting3 = `<p>
-                            Take a sip and let the beer coat your palate. Pay attention to three key elements:
+                            Now comes the best part: tasting the beer. Take a moderate sip and let it coat your entire palate. Analyze the beer’s flavor profile, balance, and complexity.
                         </p>
                         <ul className="ml-10 list-disc space-y-3">
                             <li>
-                                <span className="font-semibold">Sweetness vs. Bitterness:</span> Is it malty sweet or hop-forward bitter?
+                                <span className="font-semibold">Sweetness vs. Bitterness:</span> Pay attention to the interplay between malty sweetness and hop bitterness. Is one dominant, or are they balanced? Sweetness might come from caramel malts, while bitterness often originates from hops or roasted grains.
                             </li>
                             <li>
-                                <span className="font-semibold">Body:</span> Does it feel light, medium, or full on your tongue?
+                                <span className="font-semibold">Flavours:</span> Identify specific flavors — do you detect notes of citrus, chocolate, spices, or fruit? Different beer styles have distinct flavor profiles to explore. For instance, a Belgian dubbel might offer hints of dark fruit and spice, while a Berliner Weisse could deliver tart, refreshing acidity.
                             </li>
                             <li>
-                                <span className="font-semibold">Flavours:</span> Look for specific notes like coffee, citrus, vanilla, or spices.
+                                <span className="font-semibold">Balance:</span> Consider how the various elements of the beer work together. A well-balanced beer will have complementary flavors that enhance each other. Even beers with bold flavors, like a double IPA, should maintain a sense of harmony.
                             </li>
-                        </ul>`;
+                        </ul>
+                        <p>
+                            Each sip can reveal new nuances, so take your time and enjoy the exploration.
+                        </p>`;
 
 export const tasting4 = `<p>
-                            Notice the beer’s carbonation and weight.
+                            Mouthfeel refers to the physical sensation of the beer in your mouth. Take note of the following:
                         </p>
                         <ul className="ml-10 list-disc space-y-3">
                             <li>
-                                Is it smooth, creamy, or fizzy?
+                                <span className="font-semibold">Body:</span> Does the beer feel light, medium, or full-bodied? Lighter beers, like pilsners, are often crisp and refreshing, while heavier beers, like stouts, feel rich and robust. Some beers, like oatmeal stouts, may feel velvety smooth.
                             </li>
                             <li>
-                                Does it feel light and refreshing or heavy and robust?
+                                <span className="font-semibold">Carbonation:</span> Observe the level of carbonation. Is it fizzy, smooth, or flat? High carbonation can provide a champagne-like effervescence, while low carbonation offers a smoother, creamier mouthfeel.
                             </li>
-                        </ul>`;
+                            <li>
+                                <span className="font-semibold">Texture:</span> Some beers feel creamy or silky, while others might have a sharp or dry finish. A saison might have a prickly carbonation, while a milk stout could be smooth and luscious.
+                            </li>
+                        </ul>
+                        <p>
+                            Mouthfeel adds another dimension to your tasting experience, enhancing the flavors and aromas.
+                        </p>`;
 
 export const tasting5 = `<p>
-                            After swallowing, assess the finish.
+                            The finish is the impression the beer leaves after swallowing. It can be just as important as the initial taste.
                         </p>
                         <ul className="ml-10 list-disc space-y-3">
                             <li>
-                                Does the flavor linger, or does it dissipate quickly?
+                                <span className="font-semibold">Duration:</span> Does the flavor linger, or does it fade quickly? A long finish might showcase complex flavors, while a clean finish can make a beer more refreshing. A robust porter might leave a lasting roasted malt flavor, while a pilsner might conclude with a crisp snap.
                             </li>
                             <li>
-                                Is there a pleasant aftertaste, or do bitter or sour notes dominate?
+                                <span className="font-semibold">Aftertaste:</span> Note any residual flavors. Is the aftertaste sweet, bitter, or something else entirely? Some beers, like sours, might leave a tart finish, while others, like IPAs, may have a lingering bitterness.
                             </li>
-                        </ul>`;
+                        </ul>
+                        <p>
+                            The finish provides the final note in your sensory symphony, rounding out the tasting experience.
+                        </p>`;
