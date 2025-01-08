@@ -145,7 +145,7 @@ var __generator =
     };
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
-var supabase_1 = require("../../utils/supabase");
+var supabase_1 = require("../../../utils/supabase");
 var prisma = new client_1.PrismaClient();
 var getUrlExtension = function (url) {
     var _a;

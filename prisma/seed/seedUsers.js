@@ -37,67 +37,73 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
-var lorem_ipsum_1 = require("lorem-ipsum");
-var prisma_extension_random_1 = require("prisma-extension-random");
-var prisma = new client_1.PrismaClient().$extends((0, prisma_extension_random_1.default)());
-var lorem = new lorem_ipsum_1.LoremIpsum({
-    sentencesPerParagraph: {
-        max: 8,
-        min: 4
-    },
-    wordsPerSentence: {
-        max: 16,
-        min: 4
-    }
-});
-var ratings = [1, 2, 3, 4, 5];
+var faker_1 = require("@faker-js/faker");
+var supabase_1 = require("../../utils/supabase");
+var prisma = new client_1.PrismaClient();
+var getUrlExtension = function (url) {
+    var _a;
+    return (_a = url.split(/[#?]/)[0].split(".").pop()) === null || _a === void 0 ? void 0 : _a.trim();
+};
+var onImageEdit = function (imgUrl) { return __awaiter(void 0, void 0, void 0, function () {
+    var imgExt, response, blob, file;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                imgExt = getUrlExtension(imgUrl);
+                return [4 /*yield*/, fetch(imgUrl)];
+            case 1:
+                response = _a.sent();
+                return [4 /*yield*/, response.blob()];
+            case 2:
+                blob = _a.sent();
+                file = new File([blob], "profileImage." + imgExt, {
+                    type: blob.type
+                });
+                return [2 /*return*/, file];
+        }
+    });
+}); };
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var breweries, _i, breweries_1, brewery, x, user, j, rating, review;
+        var i, firstName, lastName, displayName, email, emailVerified, imageUrl, image, password, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.brewery.updateMany({ data: { status: "APPROVED" } })];
+                case 0:
+                    i = 0;
+                    _a.label = 1;
                 case 1:
-                    _a.sent();
-                    return [4 /*yield*/, prisma.brewery.findMany()];
+                    if (!(i < 200)) return [3 /*break*/, 6];
+                    firstName = faker_1.faker.person.firstName();
+                    lastName = faker_1.faker.person.lastName();
+                    displayName = faker_1.faker.internet.username();
+                    email = faker_1.faker.internet.email();
+                    emailVerified = faker_1.faker.date.anytime();
+                    return [4 /*yield*/, onImageEdit(faker_1.faker.image.avatar())];
                 case 2:
-                    breweries = _a.sent();
-                    _i = 0, breweries_1 = breweries;
-                    _a.label = 3;
+                    imageUrl = _a.sent();
+                    return [4 /*yield*/, (0, supabase_1.uploadImage)(imageUrl, "profile-bucket")];
                 case 3:
-                    if (!(_i < breweries_1.length)) return [3 /*break*/, 9];
-                    brewery = breweries_1[_i];
-                    x = Math.floor(Math.random() * (150 - 50 + 1)) + 50;
-                    return [4 /*yield*/, prisma.user.findManyRandom(x, {
-                            select: { id: true }
+                    image = _a.sent();
+                    password = faker_1.faker.internet.password();
+                    return [4 /*yield*/, prisma.user.create({
+                            data: {
+                                firstName: firstName,
+                                lastName: lastName,
+                                email: email,
+                                displayName: displayName,
+                                password: password,
+                                emailVerified: emailVerified,
+                                image: image
+                            }
                         })];
                 case 4:
                     user = _a.sent();
-                    j = 0;
+                    console.log(user);
                     _a.label = 5;
                 case 5:
-                    if (!(j < x)) return [3 /*break*/, 8];
-                    rating = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-                    return [4 /*yield*/, prisma.breweryReview.create({
-                            data: {
-                                comment: lorem.generateParagraphs(1),
-                                rating: rating,
-                                status: "APPROVED",
-                                breweryId: brewery.id,
-                                userId: user[j].id
-                            }
-                        })];
-                case 6:
-                    review = _a.sent();
-                    console.log(j, review.rating);
-                    _a.label = 7;
-                case 7:
-                    j++;
-                    return [3 /*break*/, 5];
-                case 8:
-                    _i++;
-                    return [3 /*break*/, 3];
-                case 9: return [2 /*return*/];
+                    i++;
+                    return [3 /*break*/, 1];
+                case 6: return [2 /*return*/];
             }
         });
     });

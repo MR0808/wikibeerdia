@@ -38,8 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
 var lorem_ipsum_1 = require("lorem-ipsum");
-var prisma_extension_random_1 = require("prisma-extension-random");
-var prisma = new client_1.PrismaClient().$extends((0, prisma_extension_random_1.default)());
+var prisma = new client_1.PrismaClient();
 var lorem = new lorem_ipsum_1.LoremIpsum({
     sentencesPerParagraph: {
         max: 8,
@@ -53,51 +52,73 @@ var lorem = new lorem_ipsum_1.LoremIpsum({
 var ratings = [1, 2, 3, 4, 5];
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var breweries, _i, breweries_1, brewery, x, user, j, rating, review;
+        var i, review, i, review, i, review;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.brewery.updateMany({ data: { status: "APPROVED" } })];
+                case 0:
+                    i = 0;
+                    _a.label = 1;
                 case 1:
-                    _a.sent();
-                    return [4 /*yield*/, prisma.brewery.findMany()];
-                case 2:
-                    breweries = _a.sent();
-                    _i = 0, breweries_1 = breweries;
-                    _a.label = 3;
-                case 3:
-                    if (!(_i < breweries_1.length)) return [3 /*break*/, 9];
-                    brewery = breweries_1[_i];
-                    x = Math.floor(Math.random() * (150 - 50 + 1)) + 50;
-                    return [4 /*yield*/, prisma.user.findManyRandom(x, {
-                            select: { id: true }
-                        })];
-                case 4:
-                    user = _a.sent();
-                    j = 0;
-                    _a.label = 5;
-                case 5:
-                    if (!(j < x)) return [3 /*break*/, 8];
-                    rating = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+                    if (!(i < 500)) return [3 /*break*/, 4];
                     return [4 /*yield*/, prisma.breweryReview.create({
                             data: {
                                 comment: lorem.generateParagraphs(1),
-                                rating: rating,
+                                rating: 5,
                                 status: "APPROVED",
-                                breweryId: brewery.id,
-                                userId: user[j].id
+                                breweryId: "f6599024-3838-40e6-97d6-d57845ee9a11",
+                                userId: "cm1q68hds0000146zv7kkvnnu"
+                            }
+                        })];
+                case 2:
+                    review = _a.sent();
+                    console.log(i, review.rating);
+                    _a.label = 3;
+                case 3:
+                    i++;
+                    return [3 /*break*/, 1];
+                case 4:
+                    i = 0;
+                    _a.label = 5;
+                case 5:
+                    if (!(i < 450)) return [3 /*break*/, 8];
+                    return [4 /*yield*/, prisma.breweryReview.create({
+                            data: {
+                                comment: lorem.generateParagraphs(1),
+                                rating: 4,
+                                status: "APPROVED",
+                                breweryId: "f6599024-3838-40e6-97d6-d57845ee9a11",
+                                userId: "cm1q68hds0000146zv7kkvnnu"
                             }
                         })];
                 case 6:
                     review = _a.sent();
-                    console.log(j, review.rating);
+                    console.log(i, review.rating);
                     _a.label = 7;
                 case 7:
-                    j++;
+                    i++;
                     return [3 /*break*/, 5];
                 case 8:
-                    _i++;
-                    return [3 /*break*/, 3];
-                case 9: return [2 /*return*/];
+                    i = 0;
+                    _a.label = 9;
+                case 9:
+                    if (!(i < 200)) return [3 /*break*/, 12];
+                    return [4 /*yield*/, prisma.breweryReview.create({
+                            data: {
+                                comment: lorem.generateParagraphs(1),
+                                rating: 3,
+                                status: "APPROVED",
+                                breweryId: "f6599024-3838-40e6-97d6-d57845ee9a11",
+                                userId: "cm1q68hds0000146zv7kkvnnu"
+                            }
+                        })];
+                case 10:
+                    review = _a.sent();
+                    console.log(i, review.rating);
+                    _a.label = 11;
+                case 11:
+                    i++;
+                    return [3 /*break*/, 9];
+                case 12: return [2 /*return*/];
             }
         });
     });

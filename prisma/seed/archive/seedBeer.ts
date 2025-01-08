@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-import { uploadImage } from "../../utils/supabase";
+import { uploadImage } from "../../../utils/supabase";
 
 const prisma = new PrismaClient();
 

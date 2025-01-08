@@ -1,7 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
+import prismaRandom from "prisma-extension-random";
 
 const prismaClientSingleton = () => {
-    return new PrismaClient();
+    return new PrismaClient().$extends(prismaRandom());
 };
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
@@ -14,4 +15,4 @@ const db = globalForPrisma.prisma ?? prismaClientSingleton();
 
 export default db;
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
