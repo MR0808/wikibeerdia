@@ -16,13 +16,13 @@ const NUMBER_OF_BEERS_TO_FETCH = 8;
 const BeerOtherBeers = ({
     initialBeers,
     breweryId,
-    user,
-    totalBeers
+    totalBeers,
+    beerId
 }: {
     initialBeers: BreweryBeersType[];
     breweryId: string;
-    user?: ExtendedUser;
     totalBeers: number;
+    beerId: string;
 }) => {
     const [offset, setOffset] = useState(NUMBER_OF_BEERS_TO_FETCH);
     const [beers, setBeers] = useState<BreweryBeersType[]>(initialBeers);
@@ -50,7 +50,9 @@ const BeerOtherBeers = ({
                     </div>
                     <div className="grid grid-cols-2 place-items-center gap-6 lg:grid-cols-4">
                         {beers.map((beer) => {
-                            return <BeerCard key={beer.id} beer={beer} />;
+                            if (beer.id !== beerId) {
+                                return <BeerCard key={beer.id} beer={beer} />;
+                            }
                         })}
                     </div>
                     <div

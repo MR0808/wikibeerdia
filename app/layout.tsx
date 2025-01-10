@@ -10,6 +10,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 
 import siteMetadata from "@/utils/siteMetaData";
 import { inter } from "./fonts";
+import Scroll from "@/components/global/Scroll";
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteMetadata.siteUrl),
@@ -59,6 +60,7 @@ export default async function RootLayout({
                     className={`${inter.className} bg-slate-100`}
                     suppressHydrationWarning={true}
                 >
+                    <Scroll />
                     <ReactQueryProvider>
                         <TooltipProvider>
                             <GoogleTagManager gtmId="G-FBQEGT4TEE" />

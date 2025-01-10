@@ -164,7 +164,7 @@ const BeerDetailsPage = async (props: { params: Params }) => {
                     <BeerOtherBeers
                         initialBeers={beers}
                         breweryId={data.breweryId}
-                        user={user}
+                        beerId={params.id}
                         totalBeers={data.brewery._count.beers}
                     />
                 </Suspense>

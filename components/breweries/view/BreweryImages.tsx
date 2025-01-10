@@ -62,7 +62,7 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                         <CarouselContent>
                             {images.map((image, index) => (
                                 <CarouselItem key={index}>
-                                    <div className="flex h-44 w-full items-center justify-center rounded-xl bg-background outline outline-1 outline-border md:h-[600px]">
+                                    <div className="bg-background outline-border flex h-44 w-full items-center justify-center rounded-xl outline-1 md:h-[600px]">
                                         <Image
                                             src={image.image}
                                             alt={`${data.name} - Image ${index + 1}`}
@@ -71,19 +71,20 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                                             )}
                                             height={600}
                                             width={600}
+                                            sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw, 33vw"
                                         />
                                     </div>
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
                         <Button
-                            className="absolute bottom-0 left-7 top-7 z-1 hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
+                            className="absolute top-7 bottom-0 left-7 z-1 hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
                             onClick={() => api?.scrollPrev()}
                         >
                             <ChevronLeftIcon />
                         </Button>
                         <Button
-                            className="absolute bottom-0 left-28 right-0 top-7 z-1 hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
+                            className="absolute top-7 right-0 bottom-0 left-28 z-1 hidden h-14 w-14 items-center justify-center rounded-full border-0 bg-white p-0 text-center text-2xl text-black md:flex"
                             onClick={() => api?.scrollNext()}
                         >
                             <ChevronRightIcon />
@@ -95,7 +96,7 @@ const BreweryImages = ({ data }: { data: BreweryType }) => {
                         className="overflow-hidden md:block"
                         ref={emblaThumbsRef}
                     >
-                        <div className="flex h-24 flex-row space-x-2 space-y-0 md:h-[600px] md:flex-col md:space-x-0 md:space-y-6">
+                        <div className="flex h-24 flex-row space-y-0 space-x-2 md:h-[600px] md:flex-col md:space-y-6 md:space-x-0">
                             {images.map((image, index) => {
                                 return (
                                     <BreweryImagesThumbnail
