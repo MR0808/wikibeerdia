@@ -15,8 +15,6 @@ const lorem = new LoremIpsum({
     }
 });
 
-const ratings = [1, 2, 3, 4, 5];
-
 async function main() {
     await prisma.brewery.updateMany({ data: { status: "APPROVED" } });
 

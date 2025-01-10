@@ -1,6 +1,4 @@
-import Autocomplete from "@/components/autocomplete/Autocomplete";
-
-const BreweryTest = () => {
+const BreweriesPage = () => {
     return (
         <div>
             <div className="mx-auto mt-36 flex h-16 w-[55%] flex-col justify-between space-y-12 sm:justify-between sm:space-x-0 md:space-x-4">
@@ -10,8 +8,7 @@ const BreweryTest = () => {
                     </div>
                 </div>
             </div>
-            <Autocomplete />
         </div>
     );
 };
-export default BreweryTest;
+export default BreweriesPage;
