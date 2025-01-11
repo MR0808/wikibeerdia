@@ -4,6 +4,7 @@ import * as z from "zod";
 import { Beer, Status, BeerReview } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import GithubSlugger, { slug } from "github-slugger";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
@@ -12,12 +13,14 @@ import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
 
+const slugger = new GithubSlugger();
+
 export const getBeers = async () => {
     const data = await db.beer.findMany({
         where: {
             status: "APPROVED"
         },
-        select: { name: true, id: true },
+        select: { name: true, id: true, slug: true },
         orderBy: { name: "asc" }
     });
     return { data };
@@ -58,9 +61,23 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
 
         const yearCreated = year ? parseInt(year) : null;
 
+        let slug = slugger.slug(name);
+        let slugExists = true;
+
+        while (slugExists) {
+            const checkSlug = await db.beer.findUnique({ where: { slug } });
+            if (!checkSlug) {
+                slugExists = false;
+                break;
+            } else {
+                slug = slugger.slug(name);
+            }
+        }
+
         data = await db.beer.create({
             data: {
                 name,
+                slug,
                 description,
                 headline,
                 abv: String(abv),
@@ -94,7 +111,7 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
         return renderError(error);
     }
 
-    redirect(`/beer/${data.id}`);
+    redirect(`/beer/${data.slug}`);
 };
 
 export const createBeerImages = async (images: ImagesUpload[]) => {
@@ -160,10 +177,37 @@ export const updateBeer = async (
 
         const yearCreated = year ? parseInt(year) : null;
 
+        const checkBeer = await db.beer.findUnique({ where: { id } });
+
+        if (!checkBeer) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+
+        let slug = checkBeer.slug;
+
+        if (name !== checkBeer.name) {
+            let slugExists = true;
+            while (slugExists) {
+                const checkSlug = await db.beer.findUnique({
+                    where: { slug }
+                });
+                if (!checkSlug) {
+                    slugExists = false;
+                    break;
+                } else {
+                    slug = slugger.slug(name);
+                }
+            }
+        }
+
         data = await db.beer.update({
             where: { id },
             data: {
                 name,
+                slug,
                 description,
                 headline,
                 abv: String(abv),
@@ -186,13 +230,13 @@ export const updateBeer = async (
         return { data: null, error: err.message };
     }
 
-    redirect(`/beers/${data.id}`);
+    redirect(`/beers/${data.slug}`);
 };
 
-export const getBeer = async (id: string) => {
+export const getBeer = async (slug: string) => {
     const data = await db.beer.findUnique({
         where: {
-            id
+            slug
         },
         include: {
             beerReviews: {
@@ -219,6 +263,7 @@ export const getBeer = async (id: string) => {
                 select: {
                     id: true,
                     name: true,
+                    slug: true,
                     logoUrl: true,
                     country: { select: { name: true } },
                     _count: {
@@ -269,6 +314,18 @@ export const createBeerReview = async (
 
         const { rating, comment, id } = validatedFields.data;
 
+        const beer = await db.beer.findUnique({
+            where: { id },
+            select: { slug: true }
+        });
+
+        if (!beer) {
+            return {
+                data: null,
+                error: getErrorMessage("Invalid fields!")
+            };
+        }
+
         data = await db.beerReview.create({
             data: {
                 rating,
@@ -298,7 +355,7 @@ export const createBeerReview = async (
             }
         };
 
-        revalidatePath(`/beers/${id}`);
+        revalidatePath(`/beers/${beer.slug}`);
 
         return {
             data: returnData,
@@ -424,14 +481,14 @@ export const updateBeerStatus = async (id: string, status: Status) => {
         };
 
     try {
-        await db.beer.update({
+        const data = await db.beer.update({
             where: { id },
             data: {
                 status
             }
         });
 
-        revalidatePath(`/breweries/${id}`);
+        revalidatePath(`/breweries/${data.slug}`);
 
         return {
             error: null

@@ -86,6 +86,8 @@ export interface BreweryFormProps extends BreweryTypeProps {
 }
 
 export type Params = Promise<{ id: string }>;
+export type ParamsSlug = Promise<{ slug: string }>;
+
 export type SearchParams = Promise<{
     [key: string]: string | string[] | undefined;
 }>;

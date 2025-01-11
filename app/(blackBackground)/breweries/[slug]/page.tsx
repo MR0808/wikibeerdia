@@ -22,23 +22,23 @@ import BreweryImages from "@/components/breweries/view/BreweryImages";
 import BreweryMain from "@/components/breweries/view/BreweryMain";
 import BreweryBeers from "@/components/breweries/view/BreweryBeers";
 import BreweryReviews from "@/components/breweries/view/BreweryReviews";
-import { Params } from "@/utils/types";
+import { ParamsSlug } from "@/utils/types";
 import getRatings from "@/lib/ratings";
 import BrewerySkeleton from "@/components/breweries/view/BrewerySkeleton";
 import siteMetadata from "@/utils/siteMetaData";
 
-export async function generateStaticParams() {
-    const { data: breweries } = await getBreweries();
-    return breweries.map((brewery) => ({ id: brewery.id }));
-}
+// export async function generateStaticParams() {
+//     const { data: breweries } = await getBreweries();
+//     return breweries.map((brewery) => ({ slug: brewery.slug }));
+// }
 
 export async function generateMetadata({
     params
 }: {
-    params: Promise<{ id: string }>;
+    params: Promise<{ slug: string }>;
 }) {
-    const { id } = await params;
-    const { data: brewery } = await getBrewery(id);
+    const { slug } = await params;
+    const { data: brewery } = await getBrewery(slug);
     if (!brewery) {
         return;
     }
@@ -84,10 +84,11 @@ export async function generateMetadata({
     };
 }
 
-const BreweryDetailsPage = async (props: { params: Params }) => {
-    const params = await props.params;
-    const { data } = await getBrewery(params.id);
+const BreweryDetailsPage = async (props: { params: ParamsSlug }) => {
+    const { slug } = await props.params;
+    const { data } = await getBrewery(slug);
     if (!data) redirect("/breweries/");
+    const id = data.id;
 
     const user = await currentUser();
     if (
@@ -97,8 +98,8 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
         redirect("/breweries/");
 
     const INITIAL_NUMBER_OF_BEERS = 8;
-    const beers = await getBreweryBeers(params.id, 0, INITIAL_NUMBER_OF_BEERS);
-    const reviews = await getBreweryReviews(params.id, 0, 5);
+    const beers = await getBreweryBeers(id, 0, INITIAL_NUMBER_OF_BEERS);
+    const reviews = await getBreweryReviews(id, 0, 5);
 
     const ratings = data.breweryReviews.map((review) => {
         return review.rating;
@@ -111,8 +112,7 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
     if (ratings.length > 0)
         rating = ratings.reduce((a, b) => a + b) / ratings.length;
 
-    const reviewDoesNotExist =
-        user && !(await findExistingReview(user.id, params.id));
+    const reviewDoesNotExist = user && !(await findExistingReview(user.id, id));
 
     return (
         <div className="container mt-32 flex h-16 flex-col justify-between px-4 sm:justify-between sm:space-x-0 md:px-28">
@@ -143,16 +143,17 @@ const BreweryDetailsPage = async (props: { params: Params }) => {
                     <BreweryMain data={data} />
                     <BreweryBeers
                         initialBeers={beers}
-                        breweryId={params.id}
+                        breweryId={id}
                         user={user}
                         totalBeers={data._count.beers}
                     />
                     <BreweryReviews
                         initialReviews={reviews}
-                        breweryId={params.id}
+                        breweryId={id}
                         totalReviews={ratings.length}
                         reviewDoesNotExist={reviewDoesNotExist}
                         ratingValues={ratingValues}
+                        slug={slug}
                     />
                 </Suspense>
             </div>

@@ -26,6 +26,7 @@ export interface BeerSubmitSearchParams {
 export interface BeerType {
     id: string;
     name: string;
+    slug: string;
     status: Status;
     description: string;
     abv: string;
@@ -48,6 +49,7 @@ export interface BeerType {
     brewery: {
         id: string;
         name: string;
+        slug: string;
         country: {
             name: string;
         };

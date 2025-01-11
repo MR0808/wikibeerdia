@@ -6,7 +6,7 @@ import { BreweryBeersType } from "@/types/breweries";
 const BreweryBeerCard = ({ beer }: { beer: BreweryBeersType }) => {
     return (
         <Link
-            href={`/beers/${beer.id}`}
+            href={`/beers/${beer.slug}`}
             className="group flex w-full flex-col items-center space-y-2 rounded-xl transition ease-in-out hover:shadow-lg"
         >
             <Image
@@ -16,7 +16,7 @@ const BreweryBeerCard = ({ beer }: { beer: BreweryBeersType }) => {
                 width={100}
                 className="block h-28 w-28 rounded-lg object-cover object-center transition ease-in-out group-hover:scale-110"
             />
-            <div className="font-semibold group-hover:text-primary">
+            <div className="group-hover:text-primary font-semibold">
                 {beer.name}
             </div>
             <div>{beer.abv}%</div>

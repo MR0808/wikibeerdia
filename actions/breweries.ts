@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 import { revalidatePath } from "next/cache";
 import { format } from "date-fns";
+import GithubSlugger, { slug } from "github-slugger";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
@@ -22,12 +23,14 @@ import { ImagesUpload } from "@/types/global";
 import { deleteImage } from "@/utils/supabase";
 import { filterColumn } from "@/lib/filterColumn";
 
+const slugger = new GithubSlugger();
+
 export const getBreweries = async () => {
     const data = await db.brewery.findMany({
         where: {
             status: "APPROVED"
         },
-        select: { name: true, id: true },
+        select: { name: true, id: true, slug: true },
         orderBy: { name: "asc" }
     });
     return { data };
@@ -178,9 +181,23 @@ export const createBrewery = async (
             };
         }
 
+        let slug = slugger.slug(name);
+        let slugExists = true;
+
+        while (slugExists) {
+            const checkSlug = await db.brewery.findUnique({ where: { slug } });
+            if (!checkSlug) {
+                slugExists = false;
+                break;
+            } else {
+                slug = slugger.slug(name);
+            }
+        }
+
         data = await db.brewery.create({
             data: {
                 name,
+                slug,
                 address1,
                 address2,
                 formattedAddress,
@@ -218,7 +235,7 @@ export const createBrewery = async (
         return renderError(error);
     }
 
-    redirect(`/breweries/${data.id}`);
+    redirect(`/breweries/${data.slug}`);
 };
 
 export const updateBrewery = async (
@@ -270,10 +287,37 @@ export const updateBrewery = async (
             };
         }
 
+        const checkBrewery = await db.brewery.findUnique({ where: { id } });
+
+        if (!checkBrewery) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+
+        let slug = checkBrewery.slug;
+
+        if (name !== checkBrewery.name) {
+            let slugExists = true;
+            while (slugExists) {
+                const checkSlug = await db.brewery.findUnique({
+                    where: { slug }
+                });
+                if (!checkSlug) {
+                    slugExists = false;
+                    break;
+                } else {
+                    slug = slugger.slug(name);
+                }
+            }
+        }
+
         data = await db.brewery.update({
             where: { id },
             data: {
                 name,
+                slug,
                 address1,
                 address2,
                 formattedAddress,
@@ -298,7 +342,7 @@ export const updateBrewery = async (
         return { data: null, error: err.message };
     }
 
-    redirect(`/breweries/${data.id}`);
+    redirect(`/breweries/${data.slug}`);
 };
 
 export const updateBreweryLogo = async (
@@ -336,7 +380,7 @@ export const updateBreweryLogo = async (
             };
         }
 
-        revalidatePath(`/breweries/${id}`);
+        revalidatePath(`/breweries/${data.slug}`);
 
         return { data, error: null };
     } catch (error) {
@@ -371,10 +415,10 @@ export const createBreweryImages = async (images: ImagesUpload[]) => {
     }
 };
 
-export const getBrewery = async (id: string) => {
+export const getBrewery = async (slug: string) => {
     const data = await db.brewery.findUnique({
         where: {
-            id
+            slug
         },
         include: {
             _count: {
@@ -433,6 +477,18 @@ export const createBreweryReview = async (
 
         const { rating, comment, id } = validatedFields.data;
 
+        const brewery = await db.brewery.findUnique({
+            where: { id },
+            select: { slug: true }
+        });
+
+        if (!brewery) {
+            return {
+                data: null,
+                error: getErrorMessage("Invalid fields!")
+            };
+        }
+
         data = await db.breweryReview.create({
             data: {
                 rating,
@@ -462,7 +518,7 @@ export const createBreweryReview = async (
             }
         };
 
-        revalidatePath(`/breweries/${id}`);
+        revalidatePath(`/breweries/${brewery.slug}`);
 
         return {
             data: returnData,
@@ -487,6 +543,7 @@ export const getBreweryBeers = async (
         take,
         select: {
             id: true,
+            slug: true,
             images: true,
             name: true,
             abv: true,
@@ -617,14 +674,14 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
         };
 
     try {
-        await db.brewery.update({
+        const data = await db.brewery.update({
             where: { id },
             data: {
                 status
             }
         });
 
-        revalidatePath(`/breweries/${id}`);
+        revalidatePath(`/breweries/${data.slug}`);
 
         return {
             error: null

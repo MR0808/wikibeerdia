@@ -17,7 +17,15 @@ import {
 
 import { updateBreweryStatus } from "@/actions/breweries";
 
-const BreweryAdminMenu = ({ id, status }: { id: string; status: Status }) => {
+const BreweryAdminMenu = ({
+    id,
+    status,
+    slug
+}: {
+    id: string;
+    status: Status;
+    slug: string;
+}) => {
     const [isPending, startTransition] = useTransition();
 
     const updateStatus = async (status: Status) => {
@@ -37,7 +45,7 @@ const BreweryAdminMenu = ({ id, status }: { id: string; status: Status }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:bg-primary hover:text-white">
+                <div className="hover:bg-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white">
                     {isPending ? <Watch /> : <Ellipsis />}
                 </div>
             </DropdownMenuTrigger>
@@ -73,7 +81,7 @@ const BreweryAdminMenu = ({ id, status }: { id: string; status: Status }) => {
                     </DropdownMenuItem>
                 )}
                 <DropdownMenuItem>
-                    <Link href={`/breweries/edit/${id}`}>Edit</Link>
+                    <Link href={`/breweries/edit/${slug}`}>Edit</Link>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

@@ -10,18 +10,18 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { currentUser } from "@/lib/auth";
-import { getBeer } from "@/actions/beers";
-import BeerEditForm from "@/components/beers/edit/BeerEditForm";
-import { getBeerStylesForm, getParentStyles } from "@/actions/beerStyles";
-import { getBreweries } from "@/actions/breweries";
+import { getBrewery } from "@/actions/breweries";
+import BreweryEditForm from "@/components/breweries/edit/BreweryEditForm";
+import { getBreweryTypesForms } from "@/actions/breweryTypes";
 import getSession from "@/lib/session";
-import { Params } from "@/utils/types";
-import BeerSkeleton from "@/components/beers/view/BeerSkeleton";
+import { ParamsSlug } from "@/utils/types";
+import BrewerySkeleton from "@/components/breweries/view/BrewerySkeleton";
 
-const BeerEditPage = async (props: { params: Params }) => {
-    const params = await props.params;
-    const { data } = await getBeer(params.id);
-    if (!data) redirect("/beers/");
+const BreweryEditPage = async (props: { params: ParamsSlug }) => {
+    const { slug } = await props.params;
+    const { data } = await getBrewery(slug);
+    if (!data) redirect("/breweries/");
+    const id = data.id;
 
     const user = await currentUser();
     if (
@@ -31,11 +31,7 @@ const BeerEditPage = async (props: { params: Params }) => {
         redirect("/breweries/");
 
     const session = await getSession();
-    const breweries = await getBreweries();
-    const parentStyles = await getParentStyles();
-    const beerStyles = await getBeerStylesForm(
-        data?.subStyle?.style?.parentStyle?.id || parentStyles.data[0].id
-    );
+    const { data: breweryTypes } = await getBreweryTypesForms();
 
     return (
         <>
@@ -43,7 +39,10 @@ const BeerEditPage = async (props: { params: Params }) => {
                 <Breadcrumb>
                     <BreadcrumbList>
                         <BreadcrumbItem>
-                            <BreadcrumbLink className="text-base" href="/beers">
+                            <BreadcrumbLink
+                                className="text-base"
+                                href="/breweries"
+                            >
                                 Breweries
                             </BreadcrumbLink>
                         </BreadcrumbItem>
@@ -51,16 +50,7 @@ const BeerEditPage = async (props: { params: Params }) => {
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 className="text-base"
-                                href={`/breweries/${data.breweryId}`}
-                            >
-                                {data.brewery.name}
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator className="text-base" />
-                        <BreadcrumbItem>
-                            <BreadcrumbLink
-                                className="text-base"
-                                href={`/beers/${data.id}`}
+                                href={`/breweries/${data.id}`}
                             >
                                 {data.name}
                             </BreadcrumbLink>
@@ -74,16 +64,14 @@ const BeerEditPage = async (props: { params: Params }) => {
                     </BreadcrumbList>
                 </Breadcrumb>
             </div>
-            <Suspense fallback={<BeerSkeleton />}>
-                <BeerEditForm
+            <Suspense fallback={<BrewerySkeleton />}>
+                <BreweryEditForm
                     data={data}
                     session={session}
-                    breweries={breweries.data}
-                    parentStyles={parentStyles.data}
-                    beerStyles={beerStyles.data}
+                    breweryTypes={breweryTypes}
                 />
             </Suspense>
         </>
     );
 };
-export default BeerEditPage;
+export default BreweryEditPage;

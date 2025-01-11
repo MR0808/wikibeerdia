@@ -16,7 +16,7 @@ const BreweryShare = ({ data }: { data: BreweryType }) => {
         <>
             <li>
                 <EmailShareButton
-                    url={`${process.env.NEXT_PUBLIC_APP_URL}/breweries/${data.id}`}
+                    url={`${process.env.NEXT_PUBLIC_APP_URL}/breweries/${data.slug}`}
                     subject={`Check out this awesome brewery I found on Wikibeerdia - ${data.name}`}
                     body={`I found this cool brewery on Wikibeerdia.com, it's call ${data.name}. Check it out at the link below`}
                 >
@@ -25,7 +25,7 @@ const BreweryShare = ({ data }: { data: BreweryType }) => {
             </li>
             <li>
                 <FacebookShareButton
-                    url={`${process.env.NEXT_PUBLIC_APP_URL}/breweries/${data.id}`}
+                    url={`${process.env.NEXT_PUBLIC_APP_URL}/breweries/${data.slug}`}
                     hashtag="#Wikibeerdia"
                 >
                     <FacebookIcon
@@ -38,7 +38,7 @@ const BreweryShare = ({ data }: { data: BreweryType }) => {
             <li>
                 <TwitterShareButton
                     title={`Wikibeerdia - Brewery - ${data.name}`}
-                    url={`${process.env.NEXT_PUBLIC_APP_URL}/breweries/${data.id}`}
+                    url={`${process.env.NEXT_PUBLIC_APP_URL}/breweries/${data.slug}`}
                     hashtags={[
                         "Wikibeerdia",
                         `${data.name.replace(/[^A-Z0-9]/gi, "")}`

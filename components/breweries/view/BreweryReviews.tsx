@@ -24,6 +24,7 @@ interface BreweryReviewsProps {
     totalReviews: number;
     reviewDoesNotExist: boolean | undefined;
     ratingValues: Object;
+    slug: string;
 }
 
 const BreweryReviews = ({
@@ -31,7 +32,8 @@ const BreweryReviews = ({
     breweryId,
     totalReviews,
     reviewDoesNotExist,
-    ratingValues
+    ratingValues,
+    slug
 }: BreweryReviewsProps) => {
     const maxReviews = 5;
     const [openAddReview, setOpenAddReview] = useState(false);
@@ -81,7 +83,7 @@ const BreweryReviews = ({
                             </Select>
                         </div>
                     </div>
-                    <div className="flex flex-col space-y-5 md:flex-row md:space-x-10 md:space-y-0">
+                    <div className="flex flex-col space-y-5 md:flex-row md:space-y-0 md:space-x-10">
                         <div className="flex flex-col md:w-1/3">
                             <RatingSummary
                                 ratings={ratingValues}
@@ -137,7 +139,7 @@ const BreweryReviews = ({
                                         className={`mx-auto mt-10 flex flex-row items-center justify-center ${maxReviews >= totalReviews && "hidden"}`}
                                     >
                                         <Link
-                                            href={`/breweries/${breweryId}/reviews`}
+                                            href={`/breweries/${slug}/reviews`}
                                             className="hover:underline"
                                         >
                                             Show more reviews

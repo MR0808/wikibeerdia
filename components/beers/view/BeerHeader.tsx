@@ -31,7 +31,7 @@ const BeerHeader = ({
                     <div className="flex w-full flex-row justify-center md:text-center">
                         <div className="items-center space-y-5">
                             <Link
-                                href={`/breweries/${data.breweryId}`}
+                                href={`/breweries/${data.brewery.slug}`}
                                 className="items-center"
                             >
                                 <Image
@@ -59,6 +59,7 @@ const BeerHeader = ({
                                         <BeerAdminMenu
                                             id={data.id}
                                             status={data.status}
+                                            slug={data.slug}
                                         />
                                     </li>
                                 )}

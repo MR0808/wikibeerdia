@@ -15,18 +15,21 @@ import {
     getBrewery,
     findExistingReview
 } from "@/actions/breweries";
-import { Params } from "@/utils/types";
+import { ParamsSlug } from "@/utils/types";
 import getRatings from "@/lib/ratings";
 import BreweryReviews from "@/components/breweries/reviews/BreweryReviews";
 import BreweryReviewsHeading from "@/components/breweries/reviews/BreweryReviewsHeading";
 import BreweryReviewsSkeleton from "@/components/breweries/reviews/BreweryReviewsSkeleton";
 
-const BreweryReviewsPage = async (props: { params: Params }) => {
+const BreweryReviewsPage = async (props: { params: ParamsSlug }) => {
     const params = await props.params;
-    const reviews = await getBreweryReviews(params.id, 0, 20);
-    const { data } = await getBrewery(params.id);
-
+    const { data } = await getBrewery(params.slug);
     if (!data) redirect("/breweries/");
+
+    const id = data.id;
+
+    const reviews = await getBreweryReviews(id, 0, 20);
+
     const user = await currentUser();
 
     const ratings = data.breweryReviews.map((review) => {
@@ -40,8 +43,7 @@ const BreweryReviewsPage = async (props: { params: Params }) => {
     if (ratings.length > 0)
         rating = ratings.reduce((a, b) => a + b) / ratings.length;
 
-    const reviewDoesNotExist =
-        user && !(await findExistingReview(user.id, params.id));
+    const reviewDoesNotExist = user && !(await findExistingReview(user.id, id));
 
     return (
         <div className="container mt-32 flex h-16 flex-col justify-between px-4 sm:justify-between sm:space-x-0 md:px-28">
@@ -56,7 +58,7 @@ const BreweryReviewsPage = async (props: { params: Params }) => {
                     <BreadcrumbItem>
                         <BreadcrumbLink
                             className="text-base"
-                            href={`/breweries/${data.id}`}
+                            href={`/breweries/${data.slug}`}
                         >
                             {data.name}
                         </BreadcrumbLink>
@@ -84,7 +86,7 @@ const BreweryReviewsPage = async (props: { params: Params }) => {
                             />
                             <BreweryReviews
                                 initialReviews={reviews}
-                                breweryId={params.id}
+                                breweryId={id}
                                 totalReviews={ratings.length}
                                 reviewDoesNotExist={reviewDoesNotExist}
                                 ratingValues={ratingValues}

@@ -34,7 +34,7 @@ const BreweryHeader = ({
         <>
             <div className="flex flex-row justify-between">
                 <div className="w-1/2">
-                    <h3 className="text-balance text-3xl font-semibold md:text-6xl">
+                    <h3 className="text-3xl font-semibold text-balance md:text-6xl">
                         <Link
                             href={data.website}
                             target="_blank"
@@ -96,7 +96,7 @@ const BreweryHeader = ({
                                         <Link
                                             href={data.website}
                                             target="_blank"
-                                            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:bg-primary hover:text-white"
+                                            className="hover:bg-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white"
                                         >
                                             <ExternalLink />
                                         </Link>
@@ -124,6 +124,7 @@ const BreweryHeader = ({
                                 <BreweryAdminMenu
                                     id={data.id}
                                     status={data.status}
+                                    slug={data.slug}
                                 />
                             </li>
                         )}
@@ -153,7 +154,7 @@ const BreweryHeader = ({
                         <Link
                             href={data.website}
                             target="_blank"
-                            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:bg-primary hover:text-white"
+                            className="hover:bg-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white"
                         >
                             <ExternalLink />
                         </Link>

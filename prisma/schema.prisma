@@ -175,6 +175,7 @@ model BeerFavorite {
 
 model Brewery {
   id                String            @id @default(uuid())
+  slug              String            @unique
   name              String
   status            Status            @default(PENDING)
   address1          String
@@ -269,6 +270,7 @@ model BreweryType {
 
 model Beer {
   id             String         @id @default(uuid())
+  slug           String         @unique
   name           String
   status         Status         @default(PENDING)
   description    String

@@ -3,6 +3,7 @@ import { Status } from "@prisma/client";
 export interface BreweryType {
     id: string;
     name: string;
+    slug: string;
     status: Status;
     address1: string;
     address2: string | null;
@@ -48,6 +49,7 @@ export interface BreweryType {
 
 export interface BreweryBeersType {
     id: string;
+    slug: string;
     name: string;
     abv: string;
     subStyle: {
