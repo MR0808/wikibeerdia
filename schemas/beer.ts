@@ -24,7 +24,7 @@ export const BeerSchema = z.object({
         invalid_type_error: "Available must be a boolean"
     }),
     parentStyle: z.string().min(1, "Parent style is required"),
-    subStyle: z.string().min(1, "Sub Style is required"),
+    style: z.string().min(1, "Style is required"),
     brewery: z.string().min(1, "Brewery is required"),
     images: z.array(z.object({ value: z.custom<File>() })).optional()
 });
@@ -53,7 +53,7 @@ export const BeerEditSchema = z.object({
         invalid_type_error: "Available must be a boolean"
     }),
     parentStyle: z.string().min(1, "Parent style is required"),
-    subStyle: z.string().min(1, "Sub Style is required"),
+    style: z.string().min(1, "Style is required"),
     brewery: z.string().min(1, "Brewery is required")
 });
 
@@ -81,7 +81,7 @@ export const BeerSchemaCreate = z.object({
         invalid_type_error: "Available must be a boolean"
     }),
     parentStyle: z.string().min(1, "Parent style is required"),
-    subStyle: z.string().min(1, "Sub Style is required"),
+    style: z.string().min(1, "Style is required"),
     brewery: z.string().min(1, "Brewery is required"),
     images: z
         .array(z.object({ order: z.number(), image: z.string() }))

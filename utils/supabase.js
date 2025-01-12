@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteImage = exports.uploadImage = exports.supabase = void 0;
+exports.getAllImages = exports.deleteImage = exports.uploadImage = exports.supabase = void 0;
 var supabase_js_1 = require("@supabase/supabase-js");
 // Create a single supabase client for interacting with your database
 exports.supabase = (0, supabase_js_1.createClient)(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_KEY);
@@ -68,3 +68,23 @@ var deleteImage = function (url, bucket) {
     return exports.supabase.storage.from(bucket).remove([imageName]);
 };
 exports.deleteImage = deleteImage;
+var getAllImages = function (bucket) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, data, error;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0: return [4 /*yield*/, exports.supabase
+                    .storage
+                    .from(bucket)
+                    .list('folder', {
+                    limit: 100,
+                    offset: 0,
+                    sortBy: { column: 'name', order: 'asc' },
+                })];
+            case 1:
+                _a = _b.sent(), data = _a.data, error = _a.error;
+                console.log(data);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.getAllImages = getAllImages;

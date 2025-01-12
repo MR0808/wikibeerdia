@@ -54,7 +54,7 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
             ibu,
             year,
             available,
-            subStyle,
+            style,
             brewery,
             images
         } = validatedFields.data;
@@ -83,7 +83,7 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
                 abv: String(abv),
                 ibu: String(ibu),
                 yearCreated,
-                subStyleId: subStyle,
+                styleId: style,
                 breweryId: brewery,
                 available,
                 userId: user.id
@@ -171,7 +171,7 @@ export const updateBeer = async (
             ibu,
             year,
             available,
-            subStyle,
+            style,
             brewery
         } = validatedFields.data;
 
@@ -214,7 +214,7 @@ export const updateBeer = async (
                 ibu: String(ibu),
                 yearCreated,
                 available,
-                subStyleId: subStyle,
+                styleId: style,
                 breweryId: brewery
             }
         });
@@ -244,17 +244,11 @@ export const getBeer = async (slug: string) => {
                     rating: true
                 }
             },
-            subStyle: {
+            style: {
                 select: {
                     id: true,
                     name: true,
-                    style: {
-                        select: {
-                            id: true,
-                            name: true,
-                            parentStyle: { select: { id: true, name: true } }
-                        }
-                    }
+                    parentStyle: { select: { id: true, name: true } }
                 }
             },
             images: { orderBy: { order: "asc" } },

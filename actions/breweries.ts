@@ -547,7 +547,7 @@ export const getBreweryBeers = async (
             images: true,
             name: true,
             abv: true,
-            subStyle: {
+            style: {
                 select: {
                     name: true
                 }
