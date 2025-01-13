@@ -6,6 +6,7 @@ import { useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { BeerStyle } from "@/types/beerStyles";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -35,39 +36,40 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/global/Icons";
 
-import { updateBeerStyle } from "@/actions/beerStyles";
+import { updateBreweryType } from "@/actions/breweryTypes";
 import { BeerStyleSchema } from "@/schemas/admin";
 import { statusLabels } from "@/utils/types";
-import { StyleProps } from "@/utils/types";
 
 interface UpdateStyleSheetProps
     extends React.ComponentPropsWithRef<typeof Sheet> {
-    type: StyleProps;
+    style: BeerStyle;
 }
 
-export const UpdateStyleSheet = ({ type, ...props }: UpdateStyleSheetProps) => {
+export const UpdateStyleSheet = ({
+    style,
+    ...props
+}: UpdateStyleSheetProps) => {
     const [isUpdatePending, startUpdateTransition] = useTransition();
 
     const form = useForm<z.infer<typeof BeerStyleSchema>>({
         resolver: zodResolver(BeerStyleSchema),
         defaultValues: {
-            status: type.status,
-            name: type.name,
-            description: type.description || ""
+            status: style.status,
+            name: style.name,
+            description: style.description || undefined
         }
     });
 
     useEffect(() => {
         form.reset({
-            status: type.status,
-            name: type.name,
-            description: type.description || ""
+            status: style.status,
+            name: style.name
         });
-    }, [type, form]);
+    }, [style, form]);
 
     function onSubmit(input: z.infer<typeof BeerStyleSchema>) {
         startUpdateTransition(async () => {
-            const { error } = await updateBeerStyle(input, type.id);
+            const { error } = await updateBreweryType(input, style.id);
 
             if (error) {
                 toast.error(error);
@@ -76,7 +78,7 @@ export const UpdateStyleSheet = ({ type, ...props }: UpdateStyleSheetProps) => {
 
             form.reset();
             props.onOpenChange?.(false);
-            toast.success("Style updated");
+            toast.success("Task updated");
         });
     }
 
@@ -84,9 +86,9 @@ export const UpdateStyleSheet = ({ type, ...props }: UpdateStyleSheetProps) => {
         <Sheet {...props}>
             <SheetContent className="flex flex-col gap-6 sm:max-w-md">
                 <SheetHeader className="text-left">
-                    <SheetTitle>Update Style</SheetTitle>
+                    <SheetTitle>Update task</SheetTitle>
                     <SheetDescription>
-                        Update the style details and save the changes
+                        Update the type details and save the changes
                     </SheetDescription>
                 </SheetHeader>
                 <Form {...form}>
@@ -102,24 +104,7 @@ export const UpdateStyleSheet = ({ type, ...props }: UpdateStyleSheetProps) => {
                                     <FormLabel>Title</FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            placeholder="Beer style name"
-                                            className="resize-none"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Beer style description"
+                                            placeholder="Do a kickflip"
                                             className="resize-none"
                                             {...field}
                                         />

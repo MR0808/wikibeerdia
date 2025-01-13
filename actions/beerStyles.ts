@@ -25,7 +25,6 @@ export const getBeerStylesByParent = async (slug: string) => {
                 id: true,
                 name: true,
                 slug: true,
-                subStyles: { orderBy: { name: "asc" } }
             },
             orderBy: { name: "asc" }
         });
@@ -63,9 +62,9 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
             "name",
             "asc"
         ]) as [
-            keyof Style | "parentStyle" | undefined,
-            "asc" | "desc" | undefined
-        ];
+                keyof Style | "parentStyle" | undefined,
+                "asc" | "desc" | undefined
+            ];
 
         const fromDay = from ? format(new Date(from), "yyyy-MM-dd") : undefined;
         const toDay = to ? format(new Date(to), "yyyy-MM-dd") : undefined;
@@ -133,13 +132,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
         const data = await db.style.findMany({
             where: usedFilter,
             include: {
-                subStyles: {
-                    select: {
-                        name: true,
-                        id: true,
-                        status: true
-                    }
-                },
                 parentStyle: {
                     select: {
                         name: true,
@@ -168,13 +160,6 @@ export const getBeerStyle = async (id: string) => {
             id
         },
         include: {
-            subStyles: {
-                select: {
-                    name: true,
-                    id: true,
-                    status: true
-                }
-            },
             parentStyle: {
                 select: {
                     name: true,
@@ -196,15 +181,6 @@ export const getBeerStylesForm = async (parentStyleId: string) => {
         select: {
             id: true,
             name: true,
-            subStyles: {
-                where: {
-                    status: "APPROVED"
-                },
-                select: {
-                    name: true,
-                    id: true
-                }
-            }
         }
     });
     return { data };

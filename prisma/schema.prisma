@@ -257,7 +257,7 @@ model BreweryReview {
 model BreweryType {
   id          String        @id @default(uuid())
   name        String
-  desription  String?
+  description String?
   status      Status        @default(PENDING)
   breweries   Brewery[]
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)

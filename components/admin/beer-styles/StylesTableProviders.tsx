@@ -26,7 +26,7 @@ export const useStylesTable = () => {
     const context = useContext(StylesTableContext);
     if (!context) {
         throw new Error(
-            "useStylesTable must be used within a StylesTableProvider"
+            "useTasksTable must be used within a TasksTableProvider"
         );
     }
     return context;
@@ -57,7 +57,7 @@ export const StylesTableProvider = ({ children }: React.PropsWithChildren) => {
                         <Tooltip key={flag.value} delayDuration={250}>
                             <ToggleGroupItem
                                 value={flag.value}
-                                className="whitespace-nowrap px-3 text-xs"
+                                className="px-3 text-xs whitespace-nowrap"
                                 asChild
                             >
                                 <TooltipTrigger>
@@ -72,10 +72,10 @@ export const StylesTableProvider = ({ children }: React.PropsWithChildren) => {
                                 align="start"
                                 side="bottom"
                                 sideOffset={6}
-                                className="flex max-w-60 flex-col space-y-1.5 border bg-background py-2 font-semibold text-foreground"
+                                className="bg-background text-foreground flex max-w-60 flex-col space-y-1.5 border py-2 font-semibold"
                             >
                                 <div>{flag.tooltipTitle}</div>
-                                <div className="text-xs text-muted-foreground">
+                                <div className="text-muted-foreground text-xs">
                                     {flag.tooltipDescription}
                                 </div>
                             </TooltipContent>

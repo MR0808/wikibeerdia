@@ -73,21 +73,13 @@ const BeerHeader = ({
                         <div className="flex w-full flex-row justify-between">
                             <div className="text-base font-bold">Category:</div>
                             <div className="w-1/2 text-left text-base">
-                                {data.subStyle?.style.parentStyle.name}
+                                {data.style?.parentStyle.name}
                             </div>
                         </div>
                         <div className="flex w-full flex-row justify-between">
                             <div className="text-base font-bold">Style:</div>
                             <div className="w-1/2 text-left text-base">
-                                {data.subStyle?.style.name}
-                            </div>
-                        </div>
-                        <div className="flex w-full flex-row justify-between">
-                            <div className="text-base font-bold">
-                                Sub-Style:
-                            </div>
-                            <div className="w-1/2 text-left text-base">
-                                {data.subStyle?.name}
+                                {data.style?.name}
                             </div>
                         </div>
                         <div className="flex w-full flex-row justify-between">

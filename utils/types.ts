@@ -116,12 +116,25 @@ export interface DataTableFilterOption<TData> {
     isMulti?: boolean;
 }
 
+// export interface StyleProps {
+//     subStyles: {
+//         name: string;
+//         status: Status;
+//         id: string;
+//     }[];
+//     parentStyle: {
+//         name: string;
+//         id: string;
+//     };
+//     id: string;
+//     name: string;
+//     status: Status;
+//     description: string | null;
+//     createdAt: Date;
+// }
+
+
 export interface StyleProps {
-    subStyles: {
-        name: string;
-        status: Status;
-        id: string;
-    }[];
     parentStyle: {
         name: string;
         id: string;
@@ -131,4 +144,10 @@ export interface StyleProps {
     status: Status;
     description: string | null;
     createdAt: Date;
+    slug: string;
+    region: string[];
+    abvLow: string | null;
+    abvHigh: string | null;
+    ibuLow: string | null;
+    ibuHigh: string | null;
 }

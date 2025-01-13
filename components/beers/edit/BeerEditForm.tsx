@@ -123,8 +123,8 @@ const BeerEditForm = ({
             ibu: data.ibu ? parseInt(data.ibu) : undefined,
             year: data.yearCreated ? data.yearCreated.toString() : undefined,
             available: data.available,
-            parentStyle: data.subStyle?.style.parentStyle.id,
-            subStyle: data.subStyleId || undefined,
+            parentStyle: data.style?.parentStyle.id,
+            style: data.styleId || undefined,
             brewery: data.breweryId
         }
     });
@@ -136,7 +136,7 @@ const BeerEditForm = ({
                     const result = await getBeerStylesForm(
                         form.getValues("parentStyle")
                     );
-                    form.setValue("subStyle", "");
+                    form.setValue("style", "");
                     setStylesList(result.data);
                 } else {
                     setFirstLoad(false);
@@ -148,16 +148,12 @@ const BeerEditForm = ({
         fetchStyles();
     }, [form.watch("parentStyle")]);
 
-    const getStyleName = (subStyleId: string) => {
+    const getStyleName = (styleId: string) => {
         let name = "";
-        stylesList.map((style) => {
-            const sub = style.subStyles.find(
-                (subStyle) => subStyle.id === subStyleId
-            );
-            if (sub) {
-                name = sub.name;
-            }
-        });
+        const newName = stylesList.find(
+            (styleSelect) => styleSelect.id === styleId
+        );
+        newName ? (name = newName.name) : (name = "");
         return name;
     };
 
@@ -469,7 +465,7 @@ const BeerEditForm = ({
                             />
                             <FormField
                                 control={form.control}
-                                name="subStyle"
+                                name="style"
                                 render={({ field }) => (
                                     <FormItem
                                         className={cn("flex w-full flex-col")}
@@ -516,55 +512,42 @@ const BeerEditForm = ({
                                                             No primary styles
                                                             found.
                                                         </CommandEmpty>
-                                                        {stylesList.map(
-                                                            (style) => (
-                                                                <CommandGroup
-                                                                    heading={
-                                                                        style.name
-                                                                    }
-                                                                    key={
-                                                                        style.id
-                                                                    }
-                                                                >
-                                                                    {style.subStyles.map(
-                                                                        (
-                                                                            subStyle
-                                                                        ) => (
-                                                                            <CommandItem
-                                                                                value={
-                                                                                    subStyle.name
-                                                                                }
-                                                                                key={
-                                                                                    subStyle.id
-                                                                                }
-                                                                                onSelect={() => {
-                                                                                    form.setValue(
-                                                                                        "subStyle",
-                                                                                        subStyle.id
-                                                                                    );
-                                                                                    setOpenStyles(
-                                                                                        false
-                                                                                    );
-                                                                                }}
-                                                                            >
-                                                                                {
-                                                                                    subStyle.name
-                                                                                }
-                                                                                <CheckIcon
-                                                                                    className={cn(
-                                                                                        "ml-auto h-4 w-4",
-                                                                                        subStyle.id ===
-                                                                                            field.value
-                                                                                            ? "opacity-100"
-                                                                                            : "opacity-0"
-                                                                                    )}
-                                                                                />
-                                                                            </CommandItem>
-                                                                        )
-                                                                    )}
-                                                                </CommandGroup>
-                                                            )
-                                                        )}
+                                                        <CommandGroup>
+                                                            {stylesList.map(
+                                                                (style) => (
+                                                                    <CommandItem
+                                                                        value={
+                                                                            style.name
+                                                                        }
+                                                                        key={
+                                                                            style.id
+                                                                        }
+                                                                        onSelect={() => {
+                                                                            form.setValue(
+                                                                                "style",
+                                                                                style.id
+                                                                            );
+                                                                            setOpenStyles(
+                                                                                false
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            style.name
+                                                                        }
+                                                                        <CheckIcon
+                                                                            className={cn(
+                                                                                "ml-auto h-4 w-4",
+                                                                                style.id ===
+                                                                                    field.value
+                                                                                    ? "opacity-100"
+                                                                                    : "opacity-0"
+                                                                            )}
+                                                                        />
+                                                                    </CommandItem>
+                                                                )
+                                                            )}
+                                                        </CommandGroup>
                                                     </CommandList>
                                                 </Command>
                                             </PopoverContent>

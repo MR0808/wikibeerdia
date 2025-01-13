@@ -4,6 +4,7 @@ import { useState } from "react";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import { BeerStyle } from "@/types/beerStyles";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,10 +18,8 @@ import { DataTableColumnHeader } from "@/components/datatable/DataTableColumnHea
 
 import { getStatusIcon } from "@/lib/utils";
 import { UpdateStyleSheet } from "./UpdateStyleSheet";
-import { StyleProps } from "@/utils/types";
-import Link from "next/link";
 
-export const getColumns = (): ColumnDef<StyleProps>[] => {
+export const getColumns = (): ColumnDef<BeerStyle>[] => {
     return [
         {
             id: "select",
@@ -74,11 +73,22 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
                 return (
                     <div className="flex space-x-2">
                         <span className="max-w-[31.25rem] truncate font-medium">
-                            <Link
-                                href={`/admin/beer-styles/${row.original.id}`}
-                            >
-                                {row.getValue("name")}
-                            </Link>
+                            {row.getValue("name")}
+                        </span>
+                    </div>
+                );
+            }
+        },
+        {
+            accessorKey: "description",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Description" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <div className="flex space-x-2">
+                        <span className="max-w-[31.25rem] truncate font-medium">
+                            {row.getValue("description")}
                         </span>
                     </div>
                 );
@@ -99,38 +109,15 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
                 return (
                     <div className="flex w-[6.25rem] items-center">
                         <Icon
-                            className="size-4 text-muted-foreground"
+                            className="text-muted-foreground mr-2 size-4"
                             aria-hidden="true"
                         />
-                        <span className="ml-2 capitalize">{status}</span>
+                        <span className="capitalize">{status}</span>
                     </div>
                 );
             },
             filterFn: (row, id, value) => {
                 return Array.isArray(value) && value.includes(row.getValue(id));
-            }
-        },
-        {
-            id: "subStyles",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Sub Styles" />
-            ),
-            cell: ({ row }) => {
-                return (
-                    <div className="flex space-x-2">
-                        <span className="max-w-[31.25rem] truncate font-medium">
-                            <ul className="list-none">
-                                {row.original.subStyles.map((subStyle) => {
-                                    return (
-                                        <li key={subStyle.id}>
-                                            {subStyle.name}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </span>
-                    </div>
-                );
             }
         },
         {
@@ -151,14 +138,14 @@ export const getColumns = (): ColumnDef<StyleProps>[] => {
                         <UpdateStyleSheet
                             open={showUpdateStyleSheet}
                             onOpenChange={setShowUpdateStyleSheet}
-                            type={row.original}
+                            style={row.original}
                         />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     aria-label="Open menu"
                                     variant="ghost"
-                                    className="flex size-8 p-0 data-[state=open]:bg-muted"
+                                    className="data-[state=open]:bg-muted flex size-8 p-0"
                                 >
                                     <DotsHorizontalIcon
                                         className="size-4"

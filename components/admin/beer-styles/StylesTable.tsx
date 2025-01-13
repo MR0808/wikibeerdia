@@ -2,8 +2,6 @@
 "use memo";
 
 import { use, useMemo } from "react";
-import { Style } from "@prisma/client";
-
 import { type DataTableFilterField } from "@/utils/types";
 import { statusLabels } from "@/utils/types";
 
@@ -12,8 +10,8 @@ import { DataTableAdvancedToolbar } from "@/components/datatable/advanced/DataTa
 import { DataTable } from "@/components/datatable/DataTable";
 import { DataTableToolbar } from "@/components/datatable/DataTableToolbar";
 
-import { type getBeerStyles, getParentStyles } from "@/actions/beerStyles";
-import { StyleProps } from "@/utils/types";
+import { BeerStyle } from "@/types/beerStyles";
+import { type getBeerStyles } from "@/actions/beerStyles";
 import { getStatusIcon } from "@/lib/utils";
 import { getColumns } from "./StylesTableColumns";
 import { StylesTableFloatingBar } from "./StylesTableFloatingBar";
@@ -22,19 +20,13 @@ import { StylesTableToolbarActions } from "./StylesTableToolbarActions";
 
 interface StylesTableProps {
     stylesPromise: ReturnType<typeof getBeerStyles>;
-    parentStyles: ReturnType<typeof getParentStyles>;
 }
 
-export const StylesTable = ({
-    stylesPromise,
-    parentStyles
-}: StylesTableProps) => {
+export const StylesTable = ({ stylesPromise }: StylesTableProps) => {
     // Feature flags for showcasing some additional features. Feel free to remove them.
     const { featureFlags } = useStylesTable();
 
     const { data, pageCount } = use(stylesPromise);
-
-    const { data: parentData } = use(parentStyles);
 
     // Memoize the columns so they don't re-render on every render
     const columns = useMemo(() => getColumns(), []);
@@ -50,25 +42,11 @@ export const StylesTable = ({
      * @prop {React.ReactNode} [icon] - An optional icon to display next to the label.
      * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
      */
-    const filterFields: DataTableFilterField<StyleProps>[] = [
+    const filterFields: DataTableFilterField<BeerStyle>[] = [
         {
             label: "Name",
             value: "name",
             placeholder: "Filter names..."
-        },
-        {
-            label: "Sub Style",
-            value: "subStyles",
-            placeholder: "Filter sub styles..."
-        },
-        {
-            label: "Style",
-            value: "parentStyle",
-            options: parentData.map((style) => ({
-                label: style.name,
-                value: style.id,
-                withCount: true
-            }))
         },
         {
             label: "Status",
@@ -90,7 +68,7 @@ export const StylesTable = ({
         filterFields,
         enableAdvancedFilter: featureFlags.includes("advancedFilter"),
         initialState: {
-            sorting: [{ id: "parentStyle", desc: false }],
+            sorting: [{ id: "name", desc: false }],
             columnPinning: { right: ["actions"] }
         },
         // For remembering the previous row selection on page change
@@ -112,17 +90,11 @@ export const StylesTable = ({
                     table={table}
                     filterFields={filterFields}
                 >
-                    <StylesTableToolbarActions
-                        table={table}
-                        parentStyleId={parentData[0].id}
-                    />
+                    <StylesTableToolbarActions table={table} />
                 </DataTableAdvancedToolbar>
             ) : (
                 <DataTableToolbar table={table} filterFields={filterFields}>
-                    <StylesTableToolbarActions
-                        table={table}
-                        parentStyleId={parentData[0].id}
-                    />
+                    <StylesTableToolbarActions table={table} />
                 </DataTableToolbar>
             )}
         </DataTable>

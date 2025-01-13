@@ -52,7 +52,7 @@ export interface BreweryBeersType {
     slug: string;
     name: string;
     abv: string;
-    subStyle: {
+    style: {
         name: string;
     } | null;
     images: {

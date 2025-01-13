@@ -13,16 +13,16 @@ import {
 
 import { SearchParams } from "@/utils/types";
 import { StylesTable } from "@/components/admin/beer-styles/StylesTable";
-import { StylesTableProvider } from "@/components/admin/beer-styles/StylesTableProviders";
+import { TypesTableProvider } from "@/components/admin/brewery-types/TypesTableProviders";
 import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
 import { SearchParamsSchema } from "@/schemas/admin";
-import { getBeerStyles, getParentStyles } from "@/actions/beerStyles";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import { checkAuthenticated } from "@/lib/auth";
+import { getBeerStyles } from "@/actions/beerStyles";
 
 const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
     const searchParams = await props.searchParams;
-    const user = await checkAuthenticated(true);
+    const user = checkAuthenticated(true);
     if (!user) {
         redirect("/login");
     }
@@ -30,8 +30,6 @@ const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
     const search = SearchParamsSchema.parse(searchParams);
 
     const stylesPromise = getBeerStyles(search);
-
-    const parentStyles = getParentStyles();
 
     return (
         <div className="container mt-36 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0">
@@ -45,17 +43,17 @@ const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
                     <BreadcrumbSeparator className="text-base" />
                     <BreadcrumbItem>
                         <BreadcrumbPage className="text-base">
-                            Beer Styles
+                            Brewery Types
                         </BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mb-14 mt-8 flex w-80 flex-row justify-between sm:w-1/2">
-                <h1 className="text-4xl font-semibold">Beer Styles</h1>
+            <div className="mt-8 mb-14 flex w-80 flex-row justify-between sm:w-1/2">
+                <h1 className="text-4xl font-semibold">Brewery Types</h1>
             </div>
             <div className="flex flex-col-reverse gap-x-16 sm:flex-row">
                 <div className="flex w-80 flex-col sm:w-full">
-                    <StylesTableProvider>
+                    <TypesTableProvider>
                         <Suspense fallback={<Skeleton className="h-7 w-52" />}>
                             <DateRangePicker
                                 triggerSize="sm"
@@ -80,12 +78,9 @@ const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
                                 />
                             }
                         >
-                            <StylesTable
-                                stylesPromise={stylesPromise}
-                                parentStyles={parentStyles}
-                            />
+                            <StylesTable stylesPromise={stylesPromise} />
                         </Suspense>
-                    </StylesTableProvider>
+                    </TypesTableProvider>
                 </div>
             </div>
         </div>

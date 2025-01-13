@@ -115,7 +115,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
             year: "",
             available: true,
             parentStyle: parentStyles[0].id,
-            subStyle: "",
+            style: "",
             brewery: breweryId || ""
         }
     });
@@ -126,7 +126,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                 const result = await getBeerStylesForm(
                     form.getValues("parentStyle")
                 );
-                form.setValue("subStyle", "");
+                form.setValue("style", "");
                 setStylesList(result.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -135,22 +135,18 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
         fetchStyles();
     }, [form.watch("parentStyle")]);
 
-    const getStyleName = (subStyleId: string) => {
+    const getStyleName = (styleId: string) => {
         let name = "";
-        stylesList.map((style) => {
-            const sub = style.subStyles.find(
-                (subStyle) => subStyle.id === subStyleId
-            );
-            if (sub) {
-                name = sub.name;
-            }
-        });
+        const newName = stylesList.find(
+            (styleSelect) => styleSelect.id === styleId
+        );
+        newName ? (name = newName.name) : (name = "");
         return name;
     };
 
-    useEffect(() => {
-        console.log(form.formState.errors);
-    }, [form.formState.errors]);
+    // useEffect(() => {
+    //     console.log(form.formState.errors);
+    // }, [form.formState.errors]);
 
     const onSubmit = (values: z.infer<typeof BeerSchema>) => {
         startTransition(async () => {
@@ -181,7 +177,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                 onSubmit={form.handleSubmit(onSubmit)}
             >
                 <div className="form-card">
-                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                    <h1 className="text-2xl leading-7 font-semibold text-gray-900">
                         Beer Overview
                     </h1>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -195,7 +191,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     >
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Brewery
@@ -289,7 +285,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Beer Name
@@ -314,7 +310,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Description of beer
@@ -341,7 +337,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Beer Headline - a one liner that
@@ -362,7 +358,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                     </div>
                 </div>
                 <div className="form-card">
-                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                    <h1 className="text-2xl leading-7 font-semibold text-gray-900">
                         Beer Attributes
                     </h1>
                     <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -376,7 +372,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     >
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Primary Style
@@ -468,14 +464,14 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                             />
                             <FormField
                                 control={form.control}
-                                name="subStyle"
+                                name="style"
                                 render={({ field }) => (
                                     <FormItem
                                         className={cn("flex w-full flex-col")}
                                     >
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Style
@@ -515,55 +511,42 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                                             No primary styles
                                                             found.
                                                         </CommandEmpty>
-                                                        {stylesList.map(
-                                                            (style) => (
-                                                                <CommandGroup
-                                                                    heading={
-                                                                        style.name
-                                                                    }
-                                                                    key={
-                                                                        style.id
-                                                                    }
-                                                                >
-                                                                    {style.subStyles.map(
-                                                                        (
-                                                                            subStyle
-                                                                        ) => (
-                                                                            <CommandItem
-                                                                                value={
-                                                                                    subStyle.name
-                                                                                }
-                                                                                key={
-                                                                                    subStyle.id
-                                                                                }
-                                                                                onSelect={() => {
-                                                                                    form.setValue(
-                                                                                        "subStyle",
-                                                                                        subStyle.id
-                                                                                    );
-                                                                                    setOpenStyles(
-                                                                                        false
-                                                                                    );
-                                                                                }}
-                                                                            >
-                                                                                {
-                                                                                    subStyle.name
-                                                                                }
-                                                                                <CheckIcon
-                                                                                    className={cn(
-                                                                                        "ml-auto h-4 w-4",
-                                                                                        subStyle.id ===
-                                                                                            field.value
-                                                                                            ? "opacity-100"
-                                                                                            : "opacity-0"
-                                                                                    )}
-                                                                                />
-                                                                            </CommandItem>
-                                                                        )
-                                                                    )}
-                                                                </CommandGroup>
-                                                            )
-                                                        )}
+                                                        <CommandGroup>
+                                                            {stylesList.map(
+                                                                (style) => (
+                                                                    <CommandItem
+                                                                        value={
+                                                                            style.name
+                                                                        }
+                                                                        key={
+                                                                            style.id
+                                                                        }
+                                                                        onSelect={() => {
+                                                                            form.setValue(
+                                                                                "style",
+                                                                                style.id
+                                                                            );
+                                                                            setOpenStyles(
+                                                                                false
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            style.name
+                                                                        }
+                                                                        <CheckIcon
+                                                                            className={cn(
+                                                                                "ml-auto h-4 w-4",
+                                                                                style.id ===
+                                                                                    field.value
+                                                                                    ? "opacity-100"
+                                                                                    : "opacity-0"
+                                                                            )}
+                                                                        />
+                                                                    </CommandItem>
+                                                                )
+                                                            )}
+                                                        </CommandGroup>
                                                     </CommandList>
                                                 </Command>
                                             </PopoverContent>
@@ -581,7 +564,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             IBU
@@ -620,7 +603,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             ABV
@@ -662,7 +645,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                         <FormItem>
                                             <FormLabel
                                                 className={cn(
-                                                    "block text-lg font-medium leading-6 text-gray-900"
+                                                    "block text-lg leading-6 font-medium text-gray-900"
                                                 )}
                                             >
                                                 Year Created (if known)
@@ -714,7 +697,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                                     <FormItem>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Still available?
@@ -753,7 +736,7 @@ const BeerForm = ({ breweryId, breweries, parentStyles, styles }: Props) => {
                     </div>
                 </div>
                 <div className="form-card">
-                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                    <h1 className="text-2xl leading-7 font-semibold text-gray-900">
                         Brewery Images
                     </h1>
                     <h3 className="text-lg leading-7 text-gray-900">

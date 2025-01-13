@@ -30,26 +30,22 @@ import {
     DrawerTrigger
 } from "@/components/ui/drawer";
 
-import { createBeerStyle } from "@/actions/beerStyles";
-import { BeerStyleSchema } from "@/schemas/admin";
+import { createBreweryType } from "@/actions/breweryTypes";
+import { BreweryTypeSchema } from "@/schemas/admin";
 import { CreateStyleForm } from "./CreateStyleForm";
 
-export const CreateStyleDialog = ({
-    parentStyleId
-}: {
-    parentStyleId: string;
-}) => {
+export const CreateStyleDialog = () => {
     const [open, setOpen] = useState(false);
     const [isCreatePending, startCreateTransition] = useTransition();
     const isDesktop = useMediaQuery("(min-width: 640px)");
 
-    const form = useForm<z.infer<typeof BeerStyleSchema>>({
-        resolver: zodResolver(BeerStyleSchema)
+    const form = useForm<z.infer<typeof BreweryTypeSchema>>({
+        resolver: zodResolver(BreweryTypeSchema)
     });
 
-    function onSubmit(input: z.infer<typeof BeerStyleSchema>) {
+    function onSubmit(input: z.infer<typeof BreweryTypeSchema>) {
         startCreateTransition(async () => {
-            const { error } = await createBeerStyle(input, parentStyleId);
+            const { error } = await createBreweryType(input);
 
             if (error) {
                 toast.error(error);
@@ -58,7 +54,7 @@ export const CreateStyleDialog = ({
 
             form.reset();
             setOpen(false);
-            toast.success("Style created");
+            toast.success("Task created");
         });
     }
 
@@ -68,15 +64,15 @@ export const CreateStyleDialog = ({
                 <DialogTrigger asChild>
                     <Button variant="outline" size="sm">
                         <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-                        New style
+                        New task
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Create Beer Style</DialogTitle>
+                        <DialogTitle>Create Brewery Type</DialogTitle>
                         <DialogDescription>
-                            Fill in the details below to create a new beer
-                            style.
+                            Fill in the details below to create a new brewery
+                            type.
                         </DialogDescription>
                     </DialogHeader>
                     <CreateStyleForm form={form} onSubmit={onSubmit}>
@@ -106,7 +102,7 @@ export const CreateStyleDialog = ({
             <DrawerTrigger asChild>
                 <Button variant="outline" size="sm">
                     <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-                    New style
+                    New task
                 </Button>
             </DrawerTrigger>
 

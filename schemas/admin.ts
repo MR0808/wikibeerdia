@@ -38,7 +38,6 @@ export const SearchParamsSchema = z.object({
     name: z.string().optional(),
     status: z.string().optional(),
     description: z.string().optional(),
-    subStyles: z.string().optional(),
     parentStyle: z.string().optional(),
     from: z.string().optional(),
     to: z.string().optional(),

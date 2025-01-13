@@ -13,10 +13,6 @@ export interface ParentStylesForm {
 export interface StylesForm {
     name: string;
     id: string;
-    subStyles: {
-        name: string;
-        id: string;
-    }[];
 }
 
 export interface BeerSubmitSearchParams {
@@ -35,7 +31,7 @@ export interface BeerType {
     available: boolean;
     headline: string;
     breweryId: string;
-    subStyleId: string | null;
+    styleId: string | null;
     userId: string;
     createdAt: Date;
     updatedAt: Date;
@@ -58,17 +54,13 @@ export interface BeerType {
             beers: number;
         };
     };
-    subStyle: {
-        id: string;
+    style: {
         name: string;
-        style: {
-            id: string;
+        parentStyle: {
             name: string;
-            parentStyle: {
-                id: string;
-                name: string;
-            };
+            id: string;
         };
+        id: string;
     } | null;
     images: {
         id: string;

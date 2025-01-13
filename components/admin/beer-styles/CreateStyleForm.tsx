@@ -20,14 +20,14 @@ import {
     SelectValue
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { BeerStyleSchema } from "@/schemas/admin";
+import { BreweryTypeSchema } from "@/schemas/admin";
 import { statusLabels } from "@/utils/types";
 
 interface CreateStyleFormProps
     extends Omit<React.ComponentPropsWithRef<"form">, "onSubmit"> {
     children: React.ReactNode;
-    form: UseFormReturn<z.infer<typeof BeerStyleSchema>>;
-    onSubmit: (data: z.infer<typeof BeerStyleSchema>) => void;
+    form: UseFormReturn<z.infer<typeof BreweryTypeSchema>>;
+    onSubmit: (data: z.infer<typeof BreweryTypeSchema>) => void;
 }
 
 export const CreateStyleForm = ({
@@ -49,24 +49,7 @@ export const CreateStyleForm = ({
                             <FormLabel>Title</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder="Beer style name"
-                                    className="resize-none"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <Textarea
-                                    placeholder="Beer style description"
+                                    placeholder="Brewery type name"
                                     className="resize-none"
                                     {...field}
                                 />

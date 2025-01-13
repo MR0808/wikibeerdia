@@ -68,7 +68,6 @@ export default async function RootLayout({
                         </TooltipProvider>
                     </ReactQueryProvider>
                     <Toaster richColors />
-
                     <SpeedInsights />
                 </body>
             </html>

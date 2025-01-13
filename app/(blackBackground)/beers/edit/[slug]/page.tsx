@@ -35,7 +35,7 @@ const BeerEditPage = async (props: { params: ParamsSlug }) => {
     const breweries = await getBreweries();
     const parentStyles = await getParentStyles();
     const beerStyles = await getBeerStylesForm(
-        data?.subStyle?.style?.parentStyle?.id || parentStyles.data[0].id
+        data?.style?.parentStyle?.id || parentStyles.data[0].id
     );
 
     return (
