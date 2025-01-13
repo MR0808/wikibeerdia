@@ -18,7 +18,7 @@ import { DataTableSkeleton } from "@/components/datatable/DataTableSkeleton";
 import { SearchParamsSchema } from "@/schemas/admin";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import { checkAuthenticated } from "@/lib/auth";
-import { getBeerStyles } from "@/actions/beerStyles";
+import { getBeerStyles, getParentStyles } from "@/actions/beerStyles";
 
 const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
     const searchParams = await props.searchParams;
@@ -30,6 +30,7 @@ const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
     const search = SearchParamsSchema.parse(searchParams);
 
     const stylesPromise = getBeerStyles(search);
+    const parentsPromise = getParentStyles();
 
     return (
         <div className="container mt-36 flex h-16 flex-col justify-between sm:justify-between sm:space-x-0">
@@ -78,7 +79,10 @@ const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
                                 />
                             }
                         >
-                            <StylesTable stylesPromise={stylesPromise} />
+                            <StylesTable
+                                stylesPromise={stylesPromise}
+                                parentStyles={parentsPromise}
+                            />
                         </Suspense>
                     </TypesTableProvider>
                 </div>

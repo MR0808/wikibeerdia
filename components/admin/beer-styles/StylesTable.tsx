@@ -11,7 +11,7 @@ import { DataTable } from "@/components/datatable/DataTable";
 import { DataTableToolbar } from "@/components/datatable/DataTableToolbar";
 
 import { BeerStyle } from "@/types/beerStyles";
-import { type getBeerStyles } from "@/actions/beerStyles";
+import { type getBeerStyles, getParentStyles } from "@/actions/beerStyles";
 import { getStatusIcon } from "@/lib/utils";
 import { getColumns } from "./StylesTableColumns";
 import { StylesTableFloatingBar } from "./StylesTableFloatingBar";
@@ -20,13 +20,19 @@ import { StylesTableToolbarActions } from "./StylesTableToolbarActions";
 
 interface StylesTableProps {
     stylesPromise: ReturnType<typeof getBeerStyles>;
+    parentStyles: ReturnType<typeof getParentStyles>;
 }
 
-export const StylesTable = ({ stylesPromise }: StylesTableProps) => {
+export const StylesTable = ({
+    stylesPromise,
+    parentStyles
+}: StylesTableProps) => {
     // Feature flags for showcasing some additional features. Feel free to remove them.
     const { featureFlags } = useStylesTable();
 
     const { data, pageCount } = use(stylesPromise);
+
+    const { data: parentData } = use(parentStyles);
 
     // Memoize the columns so they don't re-render on every render
     const columns = useMemo(() => getColumns(), []);
@@ -47,6 +53,15 @@ export const StylesTable = ({ stylesPromise }: StylesTableProps) => {
             label: "Name",
             value: "name",
             placeholder: "Filter names..."
+        },
+        {
+            label: "Parent Style",
+            value: "parentStyle",
+            options: parentData.map((style) => ({
+                label: style.name,
+                value: style.id,
+                withCount: true
+            }))
         },
         {
             label: "Status",

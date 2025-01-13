@@ -49,7 +49,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
         name,
         status,
         description,
-        subStyles,
         parentStyle,
         operator,
         from,
@@ -88,14 +87,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
                 })
             );
 
-        subStyles &&
-            whereFilter.push(
-                filterSubColumn({
-                    parentColumn: "subStyles",
-                    column: "name",
-                    value: subStyles
-                })
-            );
 
         // description &&
         //     whereFilter.push(
