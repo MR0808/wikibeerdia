@@ -35,7 +35,7 @@ export const StylesTable = ({
     const { data: parentData } = use(parentStyles);
 
     // Memoize the columns so they don't re-render on every render
-    const columns = useMemo(() => getColumns(), []);
+    const columns = useMemo(() => getColumns(parentData), []);
 
     /**
      * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -105,11 +105,17 @@ export const StylesTable = ({
                     table={table}
                     filterFields={filterFields}
                 >
-                    <StylesTableToolbarActions table={table} />
+                    <StylesTableToolbarActions
+                        table={table}
+                        parentStyles={parentData}
+                    />
                 </DataTableAdvancedToolbar>
             ) : (
                 <DataTableToolbar table={table} filterFields={filterFields}>
-                    <StylesTableToolbarActions table={table} />
+                    <StylesTableToolbarActions
+                        table={table}
+                        parentStyles={parentData}
+                    />
                 </DataTableToolbar>
             )}
         </DataTable>

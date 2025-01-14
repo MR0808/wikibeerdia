@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import {
     Breadcrumb,
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 import StylesHero from "@/components/education/StylesHero";
-import { getBeerStylesByParent } from "@/actions/beerStyles";
+import { getAllBeerStyles, getBeerStylesByParent } from "@/actions/beerStyles";
 import StylesSection from "@/components/education/StylesSection";
 import siteMetadata from "@/utils/siteMetaData";
 
@@ -48,9 +49,9 @@ export function generateMetadata(): Metadata {
 }
 
 const BeerStylesPage = async () => {
-    const { data: aleStyles } = await getBeerStylesByParent("ales");
-    const { data: lagerStyles } = await getBeerStylesByParent("lager");
-    const { data: hybridStyles } = await getBeerStylesByParent("hybrid-mixed");
+    const { data } = await getAllBeerStyles();
+
+    if (!data) redirect("/");
 
     return (
         <div className="bg-[#FFFFF5] pb-20">
@@ -117,11 +118,7 @@ const BeerStylesPage = async () => {
                     </div>
                 </div>
             </div>
-            <StylesSection
-                aleStyles={aleStyles}
-                lagerStyles={lagerStyles}
-                hybridStyles={hybridStyles}
-            />
+            <StylesSection parentStyles={data} />
         </div>
     );
 };

@@ -11,3 +11,4 @@ export type GetTypesSchema = z.infer<typeof typesSearchParamsSchema>;
 export type GetBreweriesSchema = z.infer<typeof breweriesSearchParamsSchema>;
 
 export type GetSearchSchema = z.infer<typeof SearchParamsSchema>;
+

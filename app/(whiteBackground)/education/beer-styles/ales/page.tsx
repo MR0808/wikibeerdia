@@ -175,48 +175,29 @@ const AlesInfoPage = async () => {
                         aleStyles.map((style, index) => {
                             return (
                                 <div
-                                    className="flex scroll-mt-28 flex-col space-y-5 pb-10"
+                                    className="flex scroll-mt-28 flex-col space-y-5 border-b pb-10 last:border-b-0"
                                     id={style.slug}
                                     key={index}
                                 >
                                     <h1 className="pb-5 text-4xl font-semibold">
                                         {style.name}
                                     </h1>
-                                    {style.subStyles &&
-                                        style.subStyles.map(
-                                            (subStyle, index) => {
-                                                return (
-                                                    <div
-                                                        className="flex scroll-mt-28 flex-col space-y-5 border-b pb-10"
-                                                        id={subStyle.slug}
-                                                        key={index}
-                                                    >
-                                                        <h1 className="text-3xl font-semibold">
-                                                            {subStyle.name}
-                                                        </h1>
-                                                        <div className="flex flex-col space-y-1">
-                                                            <p>
-                                                                <span className="font-medium">
-                                                                    ABV:{" "}
-                                                                </span>
-                                                                {`${subStyle.abvLow}% - ${subStyle.abvHigh}%`}
-                                                            </p>
-                                                            <p>
-                                                                <span className="font-medium">
-                                                                    IBU:{" "}
-                                                                </span>
-                                                                {`${subStyle.ibuLow} - ${subStyle.ibuHigh}`}
-                                                            </p>
-                                                        </div>
-                                                        <p>
-                                                            {
-                                                                subStyle.description
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                );
-                                            }
-                                        )}
+
+                                    <div className="flex flex-col space-y-1">
+                                        <p>
+                                            <span className="font-medium">
+                                                ABV:{" "}
+                                            </span>
+                                            {`${style.abvLow}% - ${style.abvHigh}%`}
+                                        </p>
+                                        <p>
+                                            <span className="font-medium">
+                                                IBU:{" "}
+                                            </span>
+                                            {`${style.ibuLow} - ${style.ibuHigh}`}
+                                        </p>
+                                    </div>
+                                    <p>{style.description}</p>
                                 </div>
                             );
                         })}

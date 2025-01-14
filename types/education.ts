@@ -17,10 +17,35 @@ export interface BeerStylesParent {
     }[];
 }
 
+export interface BeerStyles {
+    description: string | null;
+    status: Status;
+    id: string;
+    name: string;
+    slug: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    styles: {
+        description: string | null;
+        status: Status;
+        id: string;
+        name: string;
+        slug: string;
+        userId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        region: string[];
+        abvLow: string | null;
+        abvHigh: string | null;
+        ibuLow: string | null;
+        ibuHigh: string | null;
+        parentStyleId: string;
+    }[];
+}
+
 export interface StylesSectionProps {
-    aleStyles: BeerStylesParent[] | null;
-    lagerStyles: BeerStylesParent[] | null;
-    hybridStyles: BeerStylesParent[] | null;
+    parentStyles: BeerStyles[]
 }
 
 export interface StepProps {

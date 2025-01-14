@@ -102,7 +102,7 @@ export const CreateTypeDialog = () => {
             <DrawerTrigger asChild>
                 <Button variant="outline" size="sm">
                     <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-                    New task
+                    New type
                 </Button>
             </DrawerTrigger>
 
@@ -110,7 +110,7 @@ export const CreateTypeDialog = () => {
                 <DrawerHeader>
                     <DrawerTitle>Create task</DrawerTitle>
                     <DrawerDescription>
-                        Fill in the details below to create a new task.
+                        Fill in the details below to create a new type.
                     </DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter className="gap-2 sm:space-x-0">

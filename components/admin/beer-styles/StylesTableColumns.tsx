@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { BeerStyle } from "@/types/beerStyles";
+import { BeerStyle, ParentStyle } from "@/types/beerStyles";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -19,7 +19,9 @@ import { DataTableColumnHeader } from "@/components/datatable/DataTableColumnHea
 import { getStatusIcon } from "@/lib/utils";
 import { UpdateStyleSheet } from "./UpdateStyleSheet";
 
-export const getColumns = (): ColumnDef<BeerStyle>[] => {
+export const getColumns = (
+    parentStyles: ParentStyle[]
+): ColumnDef<BeerStyle>[] => {
     return [
         {
             id: "select",
@@ -139,6 +141,7 @@ export const getColumns = (): ColumnDef<BeerStyle>[] => {
                             open={showUpdateStyleSheet}
                             onOpenChange={setShowUpdateStyleSheet}
                             style={row.original}
+                            parentStyles={parentStyles}
                         />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

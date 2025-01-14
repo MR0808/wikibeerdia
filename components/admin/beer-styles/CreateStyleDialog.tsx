@@ -4,7 +4,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { PlusIcon, ReloadIcon } from "@radix-ui/react-icons";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -30,11 +30,16 @@ import {
     DrawerTrigger
 } from "@/components/ui/drawer";
 
-import { createBreweryType } from "@/actions/breweryTypes";
 import { BeerStyleSchema } from "@/schemas/admin";
 import { CreateStyleForm } from "./CreateStyleForm";
+import { createBeerStyle } from "@/actions/beerStyles";
+import { ParentStyle } from "@/types/beerStyles";
 
-export const CreateStyleDialog = () => {
+export const CreateStyleDialog = ({
+    parentStyles
+}: {
+    parentStyles: ParentStyle[];
+}) => {
     const [open, setOpen] = useState(false);
     const [isCreatePending, startCreateTransition] = useTransition();
     const isDesktop = useMediaQuery("(min-width: 640px)");
@@ -42,18 +47,19 @@ export const CreateStyleDialog = () => {
     const form = useForm<z.infer<typeof BeerStyleSchema>>({
         resolver: zodResolver(BeerStyleSchema),
         defaultValues: {
-            status: 'PENDING',
-            name: '',
-            description: '',
-            region: [],
-            abv: [0,30],
-            ibu: [10, 60],
+            parentStyle: "",
+            status: "APPROVED",
+            name: "",
+            description: "",
+            region: [{ value: "" }],
+            abv: [0, 30],
+            ibu: [10, 60]
         }
     });
 
     function onSubmit(input: z.infer<typeof BeerStyleSchema>) {
         startCreateTransition(async () => {
-            const { error } = await createBreweryType(input);
+            const { error } = await createBeerStyle(input);
 
             if (error) {
                 toast.error(error);
@@ -62,7 +68,7 @@ export const CreateStyleDialog = () => {
 
             form.reset();
             setOpen(false);
-            toast.success("Task created");
+            toast.success("Style created");
         });
     }
 
@@ -83,7 +89,11 @@ export const CreateStyleDialog = () => {
                             type.
                         </DialogDescription>
                     </DialogHeader>
-                    <CreateStyleForm form={form} onSubmit={onSubmit}>
+                    <CreateStyleForm
+                        form={form}
+                        onSubmit={onSubmit}
+                        parentStyles={parentStyles}
+                    >
                         <DialogFooter className="gap-2 pt-2 sm:space-x-0">
                             <DialogClose asChild>
                                 <Button type="button" variant="outline">
@@ -110,15 +120,15 @@ export const CreateStyleDialog = () => {
             <DrawerTrigger asChild>
                 <Button variant="outline" size="sm">
                     <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-                    New task
+                    New style
                 </Button>
             </DrawerTrigger>
 
             <DrawerContent>
                 <DrawerHeader>
-                    <DrawerTitle>Create task</DrawerTitle>
+                    <DrawerTitle>Create Style</DrawerTitle>
                     <DrawerDescription>
-                        Fill in the details below to create a new task.
+                        Fill in the details below to create a new style.
                     </DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter className="gap-2 sm:space-x-0">

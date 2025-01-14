@@ -21,11 +21,6 @@ export const getBeerStylesByParent = async (slug: string) => {
     try {
         const data = await db.style.findMany({
             where: { parentStyle: { slug } },
-            select: {
-                id: true,
-                name: true,
-                slug: true,
-            },
             orderBy: { name: "asc" }
         });
         return {
@@ -39,6 +34,29 @@ export const getBeerStylesByParent = async (slug: string) => {
         };
     }
 };
+
+export const getAllBeerStyles = async () => {
+    try {
+        const data = await db.parentStyle.findMany({
+            where: { status: "APPROVED" },
+            include: {
+                styles: { where: { status: "APPROVED" }, orderBy: { name: "asc" } }
+            },
+            orderBy: { name: "asc" }
+        })
+
+        return {
+            data,
+            error: null
+        };
+
+    } catch (err) {
+        return {
+            data: null,
+            error: getErrorMessage(err)
+        };
+    }
+}
 
 export const getBeerStyles = async (input: GetSearchSchema) => {
     noStore();
@@ -192,9 +210,7 @@ export const getParentStyles = async () => {
 };
 
 export const createBeerStyle = async (
-    values: z.infer<typeof BeerStyleSchema>,
-    parentStyleId: string
-) => {
+    values: z.infer<typeof BeerStyleSchema>) => {
     noStore();
     const user = await checkAuth(true);
 
@@ -227,12 +243,28 @@ export const createBeerStyle = async (
             }
         }
 
+        const { name, parentStyle, status, description, region, abv, ibu } = validatedFields.data
+
+        const regionDb = region.map((item) => { return item.value })
+
+        const abvLow = Math.min(...abv).toString();
+        const abvHigh = Math.max(...abv).toString();
+        const ibuLow = Math.min(...ibu).toString();
+        const ibuHigh = Math.max(...ibu).toString();
+
         await db.style.create({
             data: {
                 userId: user.id,
-                parentStyleId: parentStyleId,
+                parentStyleId: parentStyle,
                 slug,
-                ...values
+                name,
+                status,
+                description,
+                region: regionDb,
+                abvLow,
+                abvHigh,
+                ibuLow,
+                ibuHigh
             }
         });
 
@@ -272,10 +304,55 @@ export const updateBeerStyle = async (
         };
     }
     try {
+
+        const checkStyle = await db.style.findUnique({ where: { id } });
+
+        if (!checkStyle) {
+            return {
+                data: null,
+                error: getErrorMessage("Error with fields")
+            };
+        }
+
+        const { name, parentStyle, status, description, region, abv, ibu } = validatedFields.data
+
+        let slug = checkStyle.slug;
+
+        if (name !== checkStyle.name) {
+            let slugExists = true;
+            while (slugExists) {
+                const checkSlug = await db.style.findUnique({
+                    where: { slug }
+                });
+                if (!checkSlug) {
+                    slugExists = false;
+                    break;
+                } else {
+                    slug = slugger.slug(name);
+                }
+            }
+        }
+
+        const regionDb = region.map((item) => { return item.value })
+
+        const abvLow = Math.min(...abv).toString();
+        const abvHigh = Math.max(...abv).toString();
+        const ibuLow = Math.min(...ibu).toString();
+        const ibuHigh = Math.max(...ibu).toString();
+
         await db.style.update({
             where: { id },
             data: {
-                ...values
+                parentStyleId: parentStyle,
+                slug,
+                name,
+                status,
+                description,
+                region: regionDb,
+                abvLow,
+                abvHigh,
+                ibuLow,
+                ibuHigh
             }
         });
 

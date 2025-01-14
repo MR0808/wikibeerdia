@@ -5,19 +5,21 @@ import { type Table } from "@tanstack/react-table";
 
 import { exportTableToCSV } from "@/lib/export";
 import { Button } from "@/components/ui/button";
-import { BeerStyle } from "@/types/beerStyles";
+import { BeerStyle, ParentStyle } from "@/types/beerStyles";
 import { CreateStyleDialog } from "./CreateStyleDialog";
 
 interface StylesTableToolbarActionsProps {
     table: Table<BeerStyle>;
+    parentStyles: ParentStyle[];
 }
 
 export const StylesTableToolbarActions = ({
-    table
+    table,
+    parentStyles
 }: StylesTableToolbarActionsProps) => {
     return (
         <div className="flex items-center gap-2">
-            <CreateStyleDialog />
+            <CreateStyleDialog parentStyles={parentStyles} />
             <Button
                 variant="outline"
                 size="sm"

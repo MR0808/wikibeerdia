@@ -14,6 +14,9 @@ const ibuSchema = z.number().int().min(0).max(100);
 const abvSchema = z.number().min(0).max(30);
 
 export const BeerStyleSchema = z.object({
+    parentStyle: z.string().min(1, {
+        message: "Parent style is required"
+    }),
     name: z.string().min(1, {
         message: "Beer style is required"
     }),
@@ -23,7 +26,9 @@ export const BeerStyleSchema = z.object({
     description: z.string().min(1, {
         message: "Description is required"
     }),
-    region: z.array(z.string()),
+    region: z.array(z.object({
+        value: z.string().min(1, "Region is required"),
+    })),
     abv: z.array(abvSchema).length(2),
     ibu: z.array(ibuSchema).length(2)
 });
