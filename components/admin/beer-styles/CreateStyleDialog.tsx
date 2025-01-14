@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/drawer";
 
 import { createBreweryType } from "@/actions/breweryTypes";
-import { BreweryTypeSchema } from "@/schemas/admin";
+import { BeerStyleSchema } from "@/schemas/admin";
 import { CreateStyleForm } from "./CreateStyleForm";
 
 export const CreateStyleDialog = () => {
@@ -39,11 +39,19 @@ export const CreateStyleDialog = () => {
     const [isCreatePending, startCreateTransition] = useTransition();
     const isDesktop = useMediaQuery("(min-width: 640px)");
 
-    const form = useForm<z.infer<typeof BreweryTypeSchema>>({
-        resolver: zodResolver(BreweryTypeSchema)
+    const form = useForm<z.infer<typeof BeerStyleSchema>>({
+        resolver: zodResolver(BeerStyleSchema),
+        defaultValues: {
+            status: 'PENDING',
+            name: '',
+            description: '',
+            region: [],
+            abv: [0,30],
+            ibu: [10, 60],
+        }
     });
 
-    function onSubmit(input: z.infer<typeof BreweryTypeSchema>) {
+    function onSubmit(input: z.infer<typeof BeerStyleSchema>) {
         startCreateTransition(async () => {
             const { error } = await createBreweryType(input);
 
@@ -64,7 +72,7 @@ export const CreateStyleDialog = () => {
                 <DialogTrigger asChild>
                     <Button variant="outline" size="sm">
                         <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-                        New task
+                        New style
                     </Button>
                 </DialogTrigger>
                 <DialogContent>

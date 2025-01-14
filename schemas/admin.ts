@@ -10,6 +10,9 @@ export const BreweryTypeSchema = z.object({
     })
 });
 
+const ibuSchema = z.number().int().min(0).max(100);
+const abvSchema = z.number().min(0).max(30);
+
 export const BeerStyleSchema = z.object({
     name: z.string().min(1, {
         message: "Beer style is required"
@@ -17,7 +20,12 @@ export const BeerStyleSchema = z.object({
     status: z.nativeEnum(Status, {
         message: "Status is required"
     }),
-    description: z.optional(z.string())
+    description: z.string().min(1, {
+        message: "Description is required"
+    }),
+    region: z.array(z.string()),
+    abv: z.array(abvSchema).length(2),
+    ibu: z.array(ibuSchema).length(2)
 });
 
 export const typesSearchParamsSchema = z.object({
