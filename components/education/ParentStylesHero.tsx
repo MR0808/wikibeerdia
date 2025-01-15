@@ -1,19 +1,20 @@
 import Image from "next/image";
 
 import { averia } from "@/app/fonts";
+import { ParentStylesHeroProps } from "@/types/education";
 
-const LagerHero = () => {
+const ParentStylesHero = ({ image, headline, name }: ParentStylesHeroProps) => {
     return (
         <div className="bg-[#746C60] pb-5 drop-shadow-lg md:h-[500px] md:pb-0">
             <div className="container flex h-full flex-col bg-[#746C60] pt-20 md:flex-row md:space-x-10">
                 <div className="h-fit justify-items-center pt-2 pb-5 md:w-3/5 md:pt-10 md:pb-0">
                     <Image
-                        src="/images/lager-bg.png"
-                        width={350}
-                        height={350}
+                        src={image || "/images/ale-bg.png"}
+                        width={0}
+                        height={0}
                         sizes="100vw"
-                        className="h-full"
-                        alt="Lager beers"
+                        style={{ width: "80%" }} // optional
+                        alt="Beers"
                     />
                 </div>
                 <div className="flex flex-wrap items-center justify-between">
@@ -21,14 +22,12 @@ const LagerHero = () => {
                         <h1
                             className={`${averia.className} text-4xl leading-snug font-bold text-white uppercase sm:leading-snug md:text-6xl md:leading-[1.2]`}
                         >
-                            What is a Lager?
+                            {`What are ${name}?`}
                         </h1>
                         <h2
                             className={`${averia.className} text-xl leading-snug text-white lg:leading-[1.7]`}
                         >
-                            The most widely consumed beer style in the world,
-                            prized for its clean, crisp flavors and smooth
-                            finish
+                            {headline}
                         </h2>
                     </div>
                 </div>
@@ -36,4 +35,4 @@ const LagerHero = () => {
         </div>
     );
 };
-export default LagerHero;
+export default ParentStylesHero;

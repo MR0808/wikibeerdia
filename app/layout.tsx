@@ -60,7 +60,7 @@ export default async function RootLayout({
                     className={`${inter.className} bg-slate-100`}
                     suppressHydrationWarning={true}
                 >
-                    <Scroll />
+                    {/* <Scroll /> */}
                     <ReactQueryProvider>
                         <TooltipProvider>
                             <GoogleTagManager gtmId="G-FBQEGT4TEE" />

@@ -138,10 +138,12 @@ export const CreateStyleForm = ({
                                     <div className="flex justify-between">
                                         <Input
                                             type="number"
-                                            value={field.value[0]}
+                                            value={field.value[0].toFixed(1)}
                                             onChange={(e) => {
-                                                const newValue = parseInt(
-                                                    e.target.value
+                                                const newValue = parseFloat(
+                                                    parseFloat(
+                                                        e.target.value
+                                                    ).toFixed(1)
                                                 );
                                                 field.onChange([
                                                     newValue,
@@ -151,14 +153,17 @@ export const CreateStyleForm = ({
                                                     )
                                                 ]);
                                             }}
-                                            className="w-20"
+                                            step={0.1}
+                                            className="w-24"
                                         />
                                         <Input
                                             type="number"
-                                            value={field.value[1]}
+                                            value={field.value[1].toFixed(1)}
                                             onChange={(e) => {
-                                                const newValue = parseInt(
-                                                    e.target.value
+                                                const newValue = parseFloat(
+                                                    parseFloat(
+                                                        e.target.value
+                                                    ).toFixed(1)
                                                 );
                                                 field.onChange([
                                                     Math.min(
@@ -168,7 +173,8 @@ export const CreateStyleForm = ({
                                                     newValue
                                                 ]);
                                             }}
-                                            className="w-20"
+                                            step={0.1}
+                                            className="w-24"
                                         />
                                     </div>
                                 </div>

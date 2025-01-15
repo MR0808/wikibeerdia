@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import parse from "html-react-parser";
 
 import {
     Breadcrumb,
@@ -9,26 +11,39 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-
-import { getBeerStylesByParent } from "@/actions/beerStyles";
-import AlesHero from "@/components/education/AlesHero";
+import { ParamsSlug } from "@/utils/types";
+import { getParentStyle, getParentStyles } from "@/actions/beerStyles";
+import ParentStylesHero from "@/components/education/ParentStylesHero";
 import TableOfContentsItem from "@/components/education/TableOfContentsItem";
 import siteMetadata from "@/utils/siteMetaData";
 
-export function generateMetadata(): Metadata {
-    const imageList = [`${siteMetadata.siteUrl}/ale-bg.png`];
+export async function generateStaticParams() {
+    const { data: styles } = await getParentStyles();
+    return styles.map((style) => ({ slug: style.slug }));
+}
+
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const { data: style } = await getParentStyle(slug);
+    if (!style) {
+        return;
+    }
+
+    const imageList = [`${siteMetadata.siteUrl}${style.image}`];
     const ogImages = imageList.map((img) => {
         return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
     });
     return {
-        title: ` Education | Beer Styles | Ales`,
-        description:
-            "Learn about ales and what makes them so popular, and all the different types.",
+        title: ` Education | Beer Styles | ${style.name}`,
+        description: `Learn about ${style.name} and what makes them so popular, and all the different types.`,
         openGraph: {
-            title: "Ales and their details",
-            description:
-                "Learn about ales and what makes them so popular, and all the different types",
-            url: `${siteMetadata.siteUrl}/education/beer-styles/ales/`,
+            title: `${style.name} and their details`,
+            description: `Learn about ${style.name} and what makes them so popular, and all the different types`,
+            url: `${siteMetadata.siteUrl}/education/beer-styles/${style.slug}/`,
             siteName: siteMetadata.title,
             locale: "en_AU",
             type: "article",
@@ -39,20 +54,26 @@ export function generateMetadata(): Metadata {
         },
         twitter: {
             card: "summary_large_image",
-            title: "Ales and their details",
-            description:
-                "Learn about ales and what makes them so popular, and all the different types",
+            title: `${style.name} and their details`,
+            description: `Learn about ${style.name} and what makes them so popular, and all the different types`,
             images: ogImages
         }
     };
 }
 
-const AlesInfoPage = async () => {
-    const { data: aleStyles } = await getBeerStylesByParent("ales");
+const ParentStyleInfoPage = async (props: { params: ParamsSlug }) => {
+    const { slug } = await props.params;
+    const { data } = await getParentStyle(slug);
+
+    if (!data) redirect("/");
 
     return (
         <div className="bg-[#FFFFF5] pb-20">
-            <AlesHero />
+            <ParentStylesHero
+                image={data.image}
+                headline={data.headline}
+                name={data.name}
+            />
             <div className="container flex flex-col justify-between px-8 pt-10 sm:justify-between sm:space-x-0">
                 <Breadcrumb>
                     <BreadcrumbList>
@@ -76,7 +97,7 @@ const AlesInfoPage = async () => {
                         <BreadcrumbSeparator className="text-base" />
                         <BreadcrumbItem>
                             <BreadcrumbPage className="text-base">
-                                Ales
+                                {data.name}
                             </BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>
@@ -103,8 +124,8 @@ const AlesInfoPage = async () => {
                                     </span>
                                 </Link>
                             </li>
-                            {aleStyles &&
-                                aleStyles.map((style, index) => (
+                            {data.styles &&
+                                data.styles.map((style, index) => (
                                     <TableOfContentsItem
                                         key={index}
                                         item={style}
@@ -119,60 +140,12 @@ const AlesInfoPage = async () => {
                         id="details"
                     >
                         <h1 className="pb-5 text-4xl font-semibold">Details</h1>
-                        <p>
-                            Ale is one of the oldest and most diverse beer
-                            styles, dating back thousands of years. Its defining
-                            feature is the use of top-fermenting yeast
-                            (Saccharomyces cerevisiae), which ferments at warmer
-                            temperatures, typically between 60-75°F (15-24°C).
-                            This warmer fermentation process encourages the
-                            production of a wide range of flavors, including
-                            fruity, spicy, and sometimes even earthy or herbal
-                            notes. Ales are generally more robust and complex
-                            than lagers, making them a favorite among craft beer
-                            enthusiasts and those who appreciate a variety of
-                            tastes.
-                        </p>
-                        <p>
-                            The category of ales encompasses numerous
-                            sub-styles, each with distinct characteristics. Pale
-                            ales, for instance, are known for their balance
-                            between malt sweetness and hop bitterness, often
-                            with a crisp and refreshing finish. India Pale Ales
-                            (IPAs) take this a step further by emphasizing
-                            hop-forward flavors, with variations like West Coast
-                            IPAs offering intense bitterness and New England
-                            IPAs showcasing juicy, tropical aromas. Meanwhile,
-                            dark ales such as stouts and porters are
-                            characterized by their roasted malt profiles,
-                            delivering flavors reminiscent of coffee, chocolate,
-                            and caramel.
-                        </p>
-                        <p>
-                            Another notable ale style is the wheat ale, which
-                            uses a significant proportion of wheat in the grain
-                            bill. These beers are typically light, refreshing,
-                            and often hazy, with sub-styles like Belgian Witbier
-                            offering spice additions such as coriander and
-                            orange peel. German Hefeweizens stand out for their
-                            banana and clove notes, derived from specific yeast
-                            strains. Each ale style offers a unique experience,
-                            making this category incredibly versatile and
-                            appealing to a wide range of palates.
-                        </p>
-                        <p>
-                            Ales also pair well with an array of foods, from
-                            hearty grilled meats to rich desserts. Their complex
-                            flavor profiles can complement or contrast with
-                            dishes, enhancing the overall dining experience.
-                            Whether you're savoring a creamy stout with
-                            chocolate cake or enjoying a crisp pale ale with
-                            spicy tacos, ales provide endless opportunities to
-                            explore the interplay between beer and cuisine.
-                        </p>
+                        <div className="whitespace-break-spaces">
+                            {parse(data.longDescription || "")}
+                        </div>
                     </div>
-                    {aleStyles &&
-                        aleStyles.map((style, index) => {
+                    {data.styles &&
+                        data.styles.map((style, index) => {
                             return (
                                 <div
                                     className="flex scroll-mt-28 flex-col space-y-5 border-b pb-10 last:border-b-0"
@@ -196,6 +169,14 @@ const AlesInfoPage = async () => {
                                             </span>
                                             {`${style.ibuLow} - ${style.ibuHigh}`}
                                         </p>
+                                        <p>
+                                            <span className="font-medium">
+                                                Origin:{" "}
+                                            </span>
+                                            {style.region
+                                                .map(String)
+                                                .join(", ")}
+                                        </p>
                                     </div>
                                     <p>{style.description}</p>
                                 </div>
@@ -206,4 +187,4 @@ const AlesInfoPage = async () => {
         </div>
     );
 };
-export default AlesInfoPage;
+export default ParentStyleInfoPage;

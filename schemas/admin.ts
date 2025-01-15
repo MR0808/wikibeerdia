@@ -11,7 +11,10 @@ export const BreweryTypeSchema = z.object({
 });
 
 const ibuSchema = z.number().int().min(0).max(100);
-const abvSchema = z.number().min(0).max(30);
+
+const abvSchema = z.array(z.number().min(0).max(30).multipleOf(0.1)).length(2).refine(([min, max]) => min <= max, {
+    message: "Minimum value must be less than or equal to maximum value",
+})
 
 export const BeerStyleSchema = z.object({
     parentStyle: z.string().min(1, {
@@ -29,7 +32,7 @@ export const BeerStyleSchema = z.object({
     region: z.array(z.object({
         value: z.string().min(1, "Region is required"),
     })),
-    abv: z.array(abvSchema).length(2),
+    abv: abvSchema,
     ibu: z.array(ibuSchema).length(2)
 });
 

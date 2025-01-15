@@ -9,8 +9,10 @@ const Scroll = () => {
     // this useEffect is a workaround to 'fix' that behavior.
 
     const pathname = usePathname();
+    const hash = window.location.hash;
+    console.log(hash);
     useEffect(() => {
-        window.scroll(0, 0);
+        if (!hash) window.scroll(0, 0);
     }, [pathname]);
     return <></>;
 };

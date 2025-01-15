@@ -52,7 +52,7 @@ export const CreateStyleDialog = ({
             name: "",
             description: "",
             region: [{ value: "" }],
-            abv: [0, 30],
+            abv: [0.0, 30.0],
             ibu: [10, 60]
         }
     });

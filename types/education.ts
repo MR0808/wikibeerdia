@@ -54,3 +54,9 @@ export interface StepProps {
     description: string;
     image: string;
 }
+
+export interface ParentStylesHeroProps {
+    image: string | null
+    headline: string | null
+    name: string
+}

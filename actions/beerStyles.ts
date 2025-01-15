@@ -58,6 +58,28 @@ export const getAllBeerStyles = async () => {
     }
 }
 
+export const getParentStyle = async (slug: string) => {
+    try {
+        const data = await db.parentStyle.findUnique({
+            where: { slug, status: "APPROVED" },
+            include: {
+                styles: { where: { status: "APPROVED" }, orderBy: { name: "asc" } }
+            }
+        })
+
+        return {
+            data,
+            error: null
+        };
+
+    } catch (err) {
+        return {
+            data: null,
+            error: getErrorMessage(err)
+        };
+    }
+}
+
 export const getBeerStyles = async (input: GetSearchSchema) => {
     noStore();
     let {
@@ -200,7 +222,8 @@ export const getParentStyles = async () => {
     const data = await db.parentStyle.findMany({
         select: {
             id: true,
-            name: true
+            name: true,
+            slug: true
         },
         where: {
             status: "APPROVED"
