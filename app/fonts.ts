@@ -3,10 +3,14 @@ import {
     Averia_Serif_Libre,
     Kaushan_Script,
     Shrikhand,
-    Questrial
+    Questrial,
+    Assistant
 } from "next/font/google";
 
 export const inter = Inter({ subsets: ["latin"] });
+
+export const assistant = Assistant({ subsets: ["latin"] });
+
 
 export const averia = Averia_Serif_Libre({
     weight: "700",

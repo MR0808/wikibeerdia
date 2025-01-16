@@ -45,6 +45,7 @@
     --background-image-main-hero: url("/images/main-bg.jpg");
     --background-image-blogs-hero: url("/images/blogs-bg.jpg");
     --background-image-styles-hero: url("/images/styles-bg.png");
+    --background-image-breweries-bg: url("/images/breweries-bg.jpg");
 
     @keyframes accordion-down {
         from {
@@ -114,6 +115,30 @@
 
 @utility form-card {
     @apply mx-auto mb-10 flex w-[55%] flex-col justify-between space-y-12 rounded-3xl bg-white px-12 py-10 shadow-md sm:justify-between sm:space-x-0 md:space-x-4;
+}
+
+@utility nice-select {
+    @apply relative clear-both box-border block h-9 w-auto min-w-32 cursor-pointer rounded-[30px] border border-black bg-transparent px-4 text-left text-base leading-8 tracking-[-0.15px] whitespace-nowrap capitalize outline-0 transition-all duration-200 ease-in-out;
+}
+
+@utility nice-select-list {
+    @apply pointer-events-none absolute top-full right-0 left-0 box-border max-h-[250px] origin-[50%_0%] translate-y-[-21px] scale-75 overflow-y-auto rounded-b-md border border-black/5 bg-white pt-1 pb-4 opacity-0 shadow-2xl transition-all duration-200 ease-out;
+}
+
+@utility nice-select-option {
+    @apply mt-1 cursor-pointer list-none px-2 text-left font-normal outline-0 transition-all duration-200 ease-in;
+}
+
+@utility nice-select-hover {
+    @apply hover:text-primary hover:bg-primary/5;
+}
+
+@utility nice-select-selected {
+    @apply text-primary bg-primary/5;
+}
+
+@utility nice-select-open {
+    @apply pointer-events-auto translate-y-0 scale-100 opacity-100;
 }
 
 @utility circles {
@@ -302,14 +327,22 @@
             border-radius: 50%;
         }
         accordion-down {
-          from { height: "0" }
-          to { height: "var(--radix-accordion-content-height)" }
+            from {
+                height: "0";
+            }
+            to {
+                height: "var(--radix-accordion-content-height)";
+            }
         }
         accordion-up {
-          from { height: "var(--radix-accordion-content-height)" }
-          to { height: "0" }
+            from {
+                height: "var(--radix-accordion-content-height)";
+            }
+            to {
+                height: "0";
+            }
         }
-      }
+    }
 }
 
 .rdp-vhidden {

@@ -1,14 +1,23 @@
-const BreweriesPage = () => {
+import { getAllBreweriesPage } from "@/actions/breweries";
+import BreweriesListings from "@/components/breweries/listing/BreweriesListings";
+
+const BreweriesPage = async () => {
+    const breweries = await getAllBreweriesPage();
+
     return (
-        <div>
-            <div className="mx-auto mt-36 flex h-16 w-[55%] flex-col justify-between space-y-12 sm:justify-between sm:space-x-0 md:space-x-4">
-                <div className="flex w-full flex-col justify-between">
-                    <div className="flex flex-col gap-y-5">
-                        <h1 className="text-4xl font-semibold">Add Brewery</h1>
+        <>
+            <div className="bg-breweries-bg h-80 bg-black bg-cover bg-center drop-shadow-lg">
+                <div className="h-full bg-black/50">
+                    <div className="container my-auto h-full content-center pt-20 text-5xl font-semibold text-white">
+                        Search and find your next brewery
                     </div>
                 </div>
             </div>
-        </div>
+            <BreweriesListings
+                breweries={breweries.data}
+                total={breweries.total || 0}
+            />
+        </>
     );
 };
 export default BreweriesPage;

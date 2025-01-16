@@ -22,6 +22,7 @@ import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
 import { deleteImage } from "@/utils/supabase";
 import { filterColumn } from "@/lib/filterColumn";
+import { error } from "console";
 
 const slugger = new GithubSlugger();
 
@@ -91,7 +92,6 @@ export const getBreweriesSearch = async (input: GetBreweriesSchema) => {
         const total = await db.brewery.count({ where: usedFilter });
 
         const pageCount = Math.ceil(total / per_page);
-        console.log("pagecount", pageCount);
         return { data, pageCount };
     } catch (err) {
         return { data: [], pageCount: 0 };
@@ -692,3 +692,40 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
         };
     }
 };
+
+// Breweries Page Functions
+
+export const getAllBreweriesPage = async () => {
+    // const { page, per_page, sort, name, status, operator, from, to } = input;
+
+    const page = 1
+    const per_page = 10
+
+    try {
+        const offset = (page - 1) * per_page;
+        const data = await db.brewery.findMany({
+            where: {
+                status: "APPROVED"
+            },
+            include: {
+                _count: {
+                    select: { beers: true }
+                }
+            },
+            orderBy: { name: "asc" },
+            skip: offset,
+            take: per_page,
+        });
+        const total = await db.brewery.count();
+
+        const pageCount = Math.ceil(total / per_page);
+        return { data, pageCount, total, error: null };
+    } catch (err) {
+        return {
+            data: null,
+            pageCount: null,
+            total: null,
+            error: getErrorMessage(err)
+        };
+    }
+}

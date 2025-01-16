@@ -62,3 +62,33 @@ export interface BreweryBeersType {
         beerId: string | null;
     }[];
 }
+
+export interface BreweriesListingsProps {
+    breweries: BreweriesListing[] | null;
+    total: number;
+}
+
+export interface BreweriesListing {
+    _count: {
+        beers: number;
+    }
+    name: string;
+    city: string;
+    status: Status;
+    id: string;
+    slug: string;
+    address1: string;
+    address2: string | null;
+    region: string;
+    postalCode: string;
+    countryId: string;
+    formattedAddress: string;
+    description: string;
+    website: string;
+    logoUrl: string;
+    headline: string;
+    breweryTypeId: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+};
