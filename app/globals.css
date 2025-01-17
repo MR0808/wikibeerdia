@@ -122,7 +122,7 @@
 }
 
 @utility nice-select-list {
-    @apply pointer-events-none absolute top-full right-0 left-0 box-border max-h-[250px] origin-[50%_0%] translate-y-[-21px] scale-75 overflow-y-auto rounded-b-md border border-black/5 bg-white pt-1 pb-4 opacity-0 shadow-2xl transition-all duration-200 ease-out;
+    @apply pointer-events-none absolute top-full right-0 left-0 z-50 box-border max-h-[250px] origin-[50%_0%] translate-y-[-21px] scale-75 overflow-y-auto rounded-b-md border border-black/5 bg-white pt-1 pb-4 opacity-0 shadow-2xl transition-all duration-200 ease-out;
 }
 
 @utility nice-select-option {

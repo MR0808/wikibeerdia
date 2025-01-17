@@ -115,6 +115,7 @@ export const createBreweryType = async (
         await db.breweryType.create({
             data: {
                 userId: user.id,
+                colour: "#ffffff",
                 ...values
             }
         });

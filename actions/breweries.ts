@@ -618,7 +618,7 @@ export const fetchBreweryFavoriteId = async ({
 }) => {
     const user = await checkAuth();
 
-    if (!user) return null;
+    if (!user) return "";
 
     const breweryFavorite = await db.breweryFavorite.findFirst({
         where: {
@@ -629,7 +629,7 @@ export const fetchBreweryFavoriteId = async ({
             id: true
         }
     });
-    return breweryFavorite?.id || null;
+    return breweryFavorite?.id || "";
 };
 
 export const toggleBreweryFavoriteAction = async (
@@ -695,11 +695,34 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
 
 // Breweries Page Functions
 
-export const getAllBreweriesPage = async () => {
+export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
     // const { page, per_page, sort, name, status, operator, from, to } = input;
 
     const page = 1
-    const per_page = 10
+    const per_page = 12
+
+    let orderBy = {}
+
+    switch (sort) {
+        case "az":
+            orderBy = { name: "asc" }
+            break
+        case "za":
+            orderBy = { name: "desc" }
+            break
+        case "newest":
+            orderBy = { createdAt: "desc" }
+            break
+        case "oldest":
+            orderBy = { createdAt: "asc" }
+            break
+        case "popular":
+            orderBy = { name: "desc" }
+            break
+        default:
+            orderBy = { name: "asc" }
+            break
+    }
 
     try {
         const offset = (page - 1) * per_page;
@@ -710,9 +733,11 @@ export const getAllBreweriesPage = async () => {
             include: {
                 _count: {
                     select: { beers: true }
-                }
+                },
+                images: { select: { id: true, image: true } },
+                breweryType: { select: { id: true, name: true, colour: true } }
             },
-            orderBy: { name: "asc" },
+            orderBy,
             skip: offset,
             take: per_page,
         });

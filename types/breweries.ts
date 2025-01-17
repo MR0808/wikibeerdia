@@ -69,9 +69,18 @@ export interface BreweriesListingsProps {
 }
 
 export interface BreweriesListing {
+    breweryType: {
+        id: string;
+        name: string;
+        colour: string
+    };
     _count: {
         beers: number;
-    }
+    };
+    images: {
+        id: string;
+        image: string;
+    }[];
     name: string;
     city: string;
     status: Status;

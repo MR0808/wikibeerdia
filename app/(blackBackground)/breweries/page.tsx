@@ -1,8 +1,16 @@
+import { SearchParams } from "nuqs/server";
+
 import { getAllBreweriesPage } from "@/actions/breweries";
 import BreweriesListings from "@/components/breweries/listing/BreweriesListings";
+import { searchParamsCache } from "@/lib/searchParamsCache";
 
-const BreweriesPage = async () => {
-    const breweries = await getAllBreweriesPage();
+const BreweriesPage = async ({
+    searchParams
+}: {
+    searchParams: Promise<SearchParams>;
+}) => {
+    const params = searchParamsCache.parse(await searchParams);
+    const breweries = await getAllBreweriesPage({ sort: params.sort });
 
     return (
         <>

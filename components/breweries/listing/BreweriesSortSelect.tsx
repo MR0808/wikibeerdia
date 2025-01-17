@@ -1,6 +1,9 @@
 "use client";
+
 import React, { useState, useCallback, useRef, FC, ChangeEvent } from "react";
 import { useClickAway } from "react-use";
+
+import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 
 interface Option {
     value: string;
@@ -12,16 +15,14 @@ type NiceSelectProps = {
     defaultCurrent: number;
     placeholder: string;
     className?: string;
-    onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
     name: string;
 };
 
-const NiceSelect: FC<NiceSelectProps> = ({
+const BreweriesSortSelect: FC<NiceSelectProps> = ({
     options,
     defaultCurrent,
     placeholder,
     className,
-    onChange,
     name
 }) => {
     const [open, setOpen] = useState(false);
@@ -31,11 +32,17 @@ const NiceSelect: FC<NiceSelectProps> = ({
     }, []);
     const ref = useRef<HTMLDivElement | null>(null);
 
+    const { sort, setSort } = useBreweriesParams();
+
+    const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setSort(event.target.value);
+    };
+
     useClickAway(ref, onClose);
 
     const currentHandler = (item: Option) => {
         setCurrent(item);
-        onChange({
+        handleTypeChange({
             target: { value: item.value }
         } as ChangeEvent<HTMLSelectElement>);
         onClose();
@@ -79,4 +86,4 @@ const NiceSelect: FC<NiceSelectProps> = ({
     );
 };
 
-export default NiceSelect;
+export default BreweriesSortSelect;
