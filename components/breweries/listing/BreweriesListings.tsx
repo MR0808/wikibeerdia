@@ -53,15 +53,15 @@ const BreweriesListings = ({
                     </div>
                 ) : (
                     <Suspense>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 gap-4">
                             {breweries.map((brewery) => {
                                 return (
                                     <div
                                         key={brewery.id}
-                                        className="relative flex flex-col rounded-3xl bg-white p-5"
+                                        className="relative flex flex-col space-y-4 rounded-3xl bg-white p-5"
                                     >
                                         <div
-                                            className="absolute top-6 left-6 z-[1] w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white uppercase"
+                                            className="absolute top-10 left-10 z-[1] w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white uppercase"
                                             style={{
                                                 backgroundColor:
                                                     brewery.breweryType.colour
@@ -69,7 +69,7 @@ const BreweriesListings = ({
                                         >
                                             {brewery.breweryType.name}
                                         </div>
-                                        <div className="absolute top-6 right-6 z-[1] float-right">
+                                        <div className="absolute top-10 right-10 z-[1] float-right">
                                             <BreweriesFavouriteToggleButton
                                                 breweryId={brewery.id}
                                             />
@@ -87,9 +87,15 @@ const BreweriesListings = ({
                                                 sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw, 33vw"
                                             />
                                         </Link>
-                                        <div className="flex flex-col">
-                                            <div className="text-2xl font-semibold">
+                                        <div className="flex flex-col space-y-4">
+                                            <Link
+                                                href={`/breweries/${brewery.slug}`}
+                                                className="hover:text-primary cursor-pointer text-2xl font-semibold"
+                                            >
                                                 {brewery.name}
+                                            </Link>
+                                            <div className="text-base">
+                                                {`${brewery.region}, ${brewery.country.name}`}
                                             </div>
                                         </div>
                                     </div>

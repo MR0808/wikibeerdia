@@ -698,30 +698,30 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
 export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
     // const { page, per_page, sort, name, status, operator, from, to } = input;
 
-    const page = 1
-    const per_page = 12
+    const page = 1;
+    const per_page = 12;
 
-    let orderBy = {}
+    let orderBy = {};
 
     switch (sort) {
         case "az":
-            orderBy = { name: "asc" }
-            break
+            orderBy = { name: "asc" };
+            break;
         case "za":
-            orderBy = { name: "desc" }
-            break
+            orderBy = { name: "desc" };
+            break;
         case "newest":
-            orderBy = { createdAt: "desc" }
-            break
+            orderBy = { createdAt: "desc" };
+            break;
         case "oldest":
-            orderBy = { createdAt: "asc" }
-            break
+            orderBy = { createdAt: "asc" };
+            break;
         case "popular":
-            orderBy = { name: "desc" }
-            break
+            orderBy = { name: "desc" };
+            break;
         default:
-            orderBy = { name: "asc" }
-            break
+            orderBy = { name: "asc" };
+            break;
     }
 
     try {
@@ -735,11 +735,12 @@ export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
                     select: { beers: true }
                 },
                 images: { select: { id: true, image: true } },
-                breweryType: { select: { id: true, name: true, colour: true } }
+                breweryType: { select: { id: true, name: true, colour: true } },
+                country: { select: { id: true, name: true } }
             },
             orderBy,
             skip: offset,
-            take: per_page,
+            take: per_page
         });
         const total = await db.brewery.count();
 
@@ -753,4 +754,4 @@ export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
             error: getErrorMessage(err)
         };
     }
-}
+};

@@ -81,6 +81,10 @@ export interface BreweriesListing {
         id: string;
         image: string;
     }[];
+    country: {
+        name: string;
+        id: string;
+    };
     name: string;
     city: string;
     status: Status;
