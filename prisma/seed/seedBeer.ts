@@ -49,7 +49,7 @@ async function main() {
                 const abv = (
                     Math.floor(
                         Math.random() * (10 * precisionABV - 1 * precisionABV) +
-                            1 * precisionABV
+                        1 * precisionABV
                     ) /
                     (1 * precisionABV)
                 ).toString();
@@ -96,7 +96,8 @@ async function main() {
                         styleId,
                         userId,
                         status: "APPROVED",
-                        breweryId: brewery.id
+                        breweryId: brewery.id,
+                        averageRating: '0'
                     }
                 });
                 for (const image of images) {
