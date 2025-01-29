@@ -14,11 +14,11 @@ async function main() {
     for (const brewery of breweries) {
         const randomnum = Math.floor(Math.random() * (5 * precision - 1 * precision) + 1 * precision) / (1 * precision);
         const beerLength = brewery.beers.length
-        await prisma.brewery.update({ where: { id: brewery.id }, data: { averageRating: randomnum } })
+        await prisma.brewery.update({ where: { id: brewery.id }, data: { averageRating: randomnum.toString() } })
 
         for (const beer of brewery.beers) {
             const randomRating = Math.floor(Math.random() * (5 * precision - 1 * precision) + 1 * precision) / (1 * precision);
-            await prisma.beer.update({ where: { id: beer.id }, data: { averageRating: randomRating } })
+            await prisma.beer.update({ where: { id: beer.id }, data: { averageRating: randomRating.toString() } })
 
             countBeers++;
             console.log(
