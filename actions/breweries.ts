@@ -211,7 +211,7 @@ export const createBrewery = async (
                 website: website || "",
                 logoUrl,
                 userId: user.id,
-                averageRating: ''
+                averageRating: '0'
             }
         });
         if (!data) {
@@ -499,6 +499,15 @@ export const createBreweryReview = async (
                 status: "APPROVED"
             }
         });
+
+        const averageRating = await db.breweryReview.aggregate({
+            _avg: {
+                rating: true
+            },
+            where: { breweryId: id }
+        })
+
+        await db.brewery.update({ where: { id }, data: { averageRating: averageRating._avg.toString() } })
 
         if (!data) {
             return {

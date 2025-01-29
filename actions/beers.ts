@@ -86,7 +86,8 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
                 styleId: style,
                 breweryId: brewery,
                 available,
-                userId: user.id
+                userId: user.id,
+                averageRating: '0'
             }
         });
         if (!data) {
@@ -329,6 +330,15 @@ export const createBeerReview = async (
                 status: "APPROVED"
             }
         });
+
+        const averageRating = await db.beerReview.aggregate({
+            _avg: {
+                rating: true
+            },
+            where: { beerId: id }
+        })
+
+        await db.beer.update({ where: { id }, data: { averageRating: averageRating._avg.toString() } })
 
         if (!data) {
             return {
