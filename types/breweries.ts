@@ -12,6 +12,7 @@ export interface BreweryType {
     postalCode: string;
     countryId: string;
     formattedAddress: string;
+    averageRating: string;
     description: string;
     headline: string;
     website: string;
@@ -85,6 +86,9 @@ export interface BreweriesListing {
         name: string;
         id: string;
     };
+    breweryReviews: {
+        id: string;
+    }[];
     name: string;
     city: string;
     status: Status;
@@ -96,6 +100,7 @@ export interface BreweriesListing {
     postalCode: string;
     countryId: string;
     formattedAddress: string;
+    averageRating: string;
     description: string;
     website: string;
     logoUrl: string;

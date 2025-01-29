@@ -14,25 +14,26 @@ type NiceSelectProps = {
     options: Option[];
     defaultCurrent: number;
     placeholder: string;
-    className?: string;
-    name: string;
 };
 
 const BreweriesSortSelect: FC<NiceSelectProps> = ({
     options,
     defaultCurrent,
-    placeholder,
-    className,
-    name
+    placeholder
 }) => {
     const [open, setOpen] = useState(false);
-    const [current, setCurrent] = useState<Option>(options[defaultCurrent]);
     const onClose = useCallback(() => {
         setOpen(false);
     }, []);
     const ref = useRef<HTMLDivElement | null>(null);
 
     const { sort, setSort } = useBreweriesParams();
+
+    const selected = options.filter((option) => option.value === sort);
+
+    const [current, setCurrent] = useState<Option>(
+        selected[0] || options[defaultCurrent]
+    );
 
     const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSort(event.target.value);
@@ -50,7 +51,7 @@ const BreweriesSortSelect: FC<NiceSelectProps> = ({
 
     return (
         <div
-            className={`nice-select ${className || ""}`}
+            className={`nice-select after:nice-select-after ${open && "after:nice-select-open-after"}`}
             role="button"
             tabIndex={0}
             onClick={() => setOpen((prev) => !prev)}

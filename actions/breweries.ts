@@ -210,7 +210,8 @@ export const createBrewery = async (
                 breweryTypeId: breweryType,
                 website: website || "",
                 logoUrl,
-                userId: user.id
+                userId: user.id,
+                averageRating: ''
             }
         });
         if (!data) {
@@ -717,7 +718,7 @@ export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
             orderBy = { createdAt: "asc" };
             break;
         case "popular":
-            orderBy = { name: "desc" };
+            orderBy = { averageRating: "desc" };
             break;
         default:
             orderBy = { name: "asc" };
@@ -736,7 +737,8 @@ export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
                 },
                 images: { select: { id: true, image: true } },
                 breweryType: { select: { id: true, name: true, colour: true } },
-                country: { select: { id: true, name: true } }
+                country: { select: { id: true, name: true } },
+                breweryReviews: { select: { id: true } }
             },
             orderBy,
             skip: offset,

@@ -1,11 +1,13 @@
 import { assistant } from "@/app/fonts";
-import { BreweriesListingsProps } from "@/types/breweries";
+import { Beer, Star, MoveUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
+
+import { BreweriesListingsProps } from "@/types/breweries";
 import BreweriesFavouriteToggleButton from "./BreweriesFavouriteToggleButton";
 import BreweriesSortSelect from "./BreweriesSortSelect";
 import BreweriesViewToggle from "./BreweriesViewToggle";
-import { Suspense } from "react";
 
 const BreweriesListings = ({
     breweries,
@@ -32,7 +34,6 @@ const BreweriesListings = ({
                     <div className="flex flex-row space-x-4">
                         <div className="w-16">Sort by:</div>
                         <BreweriesSortSelect
-                            className="nice-select"
                             options={[
                                 { value: "az", text: "A - Z" },
                                 { value: "za", text: "Z - A" },
@@ -41,7 +42,6 @@ const BreweriesListings = ({
                                 { value: "popular", text: "Most Popular" }
                             ]}
                             defaultCurrent={0}
-                            name=""
                             placeholder=""
                         />
                         <BreweriesViewToggle />
@@ -94,9 +94,33 @@ const BreweriesListings = ({
                                             >
                                                 {brewery.name}
                                             </Link>
-                                            <div className="text-base">
+                                            <div className="text-foreground/55 text-lg">
                                                 {`${brewery.region}, ${brewery.country.name}`}
                                             </div>
+                                        </div>
+                                        <div className="text-foreground/60 w-full border-t border-dashed border-t-gray-300 pt-4 text-xl">
+                                            <ul className="flex list-none flex-wrap items-center justify-between">
+                                                <li className="flex flex-row items-center">
+                                                    <Beer className="mr-2 size-5" />
+                                                    {`${brewery._count.beers} beer${brewery._count.beers !== 1 && "s"}`}
+                                                </li>
+                                                <li className="flex flex-row items-center">
+                                                    <Star className="mr-2 size-5" />
+                                                    {`${Number.parseFloat(
+                                                        brewery.averageRating
+                                                    ).toFixed(
+                                                        1
+                                                    )} (${brewery.breweryReviews.length})`}
+                                                </li>
+                                                <li className="flex flex-row items-center">
+                                                    <Link
+                                                        href={`/breweries/${brewery.slug}`}
+                                                        className="hover:bg-primary size-10 cursor-pointer place-content-center items-center justify-items-center rounded-4xl bg-black transition-all delay-0 duration-300 ease-in-out"
+                                                    >
+                                                        <MoveUpRight className="size-6 text-white" />
+                                                    </Link>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 );
