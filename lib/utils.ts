@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Status } from "@prisma/client";
+
 import {
     CheckCircledIcon,
     CircleIcon,
@@ -42,3 +43,49 @@ export const formatDate = (
         ...opts
     }).format(new Date(date));
 };
+
+export const toSlug = (text: string): string =>
+    text
+        .toLowerCase()
+        .replace(/[^\w\s-]+/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .replace(/-+/g, '-')
+
+export const getFilterUrl = ({
+    params,
+    category,
+    tag,
+    sort,
+    price,
+    rating,
+    page,
+    url
+}: {
+    params: {
+        // q?: string
+        // category?: string
+        // tag?: string
+        // price?: string
+        // rating?: string
+        sort?: string
+        page?: string,
+    }
+    tag?: string
+    category?: string
+    sort?: string
+    price?: string
+    rating?: string
+    page?: string
+    url: string
+
+}) => {
+    const newParams = { ...params }
+    // if (category) newParams.category = category
+    // if (tag) newParams.tag = toSlug(tag)
+    // if (price) newParams.price = price
+    // if (rating) newParams.rating = rating
+    if (page) newParams.page = page
+    if (sort) newParams.sort = sort
+    return `/${url}?${new URLSearchParams(newParams).toString()}`
+}

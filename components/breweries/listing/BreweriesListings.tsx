@@ -7,9 +7,18 @@ import BreweriesViewToggle from "./BreweriesViewToggle";
 import BreweriesGridView from "./BreweriesGridView";
 import BreweriesGridSkeleton from "./BreweriesGridSkeleton";
 
+const sortOrders = [
+    { value: "az", name: "A - Z" },
+    { value: "za", name: "Z - A" },
+    { value: "newest", name: "Newest" },
+    { value: "oldest", name: "Oldest" },
+    { value: "popular", name: "Most Popular" }
+];
+
 const BreweriesListings = ({
     breweries,
     total = 0,
+    searchParams,
     params
 }: BreweriesListingsProps) => {
     const per_page = 12;
@@ -32,23 +41,18 @@ const BreweriesListings = ({
                     </div>
                     <div className="flex flex-row space-x-4">
                         <div className="w-16">Sort by:</div>
-                        <Suspense>
-                            <BreweriesSortSelect
-                                options={[
-                                    { value: "az", text: "A - Z" },
-                                    { value: "za", text: "Z - A" },
-                                    { value: "newest", text: "Newest" },
-                                    { value: "oldest", text: "Oldest" },
-                                    { value: "popular", text: "Most Popular" }
-                                ]}
-                                defaultCurrent={0}
-                                placeholder=""
-                            />
-                            <BreweriesViewToggle />
-                        </Suspense>
+                        <BreweriesSortSelect
+                            sortOrders={sortOrders}
+                            sort={searchParams.sort}
+                            params={params}
+                        />
+                        <BreweriesViewToggle />
                     </div>
                 </div>
-                <Suspense fallback={<BreweriesGridSkeleton />}>
+                <Suspense
+                    fallback={<BreweriesGridSkeleton />}
+                    key={JSON.stringify(searchParams)}
+                >
                     {!breweries || breweries.length === 0 ? (
                         <div className="text-2xl font-semibold">
                             No breweries found that match your search

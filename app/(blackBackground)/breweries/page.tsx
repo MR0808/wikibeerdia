@@ -1,16 +1,17 @@
-import { SearchParams } from "nuqs/server";
-
 import { getAllBreweriesPage } from "@/actions/breweries";
 import BreweriesListings from "@/components/breweries/listing/BreweriesListings";
-import { searchParamsCache } from "@/lib/searchParamsCache";
 
-const BreweriesPage = async ({
-    searchParams
-}: {
-    searchParams: Promise<SearchParams>;
+const BreweriesPage = async (props: {
+    searchParams: Promise<{
+        sort: string;
+        page: string;
+    }>;
 }) => {
-    const params = searchParamsCache.parse(await searchParams);
-    const breweries = await getAllBreweriesPage({ sort: params.sort });
+    const searchParams = await props.searchParams;
+    const { sort = "az", page = "1" } = searchParams;
+
+    const params = { sort, page };
+    const breweries = await getAllBreweriesPage({ sort });
 
     return (
         <>
@@ -24,6 +25,7 @@ const BreweriesPage = async ({
             <BreweriesListings
                 breweries={breweries.data}
                 total={breweries.total || 0}
+                searchParams={searchParams}
                 params={params}
             />
         </>

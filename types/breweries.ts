@@ -1,5 +1,4 @@
 import { Status } from "@prisma/client";
-import { searchParamsCache } from "@/lib/searchParamsCache";
 
 export interface BreweryType {
     id: string;
@@ -64,18 +63,11 @@ export interface BreweryBeersType {
         beerId: string | null;
     }[];
 }
-
-export interface params {
-    readonly search: string;
-    readonly category: string;
-    readonly sort: string;
-    readonly page: number;
-}
-
 export interface BreweriesListingsProps {
     breweries: BreweriesListing[] | null;
     total: number;
-    params: params
+    searchParams: searchParams;
+    params: params;
 }
 
 export interface BreweriesListing {
@@ -119,3 +111,13 @@ export interface BreweriesListing {
     createdAt: Date;
     updatedAt: Date;
 };
+
+export interface searchParams {
+    sort: string;
+    page: string;
+}
+
+export interface params {
+    sort: string;
+    page: string;
+}

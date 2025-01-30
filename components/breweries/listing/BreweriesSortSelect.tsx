@@ -1,42 +1,51 @@
 "use client";
 
-import React, { useState, useCallback, useRef, FC, ChangeEvent } from "react";
+import { useState, useCallback, useRef, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 import { useClickAway } from "react-use";
 
-import { useBreweriesParams } from "@/hooks/useBreweriesParams";
+import { getFilterUrl } from "@/lib/utils";
 
 interface Option {
     value: string;
-    text: string;
+    name: string;
 }
 
-type NiceSelectProps = {
-    options: Option[];
-    defaultCurrent: number;
-    placeholder: string;
+type BreweriesSortSelectProps = {
+    sortOrders: { value: string; name: string }[];
+    sort: string;
+    params: {
+        q?: string;
+        category?: string;
+        price?: string;
+        rating?: string;
+        sort?: string;
+        page?: string;
+    };
 };
 
-const BreweriesSortSelect: FC<NiceSelectProps> = ({
-    options,
-    defaultCurrent,
-    placeholder
-}) => {
+const BreweriesSortSelect = ({
+    sortOrders,
+    sort,
+    params
+}: BreweriesSortSelectProps) => {
+    const router = useRouter();
     const [open, setOpen] = useState(false);
     const onClose = useCallback(() => {
         setOpen(false);
     }, []);
     const ref = useRef<HTMLDivElement | null>(null);
 
-    const { sort, setSort } = useBreweriesParams();
-
-    const selected = options.filter((option) => option.value === sort);
+    const selected = sortOrders.filter((option) => option.value === sort);
 
     const [current, setCurrent] = useState<Option>(
-        selected[0] || options[defaultCurrent]
+        selected[0] || sortOrders[0]
     );
 
     const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        setSort(event.target.value);
+        router.push(
+            getFilterUrl({ params, sort: event.target.value, url: "breweries" })
+        );
     };
 
     useClickAway(ref, onClose);
@@ -58,14 +67,14 @@ const BreweriesSortSelect: FC<NiceSelectProps> = ({
             onKeyDown={(e) => e}
             ref={ref}
         >
-            <span className="current">{current?.text || placeholder}</span>
+            <span className="current">{current?.name || ""}</span>
             <ul
                 className={`nice-select-list ${open ? "nice-select-open" : ""}`}
                 role="menubar"
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => e.stopPropagation()}
             >
-                {options?.map((item, i) => (
+                {sortOrders.map((item, i) => (
                     <li
                         key={i}
                         data-value={item.value}
@@ -79,7 +88,7 @@ const BreweriesSortSelect: FC<NiceSelectProps> = ({
                         onClick={() => currentHandler(item)}
                         onKeyDown={(e) => e}
                     >
-                        {item.text}
+                        {item.name}
                     </li>
                 ))}
             </ul>
