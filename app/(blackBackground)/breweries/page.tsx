@@ -27,10 +27,7 @@ const BreweriesPage = async (props: {
                     </div>
                 </div>
             </div>
-            <Suspense
-                fallback={<BreweriesGridSkeleton />}
-                key={JSON.stringify(searchParams)}
-            >
+            <Suspense key={JSON.stringify(searchParams)}>
                 <BreweriesListings
                     breweries={breweries.data}
                     total={breweries.total || 0}

@@ -49,18 +49,18 @@ const BreweriesListings = ({
                         <BreweriesViewToggle />
                     </div>
                 </div>
-                {/* <Suspense
+                <Suspense
                     fallback={<BreweriesGridSkeleton />}
                     key={JSON.stringify(searchParams)}
-                > */}
-                {!breweries || breweries.length === 0 ? (
-                    <div className="text-2xl font-semibold">
-                        No breweries found that match your search
-                    </div>
-                ) : (
-                    <BreweriesGridView breweries={breweries} />
-                )}
-                {/* </Suspense> */}
+                >
+                    {!breweries || breweries.length === 0 ? (
+                        <div className="text-2xl font-semibold">
+                            No breweries found that match your search
+                        </div>
+                    ) : (
+                        <BreweriesGridView breweries={breweries} />
+                    )}
+                </Suspense>
             </div>
         </div>
     );
