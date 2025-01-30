@@ -1,5 +1,7 @@
 import { getAllBreweriesPage } from "@/actions/breweries";
 import BreweriesListings from "@/components/breweries/listing/BreweriesListings";
+import { Suspense } from "react";
+import BreweriesGridSkeleton from "@/components/breweries/listing/BreweriesGridSkeleton";
 
 const BreweriesPage = async (props: {
     searchParams: Promise<{
@@ -22,12 +24,17 @@ const BreweriesPage = async (props: {
                     </div>
                 </div>
             </div>
-            <BreweriesListings
-                breweries={breweries.data}
-                total={breweries.total || 0}
-                searchParams={searchParams}
-                params={params}
-            />
+            <Suspense
+                fallback={<BreweriesGridSkeleton />}
+                key={JSON.stringify(searchParams)}
+            >
+                <BreweriesListings
+                    breweries={breweries.data}
+                    total={breweries.total || 0}
+                    searchParams={searchParams}
+                    params={params}
+                />
+            </Suspense>
         </>
     );
 };
