@@ -1,3 +1,5 @@
+import { connection } from "next/server";
+
 import { getAllBreweriesPage } from "@/actions/breweries";
 import BreweriesListings from "@/components/breweries/listing/BreweriesListings";
 import { Suspense } from "react";
@@ -9,6 +11,7 @@ const BreweriesPage = async (props: {
         page: string;
     }>;
 }) => {
+    await connection();
     const searchParams = await props.searchParams;
     const { sort = "az", page = "1" } = searchParams;
 
