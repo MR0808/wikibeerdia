@@ -48,10 +48,7 @@ const BreweriesListings = ({
                         </Suspense>
                     </div>
                 </div>
-                <Suspense
-                    fallback={<BreweriesGridSkeleton />}
-                    key={`${params.category}${params.page}${params.sort}${params.search}`}
-                >
+                <Suspense fallback={<BreweriesGridSkeleton />}>
                     {!breweries || breweries.length === 0 ? (
                         <div className="text-2xl font-semibold">
                             No breweries found that match your search
