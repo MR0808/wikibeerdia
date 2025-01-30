@@ -2,20 +2,19 @@ import { connection } from "next/server";
 
 import { getAllBreweriesPage } from "@/actions/breweries";
 import BreweriesListings from "@/components/breweries/listing/BreweriesListings";
-import { Suspense } from "react";
-import BreweriesGridSkeleton from "@/components/breweries/listing/BreweriesGridSkeleton";
 
 const BreweriesPage = async (props: {
     searchParams: Promise<{
         sort: string;
         page: string;
+        view: string;
     }>;
 }) => {
     await connection();
     const searchParams = await props.searchParams;
-    const { sort = "az", page = "1" } = searchParams;
+    const { sort = "az", page = "1", view = "grid" } = searchParams;
 
-    const params = { sort, page };
+    const params = { sort, page, view };
     const breweries = await getAllBreweriesPage({ sort });
 
     return (
@@ -27,14 +26,12 @@ const BreweriesPage = async (props: {
                     </div>
                 </div>
             </div>
-            <Suspense key={JSON.stringify(searchParams)}>
-                <BreweriesListings
-                    breweries={breweries.data}
-                    total={breweries.total || 0}
-                    searchParams={searchParams}
-                    params={params}
-                />
-            </Suspense>
+            <BreweriesListings
+                breweries={breweries.data}
+                total={breweries.total || 0}
+                searchParams={searchParams}
+                params={params}
+            />
         </>
     );
 };

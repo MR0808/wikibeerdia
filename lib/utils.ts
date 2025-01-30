@@ -60,6 +60,7 @@ export const getFilterUrl = ({
     price,
     rating,
     page,
+    view,
     url
 }: {
     params: {
@@ -69,7 +70,8 @@ export const getFilterUrl = ({
         // price?: string
         // rating?: string
         sort?: string
-        page?: string,
+        page?: string
+        view?: string
     }
     tag?: string
     category?: string
@@ -77,8 +79,8 @@ export const getFilterUrl = ({
     price?: string
     rating?: string
     page?: string
+    view?: string
     url: string
-
 }) => {
     const newParams = { ...params }
     // if (category) newParams.category = category
@@ -87,5 +89,6 @@ export const getFilterUrl = ({
     // if (rating) newParams.rating = rating
     if (page) newParams.page = page
     if (sort) newParams.sort = sort
+    if (view) newParams.view = view
     return `/${url}?${new URLSearchParams(newParams).toString()}`
 }

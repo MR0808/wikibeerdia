@@ -10,11 +10,13 @@ import { toggleBreweryFavoriteAction } from "@/actions/breweries";
 type BreweriesFavoriteToggleFormProps = {
     breweryId: string;
     breweryFavoriteId: string | null;
+    isLoading: boolean;
 };
 
 const BreweriesFavoriteToggleForm = ({
     breweryId,
-    breweryFavoriteId
+    breweryFavoriteId,
+    isLoading
 }: BreweriesFavoriteToggleFormProps) => {
     const [isFavorite, setIsFavorite] = useState(
         breweryFavoriteId ? true : false
@@ -40,7 +42,7 @@ const BreweriesFavoriteToggleForm = ({
 
     return (
         <>
-            {isPending ? (
+            {isPending || isLoading ? (
                 <div className="hover:bg-primary flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white">
                     <ReloadIcon className="animate-spin" />
                 </div>

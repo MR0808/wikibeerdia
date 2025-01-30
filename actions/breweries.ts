@@ -642,6 +642,27 @@ export const fetchBreweryFavoriteId = async ({
     return breweryFavorite?.id || "";
 };
 
+export const fetchClientBreweryFavoriteId = async ({
+    breweryId
+}: {
+    breweryId: string;
+}) => {
+    const user = await checkAuth();
+
+    if (!user) return { data: null, error: "No user exists" };
+
+    const breweryFavorite = await db.breweryFavorite.findFirst({
+        where: {
+            breweryId,
+            userId: user.id
+        },
+        select: {
+            id: true
+        }
+    });
+    return { data: breweryFavorite?.id, error: null };
+};
+
 export const toggleBreweryFavoriteAction = async (
     breweryId: string,
     breweryFavoriteId: string | null,

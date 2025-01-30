@@ -5,24 +5,7 @@ import { useRouter } from "next/navigation";
 import { useClickAway } from "react-use";
 
 import { getFilterUrl } from "@/lib/utils";
-
-interface Option {
-    value: string;
-    name: string;
-}
-
-type BreweriesSortSelectProps = {
-    sortOrders: { value: string; name: string }[];
-    sort: string;
-    params: {
-        q?: string;
-        category?: string;
-        price?: string;
-        rating?: string;
-        sort?: string;
-        page?: string;
-    };
-};
+import { BreweriesSortSelectProps, Option } from "@/types/breweries";
 
 const BreweriesSortSelect = ({
     sortOrders,

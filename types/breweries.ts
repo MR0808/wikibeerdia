@@ -63,6 +63,7 @@ export interface BreweryBeersType {
         beerId: string | null;
     }[];
 }
+
 export interface BreweriesListingsProps {
     breweries: BreweriesListing[] | null;
     total: number;
@@ -115,9 +116,43 @@ export interface BreweriesListing {
 export interface searchParams {
     sort: string;
     page: string;
+    view: string
 }
 
 export interface params {
     sort: string;
     page: string;
+    view: string
 }
+
+export interface Option {
+    value: string;
+    name: string;
+}
+
+export type BreweriesSortSelectProps = {
+    sortOrders: { value: string; name: string }[];
+    sort: string;
+    params: {
+        q?: string;
+        category?: string;
+        price?: string;
+        rating?: string;
+        sort?: string;
+        page?: string;
+        view?: string;
+    };
+};
+
+export type BreweriesViewToggleProps = {
+    view: string;
+    params: {
+        q?: string;
+        category?: string;
+        price?: string;
+        rating?: string;
+        sort?: string;
+        page?: string;
+        view?: string;
+    };
+};
