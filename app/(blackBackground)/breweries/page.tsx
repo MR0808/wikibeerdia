@@ -24,6 +24,7 @@ const BreweriesPage = async ({
             <BreweriesListings
                 breweries={breweries.data}
                 total={breweries.total || 0}
+                params={params}
             />
         </>
     );

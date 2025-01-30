@@ -1,17 +1,16 @@
 import { assistant } from "@/app/fonts";
-import { Beer, Star, MoveUpRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
 
 import { BreweriesListingsProps } from "@/types/breweries";
-import BreweriesFavouriteToggleButton from "./BreweriesFavouriteToggleButton";
 import BreweriesSortSelect from "./BreweriesSortSelect";
 import BreweriesViewToggle from "./BreweriesViewToggle";
+import BreweriesGridView from "./BreweriesGridView";
+import BreweriesGridSkeleton from "./BreweriesGridSkeleton";
 
 const BreweriesListings = ({
     breweries,
-    total = 0
+    total = 0,
+    params
 }: BreweriesListingsProps) => {
     const per_page = 12;
     const page = 1;
@@ -33,101 +32,34 @@ const BreweriesListings = ({
                     </div>
                     <div className="flex flex-row space-x-4">
                         <div className="w-16">Sort by:</div>
-                        <BreweriesSortSelect
-                            options={[
-                                { value: "az", text: "A - Z" },
-                                { value: "za", text: "Z - A" },
-                                { value: "newest", text: "Newest" },
-                                { value: "oldest", text: "Oldest" },
-                                { value: "popular", text: "Most Popular" }
-                            ]}
-                            defaultCurrent={0}
-                            placeholder=""
-                        />
-                        <BreweriesViewToggle />
+                        <Suspense>
+                            <BreweriesSortSelect
+                                options={[
+                                    { value: "az", text: "A - Z" },
+                                    { value: "za", text: "Z - A" },
+                                    { value: "newest", text: "Newest" },
+                                    { value: "oldest", text: "Oldest" },
+                                    { value: "popular", text: "Most Popular" }
+                                ]}
+                                defaultCurrent={0}
+                                placeholder=""
+                            />
+                            <BreweriesViewToggle />
+                        </Suspense>
                     </div>
                 </div>
-                {!breweries || breweries.length === 0 ? (
-                    <div className="text-2xl font-semibold">
-                        No breweries found that match your search
-                    </div>
-                ) : (
-                    <Suspense>
-                        <div className="grid grid-cols-2 gap-4">
-                            {breweries.map((brewery) => {
-                                return (
-                                    <div
-                                        key={brewery.id}
-                                        className="relative flex flex-col space-y-4 rounded-3xl bg-white p-5"
-                                    >
-                                        <div
-                                            className="absolute top-10 left-10 z-[1] w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white uppercase"
-                                            style={{
-                                                backgroundColor:
-                                                    brewery.breweryType.colour
-                                            }}
-                                        >
-                                            {brewery.breweryType.name}
-                                        </div>
-                                        <div className="absolute top-10 right-10 z-[1] float-right">
-                                            <BreweriesFavouriteToggleButton
-                                                breweryId={brewery.id}
-                                            />
-                                        </div>
-                                        <Link
-                                            href={`/breweries/${brewery.slug}`}
-                                            className="h-full overflow-hidden rounded-xl"
-                                        >
-                                            <Image
-                                                src={brewery.images[0].image}
-                                                alt={brewery.name}
-                                                width={300}
-                                                height={200}
-                                                className="ease object-auto aspect-[4/3] h-full w-full object-center transition-all duration-300 group-hover:scale-105"
-                                                sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw, 33vw"
-                                            />
-                                        </Link>
-                                        <div className="flex flex-col space-y-4">
-                                            <Link
-                                                href={`/breweries/${brewery.slug}`}
-                                                className="hover:text-primary cursor-pointer text-2xl font-semibold"
-                                            >
-                                                {brewery.name}
-                                            </Link>
-                                            <div className="text-foreground/55 text-lg">
-                                                {`${brewery.region}, ${brewery.country.name}`}
-                                            </div>
-                                        </div>
-                                        <div className="text-foreground/60 w-full border-t border-dashed border-t-gray-300 pt-4 text-xl">
-                                            <ul className="flex list-none flex-wrap items-center justify-between">
-                                                <li className="flex flex-row items-center">
-                                                    <Beer className="mr-2 size-5" />
-                                                    {`${brewery._count.beers} beer${brewery._count.beers !== 1 && "s"}`}
-                                                </li>
-                                                <li className="flex flex-row items-center">
-                                                    <Star className="mr-2 size-5" />
-                                                    {`${Number.parseFloat(
-                                                        brewery.averageRating
-                                                    ).toFixed(
-                                                        1
-                                                    )} (${brewery.breweryReviews.length})`}
-                                                </li>
-                                                <li className="flex flex-row items-center">
-                                                    <Link
-                                                        href={`/breweries/${brewery.slug}`}
-                                                        className="hover:bg-primary size-10 cursor-pointer place-content-center items-center justify-items-center rounded-4xl bg-black transition-all delay-0 duration-300 ease-in-out"
-                                                    >
-                                                        <MoveUpRight className="size-6 text-white" />
-                                                    </Link>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                <Suspense
+                    fallback={<BreweriesGridSkeleton />}
+                    key={`${params.category}${params.page}${params.sort}${params.search}`}
+                >
+                    {!breweries || breweries.length === 0 ? (
+                        <div className="text-2xl font-semibold">
+                            No breweries found that match your search
                         </div>
-                    </Suspense>
-                )}
+                    ) : (
+                        <BreweriesGridView breweries={breweries} />
+                    )}
+                </Suspense>
             </div>
         </div>
     );
