@@ -1,4 +1,7 @@
+"use client";
+
 import { Heart } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 import {
     AlertDialog,
@@ -11,18 +14,19 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 
-import { fetchBreweryFavoriteId } from "@/actions/breweries";
+import { fetchClientBreweryFavoriteId } from "@/actions/breweries";
 import BreweriesFavoriteToggleForm from "./BreweriesFavouriteToggleForm";
-import { currentUser } from "@/lib/auth";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 import Link from "next/link";
 
-const BreweriesFavouriteToggleButton = async ({
+const BreweriesFavouriteToggleButton = ({
     breweryId
 }: {
     breweryId: string;
 }) => {
-    const user = await currentUser();
+    const user = useCurrentUser();
+
     if (!user) {
         return (
             <AlertDialog>
@@ -48,13 +52,26 @@ const BreweriesFavouriteToggleButton = async ({
         );
     }
 
-    const breweryFavoriteId = await fetchBreweryFavoriteId({ breweryId });
+    const { data, error, isLoading } = useQuery({
+        queryKey: ["favouriteData"],
+        queryFn: () =>
+            fetchClientBreweryFavoriteId({ breweryId }).then((res) => {
+                if (res.error) {
+                    throw new Error(
+                        `Network response was not ok, status ${res.error}`
+                    );
+                }
+                return res.data || "";
+            })
+    });
 
     return (
-        <BreweriesFavoriteToggleForm
-            breweryFavoriteId={breweryFavoriteId}
-            breweryId={breweryId}
-        />
+        <div>hello</div>
+        // <BreweriesFavoriteToggleForm
+        //     breweryFavoriteId={data || ""}
+        //     breweryId={breweryId}
+        //     isLoading={isLoading}
+        // />
     );
 };
 export default BreweriesFavouriteToggleButton;

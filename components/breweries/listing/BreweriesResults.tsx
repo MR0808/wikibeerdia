@@ -39,7 +39,10 @@ const BreweriesResults = ({
                         sort={searchParams.sort}
                         params={params}
                     />
-                    <BreweriesViewToggle />
+                    <BreweriesViewToggle
+                        view={searchParams.view}
+                        params={params}
+                    />
                 </div>
             </div>
             <Suspense
@@ -50,6 +53,8 @@ const BreweriesResults = ({
                     <div className="text-2xl font-semibold">
                         No breweries found that match your search
                     </div>
+                ) : searchParams.view === "grid" ? (
+                    <BreweriesGridView breweries={breweries} />
                 ) : (
                     <BreweriesGridView breweries={breweries} />
                 )}
