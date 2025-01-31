@@ -12,12 +12,10 @@ const BreweriesResults = ({
     searchParams
 }: BreweriesResultsProps) => {
     const { view } = useViewStore();
+    console.log(JSON.stringify(searchParams));
 
     return (
-        <Suspense
-            fallback={<BreweriesGridSkeleton />}
-            key={JSON.stringify(searchParams)}
-        >
+        <>
             {!breweries || breweries.length === 0 ? (
                 <div className="text-2xl font-semibold">
                     No breweries found that match your search
@@ -27,7 +25,7 @@ const BreweriesResults = ({
             ) : (
                 <BreweriesListView breweries={breweries} />
             )}
-        </Suspense>
+        </>
     );
 };
 export default BreweriesResults;

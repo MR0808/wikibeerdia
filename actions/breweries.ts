@@ -705,17 +705,17 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
 
 // Breweries Page Functions
 
-export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
+export const getAllBreweriesPage = async ({ sort, page, pageSize }: { sort: string, page: string, pageSize: string }) => {
     // const { page, per_page, sort, name, status, operator, from, to } = input;
-
-    const page = 1;
-    const per_page = 12;
 
     let orderBy = {};
 
     const user = await checkAuth();
 
     let id = ''
+
+    const pageInt = parseInt(page)
+    const pageSizeInt = parseInt(pageSize)
 
     if (user) { id = user.id }
 
@@ -741,7 +741,7 @@ export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
     }
 
     try {
-        const offset = (page - 1) * per_page;
+        const offset = (pageInt - 1) * pageSizeInt;
         const data = await db.brewery.findMany({
             where: {
                 status: "APPROVED"
@@ -758,11 +758,11 @@ export const getAllBreweriesPage = async ({ sort }: { sort: string }) => {
             },
             orderBy,
             skip: offset,
-            take: per_page
+            take: pageSizeInt
         });
         const total = await db.brewery.count();
 
-        const pageCount = Math.ceil(total / per_page);
+        const pageCount = Math.ceil(total / pageSizeInt);
         return { data, pageCount, total, error: null };
     } catch (err) {
         return {

@@ -124,12 +124,14 @@ export interface BreweriesListing {
 export interface searchParams {
     sort: string;
     page: string;
+    pageSize: string
     view: string
 }
 
 export interface params {
     sort: string;
     page: string;
+    pageSize: string
     view: string
 }
 
@@ -148,6 +150,7 @@ export type BreweriesSortSelectProps = {
         rating?: string;
         sort?: string;
         page?: string;
+        pageSize?: string
         view?: string;
     };
 };

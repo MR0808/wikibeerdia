@@ -41,19 +41,19 @@ const BreweriesFavouriteToggleForm = ({
     return (
         <>
             {isPending ? (
-                <div className="hover:bg-primary flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white">
+                <div className="hover:bg-primary flex size-8 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white">
                     <ReloadIcon className="animate-spin" />
                 </div>
             ) : isFavorite ? (
                 <div
-                    className="bg-primary hover:bg-primary flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 align-top text-lg text-white transition duration-300 ease-in-out hover:border-1 hover:border-black hover:text-white"
+                    className="bg-primary hover:bg-primary flex size-8 cursor-pointer items-center justify-center rounded-full border-0 align-top text-lg text-white transition duration-300 ease-in-out hover:border-1 hover:border-black hover:text-white"
                     onClick={onClick}
                 >
                     <Heart fill="white" />
                 </div>
             ) : (
                 <div
-                    className="hover:bg-primary flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white"
+                    className="hover:bg-primary flex size-8 cursor-pointer items-center justify-center rounded-full border border-black bg-white align-top text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white"
                     onClick={onClick}
                 >
                     <Heart />

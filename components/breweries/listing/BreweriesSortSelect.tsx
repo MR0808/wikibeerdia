@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useClickAway } from "react-use";
 
 import { getFilterUrl } from "@/lib/utils";
+import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 import { BreweriesSortSelectProps, Option } from "@/types/breweries";
 
 const BreweriesSortSelect = ({
@@ -18,6 +19,7 @@ const BreweriesSortSelect = ({
         setOpen(false);
     }, []);
     const ref = useRef<HTMLDivElement | null>(null);
+    const { sort: nuqsSort, setSort: setNuqsSort } = useBreweriesParams();
 
     const selected = sortOrders.filter((option) => option.value === sort);
 
@@ -26,9 +28,10 @@ const BreweriesSortSelect = ({
     );
 
     const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        router.push(
-            getFilterUrl({ params, sort: event.target.value, url: "breweries" })
-        );
+        // router.push(
+        //     getFilterUrl({ params, sort: event.target.value, url: "breweries" })
+        // );
+        setNuqsSort(event.target.value);
     };
 
     useClickAway(ref, onClose);

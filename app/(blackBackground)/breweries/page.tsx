@@ -3,20 +3,27 @@ import { assistant } from "@/app/fonts";
 
 import { getAllBreweriesPage } from "@/actions/breweries";
 import BreweriesListing from "@/components/breweries/listing/BreweriesListing";
+import { Suspense } from "react";
 
 const BreweriesPage = async (props: {
     searchParams: Promise<{
         sort: string;
         page: string;
+        pageSize: string;
         view: string;
     }>;
 }) => {
     await connection();
     const searchParams = await props.searchParams;
-    const { sort = "az", page = "1", view = "grid" } = searchParams;
+    const {
+        sort = "az",
+        page = "1",
+        view = "grid",
+        pageSize = "10"
+    } = searchParams;
 
-    const params = { sort, page, view };
-    const breweries = await getAllBreweriesPage({ sort });
+    const params = { sort, page, pageSize, view };
+    const breweries = await getAllBreweriesPage({ sort, page, pageSize });
 
     return (
         <>
@@ -28,16 +35,18 @@ const BreweriesPage = async (props: {
                 </div>
             </div>
             <div
-                className={`${assistant.className} container flex flex-col-reverse space-x-10 pt-10 md:flex-row md:pt-28`}
+                className={`${assistant.className} flex flex-col-reverse space-x-10 px-5 pt-10 md:container md:flex-row md:px-0 md:pt-28`}
             >
                 <div className="w-full md:w-1/4">Insert filter here</div>
                 <div className="flex w-full flex-col space-y-10 pb-10 md:w-3/4">
-                    <BreweriesListing
-                        breweries={breweries.data}
-                        total={breweries.data?.length || 0}
-                        searchParams={searchParams}
-                        params={params}
-                    />
+                    <Suspense>
+                        <BreweriesListing
+                            breweries={breweries.data}
+                            total={breweries.total || 0}
+                            searchParams={searchParams}
+                            params={params}
+                        />
+                    </Suspense>
                 </div>
             </div>
         </>

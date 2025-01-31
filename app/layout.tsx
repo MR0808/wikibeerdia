@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import ReactQueryProvider from "@/Providers/ReactQueryProvider";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { GoogleTagManager } from "@next/third-parties/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import siteMetadata from "@/utils/siteMetaData";
 import { inter } from "./fonts";
@@ -61,12 +62,14 @@ export default async function RootLayout({
                     suppressHydrationWarning={true}
                 >
                     {/* <Scroll /> */}
-                    <ReactQueryProvider>
-                        <TooltipProvider>
-                            <GoogleTagManager gtmId="G-FBQEGT4TEE" />
-                            {children}
-                        </TooltipProvider>
-                    </ReactQueryProvider>
+                    <NuqsAdapter>
+                        <ReactQueryProvider>
+                            <TooltipProvider>
+                                <GoogleTagManager gtmId="G-FBQEGT4TEE" />
+                                {children}
+                            </TooltipProvider>
+                        </ReactQueryProvider>
+                    </NuqsAdapter>
                     <Toaster richColors />
                     <SpeedInsights />
                 </body>

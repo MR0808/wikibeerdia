@@ -9,11 +9,13 @@ import {
     TooltipTrigger
 } from "@/components/ui/tooltip";
 import useViewStore from "@/hooks/useViewType";
+import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 import { BreweriesViewToggleProps } from "@/types/breweries";
 import { useEffect } from "react";
 
 const BreweriesViewToggle = ({ paramsView }: BreweriesViewToggleProps) => {
     const { view, setView } = useViewStore();
+    const { setView: setNuqsView } = useBreweriesParams();
 
     useEffect(() => {
         if (paramsView === "grid") {
@@ -23,12 +25,12 @@ const BreweriesViewToggle = ({ paramsView }: BreweriesViewToggleProps) => {
         }
     }, []);
 
-    console.log(view);
-
     const updateLayout = () => {
         if (view === "grid") {
+            setNuqsView("list");
             setView("list");
         } else {
+            setNuqsView("grid");
             setView("grid");
         }
     };

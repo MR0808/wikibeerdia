@@ -1,7 +1,11 @@
+import { Suspense } from "react";
+
 import BreweriesResults from "./BreweriesResults";
 import BreweriesSortSelect from "./BreweriesSortSelect";
 import BreweriesViewToggle from "./BreweriesViewToggle";
 import { BreweriesListingsProps } from "@/types/breweries";
+import PaginationWithLinks from "@/components/global/PaginationWithLinks";
+import BreweriesGridSkeleton from "./BreweriesGridSkeleton";
 
 const sortOrders = [
     { value: "az", name: "A - Z" },
@@ -17,32 +21,49 @@ const BreweriesListing = ({
     searchParams,
     params
 }: BreweriesListingsProps) => {
-    const per_page = 12;
-    const page = 1;
-    const start = per_page * page - per_page + 1;
-    const end = per_page * page;
+    const currentPage = parseInt((searchParams.page as string) || "1");
+    const postsPerPage = parseInt((searchParams.pageSize as string) || "10");
+
+    const start = postsPerPage * currentPage - postsPerPage + 1;
+    const end = postsPerPage * currentPage;
     return (
         <>
             <div className="flex flex-col justify-between space-y-5 text-xl md:flex-row md:space-y-0">
-                <div className="">
+                <div>
                     Showing{" "}
                     <span className="font-semibold">{`${start}-${end}`}</span>{" "}
                     of <span className="font-semibold">{total}</span> results
                 </div>
-                <div className="flex flex-row space-x-4">
+                <div className="flex flex-row justify-start space-x-4">
                     <div className="w-16">Sort by:</div>
-                    <BreweriesSortSelect
-                        sortOrders={sortOrders}
-                        sort={searchParams.sort}
-                        params={params}
-                    />
-                    <BreweriesViewToggle paramsView={params.view} />
+                    <Suspense>
+                        <BreweriesSortSelect
+                            sortOrders={sortOrders}
+                            sort={searchParams.sort}
+                            params={params}
+                        />
+                        <BreweriesViewToggle paramsView={params.view} />
+                    </Suspense>
                 </div>
             </div>
-            <BreweriesResults
-                breweries={breweries}
-                searchParams={searchParams}
-            />
+            <Suspense
+                fallback={<BreweriesGridSkeleton />}
+                key={JSON.stringify(searchParams)}
+            >
+                <BreweriesResults
+                    breweries={breweries}
+                    searchParams={searchParams}
+                />
+
+                <PaginationWithLinks
+                    page={currentPage}
+                    pageSize={postsPerPage}
+                    totalCount={total}
+                    pageSizeSelectOptions={{
+                        pageSizeOptions: [10, 20, 50, 100]
+                    }}
+                />
+            </Suspense>
         </>
     );
 };
