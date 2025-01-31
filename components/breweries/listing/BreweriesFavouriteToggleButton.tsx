@@ -1,3 +1,5 @@
+"use client";
+
 import { Heart } from "lucide-react";
 
 import {
@@ -11,18 +13,20 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 
-import { fetchBreweryFavoriteId } from "@/actions/breweries";
-import BreweriesFavoriteToggleForm from "./BreweriesFavouriteToggleForm";
-import { currentUser } from "@/lib/auth";
+import BreweriesFavouriteToggleForm from "./BreweriesFavouriteToggleForm";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 import Link from "next/link";
 
-const BreweriesFavouriteToggleButton = async ({
-    breweryId
+const BreweriesFavouriteToggleButton = ({
+    breweryId,
+    breweryFavouriteId
 }: {
     breweryId: string;
+    breweryFavouriteId: string;
 }) => {
-    const user = await currentUser();
+    const user = useCurrentUser();
+
     if (!user) {
         return (
             <AlertDialog>
@@ -48,11 +52,9 @@ const BreweriesFavouriteToggleButton = async ({
         );
     }
 
-    const breweryFavoriteId = await fetchBreweryFavoriteId({ breweryId });
-
     return (
-        <BreweriesFavoriteToggleForm
-            breweryFavoriteId={breweryFavoriteId}
+        <BreweriesFavouriteToggleForm
+            breweryFavouriteId={breweryFavouriteId || ""}
             breweryId={breweryId}
         />
     );

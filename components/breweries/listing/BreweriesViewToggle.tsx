@@ -1,6 +1,6 @@
 "use client";
+
 import { Menu, LayoutGrid } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import {
     Tooltip,
@@ -8,21 +8,29 @@ import {
     TooltipProvider,
     TooltipTrigger
 } from "@/components/ui/tooltip";
-import { getFilterUrl } from "@/lib/utils";
-
+import useViewStore from "@/hooks/useViewType";
 import { BreweriesViewToggleProps } from "@/types/breweries";
+import { useEffect } from "react";
 
-const BreweriesViewToggle = ({ view, params }: BreweriesViewToggleProps) => {
-    const router = useRouter();
+const BreweriesViewToggle = ({ paramsView }: BreweriesViewToggleProps) => {
+    const { view, setView } = useViewStore();
+
+    useEffect(() => {
+        if (paramsView === "grid") {
+            setView("grid");
+        } else {
+            setView("list");
+        }
+    }, []);
+
+    console.log(view);
 
     const updateLayout = () => {
-        router.push(
-            getFilterUrl({
-                params,
-                view: view === "grid" ? "list" : "grid",
-                url: "breweries"
-            })
-        );
+        if (view === "grid") {
+            setView("list");
+        } else {
+            setView("grid");
+        }
     };
     return (
         <div

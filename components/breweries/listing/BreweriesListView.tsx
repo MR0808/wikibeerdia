@@ -7,7 +7,7 @@ const BreweriesListView = ({
     breweries: BreweriesListing[];
 }) => {
     return (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4">
             {breweries.map((brewery) => {
                 return (
                     <BreweriesListBrewery brewery={brewery} key={brewery.id} />

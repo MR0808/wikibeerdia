@@ -71,12 +71,20 @@ export interface BreweriesListingsProps {
     params: params;
 }
 
+export interface BreweriesResultsProps {
+    breweries: BreweriesListing[] | null;
+    searchParams: searchParams;
+}
+
 export interface BreweriesListing {
     breweryType: {
         id: string;
         name: string;
         colour: string
     };
+    breweryFavourites: {
+        id: string;
+    }[];
     _count: {
         beers: number;
     };
@@ -145,14 +153,5 @@ export type BreweriesSortSelectProps = {
 };
 
 export type BreweriesViewToggleProps = {
-    view: string;
-    params: {
-        q?: string;
-        category?: string;
-        price?: string;
-        rating?: string;
-        sort?: string;
-        page?: string;
-        view?: string;
-    };
+    paramsView: string
 };

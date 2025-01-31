@@ -7,17 +7,17 @@ import { Heart } from "lucide-react";
 
 import { toggleBreweryFavoriteAction } from "@/actions/breweries";
 
-type BreweriesFavoriteToggleFormProps = {
+type BreweriesFavouriteToggleFormProps = {
     breweryId: string;
-    breweryFavoriteId: string | null;
+    breweryFavouriteId: string | null;
 };
 
-const BreweriesFavoriteToggleForm = ({
+const BreweriesFavouriteToggleForm = ({
     breweryId,
-    breweryFavoriteId
-}: BreweriesFavoriteToggleFormProps) => {
+    breweryFavouriteId
+}: BreweriesFavouriteToggleFormProps) => {
     const [isFavorite, setIsFavorite] = useState(
-        breweryFavoriteId ? true : false
+        breweryFavouriteId ? true : false
     );
     const [isPending, startTransition] = useTransition();
     const pathname = usePathname();
@@ -26,7 +26,7 @@ const BreweriesFavoriteToggleForm = ({
         startTransition(() => {
             toggleBreweryFavoriteAction(
                 breweryId,
-                breweryFavoriteId,
+                breweryFavouriteId,
                 pathname
             ).then((data) => {
                 if (data.result) {
@@ -62,4 +62,4 @@ const BreweriesFavoriteToggleForm = ({
         </>
     );
 };
-export default BreweriesFavoriteToggleForm;
+export default BreweriesFavouriteToggleForm;

@@ -17,7 +17,10 @@ const BreweriesGridBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
                 {brewery.breweryType.name}
             </div>
             <div className="absolute top-10 right-10 z-[1] float-right">
-                <BreweriesFavouriteToggleButton breweryId={brewery.id} />
+                <BreweriesFavouriteToggleButton
+                    breweryId={brewery.id}
+                    breweryFavouriteId={brewery.breweryFavourites[0]?.id || ""}
+                />
             </div>
             <Link
                 href={`/breweries/${brewery.slug}`}

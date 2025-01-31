@@ -1,7 +1,8 @@
 import { connection } from "next/server";
+import { assistant } from "@/app/fonts";
 
 import { getAllBreweriesPage } from "@/actions/breweries";
-import BreweriesListings from "@/components/breweries/listing/BreweriesListings";
+import BreweriesListing from "@/components/breweries/listing/BreweriesListing";
 
 const BreweriesPage = async (props: {
     searchParams: Promise<{
@@ -26,12 +27,19 @@ const BreweriesPage = async (props: {
                     </div>
                 </div>
             </div>
-            <BreweriesListings
-                breweries={breweries.data}
-                total={breweries.total || 0}
-                searchParams={searchParams}
-                params={params}
-            />
+            <div
+                className={`${assistant.className} container flex flex-col-reverse space-x-10 pt-10 md:flex-row md:pt-28`}
+            >
+                <div className="w-full md:w-1/4">Insert filter here</div>
+                <div className="flex w-full flex-col space-y-10 pb-10 md:w-3/4">
+                    <BreweriesListing
+                        breweries={breweries.data}
+                        total={breweries.data?.length || 0}
+                        searchParams={searchParams}
+                        params={params}
+                    />
+                </div>
+            </div>
         </>
     );
 };
