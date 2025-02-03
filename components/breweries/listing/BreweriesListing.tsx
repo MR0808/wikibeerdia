@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import BreweriesResults from "./BreweriesResults";
 import BreweriesSortSelect from "./BreweriesSortSelect";
 import BreweriesViewToggle from "./BreweriesViewToggle";
@@ -18,11 +16,10 @@ const sortOrders = [
 const BreweriesListing = ({
     breweries,
     total = 0,
-    searchParams,
     params
 }: BreweriesListingsProps) => {
-    const currentPage = parseInt((searchParams.page as string) || "1");
-    const postsPerPage = parseInt((searchParams.pageSize as string) || "10");
+    const currentPage = params.page || 1;
+    const postsPerPage = params.pageSize || 10;
 
     const start = postsPerPage * currentPage - postsPerPage + 1;
     const end = postsPerPage * currentPage;
@@ -36,34 +33,23 @@ const BreweriesListing = ({
                 </div>
                 <div className="flex flex-row justify-start space-x-4">
                     <div className="w-16">Sort by:</div>
-                    <Suspense>
-                        <BreweriesSortSelect
-                            sortOrders={sortOrders}
-                            sort={searchParams.sort}
-                            params={params}
-                        />
-                        <BreweriesViewToggle paramsView={params.view} />
-                    </Suspense>
+                    <BreweriesSortSelect
+                        sortOrders={sortOrders}
+                        sort={params.sort}
+                    />
+                    <BreweriesViewToggle paramsView={params.view} />
                 </div>
             </div>
-            <Suspense
-                fallback={<BreweriesGridSkeleton />}
-                key={JSON.stringify(searchParams)}
-            >
-                <BreweriesResults
-                    breweries={breweries}
-                    searchParams={searchParams}
-                />
+            <BreweriesResults breweries={breweries} />
 
-                <PaginationWithLinks
-                    page={currentPage}
-                    pageSize={postsPerPage}
-                    totalCount={total}
-                    pageSizeSelectOptions={{
-                        pageSizeOptions: [10, 20, 50, 100]
-                    }}
-                />
-            </Suspense>
+            <PaginationWithLinks
+                page={currentPage}
+                pageSize={postsPerPage}
+                totalCount={total}
+                pageSizeSelectOptions={{
+                    pageSizeOptions: [10, 20, 50, 100]
+                }}
+            />
         </>
     );
 };

@@ -1,22 +1,19 @@
 "use client";
-import { Suspense } from "react";
 
 import BreweriesGridView from "./BreweriesGridView";
 import BreweriesGridSkeleton from "./BreweriesGridSkeleton";
 import BreweriesListView from "./BreweriesListView";
-import useViewStore from "@/hooks/useViewType";
 import { BreweriesResultsProps } from "@/types/breweries";
+import useViewStore from "@/hooks/useViewType";
 
-const BreweriesResults = ({
-    breweries,
-    searchParams
-}: BreweriesResultsProps) => {
+const BreweriesResults = ({ breweries }: BreweriesResultsProps) => {
     const { view } = useViewStore();
-    console.log(JSON.stringify(searchParams));
-
+    const loadIsPending = false;
     return (
         <>
-            {!breweries || breweries.length === 0 ? (
+            {loadIsPending ? (
+                <BreweriesGridSkeleton />
+            ) : !breweries || breweries.length === 0 ? (
                 <div className="text-2xl font-semibold">
                     No breweries found that match your search
                 </div>

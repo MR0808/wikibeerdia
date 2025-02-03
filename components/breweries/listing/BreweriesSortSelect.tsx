@@ -1,25 +1,22 @@
 "use client";
 
 import { useState, useCallback, useRef, ChangeEvent } from "react";
-import { useRouter } from "next/navigation";
 import { useClickAway } from "react-use";
 
-import { getFilterUrl } from "@/lib/utils";
-import { useBreweriesParams } from "@/hooks/useBreweriesParams";
+import { useBreweriesParams, zodSortParser } from "@/hooks/useBreweriesParams";
 import { BreweriesSortSelectProps, Option } from "@/types/breweries";
+import useViewStore from "@/hooks/useViewType";
 
 const BreweriesSortSelect = ({
     sortOrders,
-    sort,
-    params
+    sort
 }: BreweriesSortSelectProps) => {
-    const router = useRouter();
     const [open, setOpen] = useState(false);
     const onClose = useCallback(() => {
         setOpen(false);
     }, []);
     const ref = useRef<HTMLDivElement | null>(null);
-    const { sort: nuqsSort, setSort: setNuqsSort } = useBreweriesParams();
+    const { setSort } = useBreweriesParams();
 
     const selected = sortOrders.filter((option) => option.value === sort);
 
@@ -28,10 +25,8 @@ const BreweriesSortSelect = ({
     );
 
     const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        // router.push(
-        //     getFilterUrl({ params, sort: event.target.value, url: "breweries" })
-        // );
-        setNuqsSort(event.target.value);
+        const sortType = zodSortParser.parse(event.target.value);
+        if (sortType) setSort(sortType);
     };
 
     useClickAway(ref, onClose);

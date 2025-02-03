@@ -67,13 +67,15 @@ export interface BreweryBeersType {
 export interface BreweriesListingsProps {
     breweries: BreweriesListing[] | null;
     total: number;
-    searchParams: searchParams;
+    params: params;
+}
+
+export interface BreweriesFilterProps {
     params: params;
 }
 
 export interface BreweriesResultsProps {
     breweries: BreweriesListing[] | null;
-    searchParams: searchParams;
 }
 
 export interface BreweriesListing {
@@ -121,18 +123,13 @@ export interface BreweriesListing {
     updatedAt: Date;
 };
 
-export interface searchParams {
-    sort: string;
-    page: string;
-    pageSize: string
-    view: string
-}
-
 export interface params {
+    pageSize: number;
+    page: number;
+    view: string;
     sort: string;
-    page: string;
-    pageSize: string
-    view: string
+    query: string;
+    tag: string;
 }
 
 export interface Option {
@@ -143,16 +140,6 @@ export interface Option {
 export type BreweriesSortSelectProps = {
     sortOrders: { value: string; name: string }[];
     sort: string;
-    params: {
-        q?: string;
-        category?: string;
-        price?: string;
-        rating?: string;
-        sort?: string;
-        page?: string;
-        pageSize?: string
-        view?: string;
-    };
 };
 
 export type BreweriesViewToggleProps = {
