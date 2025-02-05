@@ -68,14 +68,17 @@ export interface BreweriesListingsProps {
     breweries: BreweriesListing[] | null;
     total: number;
     params: params;
+    filters: Filters | null;
 }
 
 export interface BreweriesFilterProps {
     params: params;
+    filters: Filters | null
 }
 
 export interface BreweriesResultsProps {
     breweries: BreweriesListing[] | null;
+    params: params
 }
 
 export interface BreweriesListing {
@@ -126,10 +129,10 @@ export interface BreweriesListing {
 export interface params {
     pageSize: number;
     page: number;
-    view: string;
+    view: 'grid' | 'list' | '';
     sort: string;
-    query: string;
-    tag: string;
+    search: string;
+    country: string;
 }
 
 export interface Option {
@@ -137,11 +140,35 @@ export interface Option {
     name: string;
 }
 
-export type BreweriesSortSelectProps = {
+export interface BreweriesSortSelectProps {
     sortOrders: { value: string; name: string }[];
     sort: string;
 };
 
-export type BreweriesViewToggleProps = {
+export interface BreweriesViewToggleProps {
     paramsView: string
 };
+
+export interface BeersCountFilter {
+    beerCount: number, occurrences: number
+}
+
+export interface IdNameFilter {
+    id: string
+    name: string
+    count: number
+}
+
+export interface Filters {
+    countries: IdNameFilter[]
+    breweryTypes: IdNameFilter[]
+    beersCount: BeersCountFilter[]
+}
+
+export interface BreweryPageFilterSearch {
+    sort: string
+    page: string
+    pageSize: string
+    search?: string
+    country?: string
+}

@@ -1,33 +1,19 @@
+import { z } from 'zod';
 import { useQueryState, useQueryStates, parseAsString, parseAsInteger, createParser } from 'nuqs';
 import { useTransition } from 'react';
-import { z } from 'zod';
+
+import { zodViewParser, zodSortParser } from '@/lib/parsers';
 
 const SortSchema = z.enum(['', 'az', 'za', 'newest', 'oldest', 'popular']);
 const ViewSchema = z.enum(['', 'grid', 'list'])
 type SortOption = z.infer<typeof SortSchema>;
 type ViewOption = z.infer<typeof ViewSchema>;
 
-export const zodSortParser = createParser({
-    parse: (value: string | null): SortOption => {
-        const result = SortSchema.safeParse(value ?? '');
-        return result.success ? result.data : '';
-    },
-    serialize: (value: SortOption) => value,
-});
-
-export const zodViewParser = createParser({
-    parse: (value: string | null): ViewOption => {
-        const result = ViewSchema.safeParse(value ?? '');
-        return result.success ? result.data : '';
-    },
-    serialize: (value: ViewOption) => value,
-});
-
 export function useBreweriesParams() {
 
     const [isPending, startTransition] = useTransition();
 
-    const [query, setQuery] = useQueryState('search',
+    const [search, setSearch] = useQueryState('search',
         parseAsString.withDefault('').withOptions({
             shallow: false,
             history: 'push',
@@ -35,7 +21,15 @@ export function useBreweriesParams() {
         })
     );
 
-    const [view, setView] = useQueryState('search',
+    const [country, setCountry] = useQueryState('country', {
+        defaultValue: [],
+        parse: (value) => value.split(",").filter(Boolean),
+        serialize: (value) => value.join(","),
+        shallow: false,
+        startTransition
+    });
+
+    const [view, setView] = useQueryState('view',
         zodViewParser.withDefault("grid" as ViewOption).withOptions({
             shallow: true,
         })
@@ -80,6 +74,10 @@ export function useBreweriesParams() {
         setPageSize,
         type,
         setType,
+        search,
+        setSearch,
+        country,
+        setCountry,
         isPending
     };
 }

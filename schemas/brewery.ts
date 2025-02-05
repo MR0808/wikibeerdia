@@ -66,3 +66,7 @@ export const BrewerySchemaCreate = z.object({
 export const BreweryLogoSchema = z.object({
     logoUrl: typeof window === "undefined" ? z.any() : z.instanceof(FileList)
 });
+
+export const BrewerySearchSchema = z.object({
+    search: z.string().min(1, "Query is required")
+})

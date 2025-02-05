@@ -17,7 +17,9 @@ const BreweriesPage = async ({
     const breweries = await getAllBreweriesPage({
         sort: params.sort,
         page: params.page.toString(),
-        pageSize: params.pageSize.toString()
+        pageSize: params.pageSize.toString(),
+        search: params.search,
+        country: params.country
     });
 
     return (
@@ -33,13 +35,17 @@ const BreweriesPage = async ({
                 className={`${assistant.className} flex flex-col-reverse space-x-10 px-5 pt-10 md:container md:flex-row md:px-0 md:pt-28`}
             >
                 <div className="w-full md:w-1/4">
-                    <BreweriesFilter params={params} />
+                    <BreweriesFilter
+                        params={params}
+                        filters={breweries.filters}
+                    />
                 </div>
                 <div className="flex w-full flex-col space-y-10 pb-10 md:w-3/4">
                     <BreweriesListing
                         breweries={breweries.data}
                         total={breweries.total || 0}
                         params={params}
+                        filters={breweries.filters}
                     />
                 </div>
             </div>

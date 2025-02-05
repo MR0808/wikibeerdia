@@ -6,12 +6,13 @@ import BreweriesListView from "./BreweriesListView";
 import { BreweriesResultsProps } from "@/types/breweries";
 import useViewStore from "@/hooks/useViewType";
 
-const BreweriesResults = ({ breweries }: BreweriesResultsProps) => {
-    const { view } = useViewStore();
-    const loadIsPending = false;
+const BreweriesResults = ({ breweries, params }: BreweriesResultsProps) => {
+    const { view, isLoading } = useViewStore();
+    let viewPage = "";
+    params.view ? (viewPage = params.view) : (viewPage = view);
     return (
         <>
-            {loadIsPending ? (
+            {isLoading ? (
                 <BreweriesGridSkeleton />
             ) : !breweries || breweries.length === 0 ? (
                 <div className="text-2xl font-semibold">

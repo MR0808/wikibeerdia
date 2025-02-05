@@ -40,6 +40,9 @@
 
     --animate-accordion-down: accordion-down 0.2s ease-out;
     --animate-accordion-up: accordion-up 0.2s ease-out;
+    --animate-accordion-down-filter: accordion-down 0.5s ease-out;
+    --animate-accordion-up-filter: accordion-up 0.5s ease-out;
+
     --animate-caret-blink: caret-blink 1.25s ease-out infinite;
 
     --background-image-main-hero: url("/images/main-bg.jpg");

@@ -3,9 +3,9 @@
 import { useState, useCallback, useRef, ChangeEvent } from "react";
 import { useClickAway } from "react-use";
 
-import { useBreweriesParams, zodSortParser } from "@/hooks/useBreweriesParams";
+import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 import { BreweriesSortSelectProps, Option } from "@/types/breweries";
-import useViewStore from "@/hooks/useViewType";
+import { zodSortParser } from "@/lib/parsers";
 
 const BreweriesSortSelect = ({
     sortOrders,
@@ -26,7 +26,9 @@ const BreweriesSortSelect = ({
 
     const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const sortType = zodSortParser.parse(event.target.value);
-        if (sortType) setSort(sortType);
+        if (sortType) {
+            setSort(sortType);
+        }
     };
 
     useClickAway(ref, onClose);

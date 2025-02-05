@@ -1,9 +1,7 @@
 "use client";
 
-import { type ReactNode, useCallback } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type ReactNode } from "react";
 import { MoveLeft, MoveRight, Ellipsis } from "lucide-react";
-import Link from "next/link";
 
 import {
     Select,
@@ -49,11 +47,11 @@ const PaginationWithLinks = ({
     const totalPageCount = Math.ceil(totalCount / pageSize);
 
     const handleSizeChange = (newPageSize: number) => {
-        setPageSize(newPageSize.toString());
+        setPageSize(newPageSize);
     };
 
     const handlePageChange = (newPage: number) => {
-        setPage(newPage.toString());
+        setPage(newPage);
     };
 
     const renderPageNumbers = () => {

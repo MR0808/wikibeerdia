@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 import { revalidatePath } from "next/cache";
 import { format } from "date-fns";
-import GithubSlugger, { slug } from "github-slugger";
+import GithubSlugger from "github-slugger";
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";
@@ -22,7 +22,7 @@ import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
 import { deleteImage } from "@/utils/supabase";
 import { filterColumn } from "@/lib/filterColumn";
-import { error } from "console";
+import { BeersCountFilter, IdNameFilter, Filters, BreweryPageFilterSearch } from "@/types/breweries";
 
 const slugger = new GithubSlugger();
 
@@ -705,8 +705,12 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
 
 // Breweries Page Functions
 
-export const getAllBreweriesPage = async ({ sort, page, pageSize }: { sort: string, page: string, pageSize: string }) => {
+export const getAllBreweriesPage = async ({ sort, page, pageSize, search, country }: BreweryPageFilterSearch) => {
     // const { page, per_page, sort, name, status, operator, from, to } = input;
+
+    const convertCommaListToArray = (list: string) => {
+        return list.split(',').map(item => item.trim());
+    };
 
     let orderBy = {};
 
@@ -739,13 +743,58 @@ export const getAllBreweriesPage = async ({ sort, page, pageSize }: { sort: stri
             orderBy = { name: "asc" };
             break;
     }
+    let where: any = { status: "APPROVED" }
+    let whereFilters: any = { status: "APPROVED" }
+    if (search) {
+        const searchQuery = search.split(" ").join(" & ");
+        where = {
+            ...where, OR: [
+                {
+                    name: {
+                        search: searchQuery,
+                    },
+                },
+                {
+                    headline: {
+                        search: searchQuery,
+                    },
+                },
+                {
+                    description: {
+                        search: searchQuery,
+                    },
+                },
+            ],
+        }
+        whereFilters = {
+            ...where, OR: [
+                {
+                    name: {
+                        search: searchQuery,
+                    },
+                },
+                {
+                    headline: {
+                        search: searchQuery,
+                    },
+                },
+                {
+                    description: {
+                        search: searchQuery,
+                    },
+                },
+            ],
+        }
+    }
+    if (country) {
+        const countriesSearch = convertCommaListToArray(country)
+        where = { ...where, AND: { country: { name: { in: countriesSearch } } } }
+    }
 
     try {
         const offset = (pageInt - 1) * pageSizeInt;
         const data = await db.brewery.findMany({
-            where: {
-                status: "APPROVED"
-            },
+            where,
             include: {
                 _count: {
                     select: { beers: true }
@@ -760,15 +809,73 @@ export const getAllBreweriesPage = async ({ sort, page, pageSize }: { sort: stri
             skip: offset,
             take: pageSizeInt
         });
-        const total = await db.brewery.count();
+
+        const filtersQuery = await db.brewery.findMany({
+            where: whereFilters,
+            select: {
+                id: true,
+                averageRating: true,
+                breweryType: { select: { id: true, name: true } },
+                country: { select: { id: true, name: true } },
+                _count: { select: { beers: true } }
+            },
+        })
+        const total = await db.brewery.count({ where });
+        const countryMap = new Map();
+        const breweryTypesMap = new Map();
+        const beersCountMap = new Map();
+
+        for (const filter of filtersQuery) {
+            if (countryMap.has(filter.country.id)) {
+                countryMap.set(filter.country.id, {
+                    id: filter.country.id,
+                    name: filter.country.name,
+                    count: countryMap.get(filter.country.id).count + 1,
+                });
+            } else {
+                countryMap.set(filter.country.id, {
+                    id: filter.country.id,
+                    name: filter.country.name,
+                    count: 1,
+                });
+            }
+
+            if (breweryTypesMap.has(filter.breweryType.id)) {
+                breweryTypesMap.set(filter.breweryType.id, {
+                    id: filter.breweryType.id,
+                    name: filter.breweryType.name,
+                    count: breweryTypesMap.get(filter.breweryType.id).count + 1,
+                });
+            } else {
+                breweryTypesMap.set(filter.breweryType.id, {
+                    id: filter.breweryType.id,
+                    name: filter.breweryType.name,
+                    count: 1,
+                });
+            }
+
+            beersCountMap.set(filter._count.beers, (beersCountMap.get(filter._count.beers) || 0) + 1);
+        }
+
+        const countriesArray: IdNameFilter[] = Array.from(countryMap.values());
+        const countries = [...countriesArray].sort((a, b) => a.name.localeCompare(b.name));
+        const breweryTypesArray: IdNameFilter[] = Array.from(breweryTypesMap.values());
+        const breweryTypes = [...breweryTypesArray].sort((a, b) => a.name.localeCompare(b.name));
+        const beersCountArray: BeersCountFilter[] = Array.from(beersCountMap, ([beerCount, occurrences]) => ({
+            beerCount,
+            occurrences,
+        }));
+        const beersCount = [...beersCountArray].sort((a, b) => a.beerCount - b.beerCount);
+        const filters: Filters = { countries, breweryTypes, beersCount }
 
         const pageCount = Math.ceil(total / pageSizeInt);
-        return { data, pageCount, total, error: null };
+        return { data, pageCount, total, filters, error: null };
     } catch (err) {
         return {
             data: null,
             pageCount: null,
             total: null,
+            filters: null,
             error: getErrorMessage(err)
         };
     }

@@ -1,9 +1,14 @@
+"use client";
+
+import { Suspense } from "react";
+
 import BreweriesResults from "./BreweriesResults";
 import BreweriesSortSelect from "./BreweriesSortSelect";
 import BreweriesViewToggle from "./BreweriesViewToggle";
 import { BreweriesListingsProps } from "@/types/breweries";
 import PaginationWithLinks from "@/components/global/PaginationWithLinks";
 import BreweriesGridSkeleton from "./BreweriesGridSkeleton";
+import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 
 const sortOrders = [
     { value: "az", name: "A - Z" },
@@ -16,10 +21,14 @@ const sortOrders = [
 const BreweriesListing = ({
     breweries,
     total = 0,
-    params
+    params,
+    filters
 }: BreweriesListingsProps) => {
+    const { isPending } = useBreweriesParams();
     const currentPage = params.page || 1;
-    const postsPerPage = params.pageSize || 10;
+    let postsPerPage = params.pageSize || 10;
+
+    if (postsPerPage > total) postsPerPage = total;
 
     const start = postsPerPage * currentPage - postsPerPage + 1;
     const end = postsPerPage * currentPage;
@@ -40,8 +49,12 @@ const BreweriesListing = ({
                     <BreweriesViewToggle paramsView={params.view} />
                 </div>
             </div>
-            <BreweriesResults breweries={breweries} />
-
+            <Suspense
+                fallback={<BreweriesGridSkeleton />}
+                key={JSON.stringify(params)}
+            >
+                <BreweriesResults breweries={breweries} params={params} />
+            </Suspense>
             <PaginationWithLinks
                 page={currentPage}
                 pageSize={postsPerPage}
