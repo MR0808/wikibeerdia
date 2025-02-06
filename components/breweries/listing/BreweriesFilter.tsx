@@ -54,14 +54,14 @@ const BreweriesFilter = ({
         form.setValue("search", search);
     }, [search]);
 
-    const handleCountryChange = (country: string, checked: boolean) => {
-        setCountry((prev) => {
-            if (checked) {
-                return [...prev, country];
-            } else {
-                return prev.filter((c) => c !== country);
-            }
-        });
+    const handleCountryChange = (countryChecked: string, checked: boolean) => {
+        let newCountries = nuqsCountry;
+        if (checked) {
+            newCountries = [...newCountries, countryChecked];
+        } else {
+            newCountries = newCountries.filter((c) => c !== countryChecked);
+        }
+        setCountry(newCountries);
     };
 
     return (
