@@ -5,6 +5,8 @@ import BreweriesSortSelect from "./BreweriesSortSelect";
 import BreweriesViewToggle from "./BreweriesViewToggle";
 import { BreweriesListingsProps } from "@/types/breweries";
 import PaginationWithLinks from "@/components/global/PaginationWithLinks";
+import BreweriesGridSkeleton from "./BreweriesGridSkeleton";
+import BreweriesListSkeleton from "./BreweriesListSkeleton";
 
 const sortOrders = [
     { value: "az", name: "A - Z" },
@@ -24,12 +26,10 @@ const BreweriesListing = ({
     setCountry,
     type,
     setType,
-    page,
     setPage,
-    pageSize,
     setPageSize,
-    sort,
     setSort,
+    view,
     isPending
 }: BreweriesListingsProps) => {
     const currentPage = params.page || 1;
@@ -57,17 +57,27 @@ const BreweriesListing = ({
                     <BreweriesViewToggle paramsView={params.view} />
                 </div>
             </div>
-            <BreweriesResults
-                breweries={breweries}
-                params={params}
-                setCountry={setCountry}
-                setType={setType}
-                setSearch={setSearch}
-                country={country}
-                type={type}
-                search={search}
-                isPending={isPending}
-            />
+            <Suspense
+                fallback={
+                    view === "list" ? (
+                        <BreweriesListSkeleton />
+                    ) : (
+                        <BreweriesGridSkeleton />
+                    )
+                }
+            >
+                <BreweriesResults
+                    breweries={breweries}
+                    params={params}
+                    setCountry={setCountry}
+                    setType={setType}
+                    setSearch={setSearch}
+                    country={country}
+                    type={type}
+                    search={search}
+                    isPending={isPending}
+                />
+            </Suspense>
             <PaginationWithLinks
                 page={currentPage}
                 pageSize={postsPerPage}

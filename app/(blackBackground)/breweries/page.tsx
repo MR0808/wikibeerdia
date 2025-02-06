@@ -1,4 +1,5 @@
 import { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 
 import { getAllBreweriesPage } from "@/actions/breweries";
 import { searchParamsCache } from "@/lib/searchParamsCache";
@@ -29,12 +30,14 @@ const BreweriesPage = async ({
                     </div>
                 </div>
             </div>
-            <BreweriesContainer
-                breweries={breweries.data}
-                total={breweries.total || 0}
-                params={params}
-                filters={breweries.filters}
-            />
+            <Suspense>
+                <BreweriesContainer
+                    breweries={breweries.data}
+                    total={breweries.total || 0}
+                    params={params}
+                    filters={breweries.filters}
+                />
+            </Suspense>
         </>
     );
 };

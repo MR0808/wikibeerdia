@@ -84,9 +84,7 @@ export interface BreweriesListingsProps {
     country: string[]
     search: string
     type: string
-    pageSize: number
-    page: number
-    sort: NonNullable<"" | "az" | "za" | "newest" | "oldest" | "popular" | null>
+    view: 'grid' | 'list' | '';
     isPending: boolean
 }
 

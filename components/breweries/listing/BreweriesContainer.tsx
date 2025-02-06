@@ -1,7 +1,7 @@
 "use client";
 
 import { assistant } from "@/app/fonts";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 import BreweriesListing from "@/components/breweries/listing/BreweriesListing";
 import BreweriesFilter from "@/components/breweries/listing/BreweriesFilter";
@@ -21,12 +21,10 @@ const BreweriesContainer = ({
         setCountry,
         type,
         setType,
-        sort,
         setSort,
-        page,
         setPage,
-        pageSize,
         setPageSize,
+        view,
         isPending
     } = useBreweriesParams();
 
@@ -52,24 +50,24 @@ const BreweriesContainer = ({
                 />
             </div>
             <div className="flex w-full flex-col space-y-5 pb-10 md:w-3/4">
-                <BreweriesListing
-                    breweries={breweries}
-                    total={total || 0}
-                    params={params}
-                    setCountry={setCountry}
-                    setType={setType}
-                    setSearch={setSearch}
-                    setPageSize={setPageSize}
-                    setPage={setPage}
-                    setSort={setSort}
-                    country={country}
-                    type={type}
-                    search={search}
-                    pageSize={pageSize}
-                    page={page}
-                    sort={sort}
-                    isPending={isPending}
-                />
+                <Suspense>
+                    <BreweriesListing
+                        breweries={breweries}
+                        total={total || 0}
+                        params={params}
+                        setCountry={setCountry}
+                        setType={setType}
+                        setSearch={setSearch}
+                        setPageSize={setPageSize}
+                        setPage={setPage}
+                        setSort={setSort}
+                        country={country}
+                        type={type}
+                        search={search}
+                        view={view}
+                        isPending={isPending}
+                    />
+                </Suspense>
             </div>
         </div>
     );

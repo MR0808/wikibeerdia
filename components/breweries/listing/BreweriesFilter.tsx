@@ -18,7 +18,6 @@ import { BreweriesFilterProps } from "@/types/breweries";
 import { cn } from "@/lib/utils";
 import { BrewerySearchSchema } from "@/schemas/brewery";
 import { Button } from "@/components/ui/button";
-import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 import { useEffect } from "react";
 
 const BreweriesFilter = ({
@@ -29,16 +28,8 @@ const BreweriesFilter = ({
     setType,
     nuqsCountry,
     search,
-    type,
-    isPending
+    type
 }: BreweriesFilterProps) => {
-    // const {
-    //     setSearch,
-    //     search,
-    //     country: nuqsCountry,
-    //     setCountry
-    // } = useBreweriesParams();
-
     const form = useForm<z.infer<typeof BrewerySearchSchema>>({
         resolver: zodResolver(BrewerySearchSchema),
         defaultValues: {

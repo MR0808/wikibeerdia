@@ -8,7 +8,6 @@ import BreweriesListSkeleton from "./BreweriesListSkeleton";
 import BreweriesListView from "./BreweriesListView";
 import { BreweriesResultsProps } from "@/types/breweries";
 import useViewStore from "@/hooks/useViewType";
-import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 
 const BreweriesResults = ({
     breweries,
@@ -22,8 +21,6 @@ const BreweriesResults = ({
     isPending
 }: BreweriesResultsProps) => {
     const { view } = useViewStore();
-    // const { search, setSearch, country, setCountry, type, setType, isPending } =
-    //     useBreweriesParams();
 
     let viewPage = "";
     params.view ? (viewPage = params.view) : (viewPage = view);

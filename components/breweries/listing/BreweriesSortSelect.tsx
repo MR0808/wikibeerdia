@@ -3,7 +3,6 @@
 import { useState, useCallback, useRef, ChangeEvent } from "react";
 import { useClickAway } from "react-use";
 
-import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 import { BreweriesSortSelectProps, Option } from "@/types/breweries";
 import { zodSortParser } from "@/lib/parsers";
 
@@ -17,7 +16,6 @@ const BreweriesSortSelect = ({
         setOpen(false);
     }, []);
     const ref = useRef<HTMLDivElement | null>(null);
-    // const { setSort } = useBreweriesParams();
 
     const selected = sortOrders.filter((option) => option.value === sort);
 
