@@ -32,7 +32,7 @@ const BreweriesResults = ({
 
     country.sort();
     const onCountryClick = (countryToRemove: string) => {
-        const newCountries = country.filter((c) => c !== countryToRemove);
+        let newCountries = country.filter((c) => c !== countryToRemove);
         setCountry(newCountries);
     };
 

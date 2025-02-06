@@ -788,7 +788,15 @@ export const getAllBreweriesPage = async ({ sort, page, pageSize, search, countr
     }
     if (country) {
         const countriesSearch = convertCommaListToArray(country)
-        where = { ...where, AND: { country: { name: { in: countriesSearch } } } }
+        where = { ...where, AND: [{ country: { name: { in: countriesSearch } } }] }
+    }
+    if (type) {
+        const typesSearch = convertCommaListToArray(type)
+        if (where.AND) {
+            where.AND.push({ breweryType: { name: { in: typesSearch } } })
+        } else {
+            where.AND = { breweryType: { name: { in: typesSearch } } }
+        }
     }
 
     try {
@@ -811,61 +819,43 @@ export const getAllBreweriesPage = async ({ sort, page, pageSize, search, countr
         });
 
         const filtersQuery = await db.brewery.findMany({
-            where: whereFilters,
+            where,
             select: {
                 id: true,
                 averageRating: true,
-                breweryType: { select: { id: true, name: true } },
-                country: { select: { id: true, name: true } },
+                breweryTypeId: true,
+                countryId: true,
                 _count: { select: { beers: true } }
             },
         })
         const total = await db.brewery.count({ where });
-        const countryMap = new Map();
-        const breweryTypesMap = new Map();
+        const countriesList = await db.country.findMany({
+            where: { breweries: { some: {} } }
+        })
+        const breweryTypesList = await db.breweryType.findMany({ where: { status: 'APPROVED' } })
+        let countries = countriesList.map((country) => {
+            return { id: country.id, name: country.name, count: 0 }
+        })
+        let breweryTypes = breweryTypesList.map((type) => {
+            return { id: type.id, name: type.name, count: 0 }
+        })
         const beersCountMap = new Map();
+        for (const brewery of filtersQuery) {
+            const itemCountry = countries.find(itemCountry => itemCountry.id === brewery.countryId);
+            if (itemCountry) itemCountry.count += 1;
 
-        for (const filter of filtersQuery) {
-            if (countryMap.has(filter.country.id)) {
-                countryMap.set(filter.country.id, {
-                    id: filter.country.id,
-                    name: filter.country.name,
-                    count: countryMap.get(filter.country.id).count + 1,
-                });
-            } else {
-                countryMap.set(filter.country.id, {
-                    id: filter.country.id,
-                    name: filter.country.name,
-                    count: 1,
-                });
-            }
+            const itemType = breweryTypes.find(itemType => itemType.id === brewery.breweryTypeId);
+            if (itemType) itemType.count += 1;
 
-            if (breweryTypesMap.has(filter.breweryType.id)) {
-                breweryTypesMap.set(filter.breweryType.id, {
-                    id: filter.breweryType.id,
-                    name: filter.breweryType.name,
-                    count: breweryTypesMap.get(filter.breweryType.id).count + 1,
-                });
-            } else {
-                breweryTypesMap.set(filter.breweryType.id, {
-                    id: filter.breweryType.id,
-                    name: filter.breweryType.name,
-                    count: 1,
-                });
-            }
-
-            beersCountMap.set(filter._count.beers, (beersCountMap.get(filter._count.beers) || 0) + 1);
+            beersCountMap.set(brewery._count.beers, (beersCountMap.get(brewery._count.beers) || 0) + 1);
         }
 
-        const countriesArray: IdNameFilter[] = Array.from(countryMap.values());
-        const countries = [...countriesArray].sort((a, b) => a.name.localeCompare(b.name));
-        const breweryTypesArray: IdNameFilter[] = Array.from(breweryTypesMap.values());
-        const breweryTypes = [...breweryTypesArray].sort((a, b) => a.name.localeCompare(b.name));
         const beersCountArray: BeersCountFilter[] = Array.from(beersCountMap, ([beerCount, occurrences]) => ({
             beerCount,
             occurrences,
         }));
         const beersCount = [...beersCountArray].sort((a, b) => a.beerCount - b.beerCount);
+
         const filters: Filters = { countries, breweryTypes, beersCount }
 
         const pageCount = Math.ceil(total / pageSizeInt);

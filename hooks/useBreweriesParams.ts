@@ -65,12 +65,20 @@ export function useBreweriesParams() {
     };
 
     const setCountry = (newCountry: string[]) => {
-        setParamCountry(newCountry);
+        if (newCountry.length == 0) {
+            setParamCountry(null);
+        } else {
+            setParamCountry(newCountry);
+        }
         setPage(1)
     };
 
     const setType = (newType: string[]) => {
-        setParamType(newType);
+        if (newType.length == 0) {
+            setParamType(null);
+        } else {
+            setParamType(newType);
+        }
         setPage(1)
     };
 
