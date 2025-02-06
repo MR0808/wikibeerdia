@@ -705,7 +705,7 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
 
 // Breweries Page Functions
 
-export const getAllBreweriesPage = async ({ sort, page, pageSize, search, country }: BreweryPageFilterSearch) => {
+export const getAllBreweriesPage = async ({ sort, page, pageSize, search, country, type }: BreweryPageFilterSearch) => {
     // const { page, per_page, sort, name, status, operator, from, to } = input;
 
     const convertCommaListToArray = (list: string) => {

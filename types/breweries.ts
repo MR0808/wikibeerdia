@@ -77,13 +77,13 @@ export interface BreweriesListingsProps {
     params: params;
     setCountry: (newCountry: string[]) => void
     setSearch: (newSearch: string) => void
-    setType: (newType: string) => void
+    setType: (newType: string[]) => void
     setPageSize: (newPageSize: number) => void
     setPage: (newPage: number) => void
     setSort: (newSort: "" | "az" | "za" | "newest" | "oldest" | "popular") => void
     country: string[]
     search: string
-    type: string
+    type: string[]
     view: 'grid' | 'list' | '';
     isPending: boolean
 }
@@ -94,10 +94,10 @@ export interface BreweriesFilterProps {
     filters: Filters | null
     setCountry: (newCountry: string[]) => void
     setSearch: (newSearch: string) => void
-    setType: (newType: string) => void
+    setType: (newType: string[]) => void
     nuqsCountry: string[]
     search: string
-    type: string
+    type: string[]
     isPending: boolean
 }
 
@@ -106,10 +106,10 @@ export interface BreweriesResultsProps {
     params: params
     setCountry: (newCountry: string[]) => void
     setSearch: (newSearch: string) => void
-    setType: (newType: string) => void
+    setType: (newType: string[]) => void
     country: string[]
     search: string
-    type: string
+    type: string[]
     isPending: boolean
 }
 
@@ -205,4 +205,5 @@ export interface BreweryPageFilterSearch {
     pageSize: string
     search?: string
     country?: string
+    type?: string
 }

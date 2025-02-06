@@ -18,7 +18,8 @@ const BreweriesPage = async ({
         page: params.page.toString(),
         pageSize: params.pageSize.toString(),
         search: params.search,
-        country: params.country
+        country: params.country,
+        type: params.type
     });
 
     return (

@@ -55,6 +55,16 @@ const BreweriesFilter = ({
         setCountry(newCountries);
     };
 
+    const handleTypeChange = (typeChecked: string, checked: boolean) => {
+        let newTypes = type;
+        if (checked) {
+            newTypes = [...newTypes, typeChecked];
+        } else {
+            newTypes = newTypes.filter((t) => t !== typeChecked);
+        }
+        setType(newTypes);
+    };
+
     return (
         <div className="rounded-3xl border border-black bg-white p-5">
             <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
@@ -96,51 +106,106 @@ const BreweriesFilter = ({
                 </Form>
             </div>
             {filters && (
-                <div>
-                    <Accordion type="multiple">
-                        <AccordionItem value="countries">
-                            <AccordionTrigger className="mb-1 text-xl font-bold text-black/80">
-                                Location
-                            </AccordionTrigger>
+                <>
+                    <div>
+                        <Accordion type="multiple">
+                            <AccordionItem value="types">
+                                <AccordionTrigger className="mb-1 text-xl font-bold text-black/80">
+                                    Brewery Type
+                                </AccordionTrigger>
 
-                            <AccordionContent>
-                                <div className="flex flex-col space-y-4">
-                                    {filters.countries.map((country) => {
-                                        return (
-                                            <div
-                                                key={country.name}
-                                                className="items-top flex space-x-2"
-                                            >
-                                                <Checkbox
-                                                    id={country.name}
-                                                    checked={nuqsCountry.includes(
-                                                        country.name
-                                                    )}
-                                                    onCheckedChange={(
-                                                        checked
-                                                    ) =>
-                                                        handleCountryChange(
-                                                            country.name,
-                                                            checked as boolean
-                                                        )
-                                                    }
-                                                />
-                                                <div className="grid gap-1.5 leading-none">
-                                                    <label
-                                                        htmlFor={country.id}
-                                                        className="leading-none font-medium"
+                                <AccordionContent>
+                                    <div className="flex flex-col space-y-4">
+                                        {filters.breweryTypes.map(
+                                            (breweryType) => {
+                                                return (
+                                                    <div
+                                                        key={breweryType.name}
+                                                        className="items-top flex space-x-2"
                                                     >
-                                                        {`${country.name} (${country.count})`}
-                                                    </label>
+                                                        <Checkbox
+                                                            id={
+                                                                breweryType.name
+                                                            }
+                                                            checked={type.includes(
+                                                                breweryType.name
+                                                            )}
+                                                            onCheckedChange={(
+                                                                checked
+                                                            ) =>
+                                                                handleTypeChange(
+                                                                    breweryType.name,
+                                                                    checked as boolean
+                                                                )
+                                                            }
+                                                        />
+                                                        <div className="grid gap-1.5 leading-none">
+                                                            <label
+                                                                htmlFor={
+                                                                    breweryType.name
+                                                                }
+                                                                className="leading-none font-medium"
+                                                            >
+                                                                {`${breweryType.name} (${breweryType.count})`}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            }
+                                        )}
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                    <div>
+                        <Accordion type="multiple">
+                            <AccordionItem value="countries">
+                                <AccordionTrigger className="mb-1 text-xl font-bold text-black/80">
+                                    Location
+                                </AccordionTrigger>
+
+                                <AccordionContent>
+                                    <div className="flex flex-col space-y-4">
+                                        {filters.countries.map((country) => {
+                                            return (
+                                                <div
+                                                    key={country.name}
+                                                    className="items-top flex space-x-2"
+                                                >
+                                                    <Checkbox
+                                                        id={country.name}
+                                                        checked={nuqsCountry.includes(
+                                                            country.name
+                                                        )}
+                                                        onCheckedChange={(
+                                                            checked
+                                                        ) =>
+                                                            handleCountryChange(
+                                                                country.name,
+                                                                checked as boolean
+                                                            )
+                                                        }
+                                                    />
+                                                    <div className="grid gap-1.5 leading-none">
+                                                        <label
+                                                            htmlFor={
+                                                                country.name
+                                                            }
+                                                            className="leading-none font-medium"
+                                                        >
+                                                            {`${country.name} (${country.count})`}
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                </>
             )}
         </div>
     );

@@ -28,14 +28,21 @@ export function useBreweriesParams() {
         startTransition
     });
 
+    const [type, setParamType] = useQueryState('type', {
+        defaultValue: [],
+        parse: (value) => value.split(",").filter(Boolean),
+        serialize: (value) => value.join(","),
+        shallow: false,
+        startTransition
+    });
+
     const [view, setView] = useQueryState('view',
         zodViewParser.withDefault("grid" as ViewOption).withOptions({
             shallow: true,
         })
     );
 
-    const [{ type, sort, page, pageSize }, setParams] = useQueryStates({
-        type: parseAsString.withDefault(""),
+    const [{ sort, page, pageSize }, setParams] = useQueryStates({
         sort: zodSortParser.withDefault("" as SortOption),
         page: parseAsInteger.withDefault(1),
         pageSize: parseAsInteger.withDefault(10),
@@ -44,11 +51,6 @@ export function useBreweriesParams() {
         startTransition,
         history: 'push'
     });
-
-
-    const setType = (newType: string) => {
-        setParams({ type: newType, page: 1 });
-    };
 
     const setSort = (newSort: SortOption) => {
         setParams({ sort: newSort, page: 1 });
@@ -64,6 +66,11 @@ export function useBreweriesParams() {
 
     const setCountry = (newCountry: string[]) => {
         setParamCountry(newCountry);
+        setPage(1)
+    };
+
+    const setType = (newType: string[]) => {
+        setParamType(newType);
         setPage(1)
     };
 
