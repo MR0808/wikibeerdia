@@ -10,10 +10,9 @@ type SortOption = z.infer<typeof SortSchema>;
 type ViewOption = z.infer<typeof ViewSchema>;
 
 export function useBreweriesParams() {
-
     const [isPending, startTransition] = useTransition();
 
-    const [search, setSearch] = useQueryState('search',
+    const [search, setParamSearch] = useQueryState('search',
         parseAsString.withDefault('').withOptions({
             shallow: false,
             history: 'push',
@@ -21,7 +20,7 @@ export function useBreweriesParams() {
         })
     );
 
-    const [country, setCountry] = useQueryState('country', {
+    const [country, setParamCountry] = useQueryState('country', {
         defaultValue: [],
         parse: (value) => value.split(",").filter(Boolean),
         serialize: (value) => value.join(","),
@@ -46,6 +45,7 @@ export function useBreweriesParams() {
         history: 'push'
     });
 
+
     const setType = (newType: string) => {
         setParams({ type: newType, page: 1 });
     };
@@ -62,6 +62,15 @@ export function useBreweriesParams() {
         setParams({ pageSize: newPageSize, page: 1 });
     };
 
+    const setCountry = (newCountry: string[]) => {
+        setParamCountry(newCountry);
+        setPage(1)
+    };
+
+    const setSearch = (newSearch: string) => {
+        setParamSearch(newSearch);
+        setPage(1)
+    };
 
     return {
         view,

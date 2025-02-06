@@ -22,6 +22,8 @@ export interface PaginationWithLinksProps {
     pageSize: number;
     page: number;
     pageSearchParam?: string;
+    setPageSize: (newPageSize: number) => void;
+    setPage: (newPage: number) => void;
 }
 
 /**
@@ -40,9 +42,11 @@ const PaginationWithLinks = ({
     pageSizeSelectOptions,
     pageSize,
     totalCount,
-    page
+    page,
+    setPageSize,
+    setPage
 }: PaginationWithLinksProps) => {
-    const { setPageSize, setPage } = useBreweriesParams();
+    // const { setPageSize, setPage } = useBreweriesParams();
 
     const totalPageCount = Math.ceil(totalCount / pageSize);
 

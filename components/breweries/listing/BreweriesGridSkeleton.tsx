@@ -1,4 +1,4 @@
-import { Beer, Star, MoveUpRight } from "lucide-react";
+import { Beer, Star } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 

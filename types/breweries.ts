@@ -64,21 +64,55 @@ export interface BreweryBeersType {
     }[];
 }
 
-export interface BreweriesListingsProps {
+export interface BreweriesContainerProps {
     breweries: BreweriesListing[] | null;
     total: number;
     params: params;
     filters: Filters | null;
 }
 
+export interface BreweriesListingsProps {
+    breweries: BreweriesListing[] | null;
+    total: number;
+    params: params;
+    setCountry: (newCountry: string[]) => void
+    setSearch: (newSearch: string) => void
+    setType: (newType: string) => void
+    setPageSize: (newPageSize: number) => void
+    setPage: (newPage: number) => void
+    setSort: (newSort: "" | "az" | "za" | "newest" | "oldest" | "popular") => void
+    country: string[]
+    search: string
+    type: string
+    pageSize: number
+    page: number
+    sort: NonNullable<"" | "az" | "za" | "newest" | "oldest" | "popular" | null>
+    isPending: boolean
+}
+
+
 export interface BreweriesFilterProps {
     params: params;
     filters: Filters | null
+    setCountry: (newCountry: string[]) => void
+    setSearch: (newSearch: string) => void
+    setType: (newType: string) => void
+    nuqsCountry: string[]
+    search: string
+    type: string
+    isPending: boolean
 }
 
 export interface BreweriesResultsProps {
     breweries: BreweriesListing[] | null;
     params: params
+    setCountry: (newCountry: string[]) => void
+    setSearch: (newSearch: string) => void
+    setType: (newType: string) => void
+    country: string[]
+    search: string
+    type: string
+    isPending: boolean
 }
 
 export interface BreweriesListing {
@@ -133,6 +167,7 @@ export interface params {
     sort: string;
     search: string;
     country: string;
+    type: string
 }
 
 export interface Option {
@@ -143,6 +178,7 @@ export interface Option {
 export interface BreweriesSortSelectProps {
     sortOrders: { value: string; name: string }[];
     sort: string;
+    setSort: (newSort: "" | "az" | "za" | "newest" | "oldest" | "popular") => void
 };
 
 export interface BreweriesViewToggleProps {

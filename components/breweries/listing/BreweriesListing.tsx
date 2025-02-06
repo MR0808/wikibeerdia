@@ -1,5 +1,3 @@
-"use client";
-
 import { Suspense } from "react";
 
 import BreweriesResults from "./BreweriesResults";
@@ -7,8 +5,6 @@ import BreweriesSortSelect from "./BreweriesSortSelect";
 import BreweriesViewToggle from "./BreweriesViewToggle";
 import { BreweriesListingsProps } from "@/types/breweries";
 import PaginationWithLinks from "@/components/global/PaginationWithLinks";
-import BreweriesGridSkeleton from "./BreweriesGridSkeleton";
-import { useBreweriesParams } from "@/hooks/useBreweriesParams";
 
 const sortOrders = [
     { value: "az", name: "A - Z" },
@@ -22,9 +18,20 @@ const BreweriesListing = ({
     breweries,
     total = 0,
     params,
-    filters
+    search,
+    setSearch,
+    country,
+    setCountry,
+    type,
+    setType,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    sort,
+    setSort,
+    isPending
 }: BreweriesListingsProps) => {
-    const { isPending } = useBreweriesParams();
     const currentPage = params.page || 1;
     let postsPerPage = params.pageSize || 10;
 
@@ -45,16 +52,22 @@ const BreweriesListing = ({
                     <BreweriesSortSelect
                         sortOrders={sortOrders}
                         sort={params.sort}
+                        setSort={setSort}
                     />
                     <BreweriesViewToggle paramsView={params.view} />
                 </div>
             </div>
-            <Suspense
-                fallback={<BreweriesGridSkeleton />}
-                key={JSON.stringify(params)}
-            >
-                <BreweriesResults breweries={breweries} params={params} />
-            </Suspense>
+            <BreweriesResults
+                breweries={breweries}
+                params={params}
+                setCountry={setCountry}
+                setType={setType}
+                setSearch={setSearch}
+                country={country}
+                type={type}
+                search={search}
+                isPending={isPending}
+            />
             <PaginationWithLinks
                 page={currentPage}
                 pageSize={postsPerPage}
@@ -62,6 +75,8 @@ const BreweriesListing = ({
                 pageSizeSelectOptions={{
                     pageSizeOptions: [10, 20, 50, 100]
                 }}
+                setPage={setPage}
+                setPageSize={setPageSize}
             />
         </>
     );

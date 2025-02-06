@@ -1,10 +1,8 @@
-import { assistant } from "@/app/fonts";
 import { SearchParams } from "nuqs/server";
 
 import { getAllBreweriesPage } from "@/actions/breweries";
-import BreweriesListing from "@/components/breweries/listing/BreweriesListing";
-import BreweriesFilter from "@/components/breweries/listing/BreweriesFilter";
 import { searchParamsCache } from "@/lib/searchParamsCache";
+import BreweriesContainer from "@/components/breweries/listing/BreweriesContainer";
 
 const BreweriesPage = async ({
     searchParams
@@ -31,24 +29,12 @@ const BreweriesPage = async ({
                     </div>
                 </div>
             </div>
-            <div
-                className={`${assistant.className} flex flex-col-reverse space-x-10 px-5 pt-10 md:container md:flex-row md:px-0 md:pt-28`}
-            >
-                <div className="w-full md:w-1/4">
-                    <BreweriesFilter
-                        params={params}
-                        filters={breweries.filters}
-                    />
-                </div>
-                <div className="flex w-full flex-col space-y-10 pb-10 md:w-3/4">
-                    <BreweriesListing
-                        breweries={breweries.data}
-                        total={breweries.total || 0}
-                        params={params}
-                        filters={breweries.filters}
-                    />
-                </div>
-            </div>
+            <BreweriesContainer
+                breweries={breweries.data}
+                total={breweries.total || 0}
+                params={params}
+                filters={breweries.filters}
+            />
         </>
     );
 };

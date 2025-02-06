@@ -8,6 +8,7 @@ enum View {
 export const searchParamsCache = createSearchParamsCache({
     search: parseAsString.withDefault(''),
     country: parseAsString.withDefault(''),
+    type: parseAsString.withDefault(''),
     sort: parseAsString.withDefault(''),
     page: parseAsInteger.withDefault(1),
     pageSize: parseAsInteger.withDefault(10),

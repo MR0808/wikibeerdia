@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 
 import {
     Accordion,
@@ -19,13 +19,25 @@ import { cn } from "@/lib/utils";
 import { BrewerySearchSchema } from "@/schemas/brewery";
 import { Button } from "@/components/ui/button";
 import { useBreweriesParams } from "@/hooks/useBreweriesParams";
+import { useEffect } from "react";
 
-const BreweriesFilter = ({ params, filters }: BreweriesFilterProps) => {
-    const {
-        setSearch,
-        country: nuqsCountry,
-        setCountry
-    } = useBreweriesParams();
+const BreweriesFilter = ({
+    params,
+    filters,
+    setCountry,
+    setSearch,
+    setType,
+    nuqsCountry,
+    search,
+    type,
+    isPending
+}: BreweriesFilterProps) => {
+    // const {
+    //     setSearch,
+    //     search,
+    //     country: nuqsCountry,
+    //     setCountry
+    // } = useBreweriesParams();
 
     const form = useForm<z.infer<typeof BrewerySearchSchema>>({
         resolver: zodResolver(BrewerySearchSchema),
@@ -38,10 +50,9 @@ const BreweriesFilter = ({ params, filters }: BreweriesFilterProps) => {
         setSearch(values.search);
     };
 
-    const onResetClick = () => {
-        form.setValue("search", "");
-        setSearch("");
-    };
+    useEffect(() => {
+        form.setValue("search", search);
+    }, [search]);
 
     const handleCountryChange = (country: string, checked: boolean) => {
         setCountry((prev) => {
@@ -82,9 +93,6 @@ const BreweriesFilter = ({ params, filters }: BreweriesFilterProps) => {
                                 </FormItem>
                             )}
                         />
-                        <div className="cursor-pointer" onClick={onResetClick}>
-                            <X />
-                        </div>
                         <Button
                             type="submit"
                             variant="default"

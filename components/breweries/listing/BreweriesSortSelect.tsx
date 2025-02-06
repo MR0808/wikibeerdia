@@ -9,14 +9,15 @@ import { zodSortParser } from "@/lib/parsers";
 
 const BreweriesSortSelect = ({
     sortOrders,
-    sort
+    sort,
+    setSort
 }: BreweriesSortSelectProps) => {
     const [open, setOpen] = useState(false);
     const onClose = useCallback(() => {
         setOpen(false);
     }, []);
     const ref = useRef<HTMLDivElement | null>(null);
-    const { setSort } = useBreweriesParams();
+    // const { setSort } = useBreweriesParams();
 
     const selected = sortOrders.filter((option) => option.value === sort);
 
