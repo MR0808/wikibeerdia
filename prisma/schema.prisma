@@ -282,7 +282,7 @@ model Beer {
   yearCreated    Int?
   available      Boolean
   headline       String
-  averageRating  Decimal?
+  averageRating  Decimal
   beerReviews    BeerReview[]
   beerFavourites BeerFavorite[]
   brewery        Brewery        @relation(fields: [breweryId], references: [id], onDelete: Cascade)
