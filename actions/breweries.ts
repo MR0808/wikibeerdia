@@ -422,7 +422,7 @@ export const createBreweryImages = async (images: ImagesUpload[]) => {
 };
 
 export const getBrewery = async (slug: string) => {
-    const data = await db.brewery.findUnique({
+    let data = await db.brewery.findUnique({
         where: {
             slug
         },
@@ -447,6 +447,14 @@ export const getBrewery = async (slug: string) => {
             country: true
         }
     });
+    if (data) {
+        const updatedData = {
+            ...data,
+            averageRatingString: data.averageRating.toString()
+        };
+        return { data: updatedData };
+    }
+
     return { data };
 };
 

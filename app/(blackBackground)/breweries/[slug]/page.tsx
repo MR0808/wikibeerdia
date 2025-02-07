@@ -38,7 +38,7 @@ export async function generateMetadata({
     params: Promise<{ slug: string }>;
 }) {
     const { slug } = await params;
-    const { data: brewery } = await getBrewery(slug);
+    let { data: brewery } = await getBrewery(slug);
     if (!brewery) {
         return;
     }
