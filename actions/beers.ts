@@ -87,7 +87,7 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
                 breweryId: brewery,
                 available,
                 userId: user.id,
-                averageRating: '0'
+                averageRating: "0"
             }
         });
         if (!data) {
@@ -96,6 +96,14 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
                 error: getErrorMessage("Error with fields")
             };
         }
+
+        await db.brewery.update({
+            where: { id: data.breweryId },
+            data: {
+                beerCount: { increment: 1 }
+            }
+        });
+
         if (images && images?.length > 0) {
             for (const image of images) {
                 await db.beerImages.update({
@@ -336,9 +344,12 @@ export const createBeerReview = async (
                 rating: true
             },
             where: { beerId: id }
-        })
+        });
 
-        await db.beer.update({ where: { id }, data: { averageRating: averageRating._avg.toString() } })
+        await db.beer.update({
+            where: { id },
+            data: { averageRating: averageRating._avg.toString() }
+        });
 
         if (!data) {
             return {

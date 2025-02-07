@@ -69,55 +69,64 @@ export interface BreweriesContainerProps {
     total: number;
     params: params;
     filters: Filters | null;
+    highestBeers: number;
 }
 
 export interface BreweriesListingsProps {
     breweries: BreweriesListing[] | null;
     total: number;
     params: params;
-    setCountry: (newCountry: string[]) => void
-    setSearch: (newSearch: string) => void
-    setType: (newType: string[]) => void
-    setPageSize: (newPageSize: number) => void
-    setPage: (newPage: number) => void
-    setSort: (newSort: "" | "az" | "za" | "newest" | "oldest" | "popular") => void
-    country: string[]
-    search: string
-    type: string[]
-    view: 'grid' | 'list' | '';
-    isPending: boolean
+    setCountry: (newCountry: string[]) => void;
+    setSearch: (newSearch: string) => void;
+    setType: (newType: string[]) => void;
+    setPageSize: (newPageSize: number) => void;
+    setPage: (newPage: number) => void;
+    setBeers: (newBeers: number[]) => void;
+    setSort: (
+        newSort: "" | "az" | "za" | "newest" | "oldest" | "popular"
+    ) => void;
+    country: string[];
+    search: string;
+    type: string[];
+    beers: number[];
+    view: "grid" | "list" | "";
+    isPending: boolean;
 }
-
 
 export interface BreweriesFilterProps {
     params: params;
-    filters: Filters | null
-    setCountry: (newCountry: string[]) => void
-    setSearch: (newSearch: string) => void
-    setType: (newType: string[]) => void
-    nuqsCountry: string[]
-    search: string
-    type: string[]
-    isPending: boolean
+    filters: Filters | null;
+    setCountry: (newCountry: string[]) => void;
+    setSearch: (newSearch: string) => void;
+    setType: (newType: string[]) => void;
+    setBeers: (newBeers: number[]) => void;
+    nuqsCountry: string[];
+    search: string;
+    type: string[];
+    beers: number[];
+    isPending: boolean;
+    highestBeers: number;
 }
 
 export interface BreweriesResultsProps {
     breweries: BreweriesListing[] | null;
-    params: params
-    setCountry: (newCountry: string[]) => void
-    setSearch: (newSearch: string) => void
-    setType: (newType: string[]) => void
-    country: string[]
-    search: string
-    type: string[]
-    isPending: boolean
+    params: params;
+    setCountry: (newCountry: string[]) => void;
+    setSearch: (newSearch: string) => void;
+    setType: (newType: string[]) => void;
+    setBeers: (newBeers: number[]) => void;
+    country: string[];
+    search: string;
+    type: string[];
+    beers: number[];
+    isPending: boolean;
 }
 
 export interface BreweriesListing {
     breweryType: {
         id: string;
         name: string;
-        colour: string
+        colour: string;
     };
     breweryFavourites: {
         id: string;
@@ -156,16 +165,17 @@ export interface BreweriesListing {
     userId: string;
     createdAt: Date;
     updatedAt: Date;
-};
+}
 
 export interface params {
     pageSize: number;
     page: number;
-    view: 'grid' | 'list' | '';
+    view: "grid" | "list" | "";
     sort: string;
     search: string;
     country: string;
-    type: string
+    type: string;
+    beers: number[];
 }
 
 export interface Option {
@@ -176,34 +186,37 @@ export interface Option {
 export interface BreweriesSortSelectProps {
     sortOrders: { value: string; name: string }[];
     sort: string;
-    setSort: (newSort: "" | "az" | "za" | "newest" | "oldest" | "popular") => void
-};
+    setSort: (
+        newSort: "" | "az" | "za" | "newest" | "oldest" | "popular"
+    ) => void;
+}
 
 export interface BreweriesViewToggleProps {
-    paramsView: string
-};
+    paramsView: string;
+}
 
 export interface BeersCountFilter {
-    beerCount: number, occurrences: number
+    beerCount: number;
+    occurrences: number;
 }
 
 export interface IdNameFilter {
-    id: string
-    name: string
-    count: number
+    id: string;
+    name: string;
+    count: number;
 }
 
 export interface Filters {
-    countries: IdNameFilter[]
-    breweryTypes: IdNameFilter[]
-    beersCount: BeersCountFilter[]
+    countries: IdNameFilter[];
+    breweryTypes: IdNameFilter[];
 }
 
 export interface BreweryPageFilterSearch {
-    sort: string
-    page: string
-    pageSize: string
-    search?: string
-    country?: string
-    type?: string
+    sort: string;
+    page: string;
+    pageSize: string;
+    search?: string;
+    country?: string;
+    type?: string;
+    beers?: number[];
 }

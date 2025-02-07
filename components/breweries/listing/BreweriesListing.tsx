@@ -30,6 +30,8 @@ const BreweriesListing = ({
     setPageSize,
     setSort,
     view,
+    beers,
+    setBeers,
     isPending
 }: BreweriesListingsProps) => {
     const currentPage = params.page || 1;
@@ -72,9 +74,11 @@ const BreweriesListing = ({
                     setCountry={setCountry}
                     setType={setType}
                     setSearch={setSearch}
+                    setBeers={setBeers}
                     country={country}
                     type={type}
                     search={search}
+                    beers={beers}
                     isPending={isPending}
                 />
             </Suspense>

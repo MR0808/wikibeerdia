@@ -18,6 +18,8 @@ const BreweriesResults = ({
     setCountry,
     type,
     setType,
+    beers,
+    setBeers,
     isPending
 }: BreweriesResultsProps) => {
     const { view } = useViewStore();
@@ -42,7 +44,13 @@ const BreweriesResults = ({
         setType(newTypes);
     };
 
-    if (search !== "" || country.length != 0 || type.length != 0) tags = true;
+    if (
+        search !== "" ||
+        country.length != 0 ||
+        type.length != 0 ||
+        beers.length != 0
+    )
+        tags = true;
     return (
         <>
             {tags ? (
@@ -81,6 +89,21 @@ const BreweriesResults = ({
                                 </button>
                             );
                         })}
+                    {beers.length != 0 && (
+                        <button
+                            type="button"
+                            className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                            onClick={() => setBeers([])}
+                        >
+                            <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                Beers
+                            </span>
+                            <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                {`${beers[0]} - ${beers[1]}`}
+                            </span>
+                            <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                        </button>
+                    )}
                     {country.length != 0 &&
                         country.map((item) => {
                             return (

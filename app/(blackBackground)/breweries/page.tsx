@@ -19,7 +19,8 @@ const BreweriesPage = async ({
         pageSize: params.pageSize.toString(),
         search: params.search,
         country: params.country,
-        type: params.type
+        type: params.type,
+        beers: params.beers
     });
 
     return (
@@ -37,6 +38,7 @@ const BreweriesPage = async ({
                     total={breweries.total || 0}
                     params={params}
                     filters={breweries.filters}
+                    highestBeers={breweries.highestBeers || 100}
                 />
             </Suspense>
         </>

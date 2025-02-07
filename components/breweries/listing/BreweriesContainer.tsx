@@ -7,12 +7,14 @@ import BreweriesListing from "@/components/breweries/listing/BreweriesListing";
 import BreweriesFilter from "@/components/breweries/listing/BreweriesFilter";
 import { BreweriesContainerProps } from "@/types/breweries";
 import { useBreweriesParams } from "@/hooks/useBreweriesParams";
+import useViewStore from "@/hooks/useViewType";
 
 const BreweriesContainer = ({
     breweries,
     total = 0,
     params,
-    filters
+    filters,
+    highestBeers
 }: BreweriesContainerProps) => {
     const {
         search,
@@ -21,16 +23,20 @@ const BreweriesContainer = ({
         setCountry,
         type,
         setType,
+        beers,
+        setBeers,
         setSort,
         setPage,
         setPageSize,
         view,
         isPending
     } = useBreweriesParams();
+    const { setIsLoading, isLoading } = useViewStore();
 
     useEffect(() => {
         window.scrollTo({ top: 0 });
-    }, [isPending]);
+        setIsLoading(false);
+    }, [isLoading]);
 
     return (
         <div
@@ -43,10 +49,13 @@ const BreweriesContainer = ({
                     setCountry={setCountry}
                     setType={setType}
                     setSearch={setSearch}
+                    setBeers={setBeers}
                     nuqsCountry={country}
                     type={type}
                     search={search}
+                    beers={beers}
                     isPending={isPending}
+                    highestBeers={highestBeers}
                 />
             </div>
             <div className="flex w-full flex-col space-y-5 pb-10 md:w-3/4">
@@ -61,10 +70,12 @@ const BreweriesContainer = ({
                         setPageSize={setPageSize}
                         setPage={setPage}
                         setSort={setSort}
+                        setBeers={setBeers}
                         country={country}
                         type={type}
                         search={search}
                         view={view}
+                        beers={beers}
                         isPending={isPending}
                     />
                 </Suspense>

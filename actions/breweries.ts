@@ -22,7 +22,12 @@ import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
 import { deleteImage } from "@/utils/supabase";
 import { filterColumn } from "@/lib/filterColumn";
-import { BeersCountFilter, IdNameFilter, Filters, BreweryPageFilterSearch } from "@/types/breweries";
+import {
+    BeersCountFilter,
+    IdNameFilter,
+    Filters,
+    BreweryPageFilterSearch
+} from "@/types/breweries";
 
 const slugger = new GithubSlugger();
 
@@ -211,7 +216,7 @@ export const createBrewery = async (
                 website: website || "",
                 logoUrl,
                 userId: user.id,
-                averageRating: '0'
+                averageRating: "0"
             }
         });
         if (!data) {
@@ -505,9 +510,12 @@ export const createBreweryReview = async (
                 rating: true
             },
             where: { breweryId: id }
-        })
+        });
 
-        await db.brewery.update({ where: { id }, data: { averageRating: averageRating._avg.toString() } })
+        await db.brewery.update({
+            where: { id },
+            data: { averageRating: averageRating._avg.toString() }
+        });
 
         if (!data) {
             return {
@@ -705,23 +713,31 @@ export const updateBreweryStatus = async (id: string, status: Status) => {
 
 // Breweries Page Functions
 
-export const getAllBreweriesPage = async ({ sort, page, pageSize, search, country, type }: BreweryPageFilterSearch) => {
-    // const { page, per_page, sort, name, status, operator, from, to } = input;
-
+export const getAllBreweriesPage = async ({
+    sort,
+    page,
+    pageSize,
+    search,
+    country,
+    type,
+    beers
+}: BreweryPageFilterSearch) => {
     const convertCommaListToArray = (list: string) => {
-        return list.split(',').map(item => item.trim());
+        return list.split(",").map((item) => item.trim());
     };
 
     let orderBy = {};
 
     const user = await checkAuth();
 
-    let id = ''
+    let id = "";
 
-    const pageInt = parseInt(page)
-    const pageSizeInt = parseInt(pageSize)
+    const pageInt = parseInt(page);
+    const pageSizeInt = parseInt(pageSize);
 
-    if (user) { id = user.id }
+    if (user) {
+        id = user.id;
+    }
 
     switch (sort) {
         case "az":
@@ -743,60 +759,58 @@ export const getAllBreweriesPage = async ({ sort, page, pageSize, search, countr
             orderBy = { name: "asc" };
             break;
     }
-    let where: any = { status: "APPROVED" }
-    let whereFilters: any = { status: "APPROVED" }
+    let where: any = { status: "APPROVED" };
     if (search) {
         const searchQuery = search.split(" ").join(" & ");
         where = {
-            ...where, OR: [
+            ...where,
+            OR: [
                 {
                     name: {
-                        search: searchQuery,
-                    },
+                        search: searchQuery
+                    }
                 },
                 {
                     headline: {
-                        search: searchQuery,
-                    },
+                        search: searchQuery
+                    }
                 },
                 {
                     description: {
-                        search: searchQuery,
-                    },
-                },
-            ],
-        }
-        whereFilters = {
-            ...where, OR: [
-                {
-                    name: {
-                        search: searchQuery,
-                    },
-                },
-                {
-                    headline: {
-                        search: searchQuery,
-                    },
-                },
-                {
-                    description: {
-                        search: searchQuery,
-                    },
-                },
-            ],
-        }
+                        search: searchQuery
+                    }
+                }
+            ]
+        };
     }
+    // if (country) {
+    //     const countriesSearch = convertCommaListToArray(country);
+    //     where = {
+    //         ...where,
+    //         AND: [{ country: { name: { in: countriesSearch } } }]
+    //     };
+    // }
+    // if (type) {
+    //     const typesSearch = convertCommaListToArray(type);
+    //     if (where.AND) {
+    //         where.AND.push({ breweryType: { name: { in: typesSearch } } });
+    //     } else {
+    //         where.AND = { breweryType: { name: { in: typesSearch } } };
+    //     }
+    // }
     if (country) {
-        const countriesSearch = convertCommaListToArray(country)
-        where = { ...where, AND: [{ country: { name: { in: countriesSearch } } }] }
+        const countriesSearch = convertCommaListToArray(country);
+        where = {
+            ...where,
+            country: { name: { in: countriesSearch } }
+        };
     }
     if (type) {
-        const typesSearch = convertCommaListToArray(type)
-        if (where.AND) {
-            where.AND.push({ breweryType: { name: { in: typesSearch } } })
-        } else {
-            where.AND = { breweryType: { name: { in: typesSearch } } }
-        }
+        const typesSearch = convertCommaListToArray(type);
+        where = { ...where, breweryType: { name: { in: typesSearch } } };
+    }
+    if (beers) {
+        where = { ...where, beerCount: { gte: beers[0], lte: beers[1] } };
     }
 
     try {
@@ -811,7 +825,10 @@ export const getAllBreweriesPage = async ({ sort, page, pageSize, search, countr
                 breweryType: { select: { id: true, name: true, colour: true } },
                 country: { select: { id: true, name: true } },
                 breweryReviews: { select: { id: true } },
-                breweryFavourites: { where: { userId: id }, select: { id: true } }
+                breweryFavourites: {
+                    where: { userId: id },
+                    select: { id: true }
+                }
             },
             orderBy,
             skip: offset,
@@ -826,46 +843,64 @@ export const getAllBreweriesPage = async ({ sort, page, pageSize, search, countr
                 breweryTypeId: true,
                 countryId: true,
                 _count: { select: { beers: true } }
-            },
-        })
-        const total = await db.brewery.count({ where });
+            }
+        });
+
+        // const total = await db.brewery.count({ where });
+        const total = filtersQuery.length;
+
         const countriesList = await db.country.findMany({
-            where: { breweries: { some: {} } }
-        })
-        const breweryTypesList = await db.breweryType.findMany({ where: { status: 'APPROVED' } })
+            where: { breweries: { some: {} } },
+            orderBy: { name: "asc" }
+        });
+        const breweryTypesList = await db.breweryType.findMany({
+            where: { status: "APPROVED" },
+            orderBy: { name: "asc" }
+        });
         let countries = countriesList.map((country) => {
-            return { id: country.id, name: country.name, count: 0 }
-        })
+            return { id: country.id, name: country.name, count: 0 };
+        });
         let breweryTypes = breweryTypesList.map((type) => {
-            return { id: type.id, name: type.name, count: 0 }
-        })
-        const beersCountMap = new Map();
+            return { id: type.id, name: type.name, count: 0 };
+        });
         for (const brewery of filtersQuery) {
-            const itemCountry = countries.find(itemCountry => itemCountry.id === brewery.countryId);
+            const itemCountry = countries.find(
+                (itemCountry) => itemCountry.id === brewery.countryId
+            );
             if (itemCountry) itemCountry.count += 1;
 
-            const itemType = breweryTypes.find(itemType => itemType.id === brewery.breweryTypeId);
+            const itemType = breweryTypes.find(
+                (itemType) => itemType.id === brewery.breweryTypeId
+            );
             if (itemType) itemType.count += 1;
-
-            beersCountMap.set(brewery._count.beers, (beersCountMap.get(brewery._count.beers) || 0) + 1);
         }
 
-        const beersCountArray: BeersCountFilter[] = Array.from(beersCountMap, ([beerCount, occurrences]) => ({
-            beerCount,
-            occurrences,
-        }));
-        const beersCount = [...beersCountArray].sort((a, b) => a.beerCount - b.beerCount);
+        const brewery = await db.brewery.findFirst({
+            orderBy: {
+                beers: {
+                    _count: "desc"
+                }
+            },
+            include: {
+                _count: {
+                    select: { beers: true }
+                }
+            }
+        });
 
-        const filters: Filters = { countries, breweryTypes, beersCount }
+        const highestBeers = brewery ? brewery._count.beers : 100;
+
+        const filters: Filters = { countries, breweryTypes };
 
         const pageCount = Math.ceil(total / pageSizeInt);
-        return { data, pageCount, total, filters, error: null };
+        return { data, pageCount, total, filters, highestBeers, error: null };
     } catch (err) {
         return {
             data: null,
             pageCount: null,
             total: null,
             filters: null,
+            highestBeers: null,
             error: getErrorMessage(err)
         };
     }

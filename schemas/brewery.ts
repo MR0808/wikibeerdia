@@ -70,3 +70,7 @@ export const BreweryLogoSchema = z.object({
 export const BrewerySearchSchema = z.object({
     search: z.string().min(1, "Query is required")
 })
+
+export const BreweryBeersSchema = z.object({
+    beers: z.array(z.number().int()).length(2)
+})

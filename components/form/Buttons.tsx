@@ -17,6 +17,12 @@ type SubmitButtonProps = {
     disabledCheck?: boolean;
 };
 
+type FilterButtonProps = {
+    className?: string;
+    text?: string;
+    size?: btnSize;
+};
+
 type ProfileButtonProps = {
     text?: string;
     newImage: boolean;
@@ -45,6 +51,22 @@ export const SubmitButton = ({
             ) : (
                 text
             )}
+        </Button>
+    );
+};
+
+export const FilterButton = ({
+    className = "",
+    text = "submit",
+    size = "lg"
+}: FilterButtonProps) => {
+    return (
+        <Button
+            type="submit"
+            className={cn("capitalize", className)}
+            size={size}
+        >
+            {text}
         </Button>
     );
 };
@@ -100,7 +122,7 @@ export const FavouriteButton = ({ isFavorite }: { isFavorite: boolean }) => {
             type="submit"
             size="icon"
             variant="outline"
-            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:bg-primary hover:text-white"
+            className="hover:bg-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black bg-white text-lg text-black transition duration-300 ease-in-out hover:border-0 hover:text-white"
         >
             {pending ? (
                 <ReloadIcon className="animate-spin" />

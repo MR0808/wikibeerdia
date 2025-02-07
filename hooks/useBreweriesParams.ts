@@ -1,56 +1,78 @@
-import { z } from 'zod';
-import { useQueryState, useQueryStates, parseAsString, parseAsInteger, createParser } from 'nuqs';
-import { useTransition } from 'react';
+import { z } from "zod";
+import {
+    useQueryState,
+    useQueryStates,
+    parseAsString,
+    parseAsInteger,
+    parseAsArrayOf
+} from "nuqs";
+import { useTransition } from "react";
 
-import { zodViewParser, zodSortParser } from '@/lib/parsers';
+import { zodViewParser, zodSortParser } from "@/lib/parsers";
+import useViewStore from "./useViewType";
 
-const SortSchema = z.enum(['', 'az', 'za', 'newest', 'oldest', 'popular']);
-const ViewSchema = z.enum(['', 'grid', 'list'])
+const SortSchema = z.enum(["", "az", "za", "newest", "oldest", "popular"]);
+const ViewSchema = z.enum(["", "grid", "list"]);
 type SortOption = z.infer<typeof SortSchema>;
 type ViewOption = z.infer<typeof ViewSchema>;
 
 export function useBreweriesParams() {
     const [isPending, startTransition] = useTransition();
+    const { setIsLoading } = useViewStore();
 
-    const [search, setParamSearch] = useQueryState('search',
-        parseAsString.withDefault('').withOptions({
+    const [search, setParamSearch] = useQueryState(
+        "search",
+        parseAsString.withDefault("").withOptions({
             shallow: false,
-            history: 'push',
+            history: "push",
             startTransition
         })
     );
 
-    const [country, setParamCountry] = useQueryState('country', {
-        defaultValue: [],
-        parse: (value) => value.split(",").filter(Boolean),
-        serialize: (value) => value.join(","),
-        shallow: false,
-        startTransition
-    });
-
-    const [type, setParamType] = useQueryState('type', {
-        defaultValue: [],
-        parse: (value) => value.split(",").filter(Boolean),
-        serialize: (value) => value.join(","),
-        shallow: false,
-        startTransition
-    });
-
-    const [view, setView] = useQueryState('view',
-        zodViewParser.withDefault("grid" as ViewOption).withOptions({
-            shallow: true,
+    const [beers, setParamBeers] = useQueryState(
+        "beers",
+        parseAsArrayOf(parseAsInteger).withDefault([]).withOptions({
+            shallow: false,
+            history: "push",
+            startTransition
         })
     );
 
-    const [{ sort, page, pageSize }, setParams] = useQueryStates({
-        sort: zodSortParser.withDefault("" as SortOption),
-        page: parseAsInteger.withDefault(1),
-        pageSize: parseAsInteger.withDefault(10),
-    }, {
+    const [country, setParamCountry] = useQueryState("country", {
+        defaultValue: [],
+        parse: (value) => value.split(",").filter(Boolean),
+        serialize: (value) => value.join(","),
         shallow: false,
-        startTransition,
-        history: 'push'
+        startTransition
     });
+
+    const [type, setParamType] = useQueryState("type", {
+        defaultValue: [],
+        parse: (value) => value.split(",").filter(Boolean),
+        serialize: (value) => value.join(","),
+        shallow: false,
+        startTransition
+    });
+
+    const [view, setView] = useQueryState(
+        "view",
+        zodViewParser.withDefault("grid" as ViewOption).withOptions({
+            shallow: true
+        })
+    );
+
+    const [{ sort, page, pageSize }, setParams] = useQueryStates(
+        {
+            sort: zodSortParser.withDefault("" as SortOption),
+            page: parseAsInteger.withDefault(1),
+            pageSize: parseAsInteger.withDefault(10)
+        },
+        {
+            shallow: false,
+            startTransition,
+            history: "push"
+        }
+    );
 
     const setSort = (newSort: SortOption) => {
         setParams({ sort: newSort, page: 1 });
@@ -58,6 +80,7 @@ export function useBreweriesParams() {
 
     const setPage = (newPage: number) => {
         setParams({ page: newPage });
+        setIsLoading(true);
     };
 
     const setPageSize = (newPageSize: number) => {
@@ -70,7 +93,15 @@ export function useBreweriesParams() {
         } else {
             setParamCountry(newCountry);
         }
-        setPage(1)
+        setParams({ page: 1 });
+    };
+    const setBeers = (newBeers: number[]) => {
+        if (newBeers.length == 0) {
+            setParamBeers(null);
+        } else {
+            setParamBeers(newBeers);
+        }
+        setParams({ page: 1 });
     };
 
     const setType = (newType: string[]) => {
@@ -79,12 +110,12 @@ export function useBreweriesParams() {
         } else {
             setParamType(newType);
         }
-        setPage(1)
+        setParams({ page: 1 });
     };
 
     const setSearch = (newSearch: string) => {
         setParamSearch(newSearch);
-        setPage(1)
+        setPage(1);
     };
 
     return {
@@ -102,6 +133,8 @@ export function useBreweriesParams() {
         setSearch,
         country,
         setCountry,
+        beers,
+        setBeers,
         isPending
     };
 }

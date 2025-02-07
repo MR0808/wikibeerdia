@@ -193,6 +193,7 @@ model Brewery {
   averageRating     String
   images            BreweryImages[]
   beers             Beer[]
+  beerCount         Int               @default(0)
   breweryReviews    BreweryReview[]
   breweryFavourites BreweryFavorite[]
   breweryType       BreweryType       @relation(fields: [breweryTypeId], references: [id], onDelete: Cascade)
