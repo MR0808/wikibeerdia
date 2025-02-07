@@ -1,4 +1,5 @@
 import { Status } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export interface BreweryType {
     id: string;
@@ -72,38 +73,52 @@ export interface BreweriesContainerProps {
     highestBeers: number;
 }
 
+type SetCountry = (newCountry: string[]) => void;
+type SetSearch = (newSearch: string) => void;
+type SetType = (newType: string[]) => void;
+type SetPageSize = (newPageSize: number) => void;
+type SetPage = (newPage: number) => void;
+type SetBeers = (newBeers: number[]) => void;
+type SetSort = (
+    newSort: "" | "az" | "za" | "newest" | "oldest" | "popular"
+) => void;
+type SetRating = (newRating: number) => void;
+type View = "grid" | "list" | "";
+
 export interface BreweriesListingsProps {
     breweries: BreweriesListing[] | null;
     total: number;
     params: params;
-    setCountry: (newCountry: string[]) => void;
-    setSearch: (newSearch: string) => void;
-    setType: (newType: string[]) => void;
-    setPageSize: (newPageSize: number) => void;
-    setPage: (newPage: number) => void;
-    setBeers: (newBeers: number[]) => void;
-    setSort: (
-        newSort: "" | "az" | "za" | "newest" | "oldest" | "popular"
-    ) => void;
     country: string[];
+    setCountry: SetCountry;
     search: string;
+    setSearch: SetSearch;
     type: string[];
+    setType: SetType;
     beers: number[];
-    view: "grid" | "list" | "";
+    setBeers: SetBeers;
+    rating: number;
+    setRating: SetRating;
+    setPageSize: SetPageSize;
+    setPage: SetPage;
+    setSort: SetSort;
+    view: View;
     isPending: boolean;
 }
 
 export interface BreweriesFilterProps {
     params: params;
     filters: Filters | null;
-    setCountry: (newCountry: string[]) => void;
-    setSearch: (newSearch: string) => void;
-    setType: (newType: string[]) => void;
-    setBeers: (newBeers: number[]) => void;
-    nuqsCountry: string[];
+    country: string[];
+    setCountry: SetCountry;
     search: string;
+    setSearch: SetSearch;
     type: string[];
+    setType: SetType;
     beers: number[];
+    setBeers: SetBeers;
+    rating: number;
+    setRating: SetRating;
     isPending: boolean;
     highestBeers: number;
 }
@@ -111,14 +126,17 @@ export interface BreweriesFilterProps {
 export interface BreweriesResultsProps {
     breweries: BreweriesListing[] | null;
     params: params;
-    setCountry: (newCountry: string[]) => void;
-    setSearch: (newSearch: string) => void;
-    setType: (newType: string[]) => void;
-    setBeers: (newBeers: number[]) => void;
     country: string[];
+    setCountry: SetCountry;
     search: string;
+    setSearch: SetSearch;
     type: string[];
+    setType: SetType;
     beers: number[];
+    setBeers: SetBeers;
+    rating: number;
+    setRating: SetRating;
+
     isPending: boolean;
 }
 
@@ -186,9 +204,7 @@ export interface Option {
 export interface BreweriesSortSelectProps {
     sortOrders: { value: string; name: string }[];
     sort: string;
-    setSort: (
-        newSort: "" | "az" | "za" | "newest" | "oldest" | "popular"
-    ) => void;
+    setSort: SetSort;
 }
 
 export interface BreweriesViewToggleProps {
@@ -219,4 +235,5 @@ export interface BreweryPageFilterSearch {
     country?: string;
     type?: string;
     beers?: number[];
+    rating?: number;
 }

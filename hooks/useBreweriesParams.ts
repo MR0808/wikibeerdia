@@ -38,6 +38,15 @@ export function useBreweriesParams() {
         })
     );
 
+    const [rating, setParamRating] = useQueryState(
+        "rating",
+        parseAsInteger.withDefault(1).withOptions({
+            shallow: false,
+            history: "push",
+            startTransition
+        })
+    );
+
     const [country, setParamCountry] = useQueryState("country", {
         defaultValue: [],
         parse: (value) => value.split(",").filter(Boolean),
@@ -95,6 +104,7 @@ export function useBreweriesParams() {
         }
         setParams({ page: 1 });
     };
+
     const setBeers = (newBeers: number[]) => {
         if (newBeers.length == 0) {
             setParamBeers(null);
@@ -102,6 +112,11 @@ export function useBreweriesParams() {
             setParamBeers(newBeers);
         }
         setParams({ page: 1 });
+    };
+
+    const setRating = (newRating: number) => {
+        setParamRating(newRating);
+        setPage(1);
     };
 
     const setType = (newType: string[]) => {
@@ -135,6 +150,8 @@ export function useBreweriesParams() {
         setCountry,
         beers,
         setBeers,
+        rating,
+        setRating,
         isPending
     };
 }

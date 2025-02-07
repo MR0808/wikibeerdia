@@ -20,6 +20,8 @@ const BreweriesResults = ({
     setType,
     beers,
     setBeers,
+    rating,
+    setRating,
     isPending
 }: BreweriesResultsProps) => {
     const { view } = useViewStore();
@@ -48,7 +50,8 @@ const BreweriesResults = ({
         search !== "" ||
         country.length != 0 ||
         type.length != 0 ||
-        beers.length != 0
+        beers.length != 0 ||
+        rating > 1
     )
         tags = true;
     return (
@@ -89,6 +92,21 @@ const BreweriesResults = ({
                                 </button>
                             );
                         })}
+                    {rating > 1 && (
+                        <button
+                            type="button"
+                            className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                            onClick={() => setRating(1)}
+                        >
+                            <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                Rating
+                            </span>
+                            <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                {`${rating} stars +`}
+                            </span>
+                            <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                        </button>
+                    )}
                     {beers.length != 0 && (
                         <button
                             type="button"

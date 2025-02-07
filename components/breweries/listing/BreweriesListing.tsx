@@ -26,12 +26,14 @@ const BreweriesListing = ({
     setCountry,
     type,
     setType,
-    setPage,
-    setPageSize,
-    setSort,
     view,
     beers,
     setBeers,
+    rating,
+    setRating,
+    setPage,
+    setPageSize,
+    setSort,
     isPending
 }: BreweriesListingsProps) => {
     const currentPage = params.page || 1;
@@ -39,7 +41,10 @@ const BreweriesListing = ({
 
     if (postsPerPage > total) postsPerPage = total;
 
-    const start = postsPerPage * currentPage - postsPerPage + 1;
+    const start =
+        breweries && breweries.length > 0
+            ? postsPerPage * currentPage - postsPerPage + 1
+            : 0;
     const end = postsPerPage * currentPage;
     return (
         <>
@@ -71,27 +76,31 @@ const BreweriesListing = ({
                 <BreweriesResults
                     breweries={breweries}
                     params={params}
-                    setCountry={setCountry}
-                    setType={setType}
-                    setSearch={setSearch}
-                    setBeers={setBeers}
                     country={country}
+                    setCountry={setCountry}
                     type={type}
+                    setType={setType}
                     search={search}
+                    setSearch={setSearch}
                     beers={beers}
+                    setBeers={setBeers}
+                    rating={rating}
+                    setRating={setRating}
                     isPending={isPending}
                 />
             </Suspense>
-            <PaginationWithLinks
-                page={currentPage}
-                pageSize={postsPerPage}
-                totalCount={total}
-                pageSizeSelectOptions={{
-                    pageSizeOptions: [10, 20, 50, 100]
-                }}
-                setPage={setPage}
-                setPageSize={setPageSize}
-            />
+            {breweries && breweries.length > 0 && (
+                <PaginationWithLinks
+                    page={currentPage}
+                    pageSize={postsPerPage}
+                    totalCount={total}
+                    pageSizeSelectOptions={{
+                        pageSizeOptions: [10, 20, 50, 100]
+                    }}
+                    setPage={setPage}
+                    setPageSize={setPageSize}
+                />
+            )}
         </>
     );
 };

@@ -20,7 +20,8 @@ const BreweriesPage = async ({
         search: params.search,
         country: params.country,
         type: params.type,
-        beers: params.beers
+        beers: params.beers,
+        rating: params.rating
     });
 
     return (

@@ -720,7 +720,8 @@ export const getAllBreweriesPage = async ({
     search,
     country,
     type,
-    beers
+    beers,
+    rating
 }: BreweryPageFilterSearch) => {
     const convertCommaListToArray = (list: string) => {
         return list.split(",").map((item) => item.trim());
@@ -783,21 +784,7 @@ export const getAllBreweriesPage = async ({
             ]
         };
     }
-    // if (country) {
-    //     const countriesSearch = convertCommaListToArray(country);
-    //     where = {
-    //         ...where,
-    //         AND: [{ country: { name: { in: countriesSearch } } }]
-    //     };
-    // }
-    // if (type) {
-    //     const typesSearch = convertCommaListToArray(type);
-    //     if (where.AND) {
-    //         where.AND.push({ breweryType: { name: { in: typesSearch } } });
-    //     } else {
-    //         where.AND = { breweryType: { name: { in: typesSearch } } };
-    //     }
-    // }
+
     if (country) {
         const countriesSearch = convertCommaListToArray(country);
         where = {
@@ -809,8 +796,11 @@ export const getAllBreweriesPage = async ({
         const typesSearch = convertCommaListToArray(type);
         where = { ...where, breweryType: { name: { in: typesSearch } } };
     }
-    if (beers) {
+    if (beers && beers.length > 0) {
         where = { ...where, beerCount: { gte: beers[0], lte: beers[1] } };
+    }
+    if (rating) {
+        where = { ...where, averageRating: { gte: rating } };
     }
 
     try {
@@ -846,7 +836,6 @@ export const getAllBreweriesPage = async ({
             }
         });
 
-        // const total = await db.brewery.count({ where });
         const total = filtersQuery.length;
 
         const countriesList = await db.country.findMany({
@@ -893,7 +882,20 @@ export const getAllBreweriesPage = async ({
         const filters: Filters = { countries, breweryTypes };
 
         const pageCount = Math.ceil(total / pageSizeInt);
-        return { data, pageCount, total, filters, highestBeers, error: null };
+
+        const updatedData = data.map((item) => ({
+            ...item,
+            averageRating: item.averageRating.toString()
+        }));
+
+        return {
+            data: updatedData,
+            pageCount,
+            total,
+            filters,
+            highestBeers,
+            error: null
+        };
     } catch (err) {
         return {
             data: null,

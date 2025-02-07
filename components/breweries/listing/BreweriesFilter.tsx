@@ -14,7 +14,8 @@ import {
     AccordionTrigger
 } from "@/components/ui/accordion-filter";
 import { FilterButton } from "@/components/form/Buttons";
-
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/range-slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -27,14 +28,16 @@ import { Button } from "@/components/ui/button";
 const BreweriesFilter = ({
     params,
     filters,
+    country,
     setCountry,
-    setSearch,
-    setType,
-    setBeers,
-    nuqsCountry,
     search,
-    beers,
+    setSearch,
     type,
+    setType,
+    beers,
+    setBeers,
+    rating,
+    setRating,
     highestBeers
 }: BreweriesFilterProps) => {
     let group1: IdNameFilter[] = [];
@@ -42,11 +45,11 @@ const BreweriesFilter = ({
 
     if (filters) {
         group1 = filters.countries
-            .filter((country) => nuqsCountry.includes(country.name))
+            .filter((item) => country.includes(item.name))
             .sort((a, b) => a.name.localeCompare(b.name));
 
         group2 = filters.countries
-            .filter((country) => !nuqsCountry.includes(country.name))
+            .filter((item) => !country.includes(item.name))
             .sort((a, b) => {
                 if (a.count > 0 && b.count === 0) return -1;
                 if (a.count === 0 && b.count > 0) return 1;
@@ -97,7 +100,7 @@ const BreweriesFilter = ({
     }, [beers]);
 
     const handleCountryChange = (countryChecked: string, checked: boolean) => {
-        let newCountries = nuqsCountry;
+        let newCountries = country;
         if (checked) {
             newCountries = [...newCountries, countryChecked];
         } else {
@@ -115,6 +118,18 @@ const BreweriesFilter = ({
         }
         setType(newTypes);
     };
+
+    const handleRatingChange = (value: string) => {
+        setRating(parseInt(value));
+    };
+
+    const ratings = [
+        { value: "5", label: "5 stars" },
+        { value: "4", label: "4 stars & up" },
+        { value: "3", label: "3 stars & up" },
+        { value: "2", label: "2 stars & up" },
+        { value: "1", label: "1 star & up" }
+    ];
 
     return (
         <div className="rounded-3xl border border-black bg-white p-5">
@@ -204,46 +219,57 @@ const BreweriesFilter = ({
                     </div>
                     <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
                         <div className="py-4 text-xl font-bold text-black/80">
-                            Brewery Type
+                            Average Rating
                         </div>
                         <div className="flex flex-col space-y-4">
-                            {type.length > 0 && (
-                                <div
-                                    className="cursor-pointer text-sm hover:underline"
-                                    onClick={() => setType([])}
-                                >
-                                    Clear
-                                </div>
-                            )}
-                            {filters.breweryTypes.map((breweryType) => {
-                                return (
+                            <RadioGroup
+                                value={rating.toString()}
+                                onValueChange={handleRatingChange}
+                            >
+                                {ratings.map((item) => (
                                     <div
-                                        key={breweryType.name}
-                                        className="items-top flex space-x-2"
+                                        key={item.value}
+                                        className="mb-2 flex items-center space-x-2"
                                     >
-                                        <Checkbox
-                                            id={breweryType.name}
-                                            checked={type.includes(
-                                                breweryType.name
-                                            )}
-                                            onCheckedChange={(checked) =>
-                                                handleTypeChange(
-                                                    breweryType.name,
-                                                    checked as boolean
-                                                )
-                                            }
+                                        <RadioGroupItem
+                                            value={item.value}
+                                            id={`rating-${item.value}`}
                                         />
-                                        <div className="grid gap-1.5 leading-none">
-                                            <label
-                                                htmlFor={breweryType.name}
-                                                className="leading-none font-medium"
-                                            >
-                                                {`${breweryType.name} (${breweryType.count})`}
-                                            </label>
-                                        </div>
+                                        <Label
+                                            htmlFor={`rating-${item.value}`}
+                                            className="flex cursor-pointer items-center"
+                                        >
+                                            {[...Array(5)].map((_, index) => (
+                                                <Star
+                                                    key={index}
+                                                    className={`h-5 w-5 ${
+                                                        index <
+                                                        Number.parseInt(
+                                                            item.value
+                                                        )
+                                                            ? "fill-yellow-400 text-yellow-400"
+                                                            : "text-gray-300"
+                                                    }`}
+                                                />
+                                            ))}
+                                            <span className="ml-2 text-sm text-gray-600">
+                                                {item.label}
+                                            </span>
+                                        </Label>
                                     </div>
-                                );
-                            })}
+                                ))}
+                            </RadioGroup>
+                            {/* 
+                            <Checkbox
+                                id={breweryType.name}
+                                checked={type.includes(breweryType.name)}
+                                onCheckedChange={(checked) =>
+                                    handleTypeChange(
+                                        breweryType.name,
+                                        checked as boolean
+                                    )
+                                }
+                            /> */}
                         </div>
                     </div>
                     <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
@@ -306,7 +332,7 @@ const BreweriesFilter = ({
                             </AccordionTrigger>
                             <AccordionContent>
                                 <>
-                                    {nuqsCountry.length > 0 ? (
+                                    {country.length > 0 ? (
                                         <>
                                             <div
                                                 className="cursor-pointer pb-6 hover:underline"
@@ -316,24 +342,22 @@ const BreweriesFilter = ({
                                             </div>
 
                                             <div className="mb-6 flex flex-col space-y-4 border-b border-b-gray-200 pb-6">
-                                                {group1.map((country) => {
+                                                {group1.map((item) => {
                                                     return (
                                                         <div
-                                                            key={country.name}
+                                                            key={item.name}
                                                             className="items-top flex space-x-2"
                                                         >
                                                             <Checkbox
-                                                                id={
-                                                                    country.name
-                                                                }
-                                                                checked={nuqsCountry.includes(
-                                                                    country.name
+                                                                id={item.name}
+                                                                checked={country.includes(
+                                                                    item.name
                                                                 )}
                                                                 onCheckedChange={(
                                                                     checked
                                                                 ) =>
                                                                     handleCountryChange(
-                                                                        country.name,
+                                                                        item.name,
                                                                         checked as boolean
                                                                     )
                                                                 }
@@ -341,11 +365,11 @@ const BreweriesFilter = ({
                                                             <div className="grid gap-1.5 leading-none">
                                                                 <label
                                                                     htmlFor={
-                                                                        country.name
+                                                                        item.name
                                                                     }
                                                                     className="leading-none font-medium"
                                                                 >
-                                                                    {`${country.name} (${country.count})`}
+                                                                    {`${item.name} (${item.count})`}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -353,24 +377,22 @@ const BreweriesFilter = ({
                                                 })}
                                             </div>
                                             <div className="flex flex-col space-y-4">
-                                                {group2.map((country) => {
+                                                {group2.map((item) => {
                                                     return (
                                                         <div
-                                                            key={country.name}
+                                                            key={item.name}
                                                             className="items-top flex space-x-2"
                                                         >
                                                             <Checkbox
-                                                                id={
-                                                                    country.name
-                                                                }
-                                                                checked={nuqsCountry.includes(
-                                                                    country.name
+                                                                id={item.name}
+                                                                checked={country.includes(
+                                                                    item.name
                                                                 )}
                                                                 onCheckedChange={(
                                                                     checked
                                                                 ) =>
                                                                     handleCountryChange(
-                                                                        country.name,
+                                                                        item.name,
                                                                         checked as boolean
                                                                     )
                                                                 }
@@ -378,11 +400,11 @@ const BreweriesFilter = ({
                                                             <div className="grid gap-1.5 leading-none">
                                                                 <label
                                                                     htmlFor={
-                                                                        country.name
+                                                                        item.name
                                                                     }
                                                                     className="leading-none font-medium"
                                                                 >
-                                                                    {`${country.name} (${country.count})`}
+                                                                    {`${item.name} (${item.count})`}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -392,43 +414,39 @@ const BreweriesFilter = ({
                                         </>
                                     ) : (
                                         <div className="flex flex-col space-y-4">
-                                            {filters.countries.map(
-                                                (country) => {
-                                                    return (
-                                                        <div
-                                                            key={country.name}
-                                                            className="items-top flex space-x-2"
-                                                        >
-                                                            <Checkbox
-                                                                id={
-                                                                    country.name
+                                            {filters.countries.map((item) => {
+                                                return (
+                                                    <div
+                                                        key={item.name}
+                                                        className="items-top flex space-x-2"
+                                                    >
+                                                        <Checkbox
+                                                            id={item.name}
+                                                            checked={country.includes(
+                                                                item.name
+                                                            )}
+                                                            onCheckedChange={(
+                                                                checked
+                                                            ) =>
+                                                                handleCountryChange(
+                                                                    item.name,
+                                                                    checked as boolean
+                                                                )
+                                                            }
+                                                        />
+                                                        <div className="grid gap-1.5 leading-none">
+                                                            <label
+                                                                htmlFor={
+                                                                    item.name
                                                                 }
-                                                                checked={nuqsCountry.includes(
-                                                                    country.name
-                                                                )}
-                                                                onCheckedChange={(
-                                                                    checked
-                                                                ) =>
-                                                                    handleCountryChange(
-                                                                        country.name,
-                                                                        checked as boolean
-                                                                    )
-                                                                }
-                                                            />
-                                                            <div className="grid gap-1.5 leading-none">
-                                                                <label
-                                                                    htmlFor={
-                                                                        country.name
-                                                                    }
-                                                                    className="leading-none font-medium"
-                                                                >
-                                                                    {`${country.name} (${country.count})`}
-                                                                </label>
-                                                            </div>
+                                                                className="leading-none font-medium"
+                                                            >
+                                                                {`${item.name} (${item.count})`}
+                                                            </label>
                                                         </div>
-                                                    );
-                                                }
-                                            )}
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </>

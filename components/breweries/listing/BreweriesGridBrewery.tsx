@@ -55,7 +55,7 @@ const BreweriesGridBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
                     <li className="flex flex-row items-center">
                         <Star className="mr-2 size-5" />
                         {`${Number.parseFloat(brewery.averageRating).toFixed(
-                            1
+                            2
                         )} (${brewery.breweryReviews.length})`}
                     </li>
                     <li className="flex flex-row items-center">

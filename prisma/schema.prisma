@@ -190,7 +190,7 @@ model Brewery {
   website           String
   logoUrl           String
   headline          String
-  averageRating     String
+  averageRating     Decimal
   images            BreweryImages[]
   beers             Beer[]
   beerCount         Int               @default(0)
@@ -282,7 +282,7 @@ model Beer {
   yearCreated    Int?
   available      Boolean
   headline       String
-  averageRating  String
+  averageRating  Decimal?
   beerReviews    BeerReview[]
   beerFavourites BeerFavorite[]
   brewery        Brewery        @relation(fields: [breweryId], references: [id], onDelete: Cascade)

@@ -25,6 +25,8 @@ const BreweriesContainer = ({
         setType,
         beers,
         setBeers,
+        rating,
+        setRating,
         setSort,
         setPage,
         setPageSize,
@@ -46,14 +48,16 @@ const BreweriesContainer = ({
                 <BreweriesFilter
                     params={params}
                     filters={filters}
+                    country={country}
                     setCountry={setCountry}
-                    setType={setType}
-                    setSearch={setSearch}
-                    setBeers={setBeers}
-                    nuqsCountry={country}
                     type={type}
+                    setType={setType}
                     search={search}
+                    setSearch={setSearch}
                     beers={beers}
+                    setBeers={setBeers}
+                    rating={rating}
+                    setRating={setRating}
                     isPending={isPending}
                     highestBeers={highestBeers}
                 />
@@ -64,18 +68,20 @@ const BreweriesContainer = ({
                         breweries={breweries}
                         total={total || 0}
                         params={params}
+                        country={country}
                         setCountry={setCountry}
+                        type={type}
                         setType={setType}
+                        search={search}
                         setSearch={setSearch}
+                        beers={beers}
+                        setBeers={setBeers}
+                        rating={rating}
+                        setRating={setRating}
                         setPageSize={setPageSize}
                         setPage={setPage}
                         setSort={setSort}
-                        setBeers={setBeers}
-                        country={country}
-                        type={type}
-                        search={search}
                         view={view}
-                        beers={beers}
                         isPending={isPending}
                     />
                 </Suspense>

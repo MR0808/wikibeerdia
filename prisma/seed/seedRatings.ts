@@ -12,19 +12,37 @@ async function main() {
     const precision = 100; // 2 decimals
 
     for (const brewery of breweries) {
-        const randomnum = Math.floor(Math.random() * (5 * precision - 1 * precision) + 1 * precision) / (1 * precision);
-        const beerLength = brewery.beers.length
-        await prisma.brewery.update({ where: { id: brewery.id }, data: { averageRating: randomnum.toString() } })
+        const randomnum =
+            Math.floor(
+                Math.random() * (5 * precision - 1 * precision) + 1 * precision
+            ) /
+            (1 * precision);
+        const beerLength = brewery.beers.length;
+        await prisma.brewery.update({
+            where: { id: brewery.id },
+            data: { averageRating: randomnum }
+        });
 
-        for (const beer of brewery.beers) {
-            const randomRating = Math.floor(Math.random() * (5 * precision - 1 * precision) + 1 * precision) / (1 * precision);
-            await prisma.beer.update({ where: { id: beer.id }, data: { averageRating: randomRating.toString() } })
+        // for (const beer of brewery.beers) {
+        //     const randomRating =
+        //         Math.floor(
+        //             Math.random() * (5 * precision - 1 * precision) +
+        //                 1 * precision
+        //         ) /
+        //         (1 * precision);
+        //     await prisma.beer.update({
+        //         where: { id: beer.id },
+        //         data: { averageRating: randomRating }
+        //     });
 
-            countBeers++;
-            console.log(
-                `Brewery Rating - ${randomnum} - Beer Rating - ${randomRating} - Brewery - ${countBreweries} / ${breweryLength} - Beer ${countBeers} / ${beerLength}`
-            );
-        }
+        //     countBeers++;
+        //     console.log(
+        //         `Brewery Rating - ${randomnum} - Beer Rating - ${randomRating} - Brewery - ${countBreweries} / ${breweryLength} - Beer ${countBeers} / ${beerLength}`
+        //     );
+        // }
+        console.log(
+            `Brewery Rating - ${randomnum} - Brewery - ${countBreweries} / ${breweryLength}`
+        );
 
         countBreweries++;
     }

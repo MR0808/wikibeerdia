@@ -20,6 +20,6 @@ export const searchParamsCache = createSearchParamsCache({
     sort: parseAsString.withDefault(""),
     page: parseAsInteger.withDefault(1),
     pageSize: parseAsInteger.withDefault(10),
-    rating: parseAsInteger.withDefault(0),
+    rating: parseAsInteger.withDefault(1),
     view: parseAsStringEnum<View>(Object.values(View)).withDefault(View.grid)
 });

@@ -69,7 +69,7 @@ const BreweriesListBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
                             <Star className="mr-2 size-5" />
                             {`${Number.parseFloat(
                                 brewery.averageRating
-                            ).toFixed(1)} (${brewery.breweryReviews.length})`}
+                            ).toFixed(2)} (${brewery.breweryReviews.length})`}
                         </li>
                         <li className="collapse hidden flex-row items-center md:visible md:flex">
                             <Link
