@@ -59,7 +59,9 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
             country: data.country.name,
             city: data.city,
             formattedAddress: data.formattedAddress,
-            countryCode: data.country.isoCode
+            countryCode: data.country.isoCode,
+            latitude: "0",
+            longitude: "0"
         }
     });
 
@@ -71,8 +73,8 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
         region: data.region,
         postalCode: data.postalCode,
         country: data.country.name,
-        lat: 0,
-        lng: 0,
+        lat: "0",
+        lng: "0",
         countryCode: data.country.isoCode
     };
 
@@ -93,7 +95,7 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
                 onSubmit={form.handleSubmit(onSubmit)}
             >
                 <div className="form-card">
-                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                    <h1 className="text-2xl leading-7 font-semibold text-gray-900">
                         Brewery Overview
                     </h1>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -105,7 +107,7 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Brewery Name
@@ -130,7 +132,7 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Description of brewery
@@ -157,7 +159,7 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Brewery Headline - a one liner that
@@ -183,7 +185,7 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Brewery Type
@@ -223,7 +225,7 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
                                     <FormItem className={cn("w-full")}>
                                         <FormLabel
                                             className={cn(
-                                                "block text-lg font-medium leading-6 text-gray-900"
+                                                "block text-lg leading-6 font-medium text-gray-900"
                                             )}
                                         >
                                             Website
@@ -243,7 +245,7 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
                     </div>
                 </div>
                 <div className="form-card">
-                    <h1 className="text-2xl font-semibold leading-7 text-gray-900">
+                    <h1 className="text-2xl leading-7 font-semibold text-gray-900">
                         Brewery Address
                     </h1>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

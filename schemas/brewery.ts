@@ -32,6 +32,8 @@ export const BreweryEditSchema = z.object({
     address1: z.string().min(1, "Address line 1 is required"),
     address2: z.optional(z.string()),
     formattedAddress: z.string().min(1, "Formatted address is required"),
+    latitude: z.string().min(1, "Latitude is required"),
+    longitude: z.string().min(1, "Longitude is required"),
     city: z.string().min(1, "City is required"),
     region: z.string().min(1, "Region is required"),
     postalCode: z.string().min(1, "Postal code is required"),
