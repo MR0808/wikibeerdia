@@ -49,6 +49,7 @@
     --background-image-blogs-hero: url("/images/blogs-bg.jpg");
     --background-image-styles-hero: url("/images/styles-bg.png");
     --background-image-breweries-bg: url("/images/breweries-bg.jpg");
+    --background-image-az-bg: url("/images/az-bg.png");
 
     @keyframes accordion-down {
         from {

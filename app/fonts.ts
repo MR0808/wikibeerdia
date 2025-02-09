@@ -4,13 +4,15 @@ import {
     Kaushan_Script,
     Shrikhand,
     Questrial,
-    Assistant
+    Assistant,
+    BioRhyme
 } from "next/font/google";
 
 export const inter = Inter({ subsets: ["latin"] });
 
 export const assistant = Assistant({ subsets: ["latin"] });
 
+export const biorhyme = BioRhyme({ subsets: ["latin"] });
 
 export const averia = Averia_Serif_Libre({
     weight: "700",

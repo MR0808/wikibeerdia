@@ -23,10 +23,9 @@ import { ImagesUpload } from "@/types/global";
 import { deleteImage } from "@/utils/supabase";
 import { filterColumn } from "@/lib/filterColumn";
 import {
-    BeersCountFilter,
-    IdNameFilter,
     Filters,
-    BreweryPageFilterSearch
+    BreweryPageFilterSearch,
+    BreweryAZPageSearch
 } from "@/types/breweries";
 
 const slugger = new GithubSlugger();
@@ -913,5 +912,61 @@ export const getAllBreweriesPage = async ({
             highestBeers: null,
             error: getErrorMessage(err)
         };
+    }
+};
+
+export const getBreweriesAZ = async ({
+    page,
+    letter = "a"
+}: BreweryAZPageSearch) => {
+    const user = await checkAuth();
+
+    let id = "";
+
+    if (user) {
+        id = user.id;
+    }
+
+    try {
+        const offset = page * 10;
+        const data = await db.brewery.findMany({
+            where: { name: { startsWith: letter, mode: "insensitive" } },
+            include: {
+                _count: {
+                    select: { beers: true }
+                },
+                images: { select: { id: true, image: true } },
+                breweryType: { select: { id: true, name: true, colour: true } },
+                country: { select: { id: true, name: true } },
+                breweryReviews: { select: { id: true } },
+                breweryFavourites: {
+                    where: { userId: id },
+                    select: { id: true }
+                }
+            },
+            orderBy: { name: "asc" },
+            skip: offset,
+            take: 10
+        });
+
+        const updatedData = data.map((item) => ({
+            ...item,
+            averageRating: item.averageRating.toString()
+        }));
+
+        return updatedData;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getBreweriesAZTotal = async (letter = "a") => {
+    try {
+        const total = await db.brewery.count({
+            where: { name: { startsWith: letter, mode: "insensitive" } }
+        });
+        return total;
+    } catch (err) {
+        throw err;
     }
 };

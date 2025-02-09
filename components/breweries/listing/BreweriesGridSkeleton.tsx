@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const BreweriesGridSkeleton = () => {
     return (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {Array.from({ length: 12 }).map((_, index) => {
                 return (
                     <div

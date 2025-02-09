@@ -76,6 +76,7 @@ export interface BreweriesContainerProps {
 type SetCountry = (newCountry: string[]) => void;
 type SetSearch = (newSearch: string) => void;
 type SetType = (newType: string[]) => void;
+type SetLetter = (newLetter: string) => void;
 type SetPageSize = (newPageSize: number) => void;
 type SetPage = (newPage: number) => void;
 type SetBeers = (newBeers: number[]) => void;
@@ -185,6 +186,51 @@ export interface BreweriesListing {
     updatedAt: Date;
 }
 
+export interface BreweryListing {
+    breweryType: {
+        id: string;
+        name: string;
+        colour: string;
+    };
+    breweryFavourites: {
+        id: string;
+    }[];
+    _count: {
+        beers: number;
+    };
+    images: {
+        id: string;
+        image: string;
+    }[];
+    country: {
+        name: string;
+        id: string;
+    };
+    breweryReviews: {
+        id: string;
+    }[];
+    name: string;
+    city: string;
+    status: Status;
+    id: string;
+    slug: string;
+    address1: string;
+    address2: string | null;
+    region: string;
+    postalCode: string;
+    countryId: string;
+    formattedAddress: string;
+    averageRating: string;
+    description: string;
+    website: string;
+    logoUrl: string;
+    headline: string;
+    breweryTypeId: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 export interface params {
     pageSize: number;
     page: number;
@@ -236,4 +282,25 @@ export interface BreweryPageFilterSearch {
     type?: string;
     beers?: number[];
     rating?: number;
+}
+
+export interface BreweriesAZContainerProps {
+    total: number;
+    letter: string;
+}
+
+export interface AZparams {
+    pageSize: number;
+    page: number;
+    view: "grid" | "list" | "";
+    letter: string;
+}
+
+export interface BreweryAZPageSearch {
+    page: number;
+    letter?: string;
+}
+
+export interface BreweriesAZAlphabetProps {
+    letter: string;
 }

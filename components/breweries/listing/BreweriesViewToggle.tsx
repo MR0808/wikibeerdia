@@ -36,7 +36,7 @@ const BreweriesViewToggle = ({ paramsView }: BreweriesViewToggleProps) => {
     };
     return (
         <div
-            className="hover:bg-primary hover:border-primary flex size-9 cursor-pointer flex-col items-center justify-center rounded-4xl border border-black text-black transition-all transition-normal delay-0 duration-300 ease-in-out hover:text-white"
+            className="hover:bg-primary hover:border-primary collapse hidden size-9 cursor-pointer flex-col items-center justify-center rounded-4xl border border-black text-black transition-all transition-normal delay-0 duration-300 ease-in-out hover:text-white md:visible md:flex"
             onClick={updateLayout}
         >
             {view == "grid" ? (

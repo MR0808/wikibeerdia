@@ -2,7 +2,7 @@ import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 
 import { getAllBreweriesPage } from "@/actions/breweries";
-import { searchParamsCache } from "@/lib/searchParamsCache";
+import { searchParamsCacheBreweriesMain } from "@/lib/searchParamsCacheBreweriesMain";
 import BreweriesContainer from "@/components/breweries/listing/BreweriesContainer";
 
 const BreweriesPage = async ({
@@ -10,7 +10,7 @@ const BreweriesPage = async ({
 }: {
     searchParams: Promise<SearchParams>;
 }) => {
-    const params = searchParamsCache.parse(await searchParams);
+    const params = searchParamsCacheBreweriesMain.parse(await searchParams);
 
     // const params = { sort, page, pageSize, view };
     const breweries = await getAllBreweriesPage({
