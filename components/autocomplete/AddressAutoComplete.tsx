@@ -50,6 +50,8 @@ const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
             form.setValue("country", adrInputs.country);
             form.setValue("formattedAddress", adrInputs.formattedAddress);
             form.setValue("countryCode", adrInputs.countryCode);
+            form.setValue("latitude", adrInputs.lat.toString());
+            form.setValue("longitude", adrInputs.lng.toString());
         }
     }, [data, setAddress]);
 
@@ -86,8 +88,8 @@ const AddressAutoComplete = (props: AddressAutoCompleteProps) => {
                                 region: "",
                                 postalCode: "",
                                 country: "",
-                                lat: 0,
-                                lng: 0,
+                                lat: "0",
+                                lng: "0",
                                 countryCode: ""
                             });
                         }}

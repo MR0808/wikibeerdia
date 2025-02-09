@@ -186,6 +186,8 @@ model Brewery {
   country           Country           @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId         String
   formattedAddress  String
+  latitude          String?
+  longitude         String?
   description       String
   website           String
   logoUrl           String
@@ -221,6 +223,8 @@ model BreweryEdit {
   postalCode       String
   country          Country         @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId        String
+  latitude         String?
+  longitude        String?
   formattedAddress String
   description      String
   website          String

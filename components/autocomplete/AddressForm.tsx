@@ -31,7 +31,7 @@ const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
                         <FormItem>
                             <FormLabel
                                 className={cn(
-                                    "block text-lg font-medium leading-6 text-gray-900"
+                                    "block text-lg leading-6 font-medium text-gray-900"
                                 )}
                             >
                                 Address line 1
@@ -60,7 +60,7 @@ const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
                         <FormItem>
                             <FormLabel
                                 className={cn(
-                                    "block text-lg font-medium leading-6 text-gray-900"
+                                    "block text-lg leading-6 font-medium text-gray-900"
                                 )}
                             >
                                 Address line 2
@@ -90,7 +90,7 @@ const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
                             <FormItem>
                                 <FormLabel
                                     className={cn(
-                                        "block text-lg font-medium leading-6 text-gray-900"
+                                        "block text-lg leading-6 font-medium text-gray-900"
                                     )}
                                 >
                                     City
@@ -118,7 +118,7 @@ const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
                             <FormItem>
                                 <FormLabel
                                     className={cn(
-                                        "block text-lg font-medium leading-6 text-gray-900"
+                                        "block text-lg leading-6 font-medium text-gray-900"
                                     )}
                                 >
                                     State / Province / Region
@@ -149,7 +149,7 @@ const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
                             <FormItem>
                                 <FormLabel
                                     className={cn(
-                                        "block text-lg font-medium leading-6 text-gray-900"
+                                        "block text-lg leading-6 font-medium text-gray-900"
                                     )}
                                 >
                                     Postcode
@@ -177,7 +177,7 @@ const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
                             <FormItem>
                                 <FormLabel
                                     className={cn(
-                                        "block text-lg font-medium leading-6 text-gray-900"
+                                        "block text-lg leading-6 font-medium text-gray-900"
                                     )}
                                 >
                                     Country
@@ -210,6 +210,28 @@ const AddressForm = (props: React.PropsWithChildren<AddressFormProps>) => {
                     <FormField
                         control={form.control}
                         name="formattedAddress"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <Input type="hidden" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="latitude"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <Input type="hidden" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="longitude"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>

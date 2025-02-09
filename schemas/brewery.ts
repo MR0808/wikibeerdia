@@ -7,6 +7,8 @@ export const BrewerySchema = z.object({
     address1: z.string().min(1, "Address line 1 is required"),
     address2: z.optional(z.string()),
     formattedAddress: z.string().min(1, "Formatted address is required"),
+    latitude: z.string().min(1, "Latitude is required"),
+    longitude: z.string().min(1, "Longitude is required"),
     city: z.string().min(1, "City is required"),
     region: z.string().min(1, "Region is required"),
     postalCode: z.string().min(1, "Postal code is required"),
@@ -48,6 +50,8 @@ export const BrewerySchemaCreate = z.object({
     address1: z.string().min(1, "Address line 1 is required"),
     address2: z.optional(z.string()),
     formattedAddress: z.string().min(1, "Formatted address is required"),
+    latitude: z.string().min(1, "Latitude is required"),
+    longitude: z.string().min(1, "Longitude is required"),
     city: z.string().min(1, "City is required"),
     region: z.string().min(1, "Region is required"),
     postalCode: z.string().min(1, "Postal code is required"),
@@ -69,8 +73,8 @@ export const BreweryLogoSchema = z.object({
 
 export const BrewerySearchSchema = z.object({
     search: z.string().min(1, "Query is required")
-})
+});
 
 export const BreweryBeersSchema = z.object({
     beers: z.array(z.number().int()).length(2)
-})
+});
