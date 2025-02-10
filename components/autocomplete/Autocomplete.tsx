@@ -15,8 +15,8 @@ const Autocomplete = ({ addressData }: { addressData?: AddressType }) => {
             region: "",
             postalCode: "",
             country: "",
-            lat: "0",
-            lng: "0",
+            lat: 0,
+            lng: 0,
             countryCode: ""
         }
     );

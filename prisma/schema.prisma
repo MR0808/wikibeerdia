@@ -186,8 +186,8 @@ model Brewery {
   country           Country           @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId         String
   formattedAddress  String
-  latitude          String?
-  longitude         String?
+  latitude          Float
+  longitude         Float
   description       String
   website           String
   logoUrl           String

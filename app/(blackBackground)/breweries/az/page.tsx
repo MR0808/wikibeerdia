@@ -1,4 +1,3 @@
-import { SearchParams } from "nuqs/server";
 import { biorhyme } from "@/app/fonts";
 import {
     dehydrate,
@@ -6,7 +5,6 @@ import {
     QueryClient
 } from "@tanstack/react-query";
 
-import { searchParamsCacheBreweriesAZ } from "@/lib/searchParamsCacheBreweriesAZ";
 import { getBreweriesAZ, getBreweriesAZTotal } from "@/actions/breweries";
 import BreweriesAZContainer from "@/components/breweries/listing/az/BreweriesAZContainer";
 

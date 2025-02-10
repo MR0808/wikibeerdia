@@ -50,6 +50,7 @@
     --background-image-styles-hero: url("/images/styles-bg.png");
     --background-image-breweries-bg: url("/images/breweries-bg.jpg");
     --background-image-az-bg: url("/images/az-bg.png");
+    --background-image-location-bg: url("/images/bg-location.jpg");
 
     @keyframes accordion-down {
         from {

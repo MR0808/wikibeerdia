@@ -64,8 +64,8 @@ const BreweryForm = ({ id, session, breweryTypes }: Props) => {
             city: "",
             formattedAddress: "",
             countryCode: "",
-            latitude: "0",
-            longitude: "0"
+            latitude: 0,
+            longitude: 0
         }
     });
 

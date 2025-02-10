@@ -60,8 +60,8 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
             city: data.city,
             formattedAddress: data.formattedAddress,
             countryCode: data.country.isoCode,
-            latitude: "0",
-            longitude: "0"
+            latitude: 0,
+            longitude: 0
         }
     });
 
@@ -73,8 +73,8 @@ const BreweryEditForm = ({ data, session, breweryTypes }: Props) => {
         region: data.region,
         postalCode: data.postalCode,
         country: data.country.name,
-        lat: "0",
-        lng: "0",
+        lat: 0,
+        lng: 0,
         countryCode: data.country.isoCode
     };
 

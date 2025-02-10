@@ -63,8 +63,8 @@ async function main() {
             latLong = generateAmericanLatLong();
         if (countBreweries > 300) latLong = generateGermanLatLong();
 
-        const latitude = latLong.latitude.toString();
-        const longitude = latLong.longitude.toString();
+        const latitude = latLong.latitude;
+        const longitude = latLong.longitude;
 
         await prisma.brewery.update({
             where: { id: brewery.id },
