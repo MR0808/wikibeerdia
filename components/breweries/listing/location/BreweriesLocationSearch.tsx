@@ -1,75 +1,45 @@
 "use client";
 
-import { useRef } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { LoadScript, Autocomplete } from "@react-google-maps/api";
+import { useRef, useState } from "react";
+import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useMapStore } from "@/hooks/useMapStore";
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY as string;
 const libraries: "places"[] = ["places"];
 
-const AddressSchema = z.object({
-    search: z.string().min(3, "Search must be at least 3 characters"),
-    suburb: z.string().optional(),
-    state: z.string().optional(),
-    country: z.string().optional(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional()
-});
-
-type LocationFormData = z.infer<typeof AddressSchema>;
-
-const BreweriesLocationSearch = () => {
-    const form = useForm<LocationFormData>({
-        resolver: zodResolver(AddressSchema),
-        defaultValues: {
-            search: "",
-            suburb: "",
-            state: "",
-            country: "",
-            latitude: undefined,
-            longitude: undefined
-        }
+const BreweriesLocationSearch = ({
+    types
+}: {
+    types: {
+        data: {
+            id: string;
+            name: string;
+        }[];
+    };
+}) => {
+    const { isLoaded } = useLoadScript({
+        googleMapsApiKey: GOOGLE_API_KEY,
+        libraries
     });
-
-    const { userLocation, setUserLocation } = useMapStore();
+    const { userLocation, setUserLocation, breweryType, setBreweryType } =
+        useMapStore();
+    const [search, setSearch] = useState("");
+    const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
 
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(
         null
     );
-    // const [userLocation, setUserLocation] =
-    //     useState<google.maps.LatLngLiteral | null>(null);
-
-    // useEffect(() => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 setUserLocation([
-    //                     position.coords.latitude,
-    //                     position.coords.longitude
-    //                 ]);
-    //             },
-    //             (error) => {
-    //                 console.error("Geolocation error:", error);
-    //             }
-    //         );
-    //     }
-    // }, []);
 
     const onPlaceChanged = () => {
         if (!autocompleteRef.current) return;
@@ -78,101 +48,75 @@ const BreweriesLocationSearch = () => {
         if (!place.geometry || !place.geometry.location) return;
 
         const location = place.geometry.location as google.maps.LatLng;
-        const latitude = location.lat();
-        const longitude = location.lng();
-
-        const formattedPlace: Partial<LocationFormData> = {
-            search: place.formatted_address || "",
-            suburb:
-                place.address_components?.find((c) =>
-                    c.types.includes("locality")
-                )?.long_name || "",
-            state:
-                place.address_components?.find((c) =>
-                    c.types.includes("administrative_area_level_1")
-                )?.long_name || "",
-            country:
-                place.address_components?.find((c) =>
-                    c.types.includes("country")
-                )?.long_name || "",
-            latitude,
-            longitude
-        };
-
-        // Update react-hook-form fields
-        Object.entries(formattedPlace).forEach(([key, value]) => {
-            form.setValue(key as keyof LocationFormData, value);
-        });
+        setUserLocation([location.lng(), location.lat()]);
+        setSearch(place.formatted_address || "");
     };
 
-    const onSubmit = (data: LocationFormData) => {
-        console.log("Submitted Data:", data);
-        if (data.latitude && data.longitude)
-            setUserLocation([data.longitude, data.latitude]);
+    const onBreweryTypeChange = (value: string) => {
+        setBreweryType(value);
     };
 
     return (
-        <LoadScript googleMapsApiKey={GOOGLE_API_KEY} libraries={libraries}>
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className={cn(
-                        "mb-10 flex w-full flex-row space-y-4 rounded-4xl bg-gray-100 p-4"
-                    )}
-                >
-                    {/* Search Field with Google Autocomplete */}
-                    <FormField
-                        control={form.control}
-                        name="search"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Search for a location</FormLabel>
-                                <FormControl>
-                                    <Autocomplete
-                                        onLoad={(auto) => {
-                                            autocompleteRef.current = auto;
-                                            // Set location bias if user location is available
-                                            if (userLocation) {
-                                                auto.setBounds(
-                                                    new google.maps.LatLngBounds(
-                                                        new google.maps.LatLng(
-                                                            userLocation[0],
-                                                            userLocation[1]
-                                                        )
-                                                    )
-                                                );
-                                            }
-                                        }}
-                                        onPlaceChanged={onPlaceChanged}
-                                        options={{
-                                            bounds: userLocation
-                                                ? new google.maps.LatLngBounds(
-                                                      new google.maps.LatLng(
-                                                          userLocation[0],
-                                                          userLocation[1]
-                                                      )
-                                                  )
-                                                : undefined
-                                        }}
-                                    >
-                                        <Input
-                                            {...field}
-                                            placeholder="Enter a location..."
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                        />
-                                    </Autocomplete>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit" className="w-full">
-                        Submit
-                    </Button>
-                </form>
-            </Form>
-        </LoadScript>
+        <>
+            {isLoaded ? (
+                <div className="mb-5 flex w-full flex-row space-x-10 rounded-4xl bg-gray-100 p-4">
+                    <Autocomplete
+                        onLoad={(auto) => {
+                            autocompleteRef.current = auto;
+                            // Set location bias if user location is available
+                            if (userLocation) {
+                                auto.setBounds(
+                                    new google.maps.LatLngBounds(
+                                        new google.maps.LatLng(
+                                            userLocation[0],
+                                            userLocation[1]
+                                        )
+                                    )
+                                );
+                            }
+                        }}
+                        onPlaceChanged={onPlaceChanged}
+                        options={{
+                            bounds: userLocation
+                                ? new google.maps.LatLngBounds(
+                                      new google.maps.LatLng(
+                                          userLocation[0],
+                                          userLocation[1]
+                                      )
+                                  )
+                                : undefined
+                        }}
+                        className={cn("w-3/5")}
+                    >
+                        <Input
+                            placeholder="Enter a location..."
+                            defaultValue={search}
+                            className={cn("w-full")}
+                        />
+                    </Autocomplete>
+                    <Select
+                        onValueChange={onBreweryTypeChange}
+                        defaultValue={breweryType}
+                    >
+                        <SelectTrigger className="w-2/5">
+                            <SelectValue placeholder="Select a brewery type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All</SelectItem>
+                            {types.data.map((type) => {
+                                return (
+                                    <SelectItem value={type.id} key={type.id}>
+                                        {type.name}
+                                    </SelectItem>
+                                );
+                            })}
+                        </SelectContent>
+                    </Select>
+                </div>
+            ) : (
+                <p>Loading Google Maps...</p>
+            )}
+        </>
     );
 };
 export default BreweriesLocationSearch;

@@ -184,6 +184,8 @@ export interface BreweriesListing {
     userId: string;
     createdAt: Date;
     updatedAt: Date;
+    latitude: number;
+    longitude: number;
 }
 
 export interface BreweryListing {

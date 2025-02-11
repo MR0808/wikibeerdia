@@ -1,14 +1,10 @@
 import { biorhyme } from "@/app/fonts";
-import BreweriesLocationContainer from "@/components/breweries/listing/location/BreweriesLocationContainer";
-import { LngLatBounds } from "mapbox-gl";
 
-const BreweriesLocation = () => {
-    const fetchLocations = async (bounds: LngLatBounds) => {
-        const res = await fetch(
-            `/api/locations?swLat=${bounds.getSouthWest().lat}&swLng=${bounds.getSouthWest().lng}&neLat=${bounds.getNorthEast().lat}&neLng=${bounds.getNorthEast().lng}`
-        );
-        return res.json();
-    };
+import BreweriesLocationContainer from "@/components/breweries/listing/location/BreweriesLocationContainer";
+import { getBreweryTypesForms } from "@/actions/breweryTypes";
+
+const BreweriesLocation = async () => {
+    const types = await getBreweryTypesForms();
 
     return (
         <div className="bg-location-bg h-48 bg-black bg-cover bg-center drop-shadow-lg">
@@ -20,7 +16,7 @@ const BreweriesLocation = () => {
                 </div>
             </div>
             <div className="flex h-[calc(100vh-192px)] flex-row">
-                <BreweriesLocationContainer />
+                <BreweriesLocationContainer types={types} />
             </div>
         </div>
     );

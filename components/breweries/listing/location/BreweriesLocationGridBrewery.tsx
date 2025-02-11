@@ -33,8 +33,8 @@ const BreweriesLocationGridBrewery = ({
                 <Image
                     src={brewery.images[0].image}
                     alt={brewery.name}
-                    width={300}
-                    height={200}
+                    width={150}
+                    height={100}
                     className="ease object-auto aspect-[4/3] h-full w-full object-center transition-all duration-300 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw, 33vw"
                 />
@@ -62,14 +62,14 @@ const BreweriesLocationGridBrewery = ({
                             2
                         )} (${brewery.breweryReviews.length})`}
                     </li>
-                    <li className="flex flex-row items-center">
+                    {/* <li className="flex flex-row items-center">
                         <Link
                             href={`/breweries/${brewery.slug}`}
                             className="hover:bg-primary size-10 cursor-pointer place-content-center items-center justify-items-center rounded-4xl bg-black transition-all delay-0 duration-300 ease-in-out"
                         >
                             <MoveUpRight className="size-6 text-white" />
                         </Link>
-                    </li>
+                    </li> */}
                 </ul>
             </div>
         </div>

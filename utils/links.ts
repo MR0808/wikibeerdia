@@ -25,12 +25,12 @@ export const links: NavLink[] = [
         label: "breweries",
         subMenu: [
             {
-                href: "/breweries/popular",
-                label: "popular"
-            },
-            {
                 href: "/breweries/az",
                 label: "A-Z"
+            },
+            {
+                href: "/breweries/location",
+                label: "Find by location"
             },
             {
                 href: "/breweries/submit",

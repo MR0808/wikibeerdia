@@ -10,11 +10,14 @@ import BreweriesLocationGridBrewery from "./BreweriesLocationGridBrewery";
 import BreweriesLocationGridSkeleton from "./BreweriesLocationGridSkeleton";
 
 interface MapProps {
-    fetchLocations: (bounds: LngLatBounds) => Promise<BreweriesListing[]>;
+    fetchLocations: (
+        bounds: LngLatBounds,
+        breweryType: string
+    ) => Promise<BreweriesListing[]>;
 }
 
 const BreweriesLocationFilter: React.FC<MapProps> = ({ fetchLocations }) => {
-    const { bounds } = useMapStore();
+    const { bounds, breweryType } = useMapStore();
     const [locations, setLocations] = useState<BreweriesListing[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -22,29 +25,41 @@ const BreweriesLocationFilter: React.FC<MapProps> = ({ fetchLocations }) => {
         setIsLoading(true);
         const fetchData = async () => {
             if (!bounds) return;
-            fetchLocations(bounds).then((result) => {
-                setLocations(result);
+            fetchLocations(bounds, breweryType).then((result) => {
+                let filteredData = result;
+                if (breweryType !== "all")
+                    filteredData = result.filter(
+                        (item) => item.breweryTypeId === breweryType
+                    );
+                setLocations(filteredData);
                 setIsLoading(false);
             });
         };
         fetchData();
-    }, [bounds]);
+    }, [bounds, breweryType]);
 
     return (
-        <div className="grid grid-cols-1 gap-10 overflow-auto md:grid-cols-2">
+        <>
             {isLoading ? (
                 <BreweriesLocationGridSkeleton />
             ) : (
-                locations.map((location) => {
-                    return (
-                        <BreweriesLocationGridBrewery
-                            brewery={location}
-                            key={location.id}
-                        />
-                    );
-                })
+                <div className="flex flex-col">
+                    <div className="mb-5 pl-5 text-lg font-bold">
+                        {`${locations.length} result${locations.length === 1 ? "" : "s"}`}
+                    </div>
+                    <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+                        {locations.map((location) => {
+                            return (
+                                <BreweriesLocationGridBrewery
+                                    brewery={location}
+                                    key={location.id}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
             )}
-        </div>
+        </>
     );
 };
 export default BreweriesLocationFilter;

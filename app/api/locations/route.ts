@@ -10,6 +10,7 @@ export async function GET(req: Request) {
     const swLng = parseFloat(url.searchParams.get("swLng") || "0");
     const neLat = parseFloat(url.searchParams.get("neLat") || "0");
     const neLng = parseFloat(url.searchParams.get("neLng") || "0");
+    const breweryType = url.searchParams.get("breweryType") || "all";
 
     const user = await checkAuth();
 
@@ -18,12 +19,17 @@ export async function GET(req: Request) {
     if (user) {
         id = user.id;
     }
+    let where: any = {
+        latitude: { gte: swLat, lte: neLat },
+        longitude: { gte: swLng, lte: neLng }
+    };
+
+    // if (breweryType !== "all") {
+    //     where = { ...where, breweryTypeId: breweryType };
+    // }
 
     const locations = await prisma.brewery.findMany({
-        where: {
-            latitude: { gte: swLat, lte: neLat },
-            longitude: { gte: swLng, lte: neLng }
-        },
+        where,
         include: {
             _count: {
                 select: { beers: true }
