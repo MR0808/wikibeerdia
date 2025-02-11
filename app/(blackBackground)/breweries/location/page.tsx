@@ -1,5 +1,5 @@
 import { biorhyme } from "@/app/fonts";
-import BreweriesLocationMap from "@/components/breweries/location/BreweriesLocationMap";
+import BreweriesLocationContainer from "@/components/breweries/listing/location/BreweriesLocationContainer";
 import { LngLatBounds } from "mapbox-gl";
 
 const BreweriesLocation = () => {
@@ -20,7 +20,7 @@ const BreweriesLocation = () => {
                 </div>
             </div>
             <div className="flex h-[calc(100vh-192px)] flex-row">
-                <BreweriesLocationMap />
+                <BreweriesLocationContainer />
             </div>
         </div>
     );

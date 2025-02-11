@@ -3,7 +3,7 @@ import { Beer, Star, MoveUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { BreweriesListing } from "@/types/breweries";
-// import BreweriesFavouriteToggleButton from "./BreweriesFavouriteToggleButton";
+import BreweriesFavouriteToggleButton from "@/components/breweries/listing/BreweriesFavouriteToggleButton";
 
 const BreweriesLocationGridBrewery = ({
     brewery
@@ -21,10 +21,10 @@ const BreweriesLocationGridBrewery = ({
                 {brewery.breweryType.name}
             </div>
             <div className="absolute top-10 right-10 z-[1] float-right">
-                {/* <BreweriesFavouriteToggleButton
+                <BreweriesFavouriteToggleButton
                     breweryId={brewery.id}
                     breweryFavouriteId={brewery.breweryFavourites[0]?.id || ""}
-                /> */}
+                />
             </div>
             <Link
                 href={`/breweries/${brewery.slug}`}

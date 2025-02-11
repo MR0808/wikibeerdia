@@ -16,27 +16,22 @@ interface MapProps {
 const BreweriesLocationFilter: React.FC<MapProps> = ({ fetchLocations }) => {
     const { bounds } = useMapStore();
     const [locations, setLocations] = useState<BreweriesListing[]>([]);
-    const [isPending, startTransition] = useTransition();
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        startTransition(async () => {
-            setIsLoading(true);
-            const fetchData = async () => {
-                if (!bounds) return;
-                fetchLocations(bounds).then((result) => {
-                    setLocations(result);
-                    setIsLoading(false);
-                });
-            };
-            fetchData();
-        });
+        setIsLoading(true);
+        const fetchData = async () => {
+            if (!bounds) return;
+            fetchLocations(bounds).then((result) => {
+                setLocations(result);
+                setIsLoading(false);
+            });
+        };
+        fetchData();
     }, [bounds]);
 
-    console.log(locations);
-
     return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-10 overflow-auto md:grid-cols-2">
             {isLoading ? (
                 <BreweriesLocationGridSkeleton />
             ) : (

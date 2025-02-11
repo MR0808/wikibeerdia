@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useTransition } from "react";
+import { useEffect, useState, useRef } from "react";
 import mapboxgl, { Map as MapboxMap, LngLatBounds } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -21,14 +21,13 @@ interface MapProps {
     fetchLocations: (bounds: LngLatBounds) => Promise<Location[]>;
 }
 
-const Map: React.FC<MapProps> = ({ fetchLocations }) => {
+const BreweriesLocationMap: React.FC<MapProps> = ({ fetchLocations }) => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const [map, setMap] = useState<MapboxMap | null>(null);
-    const [userLocation, setUserLocation] = useState<[number, number] | null>(
-        null
-    );
-    const { setBounds, isLoading, setIsLoading } = useMapStore();
-    const [isPending, startTransition] = useTransition();
+    // const [userLocation, setUserLocation] = useState<[number, number] | null>(
+    //     null
+    // );
+    const { setBounds, userLocation, setUserLocation } = useMapStore();
 
     useEffect(() => {
         if (!navigator.geolocation) return;
@@ -44,9 +43,7 @@ const Map: React.FC<MapProps> = ({ fetchLocations }) => {
         );
     }, []);
 
-    useEffect(() => {
-        setIsLoading(isPending);
-    }, [isPending]);
+    console.log("userLocation", userLocation);
 
     useEffect(() => {
         if (!mapContainerRef.current || !userLocation) return;
@@ -58,33 +55,37 @@ const Map: React.FC<MapProps> = ({ fetchLocations }) => {
             zoom: 12
         });
 
-        setMap(initializeMap);
-        const fetchData = async () => {
-            startTransition(async () => {
-                const bounds = initializeMap.getBounds();
-                if (!bounds) return; // Ensure bounds is not null before calling fetchLocations
-                setBounds([
-                    bounds.getWest(),
-                    bounds.getSouth(),
-                    bounds.getEast(),
-                    bounds.getNorth()
-                ]);
-                const locations = await fetchLocations(bounds);
-                updateMarkers(initializeMap, locations);
-            });
-        };
-        fetchData();
-
-        initializeMap.on("moveend", async () => {
-            // const bounds = initializeMap.getBounds();
-            // if (!bounds) return; // Ensure bounds is not null before calling fetchLocations
-            // const locations = await fetchLocations(bounds);
-            // updateMarkers(initializeMap, locations);
-            fetchData();
+        initializeMap.on("load", () => {
+            setMap(initializeMap);
         });
 
         return () => initializeMap.remove();
     }, [userLocation]);
+
+    useEffect(() => {
+        if (!map) return;
+
+        const fetchData = async () => {
+            if (!map) return;
+            const bounds = map.getBounds();
+            if (!bounds) return; // Ensure bounds is not null before calling fetchLocations
+            setBounds([
+                bounds.getWest(),
+                bounds.getSouth(),
+                bounds.getEast(),
+                bounds.getNorth()
+            ]);
+            const locations = await fetchLocations(bounds);
+            updateMarkers(map, locations);
+        };
+        fetchData();
+
+        map.on("moveend", fetchData);
+
+        return () => {
+            map.off("moveend", fetchData);
+        };
+    }, [map]);
 
     const updateMarkers = (mapInstance: MapboxMap, locations: Location[]) => {
         document
@@ -106,4 +107,4 @@ const Map: React.FC<MapProps> = ({ fetchLocations }) => {
     return <div ref={mapContainerRef} className="h-full w-full" />;
 };
 
-export default Map;
+export default BreweriesLocationMap;

@@ -14,7 +14,7 @@ const BreweriesAlphabetPage = async ({
     searchParams: Promise<{ letter: string }>;
 }) => {
     const { letter } = await searchParams;
-    const capLetter = letter.toUpperCase();
+    const capLetter = letter ? letter.toUpperCase() : "A";
     const queryClient = new QueryClient();
     await queryClient.prefetchInfiniteQuery({
         queryKey: ["breweriesAZ"],

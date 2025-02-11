@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const BreweriesLocationGridSkeleton = () => {
     return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <>
             {Array.from({ length: 12 }).map((_, index) => {
                 return (
                     <div
@@ -34,7 +34,7 @@ const BreweriesLocationGridSkeleton = () => {
                     </div>
                 );
             })}
-        </div>
+        </>
     );
 };
 export default BreweriesLocationGridSkeleton;
