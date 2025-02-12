@@ -39,11 +39,11 @@ const BreweriesLocationContainer = ({
 
     return (
         <>
-            <div className="h-full w-3/5 overflow-y-scroll p-5">
+            <div className="p-5 md:h-full md:w-3/5 md:overflow-y-scroll">
                 <BreweriesLocationSearch types={types} />
                 <BreweriesLocationFilter fetchLocations={fetchLocations} />
             </div>
-            <div className="w-2/5">
+            <div className="h-96 md:h-full md:w-2/5">
                 <BreweriesLocationMap fetchLocations={fetchLocations} />
             </div>
         </>

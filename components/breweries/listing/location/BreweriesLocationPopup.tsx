@@ -4,19 +4,19 @@ import { Beer, Star } from "lucide-react";
 import { BreweriesListing } from "@/types/breweries";
 
 const BreweriesLocationPopup = ({ brewery }: { brewery: BreweriesListing }) => (
-    <div className="relative flex flex-col space-y-4 rounded-3xl bg-white p-5">
+    <div className="relative flex flex-col rounded-3xl bg-white p-2 md:space-y-4 md:p-5">
         <div
-            className="w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white uppercase"
+            className="uppercase0 mb-4 w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white"
             style={{
                 backgroundColor: brewery.breweryType.colour
             }}
         >
             {brewery.breweryType.name}
         </div>
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col md:space-y-4">
             <Link
                 href={`/breweries/${brewery.slug}`}
-                className="hover:text-primary cursor-pointer text-2xl font-semibold"
+                className="hover:text-primary mb-4 cursor-pointer text-2xl font-semibold"
             >
                 {brewery.name}
             </Link>
@@ -24,7 +24,7 @@ const BreweriesLocationPopup = ({ brewery }: { brewery: BreweriesListing }) => (
                 {`${brewery.region}, ${brewery.country.name}`}
             </div>
         </div>
-        <div className="text-foreground/60 w-full border-t border-dashed border-t-gray-300 pt-4 text-xl">
+        <div className="text-foreground/60 hidden w-full border-t border-dashed border-t-gray-300 pt-4 text-xl md:block">
             <ul className="flex list-none flex-wrap items-center justify-between">
                 <li className="flex flex-row items-center">
                     <Beer className="mr-2 size-5" />
