@@ -13,7 +13,6 @@ export interface BreweryType {
     postalCode: string;
     countryId: string;
     formattedAddress: string;
-    averageRatingString: string;
     description: string;
     headline: string;
     website: string;

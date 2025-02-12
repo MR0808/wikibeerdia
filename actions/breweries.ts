@@ -96,7 +96,13 @@ export const getBreweriesSearch = async (input: GetBreweriesSchema) => {
         const total = await db.brewery.count({ where: usedFilter });
 
         const pageCount = Math.ceil(total / per_page);
-        return { data, pageCount };
+
+        const updatedData = data.map((item) => ({
+            ...item,
+            averageRating: item.averageRating.toString()
+        }));
+
+        return { data: updatedData, pageCount };
     } catch (err) {
         return { data: [], pageCount: 0 };
     }
@@ -219,7 +225,7 @@ export const createBrewery = async (
                 website: website || "",
                 logoUrl,
                 userId: user.id,
-                averageRating: "0"
+                averageRating: 0
             }
         });
         if (!data) {
@@ -370,6 +376,7 @@ export const updateBreweryLogo = async (
 
         const data = await db.brewery.update({
             where: { id },
+            omit: { averageRating: true },
             data: {
                 logoUrl
             }
@@ -429,6 +436,7 @@ export const getBrewery = async (slug: string) => {
         where: {
             slug
         },
+        omit: { averageRating: true },
         include: {
             _count: {
                 select: {
@@ -450,13 +458,6 @@ export const getBrewery = async (slug: string) => {
             country: true
         }
     });
-    if (data) {
-        const updatedData = {
-            ...data,
-            averageRatingString: data.averageRating.toString()
-        };
-        return { data: updatedData };
-    }
 
     return { data };
 };

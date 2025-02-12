@@ -90,7 +90,7 @@ const BreweryDetailsPage = async (props: { params: ParamsSlug }) => {
     if (!data) redirect("/breweries/");
     const id = data.id;
 
-    const { averageRating, ...newData } = data;
+    // const {  ...newData } = data;
 
     const user = await currentUser();
     if (
@@ -136,18 +136,18 @@ const BreweryDetailsPage = async (props: { params: ParamsSlug }) => {
             <div className="mt-10 flex flex-col justify-between sm:justify-between sm:space-x-0">
                 <Suspense fallback={<BrewerySkeleton />}>
                     <BreweryHeader
-                        data={newData}
+                        data={data}
                         user={user}
                         rating={rating}
                         totalReviews={ratings.length}
                     />
-                    <BreweryImages data={newData} />
-                    <BreweryMain data={newData} />
+                    <BreweryImages data={data} />
+                    <BreweryMain data={data} />
                     <BreweryBeers
                         initialBeers={beers}
                         breweryId={id}
                         user={user}
-                        totalBeers={newData._count.beers}
+                        totalBeers={data._count.beers}
                     />
                     <BreweryReviews
                         initialReviews={reviews}

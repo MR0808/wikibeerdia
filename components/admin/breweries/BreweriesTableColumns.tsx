@@ -54,7 +54,6 @@ export const getColumns = (): ColumnDef<Brewery>[] => {
                 <DataTableColumnHeader column={column} title="Name" />
             ),
             cell: ({ row }) => {
-                console.log(row);
                 return (
                     <div className="flex space-x-2">
                         <Link
@@ -85,7 +84,7 @@ export const getColumns = (): ColumnDef<Brewery>[] => {
                 return (
                     <div className="flex w-[6.25rem] items-center">
                         <Icon
-                            className="mr-2 size-4 text-muted-foreground"
+                            className="text-muted-foreground mr-2 size-4"
                             aria-hidden="true"
                         />
                         <span className="capitalize">{status}</span>
@@ -116,7 +115,7 @@ export const getColumns = (): ColumnDef<Brewery>[] => {
                                 <Button
                                     aria-label="Open menu"
                                     variant="ghost"
-                                    className="flex size-8 p-0 data-[state=open]:bg-muted"
+                                    className="data-[state=open]:bg-muted flex size-8 p-0"
                                 >
                                     <DotsHorizontalIcon
                                         className="size-4"

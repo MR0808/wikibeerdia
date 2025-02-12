@@ -57,8 +57,6 @@ export const UpdateStyleSheet = ({
 }: UpdateStyleSheetProps) => {
     const [isUpdatePending, startUpdateTransition] = useTransition();
 
-    console.log(style.parentStyleId, parentStyles);
-
     const abvLow = parseInt(style.abvLow || "0");
     const abvHigh = parseInt(style.abvHigh || "0");
     const ibuLow = parseInt(style.ibuLow || "30");
