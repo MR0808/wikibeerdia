@@ -21,11 +21,12 @@
 // };
 
 export const uploadImage = async (image: File, bucket: string) => {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const formData = new FormData();
     formData.append("image", image);
     formData.append("bucket", bucket);
 
-    const response = await fetch("/api/upload", {
+    const response = await fetch(`${baseUrl}/api/upload`, {
         method: "POST",
         body: formData
     });

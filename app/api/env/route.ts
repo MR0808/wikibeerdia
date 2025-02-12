@@ -2,12 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getApiKeyFromDB } from "@/lib/key";
 
 // List of allowed environment variables
-const ALLOWED_ENV_VARS = [
-    "MAPBOX_ACCESS_TOKEN",
-    "SUPABASE_KEY",
-    "SUPABASE_URL",
-    "GOOGLE_PLACES_API_KEY"
-];
+const ALLOWED_ENV_VARS = ["MAPBOX_ACCESS_TOKEN", "GOOGLE_PLACES_API_KEY"];
 
 function getApiKeyFromCookies(req: NextRequest): string | null {
     const cookieHeader = req.headers.get("cookie");
