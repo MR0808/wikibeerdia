@@ -12,6 +12,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import siteMetadata from "@/utils/siteMetaData";
 import { inter } from "./fonts";
 import Scroll from "@/components/global/Scroll";
+import { ApiKeyProvider } from "@/Providers/ApiKeyProvider";
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteMetadata.siteUrl),
@@ -62,6 +63,7 @@ export default async function RootLayout({
                     suppressHydrationWarning={true}
                 >
                     {/* <Scroll /> */}
+                    <ApiKeyProvider />
                     <NuqsAdapter>
                         <ReactQueryProvider>
                             <TooltipProvider>

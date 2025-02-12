@@ -68,7 +68,7 @@ const BreweryEditLogoDialog = ({ data }: BreweryEditLogoDialogProps) => {
                     Edit
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader className="border-b px-6 pb-4 pt-8">
+                    <DialogHeader className="border-b px-6 pt-8 pb-4">
                         <DialogTitle className="text-left text-3xl font-bold">
                             Update Logo
                         </DialogTitle>
@@ -84,7 +84,7 @@ const BreweryEditLogoDialog = ({ data }: BreweryEditLogoDialogProps) => {
         <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger>Edit</DrawerTrigger>
             <DrawerContent>
-                <DrawerHeader className="mb-4 border-b px-6 pb-4 pt-8">
+                <DrawerHeader className="mb-4 border-b px-6 pt-8 pb-4">
                     <DrawerTitle className="text-left text-2xl font-bold">
                         Add Review
                     </DrawerTitle>
@@ -142,7 +142,7 @@ const LogoForm = ({ setOpen, data }: LogoFormProps) => {
                 setError("Error uploading logo");
             } else {
                 const result = await updateBreweryLogo(
-                    logoUrl,
+                    logoUrl.publicUrl,
                     data.id,
                     data.logoUrl
                 );

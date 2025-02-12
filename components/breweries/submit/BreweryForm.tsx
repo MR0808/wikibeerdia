@@ -85,13 +85,14 @@ const BreweryForm = ({ id, session, breweryTypes }: Props) => {
                         imageItem.value,
                         "images-bucket"
                     );
-                    images.push({ image, order });
+                    images.push({ image: image.publicUrl, order });
                     order++;
                 }
             }
             await createBreweryImages(images);
-            const formData = { ...values, images, logoUrl };
-            createBrewery(formData);
+            const formData = { ...values, images, logoUrl: logoUrl.publicUrl };
+            const test = await createBrewery(formData);
+            console.log(test);
         });
     };
 

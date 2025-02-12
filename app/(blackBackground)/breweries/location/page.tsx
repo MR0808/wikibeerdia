@@ -2,6 +2,7 @@ import { biorhyme } from "@/app/fonts";
 
 import BreweriesLocationContainer from "@/components/breweries/listing/location/BreweriesLocationContainer";
 import { getBreweryTypesForms } from "@/actions/breweryTypes";
+import { GoogleMapsProvider } from "@/Providers/GoogleMapsProvider";
 
 const BreweriesLocation = async () => {
     const types = await getBreweryTypesForms();
@@ -16,7 +17,9 @@ const BreweriesLocation = async () => {
                 </div>
             </div>
             <div className="flex h-[calc(100vh-192px)] flex-row">
-                <BreweriesLocationContainer types={types} />
+                <GoogleMapsProvider apiKey={process.env.GOOGLE_PLACES_API_KEY!}>
+                    <BreweriesLocationContainer types={types} />
+                </GoogleMapsProvider>
             </div>
         </div>
     );
