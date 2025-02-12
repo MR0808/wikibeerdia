@@ -2,8 +2,6 @@
 "use memo";
 
 import { use, useMemo } from "react";
-import { Brewery } from "@prisma/client";
-
 import { type DataTableFilterField } from "@/utils/types";
 import { statusLabels } from "@/utils/types";
 
@@ -12,6 +10,7 @@ import { DataTableAdvancedToolbar } from "@/components/datatable/advanced/DataTa
 import { DataTable } from "@/components/datatable/DataTable";
 import { DataTableToolbar } from "@/components/datatable/DataTableToolbar";
 
+import { Brewery } from "@/types/admin";
 import { type getBreweriesSearch } from "@/actions/breweries";
 import { getStatusIcon } from "@/lib/utils";
 import { getColumns } from "./BreweriesTableColumns";

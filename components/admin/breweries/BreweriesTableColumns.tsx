@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Brewery } from "@prisma/client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import { Brewery } from "@/types/admin";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";

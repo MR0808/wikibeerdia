@@ -1,11 +1,11 @@
 "use client";
 
-import { Brewery } from "@prisma/client";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { type Table } from "@tanstack/react-table";
 import Link from "next/link";
 import { PlusIcon } from "@radix-ui/react-icons";
 
+import { Brewery } from "@/types/admin";
 import { exportTableToCSV } from "@/lib/export";
 import { Button } from "@/components/ui/button";
 
