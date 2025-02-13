@@ -15,7 +15,6 @@ const BreweriesAZContainer = ({
     letter
 }: BreweriesAZContainerProps) => {
     const totalPages = Math.ceil(total / 10);
-    console.log(totalPages);
     const { isLoading, data, isFetchingNextPage, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
             queryKey: ["breweriesAZ"],

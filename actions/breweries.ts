@@ -27,6 +27,7 @@ import {
     BreweryPageFilterSearch,
     BreweryAZPageSearch
 } from "@/types/breweries";
+import { error } from "console";
 
 const slugger = new GithubSlugger();
 
@@ -969,6 +970,56 @@ export const getBreweriesAZTotal = async (letter = "a") => {
     try {
         const total = await db.brewery.count({
             where: { name: { startsWith: letter, mode: "insensitive" } }
+        });
+        return total;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getCountriesBreweries = async ({ page }: { page: number }) => {
+    try {
+        const skip = page * 10;
+        const countries = await db.country.findMany({
+            where: {
+                breweries: {
+                    some: {
+                        status: "APPROVED"
+                    }
+                }
+            },
+            select: {
+                id: true,
+                isoCode: true,
+                name: true,
+                currency: true,
+                breweries: {
+                    where: {
+                        status: "APPROVED"
+                    },
+                    omit: { averageRating: true }
+                }
+            },
+            skip,
+            take: 9
+        });
+
+        return countries;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getCountriesBreweriesTotal = async () => {
+    try {
+        const total = await db.country.count({
+            where: {
+                breweries: {
+                    some: {
+                        status: "APPROVED"
+                    }
+                }
+            }
         });
         return total;
     } catch (err) {
