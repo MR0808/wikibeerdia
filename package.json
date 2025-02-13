@@ -106,7 +106,7 @@
         "@tailwindcss/postcss": "^4.0.6",
         "@tailwindcss/typography": "^0.5.16",
         "@types/mapbox-gl": "^3.4.1",
-        "@types/node": "^22.13.1",
+        "@types/node": "^22.13.2",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "@types/uuid": "^10.0.0",
