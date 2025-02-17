@@ -50,7 +50,7 @@ export const links: NavLink[] = [
         ]
     },
     {
-        href: "/beer",
+        href: "/beers",
         label: "beer",
 
         subMenu: [

@@ -87,3 +87,7 @@ export const BeerSchemaCreate = z.object({
         .array(z.object({ order: z.number(), image: z.string() }))
         .optional()
 });
+
+export const BeerSearchSchema = z.object({
+    search: z.string().min(1, "Query is required")
+});

@@ -22,7 +22,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BeersFilterProps, IdNameFilter } from "@/types/beers";
 import { cn } from "@/lib/utils";
-import { BrewerySearchSchema, BreweryBeersSchema } from "@/schemas/brewery";
+import { BeerSearchSchema } from "@/schemas/beer";
 import { Button } from "@/components/ui/button";
 
 const BeersFilter = ({
@@ -64,47 +64,20 @@ const BeersFilter = ({
             });
     }
 
-    const formSearch = useForm<z.infer<typeof BrewerySearchSchema>>({
-        resolver: zodResolver(BrewerySearchSchema),
+    const formSearch = useForm<z.infer<typeof BeerSearchSchema>>({
+        resolver: zodResolver(BeerSearchSchema),
         defaultValues: {
             search: params.search || ""
         }
     });
 
-    const onSubmitSearch = (values: z.infer<typeof BrewerySearchSchema>) => {
+    const onSubmitSearch = (values: z.infer<typeof BeerSearchSchema>) => {
         setSearch(values.search);
-    };
-
-    const onBeersReset = () => {
-        setBeers([]);
-        formBeers.reset();
-    };
-
-    let beersArray = [0, highestBeers];
-    if (beers.length > 0) beersArray = beers;
-
-    const formBeers = useForm<z.infer<typeof BreweryBeersSchema>>({
-        resolver: zodResolver(BreweryBeersSchema),
-        defaultValues: {
-            beers: beersArray
-        }
-    });
-
-    const onSubmitBeers = (values: z.infer<typeof BreweryBeersSchema>) => {
-        setBeers(values.beers);
     };
 
     useEffect(() => {
         formSearch.setValue("search", search);
     }, [search]);
-
-    useEffect(() => {
-        if (
-            JSON.stringify(beers) === JSON.stringify([0, 10]) ||
-            beers.length === 0
-        )
-            formBeers.reset();
-    }, [beers]);
 
     const handleCountryChange = (countryChecked: string, checked: boolean) => {
         let newCountries = country;
@@ -114,16 +87,6 @@ const BeersFilter = ({
             newCountries = newCountries.filter((c) => c !== countryChecked);
         }
         setCountry(newCountries);
-    };
-
-    const handleTypeChange = (typeChecked: string, checked: boolean) => {
-        let newTypes = type;
-        if (checked) {
-            newTypes = [...newTypes, typeChecked];
-        } else {
-            newTypes = newTypes.filter((t) => t !== typeChecked);
-        }
-        setType(newTypes);
     };
 
     const handleRatingChange = (value: string) => {
@@ -182,50 +145,6 @@ const BeersFilter = ({
                 <>
                     <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
                         <div className="py-4 text-xl font-bold text-black/80">
-                            Brewery Type
-                        </div>
-                        <div className="flex flex-col space-y-4">
-                            {type.length > 0 && (
-                                <div
-                                    className="cursor-pointer text-sm hover:underline"
-                                    onClick={() => setType([])}
-                                >
-                                    Clear
-                                </div>
-                            )}
-                            {filters.breweryTypes.map((breweryType) => {
-                                return (
-                                    <div
-                                        key={breweryType.name}
-                                        className="items-top flex space-x-2"
-                                    >
-                                        <Checkbox
-                                            id={breweryType.name}
-                                            checked={type.includes(
-                                                breweryType.name
-                                            )}
-                                            onCheckedChange={(checked) =>
-                                                handleTypeChange(
-                                                    breweryType.name,
-                                                    checked as boolean
-                                                )
-                                            }
-                                        />
-                                        <div className="grid gap-1.5 leading-none">
-                                            <label
-                                                htmlFor={breweryType.name}
-                                                className="leading-none font-medium"
-                                            >
-                                                {`${breweryType.name} (${breweryType.count})`}
-                                            </label>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                    <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
-                        <div className="py-4 text-xl font-bold text-black/80">
                             Average Rating
                         </div>
                         <div className="flex flex-col space-y-4">
@@ -278,59 +197,6 @@ const BeersFilter = ({
                                 }
                             /> */}
                         </div>
-                    </div>
-                    <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
-                        <div className="py-4 text-xl font-bold text-black/80">
-                            Number of Beers
-                        </div>
-                        {beersArray.length > 0 &&
-                            JSON.stringify(beersArray) !==
-                                JSON.stringify([0, 10]) && (
-                                <div
-                                    className="cursor-pointer pb-2 text-sm hover:underline"
-                                    onClick={onBeersReset}
-                                >
-                                    Clear
-                                </div>
-                            )}
-                        <Form {...formSearch}>
-                            <form
-                                className="flex w-full flex-col justify-start space-y-5"
-                                onSubmit={formBeers.handleSubmit(onSubmitBeers)}
-                            >
-                                <FormField
-                                    control={formBeers.control}
-                                    name="beers"
-                                    render={({ field }) => (
-                                        <FormItem className="w-full">
-                                            <FormControl>
-                                                <div className="w-full pt-3">
-                                                    <Slider
-                                                        min={0}
-                                                        max={highestBeers}
-                                                        step={1}
-                                                        value={field.value}
-                                                        onValueChange={
-                                                            field.onChange
-                                                        }
-                                                        className="w-full"
-                                                    />
-                                                    <div className="flex w-full flex-row justify-between pt-6 leading-none font-medium">
-                                                        <span>
-                                                            {field.value[0]}
-                                                        </span>
-                                                        <span>
-                                                            {field.value[1]}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FilterButton text="apply" className="w-fit" />
-                            </form>
-                        </Form>
                     </div>
                     <Accordion type="multiple">
                         <AccordionItem value="countries">
