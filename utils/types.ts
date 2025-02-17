@@ -87,6 +87,7 @@ export interface BreweryFormProps extends BreweryTypeProps {
 
 export type Params = Promise<{ id: string }>;
 export type ParamsSlug = Promise<{ slug: string }>;
+export type ParamsIsoCode = Promise<{ isoCode: string }>;
 
 export type SearchParams = Promise<{
     [key: string]: string | string[] | undefined;
@@ -132,7 +133,6 @@ export interface DataTableFilterOption<TData> {
 //     description: string | null;
 //     createdAt: Date;
 // }
-
 
 export interface StyleProps {
     parentStyle: {

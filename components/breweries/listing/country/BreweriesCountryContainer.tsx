@@ -7,15 +7,23 @@ import Image from "next/image";
 
 import InfiniteScroll from "@/components/global/InfiniteScroll";
 import { getCountriesBreweries } from "@/actions/breweries";
+import BreweriesCountryAlphabet from "./BreweriesCountryAlphabet";
 
-const BreweriesCountryContainer = ({ total }: { total: number }) => {
+const BreweriesCountryContainer = ({
+    total,
+    letter
+}: {
+    total: number;
+    letter: string;
+}) => {
     const totalPages = Math.ceil(total / 10);
     const { isLoading, data, isFetchingNextPage, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
             queryKey: ["breweriesCountry"],
             queryFn: ({ pageParam }) =>
                 getCountriesBreweries({
-                    page: pageParam
+                    page: pageParam,
+                    letter
                 }),
 
             initialPageParam: 0,
@@ -59,19 +67,21 @@ const BreweriesCountryContainer = ({ total }: { total: number }) => {
 
     return (
         <div
-            className={`${assistant.className} flex flex-col space-y-5 pt-5 md:mx-auto`}
+            className={`${assistant.className} flex flex-col items-center justify-center space-y-1 pt-5 md:mx-auto md:space-y-5`}
         >
+            <BreweriesCountryAlphabet letter={letter} />
             <InfiniteScroll
+                typeLoading="countries"
                 isLoadingIntial={isLoading}
                 isLoadingMore={isFetchingNextPage}
                 loadMore={() => hasNextPage && fetchNextPage()}
             >
-                <div className="mx-8 mt-10 grid grid-cols-3 justify-items-center gap-8">
+                <div className="mx-8 mt-4 grid grid-cols-1 justify-items-center gap-8 md:mt-5 md:grid-cols-3">
                     {pages.map((country) => {
                         return (
                             <div
                                 key={country.id}
-                                className="group relative h-[340px] w-[520px] overflow-hidden rounded-4xl"
+                                className="group relative h-54 w-80 overflow-hidden rounded-4xl md:h-[340px] md:w-[520px]"
                             >
                                 <div className="absolute inset-0 scale-100">
                                     <Image

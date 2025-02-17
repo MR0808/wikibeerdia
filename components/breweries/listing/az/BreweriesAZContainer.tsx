@@ -72,6 +72,7 @@ const BreweriesAZContainer = ({
                 <div className="text-xl font-semibold">{`${total} result${total === 1 ? "" : "s"}`}</div>
             </div>
             <InfiniteScroll
+                typeLoading="breweries"
                 isLoadingIntial={isLoading}
                 isLoadingMore={isFetchingNextPage}
                 loadMore={() => hasNextPage && fetchNextPage()}

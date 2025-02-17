@@ -25,6 +25,11 @@ export const links: NavLink[] = [
         label: "breweries",
         subMenu: [
             {
+                href: "/breweries",
+                label: "Find a Brewery"
+            },
+
+            {
                 href: "/breweries/az",
                 label: "A-Z"
             },
@@ -50,8 +55,12 @@ export const links: NavLink[] = [
 
         subMenu: [
             {
-                href: "/beers/popular",
-                label: "popular"
+                href: "/beers",
+                label: "Find a Beer"
+            },
+            {
+                href: "/beers/country",
+                label: "Find by Country"
             },
             {
                 href: "/beers/submit",

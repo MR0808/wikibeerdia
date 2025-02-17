@@ -5,25 +5,29 @@ const prisma = new PrismaClient();
 async function main() {
     const beers = await prisma.beer.findMany();
     const beerLength = beers.length;
-    let countBeers = 1;
-    const precision = 100; // 2 decimals
+    let countBeers = 0;
 
     for (const beer of beers) {
-        const randomnum =
+        const precisionABV = 10; // 2 decimals
+        let min = 10;
+        let max = 100;
+        const abv =
             Math.floor(
-                Math.random() * (5 * precision - 1 * precision) + 1 * precision
+                Math.random() * (10 * precisionABV - 1 * precisionABV) +
+                    1 * precisionABV
             ) /
-            (1 * precision);
-        await prisma.beer.update({
+            (1 * precisionABV);
+        const ibu = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        const beerUpdated = await prisma.beer.update({
             where: { id: beer.id },
-            data: { averageRating: randomnum }
+            data: {
+                abv,
+                ibu
+            }
         });
-
-        console.log(
-            `Beer Rating - ${randomnum} - Beer - ${countBeers} / ${beerLength}`
-        );
-
         countBeers++;
+        console.log(`Beer ${countBeers} / ${beerLength}`);
     }
 }
 

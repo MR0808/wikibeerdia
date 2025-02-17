@@ -12,6 +12,7 @@ import { BeerSchemaCreate, BeerEditSchema } from "@/schemas/beer";
 import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
+import { BeerPageFilterSearch, Filters } from "@/types/beers";
 
 const slugger = new GithubSlugger();
 
@@ -80,8 +81,8 @@ export const createBeer = async (values: z.infer<typeof BeerSchemaCreate>) => {
                 slug,
                 description,
                 headline,
-                abv: String(abv),
-                ibu: String(ibu),
+                abv,
+                ibu,
                 yearCreated,
                 styleId: style,
                 breweryId: brewery,
@@ -219,8 +220,8 @@ export const updateBeer = async (
                 slug,
                 description,
                 headline,
-                abv: String(abv),
-                ibu: String(ibu),
+                abv,
+                ibu,
                 yearCreated,
                 available,
                 styleId: style,
@@ -510,6 +511,191 @@ export const updateBeerStatus = async (id: string, status: Status) => {
         };
     } catch (err) {
         return {
+            error: getErrorMessage(err)
+        };
+    }
+};
+
+export const getAllBeersPage = async ({
+    sort,
+    page,
+    pageSize,
+    search,
+    country,
+    style,
+    brewery,
+    abv,
+    ibu,
+    yearCreated,
+    available,
+    rating
+}: BeerPageFilterSearch) => {
+    const convertCommaListToArray = (list: string) => {
+        return list.split(",").map((item) => item.trim());
+    };
+
+    let orderBy = {};
+
+    const user = await checkAuth();
+
+    let id = "";
+
+    const pageInt = parseInt(page);
+    const pageSizeInt = parseInt(pageSize);
+
+    if (user) {
+        id = user.id;
+    }
+
+    switch (sort) {
+        case "az":
+            orderBy = { name: "asc" };
+            break;
+        case "za":
+            orderBy = { name: "desc" };
+            break;
+        case "newest":
+            orderBy = { createdAt: "desc" };
+            break;
+        case "oldest":
+            orderBy = { createdAt: "asc" };
+            break;
+        case "popular":
+            orderBy = { averageRating: "desc" };
+            break;
+        default:
+            orderBy = { name: "asc" };
+            break;
+    }
+    let where: any = { status: "APPROVED" };
+    if (search) {
+        const searchQuery = search.split(" ").join(" & ");
+        where = {
+            ...where,
+            OR: [
+                {
+                    name: {
+                        search: searchQuery
+                    }
+                },
+                {
+                    headline: {
+                        search: searchQuery
+                    }
+                },
+                {
+                    description: {
+                        search: searchQuery
+                    }
+                }
+            ]
+        };
+    }
+
+    if (country) {
+        const countriesSearch = convertCommaListToArray(country);
+        where = {
+            ...where,
+            brewery: { country: { name: { in: countriesSearch } } }
+        };
+    }
+    if (style) {
+        const stylesSearch = convertCommaListToArray(style);
+        where = { ...where, style: { name: { in: stylesSearch } } };
+    }
+    if (brewery) {
+        const breweriesSearch = convertCommaListToArray(brewery);
+        where = { ...where, brewery: { slug: { in: breweriesSearch } } };
+    }
+    if (abv && abv.length > 0) {
+        where = { ...where, abv: { gte: abv[0], lte: abv[1] } };
+    }
+    if (ibu && ibu.length > 0) {
+        where = { ...where, ibu: { gte: ibu[0], lte: ibu[1] } };
+    }
+    if (yearCreated && yearCreated.length > 0) {
+        where = {
+            ...where,
+            yearCreated: { gte: yearCreated[0], lte: yearCreated[1] }
+        };
+    }
+    if (available) {
+        where = { ...where, available };
+    }
+
+    if (rating) {
+        where = { ...where, averageRating: { gte: rating } };
+    }
+
+    try {
+        const offset = (pageInt - 1) * pageSizeInt;
+        const data = await db.beer.findMany({
+            where,
+            include: {
+                images: { select: { id: true, image: true } },
+                beerReviews: { select: { id: true } },
+                beerFavourites: {
+                    where: { userId: id },
+                    select: { id: true }
+                }
+            },
+            orderBy,
+            skip: offset,
+            take: pageSizeInt
+        });
+
+        const filtersQuery = await db.beer.findMany({
+            where,
+            include: { brewery: true }
+        });
+
+        const total = filtersQuery.length;
+
+        const countriesList = await db.country.findMany({
+            where: {
+                breweries: {
+                    some: {
+                        beers: {
+                            some: {}
+                        }
+                    }
+                }
+            },
+            orderBy: { name: "asc" }
+        });
+        let countries = countriesList.map((country) => {
+            return { id: country.id, name: country.name, count: 0 };
+        });
+        for (const beer of filtersQuery) {
+            const itemCountry = countries.find(
+                (itemCountry) => itemCountry.id === beer.brewery.countryId
+            );
+            if (itemCountry) itemCountry.count += 1;
+        }
+
+        const filters: Filters = { countries };
+
+        const pageCount = Math.ceil(total / pageSizeInt);
+
+        const updatedData = data.map((item) => ({
+            ...item,
+            averageRating: item.averageRating.toString(),
+            abv: item.abv.toString()
+        }));
+
+        return {
+            data: updatedData,
+            pageCount,
+            total,
+            filters,
+            error: null
+        };
+    } catch (err) {
+        return {
+            data: null,
+            pageCount: null,
+            total: null,
+            filters: null,
             error: getErrorMessage(err)
         };
     }

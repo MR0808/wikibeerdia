@@ -4,6 +4,7 @@ import { LoaderCircle } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 
 type Props = {
+    typeLoading: string;
     isLoadingIntial: boolean;
     isLoadingMore: boolean;
     children: React.ReactNode;
@@ -12,7 +13,8 @@ type Props = {
 
 function InfiniteScroll(props: Props) {
     const observerElement = useRef<HTMLDivElement | null>(null);
-    const { isLoadingIntial, isLoadingMore, children, loadMore } = props;
+    const { isLoadingIntial, isLoadingMore, children, loadMore, typeLoading } =
+        props;
 
     useEffect(() => {
         // is element in view?
@@ -49,7 +51,7 @@ function InfiniteScroll(props: Props) {
             <div ref={observerElement} id="obs">
                 {isLoadingMore && !isLoadingIntial && (
                     <div className="wrapper flex h-20 flex-col items-center justify-center">
-                        <div>Loading more breweries...</div>
+                        <div>Loading more {typeLoading}...</div>
 
                         <LoaderCircle className="animate-spin" />
                     </div>

@@ -289,8 +289,8 @@ model Beer {
   name           String
   status         Status         @default(PENDING)
   description    String
-  abv            String
-  ibu            String?
+  abv            Decimal
+  ibu            Int?
   yearCreated    Int?
   available      Boolean
   headline       String
