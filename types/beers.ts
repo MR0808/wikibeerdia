@@ -129,6 +129,19 @@ export interface BeersListing {
     headline: string;
     breweryId: string;
     styleId: string | null;
+    style: {
+        id: string;
+        name: string;
+    } | null;
+    brewery: {
+        country: {
+            name: string;
+        };
+        id: string;
+        name: string;
+        region: string;
+        slug: string;
+    };
 }
 
 export interface params {
@@ -168,6 +181,74 @@ type View = "grid" | "list" | "";
 export interface BeersFilterProps {
     params: params;
     filters: Filters | null;
+    country: string[];
+    setCountry: SetCountry;
+    search: string;
+    setSearch: SetSearch;
+    style: string[];
+    setStyle: SetStyle;
+    brewery: string[];
+    setBrewery: setBrewery;
+    abv: number[];
+    setAbv: setAbv;
+    ibu: number[];
+    setIbu: setIbu;
+    yearCreated: number[];
+    setYearCreated: setYearCreated;
+    available: boolean;
+    setAvailable: setAvailable;
+    rating: number;
+    setRating: SetRating;
+    isPending: boolean;
+}
+
+export interface BeersListingsProps {
+    beers: BeersListing[] | null;
+    total: number;
+    params: params;
+    country: string[];
+    setCountry: SetCountry;
+    search: string;
+    setSearch: SetSearch;
+    style: string[];
+    setStyle: SetStyle;
+    brewery: string[];
+    setBrewery: setBrewery;
+    abv: number[];
+    setAbv: setAbv;
+    ibu: number[];
+    setIbu: setIbu;
+    yearCreated: number[];
+    setYearCreated: setYearCreated;
+    available: boolean;
+    setAvailable: setAvailable;
+    rating: number;
+    setRating: SetRating;
+    setPageSize: SetPageSize;
+    setPage: SetPage;
+    setSort: SetSort;
+    view: View;
+    isPending: boolean;
+}
+
+export interface BeersViewToggleProps {
+    paramsView: string;
+}
+
+export interface Option {
+    value: string;
+    name: string;
+}
+
+export interface BeersSortSelectProps {
+    sortOrders: { value: string; name: string }[];
+    sort: string;
+    setSort: SetSort;
+}
+
+export interface BeersResultsProps {
+    beers: BeersListing[] | null;
+    params: params;
     country: string[];
     setCountry: SetCountry;
     search: string;

@@ -3,7 +3,7 @@
 import { assistant } from "@/app/fonts";
 import { Suspense, useEffect } from "react";
 
-// import BeersListing from "@/components/beers/listing/BeersListing";
+import BeersListing from "@/components/beers/listing/BeersListing";
 import BeersFilter from "@/components/beers/listing/BeersFilter";
 import { BeersContainerProps } from "@/types/beers";
 import { useBeersParams } from "@/hooks/useBeersParams";
@@ -82,18 +82,26 @@ const BeersContainer = ({
             </div>
             <div className="flex w-full flex-col space-y-5 pb-10 md:w-3/4">
                 <Suspense>
-                    {/* <BreweriesListing
-                        breweries={breweries}
+                    <BeersListing
+                        beers={beers}
                         total={total || 0}
                         params={params}
                         country={country}
                         setCountry={setCountry}
-                        type={type}
-                        setType={setType}
                         search={search}
                         setSearch={setSearch}
-                        beers={beers}
-                        setBeers={setBeers}
+                        style={style}
+                        setStyle={setStyle}
+                        brewery={brewery}
+                        setBrewery={setBrewery}
+                        abv={abv}
+                        setAbv={setAbv}
+                        ibu={ibu}
+                        setIbu={setIbu}
+                        yearCreated={yearCreated}
+                        setYearCreated={setYearCreated}
+                        available={available}
+                        setAvailable={setAvailable}
                         rating={rating}
                         setRating={setRating}
                         setPageSize={setPageSize}
@@ -101,7 +109,7 @@ const BeersContainer = ({
                         setSort={setSort}
                         view={view}
                         isPending={isPending}
-                    /> */}
+                    />
                 </Suspense>
             </div>
         </div>

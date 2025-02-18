@@ -477,7 +477,7 @@ export const toggleBeerFavoriteAction = async (
                 }
             });
         }
-        revalidatePath(pathname);
+        if (pathname !== "/beers/map") revalidatePath(pathname);
         return {
             result: beerFavoriteId ? false : true,
             message: beerFavoriteId ? "Removed from Faves" : "Added to Faves"
@@ -637,6 +637,16 @@ export const getAllBeersPage = async ({
                 beerFavourites: {
                     where: { userId: id },
                     select: { id: true }
+                },
+                style: { select: { id: true, name: true } },
+                brewery: {
+                    select: {
+                        id: true,
+                        name: true,
+                        region: true,
+                        country: { select: { name: true } },
+                        slug: true
+                    }
                 }
             },
             orderBy,

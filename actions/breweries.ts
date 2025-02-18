@@ -685,7 +685,7 @@ export const toggleBreweryFavoriteAction = async (
                 }
             });
         }
-        if (pathname !== "/breweries/location") revalidatePath(pathname);
+        if (pathname !== "/breweries/map") revalidatePath(pathname);
         return {
             result: breweryFavoriteId ? false : true,
             message: breweryFavoriteId ? "Removed from Faves" : "Added to Faves"
