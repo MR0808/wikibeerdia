@@ -59,6 +59,7 @@ const BeersResults = ({
         brewery.length != 0 ||
         abv.length != 0 ||
         ibu.length != 0 ||
+        available !== "" ||
         rating > 1
     )
         tags = true;
@@ -142,6 +143,21 @@ const BeersResults = ({
                             </span>
                             <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
                                 {`${yearCreated[0]} - ${yearCreated[1]}`}
+                            </span>
+                            <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                        </button>
+                    )}
+                    {available !== "" && (
+                        <button
+                            type="button"
+                            className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                            onClick={() => setAvailable("")}
+                        >
+                            <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                Available
+                            </span>
+                            <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                {available === "true" ? "Yes" : "No"}
                             </span>
                             <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
                         </button>

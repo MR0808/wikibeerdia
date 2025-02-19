@@ -81,7 +81,7 @@ export interface BeerPageFilterSearch {
     abv?: number[];
     ibu?: number[];
     yearCreated?: number[];
-    available?: boolean;
+    available?: string;
     rating?: number;
 }
 
@@ -91,8 +91,17 @@ export interface IdNameFilter {
     count: number;
 }
 
+export interface StyleFilter {
+    id: string;
+    name: string;
+    slug: string;
+    parentStyleName: string;
+    count: number;
+}
+
 export interface Filters {
     countries: IdNameFilter[];
+    styles: StyleFilter[];
 }
 
 export interface Highest {
@@ -176,13 +185,13 @@ type SetPage = (newPage: number) => void;
 type SetSort = (
     newSort: "" | "az" | "za" | "newest" | "oldest" | "popular"
 ) => void;
+type setAvailable = (newAvailable: "" | "true" | "false") => void;
 type SetRating = (newRating: number) => void;
 type setStyle = (newStyle: string[]) => void;
 type setBrewery = (newBrewery: string[]) => void;
 type setAbv = (newAbv: number[]) => void;
 type setIbu = (newIbu: number[]) => void;
 type setYearCreated = (newYearCreated: number[]) => void;
-type setAvailable = (newAvailable: boolean) => void;
 type View = "grid" | "list" | "";
 
 export interface BeersFilterProps {
@@ -201,7 +210,7 @@ export interface BeersFilterProps {
     setBrewery: setBrewery;
     yearCreated: number[];
     setYearCreated: setYearCreated;
-    available: boolean;
+    available: string;
     setAvailable: setAvailable;
     rating: number;
     setRating: SetRating;
@@ -244,9 +253,20 @@ export interface BeersFilterCountryProps {
     countries: IdNameFilter[];
 }
 
+export interface BeersFilterStyleProps {
+    style: string[];
+    setStyle: SetStyle;
+    styles: StyleFilter[];
+}
+
 export interface BeersFilterRatingProps {
     rating: number;
     setRating: SetRating;
+}
+
+export interface BeersFilterAvailableProps {
+    available: string;
+    setAvailable: setAvailable;
 }
 
 export interface BeersListingsProps {
@@ -266,7 +286,7 @@ export interface BeersListingsProps {
     setIbu: setIbu;
     yearCreated: number[];
     setYearCreated: setYearCreated;
-    available: boolean;
+    available: string;
     setAvailable: setAvailable;
     rating: number;
     setRating: SetRating;
@@ -311,7 +331,7 @@ export interface BeersResultsProps {
     setIbu: setIbu;
     yearCreated: number[];
     setYearCreated: setYearCreated;
-    available: boolean;
+    available: string;
     setAvailable: setAvailable;
     rating: number;
     setRating: SetRating;

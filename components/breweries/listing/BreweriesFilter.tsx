@@ -259,17 +259,6 @@ const BreweriesFilter = ({
                                     </div>
                                 ))}
                             </RadioGroup>
-                            {/* 
-                            <Checkbox
-                                id={breweryType.name}
-                                checked={type.includes(breweryType.name)}
-                                onCheckedChange={(checked) =>
-                                    handleTypeChange(
-                                        breweryType.name,
-                                        checked as boolean
-                                    )
-                                }
-                            /> */}
                         </div>
                     </div>
                     <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">

@@ -22,7 +22,7 @@ export const searchParamsCacheBeersMain = createSearchParamsCache({
     abv: parseAsArrayOf(parseAsInteger).withDefault([]),
     ibu: parseAsArrayOf(parseAsFloat).withDefault([]),
     yearCreated: parseAsArrayOf(parseAsInteger).withDefault([]),
-    available: parseAsBoolean.withDefault(true),
+    available: parseAsString.withDefault(""),
     sort: parseAsString.withDefault(""),
     page: parseAsInteger.withDefault(1),
     pageSize: parseAsInteger.withDefault(10),

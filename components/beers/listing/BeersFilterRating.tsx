@@ -16,7 +16,8 @@ const BeersFilterRating = ({ rating, setRating }: BeersFilterRatingProps) => {
         { value: "4", label: "4 stars & up" },
         { value: "3", label: "3 stars & up" },
         { value: "2", label: "2 stars & up" },
-        { value: "1", label: "1 star & up" }
+        { value: "1", label: "1 star & up" },
+        { value: "0", label: "No rating" }
     ];
 
     return (

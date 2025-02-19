@@ -8,9 +8,8 @@ import BeersFilterRating from "./BeersFilterRating";
 import BeersFilterAbv from "./BeersFilterAbv";
 import BeersFilterIbu from "./BeersFilterIbu";
 import BeersFilterYear from "./BeersFilterYear";
-
-import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
+import BeersFilterAvailable from "./BeersFilterAvailable";
+import BeersFilterStyle from "./BeersFilterStyle";
 
 const BeersFilter = ({
     filters,
@@ -44,6 +43,11 @@ const BeersFilter = ({
             {filters && (
                 <>
                     <BeersFilterSearch search={search} setSearch={setSearch} />
+                    <BeersFilterStyle
+                        style={style}
+                        setStyle={setStyle}
+                        styles={filters.styles}
+                    />
                     <BeersFilterBrewery
                         brewery={brewery}
                         setBrewery={setBrewery}
@@ -64,14 +68,10 @@ const BeersFilter = ({
                         highestYear={highestYear}
                         lowestYear={lowestYear}
                     />
-                    <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
-                        <div className="py-4 text-xl font-bold text-black/80">
-                            Available?
-                        </div>
-                        <div className="flex flex-col space-y-4">
-                            <Switch size="lg" />
-                        </div>
-                    </div>
+                    <BeersFilterAvailable
+                        available={available}
+                        setAvailable={setAvailable}
+                    />
                     <BeersFilterRating rating={rating} setRating={setRating} />
                     <BeersFilterCountry
                         country={country}

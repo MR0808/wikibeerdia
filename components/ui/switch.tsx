@@ -67,8 +67,8 @@ const Switch = React.forwardRef<
     const notchSize = size === "lg" ? "size-7" : "size-5";
     const notchPosition =
         size === "lg"
-            ? "data-[state=checked]:translate-x-8"
-            : "data-[state=checked]:translate-x-5";
+            ? "data-[state=checked]:translate-x-7 data-[state=unchecked]:translate-x-1"
+            : "data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0";
     return (
         <SwitchPrimitives.Root
             className={cn(switchVariants({ variant, size }), className)}
@@ -77,7 +77,7 @@ const Switch = React.forwardRef<
         >
             <SwitchPrimitives.Thumb
                 className={cn(
-                    "bg-background pointer-events-none block size-5 rounded-full ring-0 shadow-lg transition-transform data-[state=unchecked]:translate-x-0",
+                    "bg-background pointer-events-none block size-5 rounded-full ring-0 shadow-lg transition-transform",
                     notchSize,
                     notchPosition
                 )}

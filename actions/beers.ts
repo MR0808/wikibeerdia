@@ -601,7 +601,7 @@ export const getAllBeersPage = async ({
     }
     if (style) {
         const stylesSearch = convertCommaListToArray(style);
-        where = { ...where, style: { name: { in: stylesSearch } } };
+        where = { ...where, style: { slug: { in: stylesSearch } } };
     }
     if (brewery) {
         const breweriesSearch = convertCommaListToArray(brewery);
@@ -620,11 +620,17 @@ export const getAllBeersPage = async ({
         };
     }
     if (available) {
-        where = { ...where, available };
+        const parseBoolean = (value: string): boolean =>
+            value.toLowerCase() === "true";
+        where = { ...where, available: parseBoolean(available) };
     }
 
-    if (rating) {
-        where = { ...where, averageRating: { gte: rating } };
+    if (rating != null && rating >= 0) {
+        if (rating === 0) {
+            where = { ...where, averageRating: 0 };
+        } else {
+            where = { ...where, averageRating: { gte: rating } };
+        }
     }
 
     try {
@@ -682,17 +688,40 @@ export const getAllBeersPage = async ({
             },
             orderBy: { name: "asc" }
         });
+
         let countries = countriesList.map((country) => {
             return { id: country.id, name: country.name, count: 0 };
+        });
+        const stylesList = await db.style.findMany({
+            where: {
+                beers: {
+                    some: {}
+                }
+            },
+            include: { parentStyle: true },
+            orderBy: [{ parentStyle: { name: "asc" } }, { name: "asc" }]
+        });
+        let styles = stylesList.map((style) => {
+            return {
+                id: style.id,
+                name: style.name,
+                slug: style.slug,
+                parentStyleName: style.parentStyle.name,
+                count: 0
+            };
         });
         for (const beer of filtersQuery) {
             const itemCountry = countries.find(
                 (itemCountry) => itemCountry.id === beer.brewery.countryId
             );
             if (itemCountry) itemCountry.count += 1;
+            const itemStyle = styles.find(
+                (itemStyle) => itemStyle.id === beer.styleId
+            );
+            if (itemStyle) itemStyle.count += 1;
         }
 
-        const filters: Filters = { countries };
+        const filters: Filters = { countries, styles };
 
         const pageCount = Math.ceil(total / pageSizeInt);
 

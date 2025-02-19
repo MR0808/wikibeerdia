@@ -6,6 +6,7 @@ import { BeersListing } from "@/types/beers";
 import BeersFavouriteToggleButton from "./BeersFavouriteToggleButton";
 
 const BeersListBeer = ({ beer }: { beer: BeersListing }) => {
+    const abv = parseFloat(beer.abv);
     return (
         <div className="relative flex flex-col rounded-3xl bg-white p-5 md:h-72 md:flex-row">
             <div className="w-full md:mr-12 md:w-1/3">
@@ -38,7 +39,7 @@ const BeersListBeer = ({ beer }: { beer: BeersListing }) => {
                         href={`/beers/${beer.slug}`}
                         className="hover:text-primary cursor-pointer text-3xl font-semibold md:text-4xl"
                     >
-                        {beer.name}
+                        {`${beer.name}${beer.available == false ? " (No longer available)" : ""}`}
                     </Link>
                     <div className="collapse hidden md:visible md:block">
                         <BeersFavouriteToggleButton
@@ -58,7 +59,7 @@ const BeersListBeer = ({ beer }: { beer: BeersListing }) => {
                         <li className="flex flex-col space-y-2">
                             <div className="flex flex-row items-center">
                                 <Beer className="mr-2 size-5" />
-                                {`ABV - ${beer.abv}%`}
+                                {`ABV - ${abv.toFixed(2)}%`}
                             </div>
                             <div className="flex flex-row items-center">
                                 <Hop className="mr-2 size-5" />

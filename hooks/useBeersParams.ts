@@ -10,13 +10,19 @@ import {
 } from "nuqs";
 import { useTransition } from "react";
 
-import { zodViewParser, zodSortParser } from "@/lib/parsers";
+import {
+    zodViewParser,
+    zodSortParser,
+    zodAvailableParser
+} from "@/lib/parsers";
 import useViewStore from "./useViewType";
 
 const SortSchema = z.enum(["", "az", "za", "newest", "oldest", "popular"]);
 const ViewSchema = z.enum(["", "grid", "list"]);
+const AvailableSchema = z.enum(["", "true", "false"]);
 type SortOption = z.infer<typeof SortSchema>;
 type ViewOption = z.infer<typeof ViewSchema>;
+type AvailableOption = z.infer<typeof AvailableSchema>;
 
 export function useBeersParams() {
     const [isPending, startTransition] = useTransition();
@@ -101,9 +107,9 @@ export function useBeersParams() {
     const [{ sort, page, pageSize, available }, setParams] = useQueryStates(
         {
             sort: zodSortParser.withDefault("" as SortOption),
+            available: zodAvailableParser.withDefault("" as AvailableOption),
             page: parseAsInteger.withDefault(1),
-            pageSize: parseAsInteger.withDefault(10),
-            available: parseAsBoolean.withDefault(true)
+            pageSize: parseAsInteger.withDefault(10)
         },
         {
             shallow: false,
@@ -116,7 +122,7 @@ export function useBeersParams() {
         setParams({ sort: newSort, page: 1 });
     };
 
-    const setAvailable = (newAvailable: boolean) => {
+    const setAvailable = (newAvailable: AvailableOption) => {
         setParams({ available: newAvailable, page: 1 });
     };
 
