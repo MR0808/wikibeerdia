@@ -8,10 +8,10 @@ import BeersListSkeleton from "./BeersListSkeleton";
 import BeersListView from "./BeersListView";
 import { BeersResultsProps } from "@/types/beers";
 import useViewStore from "@/hooks/useViewType";
+import { useBreweryFilterStore } from "@/hooks/useBreweryFilterStore";
 
 const BeersResults = ({
     beers,
-    params,
     search,
     setSearch,
     country,
@@ -33,9 +33,8 @@ const BeersResults = ({
     isPending
 }: BeersResultsProps) => {
     const { view } = useViewStore();
+    const { breweryList, setBreweryList } = useBreweryFilterStore();
 
-    let viewPage = "";
-    params.view ? (viewPage = params.view) : (viewPage = view);
     let tags = false;
 
     const onSearchClick = () => {
@@ -48,7 +47,21 @@ const BeersResults = ({
         setCountry(newCountries);
     };
 
-    if (search !== "" || country.length != 0 || rating > 1) tags = true;
+    const onBreweryClick = (breweryToRemove: string) => {
+        let newBreweries = brewery.filter((b) => b !== breweryToRemove);
+        setBrewery(newBreweries);
+        setBreweryList(breweryList.filter((b) => b.slug !== breweryToRemove));
+    };
+
+    if (
+        search !== "" ||
+        country.length != 0 ||
+        brewery.length != 0 ||
+        abv.length != 0 ||
+        ibu.length != 0 ||
+        rating > 1
+    )
+        tags = true;
     return (
         <>
             {tags ? (
@@ -69,6 +82,70 @@ const BeersResults = ({
                         </button>
                     )}
 
+                    {breweryList.length != 0 &&
+                        breweryList.map((item) => {
+                            return (
+                                <button
+                                    type="button"
+                                    className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                                    onClick={() => onBreweryClick(item.slug)}
+                                    key={item.slug}
+                                >
+                                    <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                        Brewery
+                                    </span>
+                                    <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                        {item.name}
+                                    </span>
+                                    <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                                </button>
+                            );
+                        })}
+                    {abv.length != 0 && (
+                        <button
+                            type="button"
+                            className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                            onClick={() => setAbv([])}
+                        >
+                            <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                ABV
+                            </span>
+                            <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                {`${abv[0]} - ${abv[1]}`}
+                            </span>
+                            <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                        </button>
+                    )}
+                    {ibu.length != 0 && (
+                        <button
+                            type="button"
+                            className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                            onClick={() => setIbu([])}
+                        >
+                            <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                IBU
+                            </span>
+                            <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                {`${ibu[0]} - ${ibu[1]}`}
+                            </span>
+                            <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                        </button>
+                    )}
+                    {yearCreated.length != 0 && (
+                        <button
+                            type="button"
+                            className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                            onClick={() => setYearCreated([])}
+                        >
+                            <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                Year Created
+                            </span>
+                            <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                {`${yearCreated[0]} - ${yearCreated[1]}`}
+                            </span>
+                            <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                        </button>
+                    )}
                     {rating > 1 && (
                         <button
                             type="button"
@@ -118,10 +195,7 @@ const BeersResults = ({
                     No breweries found that match your search
                 </div>
             ) : view === "grid" ? (
-                <>
-                    <BeersGridSkeleton />
-                    <BeersGridView beers={beers} />
-                </>
+                <BeersGridView beers={beers} />
             ) : (
                 <BeersListView beers={beers} />
             )}

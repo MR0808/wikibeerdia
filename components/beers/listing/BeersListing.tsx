@@ -19,7 +19,6 @@ const sortOrders = [
 const BeersListing = ({
     beers,
     total = 0,
-    params,
     country,
     setCountry,
     search,
@@ -38,14 +37,20 @@ const BeersListing = ({
     setAvailable,
     rating,
     setRating,
+    pageSize,
     setPageSize,
+    page,
     setPage,
+    sort,
     setSort,
     view,
     isPending
 }: BeersListingsProps) => {
-    const currentPage = params.page || 1;
-    let postsPerPage = params.pageSize || 10;
+    // const currentPage = params.page || 1;
+    // let postsPerPage = params.pageSize || 10;
+
+    const currentPage = page || 1;
+    let postsPerPage = pageSize || 10;
 
     if (postsPerPage > total) postsPerPage = total;
 
@@ -66,10 +71,10 @@ const BeersListing = ({
                     <div className="w-16">Sort by:</div>
                     <BeersSortSelect
                         sortOrders={sortOrders}
-                        sort={params.sort}
+                        sort={sort}
                         setSort={setSort}
                     />
-                    <BeersViewToggle paramsView={params.view} />
+                    <BeersViewToggle paramsView={view} />
                 </div>
             </div>
             <Suspense
@@ -83,7 +88,6 @@ const BeersListing = ({
             >
                 <BeersResults
                     beers={beers}
-                    params={params}
                     country={country}
                     setCountry={setCountry}
                     search={search}

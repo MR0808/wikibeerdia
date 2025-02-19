@@ -12,8 +12,8 @@ import useViewStore from "@/hooks/useViewType";
 const BeersContainer = ({
     beers,
     total = 0,
-    params,
-    filters
+    filters,
+    highest
 }: BeersContainerProps) => {
     const {
         view,
@@ -57,7 +57,6 @@ const BeersContainer = ({
         >
             <div className="w-full md:w-1/4">
                 <BeersFilter
-                    params={params}
                     filters={filters}
                     country={country}
                     setCountry={setCountry}
@@ -78,6 +77,7 @@ const BeersContainer = ({
                     rating={rating}
                     setRating={setRating}
                     isPending={isPending}
+                    highest={highest}
                 />
             </div>
             <div className="flex w-full flex-col space-y-5 pb-10 md:w-3/4">
@@ -85,7 +85,6 @@ const BeersContainer = ({
                     <BeersListing
                         beers={beers}
                         total={total || 0}
-                        params={params}
                         country={country}
                         setCountry={setCountry}
                         search={search}
@@ -104,8 +103,11 @@ const BeersContainer = ({
                         setAvailable={setAvailable}
                         rating={rating}
                         setRating={setRating}
+                        pageSize={pageSize}
                         setPageSize={setPageSize}
+                        page={page}
                         setPage={setPage}
+                        sort={sort}
                         setSort={setSort}
                         view={view}
                         isPending={isPending}

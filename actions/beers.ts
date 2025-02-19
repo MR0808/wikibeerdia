@@ -659,6 +659,15 @@ export const getAllBeersPage = async ({
             include: { brewery: true }
         });
 
+        const maxResults = await db.beer.aggregate({
+            _max: {
+                abv: true,
+                ibu: true,
+                yearCreated: true
+            },
+            _min: { yearCreated: true }
+        });
+
         const total = filtersQuery.length;
 
         const countriesList = await db.country.findMany({
@@ -698,6 +707,10 @@ export const getAllBeersPage = async ({
             pageCount,
             total,
             filters,
+            highestAbv: maxResults._max.abv || 0,
+            highestIbu: maxResults._max.ibu || 0,
+            highestYear: maxResults._max.yearCreated || 0,
+            lowerstYear: maxResults._min.yearCreated || 0,
             error: null
         };
     } catch (err) {
@@ -706,6 +719,26 @@ export const getAllBeersPage = async ({
             pageCount: null,
             total: null,
             filters: null,
+            highestAbv: null,
+            highestIbu: null,
+            highestYear: null,
+            error: getErrorMessage(err)
+        };
+    }
+};
+
+export const getBreweriesNames = async (breweries: string[]) => {
+    try {
+        const data = await db.brewery.findMany({
+            where: { slug: { in: breweries } },
+            select: { name: true, slug: true }
+        });
+
+        return { data, error: null };
+    } catch (err) {
+        return {
+            data: null,
+
             error: getErrorMessage(err)
         };
     }

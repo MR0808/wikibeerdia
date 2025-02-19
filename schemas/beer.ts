@@ -91,3 +91,15 @@ export const BeerSchemaCreate = z.object({
 export const BeerSearchSchema = z.object({
     search: z.string().min(1, "Query is required")
 });
+
+export const BeerAbvSchema = z.object({
+    abv: z.array(z.number()).length(2)
+});
+
+export const BeerIbuSchema = z.object({
+    ibu: z.array(z.number().int()).length(2)
+});
+
+export const BeerYearSchema = z.object({
+    yearCreated: z.array(z.number().int()).length(2)
+});

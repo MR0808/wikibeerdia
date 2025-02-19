@@ -95,11 +95,18 @@ export interface Filters {
     countries: IdNameFilter[];
 }
 
+export interface Highest {
+    abv: string;
+    ibu: string;
+    yearMax: string;
+    yearMin: string;
+}
+
 export interface BeersContainerProps {
     beers: BeersListing[] | null;
     total: number;
-    params: params;
     filters: Filters | null;
+    highest: Highest;
 }
 
 export interface BeersListing {
@@ -179,7 +186,6 @@ type setAvailable = (newAvailable: boolean) => void;
 type View = "grid" | "list" | "";
 
 export interface BeersFilterProps {
-    params: params;
     filters: Filters | null;
     country: string[];
     setCountry: SetCountry;
@@ -187,12 +193,12 @@ export interface BeersFilterProps {
     setSearch: SetSearch;
     style: string[];
     setStyle: SetStyle;
-    brewery: string[];
-    setBrewery: setBrewery;
     abv: number[];
     setAbv: setAbv;
     ibu: number[];
     setIbu: setIbu;
+    brewery: string[];
+    setBrewery: setBrewery;
     yearCreated: number[];
     setYearCreated: setYearCreated;
     available: boolean;
@@ -200,12 +206,52 @@ export interface BeersFilterProps {
     rating: number;
     setRating: SetRating;
     isPending: boolean;
+    highest: Highest;
+}
+
+export interface BeersFilterBreweriesProps {
+    brewery: string[];
+    setBrewery: setBrewery;
+}
+
+export interface BeersFilterIbuProps {
+    ibu: number[];
+    setIbu: setIbu;
+    highestIbu: number;
+}
+
+export interface BeersFilterAbvProps {
+    abv: number[];
+    setAbv: setAbv;
+    highestAbv: number;
+}
+
+export interface BeersFilterYearProps {
+    yearCreated: number[];
+    setYearCreated: setYearCreated;
+    highestYear: number;
+    lowestYear: number;
+}
+
+export interface BeersFilterSearchProps {
+    search: string;
+    setSearch: SetSearch;
+}
+
+export interface BeersFilterCountryProps {
+    country: string[];
+    setCountry: SetCountry;
+    countries: IdNameFilter[];
+}
+
+export interface BeersFilterRatingProps {
+    rating: number;
+    setRating: SetRating;
 }
 
 export interface BeersListingsProps {
     beers: BeersListing[] | null;
     total: number;
-    params: params;
     country: string[];
     setCountry: SetCountry;
     search: string;
@@ -224,8 +270,11 @@ export interface BeersListingsProps {
     setAvailable: setAvailable;
     rating: number;
     setRating: SetRating;
+    pageSize: number;
     setPageSize: SetPageSize;
+    page: number;
     setPage: SetPage;
+    sort: string;
     setSort: SetSort;
     view: View;
     isPending: boolean;
@@ -248,7 +297,6 @@ export interface BeersSortSelectProps {
 
 export interface BeersResultsProps {
     beers: BeersListing[] | null;
-    params: params;
     country: string[];
     setCountry: SetCountry;
     search: string;
@@ -269,3 +317,5 @@ export interface BeersResultsProps {
     setRating: SetRating;
     isPending: boolean;
 }
+
+export type BreweriesResult = { name: string; slug: string };

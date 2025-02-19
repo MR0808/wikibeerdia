@@ -12,7 +12,6 @@ const BreweriesPage = async ({
 }) => {
     const params = searchParamsCacheBeersMain.parse(await searchParams);
 
-    // const params = { sort, page, pageSize, view };
     const beers = await getAllBeersPage({
         sort: params.sort,
         page: params.page.toString(),
@@ -28,6 +27,15 @@ const BreweriesPage = async ({
         rating: params.rating
     });
 
+    const highest = {
+        abv: beers.highestAbv?.toString() || "0",
+        ibu: beers.highestIbu?.toString() || "0",
+        yearMax:
+            beers.highestYear?.toString() ||
+            new Date().getFullYear().toString(),
+        yearMin: beers.lowerstYear?.toString() || "1900"
+    };
+
     return (
         <>
             <div className="bg-breweries-bg h-80 bg-black bg-cover bg-center drop-shadow-lg">
@@ -41,8 +49,8 @@ const BreweriesPage = async ({
                 <BeersContainer
                     beers={beers.data}
                     total={beers.total || 0}
-                    params={params}
                     filters={beers.filters}
+                    highest={highest}
                 />
             </Suspense>
         </>

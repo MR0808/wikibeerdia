@@ -286,7 +286,7 @@ const BreweriesFilter = ({
                                     Clear
                                 </div>
                             )}
-                        <Form {...formSearch}>
+                        <Form {...formBeers}>
                             <form
                                 className="flex w-full flex-col justify-start space-y-5"
                                 onSubmit={formBeers.handleSubmit(onSubmitBeers)}
