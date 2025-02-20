@@ -338,3 +338,7 @@ export interface BeersResultsProps {
 }
 
 export type BreweriesResult = { name: string; slug: string };
+
+export interface BeersAZAlphabetProps {
+    letter: string;
+}

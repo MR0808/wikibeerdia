@@ -52,6 +52,7 @@
     --background-image-az-bg: url("/images/az-bg.png");
     --background-image-location-bg: url("/images/bg-location.jpg");
     --background-image-country-bg: url("/images/bg-country.png");
+    --background-image-country-beers-bg: url("/images/beers-country-bg.png");
 
     @keyframes accordion-down {
         from {
