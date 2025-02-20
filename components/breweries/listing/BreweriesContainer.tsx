@@ -12,7 +12,6 @@ import useViewStore from "@/hooks/useViewType";
 const BreweriesContainer = ({
     breweries,
     total = 0,
-    params,
     filters,
     highestBeers
 }: BreweriesContainerProps) => {
@@ -27,8 +26,11 @@ const BreweriesContainer = ({
         setBeers,
         rating,
         setRating,
+        sort,
         setSort,
+        page,
         setPage,
+        pageSize,
         setPageSize,
         view,
         isPending
@@ -46,7 +48,6 @@ const BreweriesContainer = ({
         >
             <div className="w-full md:w-1/4">
                 <BreweriesFilter
-                    params={params}
                     filters={filters}
                     country={country}
                     setCountry={setCountry}
@@ -67,7 +68,6 @@ const BreweriesContainer = ({
                     <BreweriesListing
                         breweries={breweries}
                         total={total || 0}
-                        params={params}
                         country={country}
                         setCountry={setCountry}
                         type={type}
@@ -78,8 +78,11 @@ const BreweriesContainer = ({
                         setBeers={setBeers}
                         rating={rating}
                         setRating={setRating}
+                        pageSize={pageSize}
                         setPageSize={setPageSize}
+                        page={page}
                         setPage={setPage}
+                        sort={sort}
                         setSort={setSort}
                         view={view}
                         isPending={isPending}

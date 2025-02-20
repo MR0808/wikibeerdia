@@ -40,7 +40,7 @@ export function useBreweriesParams() {
 
     const [rating, setParamRating] = useQueryState(
         "rating",
-        parseAsInteger.withDefault(1).withOptions({
+        parseAsInteger.withDefault(0).withOptions({
             shallow: false,
             history: "push",
             startTransition

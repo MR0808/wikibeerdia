@@ -96,7 +96,6 @@ export interface StyleFilter {
     name: string;
     slug: string;
     parentStyleName: string;
-    count: number;
 }
 
 export interface Filters {

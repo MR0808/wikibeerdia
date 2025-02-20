@@ -67,7 +67,6 @@ export interface BreweryBeersType {
 export interface BreweriesContainerProps {
     breweries: BreweriesListing[] | null;
     total: number;
-    params: params;
     filters: Filters | null;
     highestBeers: number;
 }
@@ -88,7 +87,6 @@ type View = "grid" | "list" | "";
 export interface BreweriesListingsProps {
     breweries: BreweriesListing[] | null;
     total: number;
-    params: params;
     country: string[];
     setCountry: SetCountry;
     search: string;
@@ -99,15 +97,17 @@ export interface BreweriesListingsProps {
     setBeers: SetBeers;
     rating: number;
     setRating: SetRating;
+    pageSize: number;
     setPageSize: SetPageSize;
+    page: number;
     setPage: SetPage;
+    sort: string;
     setSort: SetSort;
     view: View;
     isPending: boolean;
 }
 
 export interface BreweriesFilterProps {
-    params: params;
     filters: Filters | null;
     country: string[];
     setCountry: SetCountry;
@@ -123,9 +123,36 @@ export interface BreweriesFilterProps {
     highestBeers: number;
 }
 
+export interface BreweriesFilterSearchProps {
+    search: string;
+    setSearch: SetSearch;
+}
+
+export interface BreweriesFilterCountryProps {
+    country: string[];
+    setCountry: SetCountry;
+    countries: IdNameFilter[];
+}
+
+export interface BreweriesFilterTypeProps {
+    type: string[];
+    setType: SetType;
+    breweryTypes: IdNameFilter[];
+}
+
+export interface BreweriesFilterBeersProps {
+    beers: number[];
+    setBeers: SetBeers;
+    highestBeers: number;
+}
+
+export interface BreweriesFilterRatingProps {
+    rating: number;
+    setRating: SetRating;
+}
+
 export interface BreweriesResultsProps {
     breweries: BreweriesListing[] | null;
-    params: params;
     country: string[];
     setCountry: SetCountry;
     search: string;
@@ -136,7 +163,7 @@ export interface BreweriesResultsProps {
     setBeers: SetBeers;
     rating: number;
     setRating: SetRating;
-
+    nuqsView: View;
     isPending: boolean;
 }
 

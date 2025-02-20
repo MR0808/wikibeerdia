@@ -37,7 +37,6 @@ const BreweriesPage = async ({
                 <BreweriesContainer
                     breweries={breweries.data}
                     total={breweries.total || 0}
-                    params={params}
                     filters={breweries.filters}
                     highestBeers={breweries.highestBeers || 100}
                 />

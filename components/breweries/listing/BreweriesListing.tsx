@@ -19,7 +19,6 @@ const sortOrders = [
 const BreweriesListing = ({
     breweries,
     total = 0,
-    params,
     search,
     setSearch,
     country,
@@ -31,13 +30,16 @@ const BreweriesListing = ({
     setBeers,
     rating,
     setRating,
+    page,
     setPage,
+    pageSize,
     setPageSize,
+    sort,
     setSort,
     isPending
 }: BreweriesListingsProps) => {
-    const currentPage = params.page || 1;
-    let postsPerPage = params.pageSize || 10;
+    const currentPage = page || 1;
+    let postsPerPage = pageSize || 10;
 
     if (postsPerPage > total) postsPerPage = total;
 
@@ -58,10 +60,10 @@ const BreweriesListing = ({
                     <div className="w-16">Sort by:</div>
                     <BreweriesSortSelect
                         sortOrders={sortOrders}
-                        sort={params.sort}
+                        sort={sort}
                         setSort={setSort}
                     />
-                    <BreweriesViewToggle paramsView={params.view} />
+                    <BreweriesViewToggle paramsView={view} />
                 </div>
             </div>
             <Suspense
@@ -75,7 +77,6 @@ const BreweriesListing = ({
             >
                 <BreweriesResults
                     breweries={breweries}
-                    params={params}
                     country={country}
                     setCountry={setCountry}
                     type={type}
@@ -86,6 +87,7 @@ const BreweriesListing = ({
                     setBeers={setBeers}
                     rating={rating}
                     setRating={setRating}
+                    nuqsView={view}
                     isPending={isPending}
                 />
             </Suspense>

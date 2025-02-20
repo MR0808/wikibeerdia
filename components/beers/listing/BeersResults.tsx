@@ -33,7 +33,8 @@ const BeersResults = ({
     isPending
 }: BeersResultsProps) => {
     const { view } = useViewStore();
-    const { breweryList, setBreweryList } = useBreweryFilterStore();
+    const { breweryList, setBreweryList, stylesList, setStylesList } =
+        useBreweryFilterStore();
 
     let tags = false;
 
@@ -53,10 +54,17 @@ const BeersResults = ({
         setBreweryList(breweryList.filter((b) => b.slug !== breweryToRemove));
     };
 
+    const onStyleClick = (styleToRemove: string) => {
+        let newStyles = style.filter((s) => s !== styleToRemove);
+        setStyle(newStyles);
+        setStylesList(stylesList.filter((s) => s.slug !== styleToRemove));
+    };
+
     if (
         search !== "" ||
         country.length != 0 ||
         brewery.length != 0 ||
+        style.length != 0 ||
         abv.length != 0 ||
         ibu.length != 0 ||
         available !== "" ||
@@ -82,7 +90,25 @@ const BeersResults = ({
                             <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
                         </button>
                     )}
-
+                    {stylesList.length != 0 &&
+                        stylesList.map((item) => {
+                            return (
+                                <button
+                                    type="button"
+                                    className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
+                                    onClick={() => onStyleClick(item.slug)}
+                                    key={item.slug}
+                                >
+                                    <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
+                                        Style
+                                    </span>
+                                    <span className="flex h-full items-center px-2 font-bold whitespace-nowrap text-slate-900">
+                                        {item.name}
+                                    </span>
+                                    <X className="group-hover:text-primary mt-[-1px] mr-2 text-xl" />
+                                </button>
+                            );
+                        })}
                     {breweryList.length != 0 &&
                         breweryList.map((item) => {
                             return (

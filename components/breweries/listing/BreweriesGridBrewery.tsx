@@ -50,7 +50,7 @@ const BreweriesGridBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
                 <ul className="flex list-none flex-wrap items-center justify-between">
                     <li className="flex flex-row items-center">
                         <Beer className="mr-2 size-5" />
-                        {`${brewery._count.beers} beer${brewery._count.beers !== 1 && "s"}`}
+                        {`${brewery._count.beers} beer${brewery._count.beers !== 1 ? "s" : ""}`}
                     </li>
                     <li className="flex flex-row items-center">
                         <Star className="mr-2 size-5" />

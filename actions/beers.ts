@@ -626,11 +626,7 @@ export const getAllBeersPage = async ({
     }
 
     if (rating != null && rating >= 0) {
-        if (rating === 0) {
-            where = { ...where, averageRating: 0 };
-        } else {
-            where = { ...where, averageRating: { gte: rating } };
-        }
+        where = { ...where, averageRating: { gte: rating } };
     }
 
     try {
@@ -706,8 +702,7 @@ export const getAllBeersPage = async ({
                 id: style.id,
                 name: style.name,
                 slug: style.slug,
-                parentStyleName: style.parentStyle.name,
-                count: 0
+                parentStyleName: style.parentStyle.name
             };
         });
         for (const beer of filtersQuery) {
@@ -715,10 +710,6 @@ export const getAllBeersPage = async ({
                 (itemCountry) => itemCountry.id === beer.brewery.countryId
             );
             if (itemCountry) itemCountry.count += 1;
-            const itemStyle = styles.find(
-                (itemStyle) => itemStyle.id === beer.styleId
-            );
-            if (itemStyle) itemStyle.count += 1;
         }
 
         const filters: Filters = { countries, styles };
@@ -768,6 +759,38 @@ export const getBreweriesNames = async (breweries: string[]) => {
         return {
             data: null,
 
+            error: getErrorMessage(err)
+        };
+    }
+};
+
+export const getStylesNames = async (styles: string[]) => {
+    try {
+        const stylesReturn = await db.style.findMany({
+            where: { slug: { in: styles } },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                parentStyle: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+
+        const data = stylesReturn.map((style) => ({
+            id: style.id,
+            name: style.name,
+            slug: style.slug,
+            parentStyleName: style.parentStyle.name
+        }));
+
+        return { data, error: null };
+    } catch (err) {
+        return {
+            data: null,
             error: getErrorMessage(err)
         };
     }

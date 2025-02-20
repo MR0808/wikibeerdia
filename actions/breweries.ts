@@ -812,7 +812,7 @@ export const getAllBreweriesPage = async ({
     if (beers && beers.length > 0) {
         where = { ...where, beerCount: { gte: beers[0], lte: beers[1] } };
     }
-    if (rating) {
+    if (rating != null && rating >= 0) {
         where = { ...where, averageRating: { gte: rating } };
     }
 

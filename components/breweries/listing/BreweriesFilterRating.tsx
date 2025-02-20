@@ -4,9 +4,12 @@ import { Star } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { BeersFilterRatingProps } from "@/types/beers";
+import { BreweriesFilterRatingProps } from "@/types/breweries";
 
-const BeersFilterRating = ({ rating, setRating }: BeersFilterRatingProps) => {
+const BreweriesFilterRating = ({
+    rating,
+    setRating
+}: BreweriesFilterRatingProps) => {
     const handleRatingChange = (value: string) => {
         setRating(parseInt(value));
     };
@@ -19,7 +22,6 @@ const BeersFilterRating = ({ rating, setRating }: BeersFilterRatingProps) => {
         { value: "1", label: "1 star & up" },
         { value: "0", label: "No rating & up" }
     ];
-
     return (
         <div className="flex w-full flex-col border-b border-b-gray-200 pb-6">
             <div className="py-4 text-xl font-bold text-black/80">
@@ -60,19 +62,8 @@ const BeersFilterRating = ({ rating, setRating }: BeersFilterRatingProps) => {
                         </div>
                     ))}
                 </RadioGroup>
-                {/* 
-                            <Checkbox
-                                id={breweryType.name}
-                                checked={type.includes(breweryType.name)}
-                                onCheckedChange={(checked) =>
-                                    handleTypeChange(
-                                        breweryType.name,
-                                        checked as boolean
-                                    )
-                                }
-                            /> */}
             </div>
         </div>
     );
 };
-export default BeersFilterRating;
+export default BreweriesFilterRating;

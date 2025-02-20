@@ -11,7 +11,6 @@ import useViewStore from "@/hooks/useViewType";
 
 const BreweriesResults = ({
     breweries,
-    params,
     search,
     setSearch,
     country,
@@ -22,12 +21,13 @@ const BreweriesResults = ({
     setBeers,
     rating,
     setRating,
+    nuqsView,
     isPending
 }: BreweriesResultsProps) => {
     const { view } = useViewStore();
 
     let viewPage = "";
-    params.view ? (viewPage = params.view) : (viewPage = view);
+    nuqsView ? (viewPage = nuqsView) : (viewPage = view);
     let tags = false;
 
     const onSearchClick = () => {
