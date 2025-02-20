@@ -248,6 +248,7 @@ export const getBeer = async (slug: string) => {
         where: {
             slug
         },
+        omit: { averageRating: true },
         include: {
             beerReviews: {
                 select: {

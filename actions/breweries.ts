@@ -568,7 +568,7 @@ export const getBreweryBeers = async (
     skip: number,
     take: number
 ) => {
-    const data = await db.beer.findMany({
+    const beers = await db.beer.findMany({
         where: { breweryId, status: "APPROVED" },
         skip,
         take,
@@ -585,6 +585,11 @@ export const getBreweryBeers = async (
             }
         }
     });
+
+    const data = beers.map((item) => ({
+        ...item,
+        abv: item.abv.toString()
+    }));
 
     return data;
 };

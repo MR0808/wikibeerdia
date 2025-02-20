@@ -86,6 +86,8 @@ const BeerDetailsPage = async (props: { params: ParamsSlug }) => {
     if (!data) redirect("/beers/");
     const id = data.id;
 
+    const newData = { ...data, abv: data.abv.toString() };
+
     const user = await currentUser();
     if (
         data.status !== "APPROVED" &&
@@ -99,6 +101,7 @@ const BeerDetailsPage = async (props: { params: ParamsSlug }) => {
         0,
         INITIAL_NUMBER_OF_BEERS
     );
+
     const reviews = await getBeerReviews(id, 0, 5);
 
     const ratings = data.beerReviews.map((review) => {
@@ -143,7 +146,7 @@ const BeerDetailsPage = async (props: { params: ParamsSlug }) => {
             <div className="mt-5 flex flex-col justify-between space-y-5 sm:justify-between sm:space-x-0 md:space-y-10">
                 <Suspense fallback={<BeerSkeleton />}>
                     <BeerHeader
-                        data={data}
+                        data={newData}
                         user={user}
                         rating={rating}
                         totalReviews={ratings.length}

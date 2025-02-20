@@ -26,7 +26,7 @@ export interface BeerType {
     status: Status;
     description: string;
     abv: string;
-    ibu: string | null;
+    ibu: number | null;
     yearCreated: number | null;
     available: boolean;
     headline: string;
