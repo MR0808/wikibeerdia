@@ -24,6 +24,8 @@ const BeerEditPage = async (props: { params: ParamsSlug }) => {
     if (!data) redirect("/beers/");
     const id = data.id;
 
+    const newData = { ...data, abv: data.abv.toString() };
+
     const user = await currentUser();
     if (
         data.status !== "APPROVED" &&
@@ -77,7 +79,7 @@ const BeerEditPage = async (props: { params: ParamsSlug }) => {
             </div>
             <Suspense fallback={<BeerSkeleton />}>
                 <BeerEditForm
-                    data={data}
+                    data={newData}
                     session={session}
                     breweries={breweries.data}
                     parentStyles={parentStyles.data}
