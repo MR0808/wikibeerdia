@@ -12,7 +12,7 @@ import { getAllCountries } from "@/data/location";
 
 export async function generateStaticParams() {
     const data = await getAllCountries();
-    return data?.map((country) => ({ isoCode: country.isoCode }));
+    return data ? data.map((country) => ({ isoCode: country.isoCode })) : [];
 }
 
 export async function generateMetadata({
