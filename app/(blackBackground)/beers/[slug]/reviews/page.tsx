@@ -22,6 +22,8 @@ const BeerReviewsPage = async (props: { params: ParamsSlug }) => {
     const { data } = await getBeer(slug);
     if (!data) redirect("/beers/");
 
+    const newData = { ...data, abv: data.abv.toString() };
+
     const id = data.id;
 
     const reviews = await getBeerReviews(id, 0, 20);
@@ -75,7 +77,7 @@ const BeerReviewsPage = async (props: { params: ParamsSlug }) => {
                     >
                         <div className="mb-5 h-auto w-full items-center rounded-lg bg-white p-5 shadow-lg md:mb-20 md:p-14">
                             <BeerReviewsHeading
-                                data={data}
+                                data={newData}
                                 user={user}
                                 rating={rating}
                                 totalReviews={ratings.length}
