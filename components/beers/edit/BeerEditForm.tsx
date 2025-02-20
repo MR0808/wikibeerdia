@@ -120,7 +120,7 @@ const BeerEditForm = ({
             description: data.description,
             headline: data.headline,
             abv: parseInt(data.abv),
-            ibu: data.ibu ? parseInt(data.ibu) : undefined,
+            ibu: data.ibu ? data.ibu : undefined,
             year: data.yearCreated ? data.yearCreated.toString() : undefined,
             available: data.available,
             parentStyle: data.style?.parentStyle.id,
