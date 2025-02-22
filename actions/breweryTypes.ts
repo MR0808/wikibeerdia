@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
 import { BreweryType, type BreweryType as TypeType } from "@prisma/client";
 import { format } from "date-fns";
+import GithubSlugger from "github-slugger";
+
+const slugger = new GithubSlugger();
 
 import db from "@/lib/db";
 import { checkAuth } from "@/lib/auth";
@@ -112,10 +115,26 @@ export const createBreweryType = async (
     }
 
     try {
+        let slug = slugger.slug(values.name);
+        let slugExists = true;
+
+        while (slugExists) {
+            const checkSlug = await db.breweryType.findFirst({
+                where: { slug }
+            });
+            if (!checkSlug) {
+                slugExists = false;
+                break;
+            } else {
+                slug = slugger.slug(values.name);
+            }
+        }
+
         await db.breweryType.create({
             data: {
                 userId: user.id,
                 colour: "#ffffff",
+                slug,
                 ...values
             }
         });
