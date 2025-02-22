@@ -1066,7 +1066,12 @@ export const getCountryBreweries = async (isoCode: string) => {
                             select: { beers: true }
                         },
                         breweryType: {
-                            select: { id: true, name: true, colour: true }
+                            select: {
+                                id: true,
+                                name: true,
+                                colour: true,
+                                slug: true
+                            }
                         },
                         country: { select: { id: true, name: true } },
                         breweryReviews: { select: { id: true } },
