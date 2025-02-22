@@ -9,20 +9,21 @@ const BreweriesListBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
     return (
         <div className="relative flex flex-col rounded-3xl bg-white p-5 md:h-72 md:flex-row">
             <div className="w-full md:mr-12 md:w-1/3">
-                <div
+                <Link
+                    href={`/breweries/type/${brewery.breweryType.slug}`}
                     className="absolute top-10 left-10 z-[1] w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white uppercase"
                     style={{
                         backgroundColor: brewery.breweryType.colour
                     }}
                 >
                     {brewery.breweryType.name}
-                </div>
+                </Link>
                 <Link
                     href={`/breweries/${brewery.slug}`}
                     className="overflow-hidden rounded-xl"
                 >
                     <Image
-                        src={brewery.images[0].image}
+                        src={brewery.logoUrl}
                         alt={brewery.name}
                         width={500}
                         height={500}

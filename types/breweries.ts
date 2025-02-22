@@ -38,6 +38,7 @@ export interface BreweryType {
     }[];
     breweryType: {
         name: string;
+        slug: string;
     };
     user: {
         id: string;
@@ -172,6 +173,7 @@ export interface BreweriesListing {
         id: string;
         name: string;
         colour: string;
+        slug: string;
     };
     breweryFavourites: {
         id: string;
@@ -179,10 +181,6 @@ export interface BreweriesListing {
     _count: {
         beers: number;
     };
-    images: {
-        id: string;
-        image: string;
-    }[];
     country: {
         name: string;
         id: string;

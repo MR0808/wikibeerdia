@@ -34,7 +34,6 @@ export async function GET(req: Request) {
             _count: {
                 select: { beers: true }
             },
-            images: { select: { id: true, image: true } },
             breweryType: { select: { id: true, name: true, colour: true } },
             country: { select: { id: true, name: true } },
             breweryReviews: { select: { id: true } },

@@ -1,4 +1,5 @@
 import { Factory, Beer, Earth, Star } from "lucide-react";
+import Link from "next/link";
 
 import { BreweryType } from "@/types/breweries";
 
@@ -21,9 +22,12 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                     </li>
                     <li className="relative mt-2 w-1/2 p-2 text-base md:mt-0 md:w-1/5">
                         <Factory className="mb-3 h-8 w-8" />
-                        <span className="text-xl text-black">
+                        <Link
+                            href={`/breweries/types/${data.breweryType.slug}`}
+                            className="text-xl text-black hover:underline"
+                        >
                             {data.breweryType.name}
-                        </span>
+                        </Link>
                     </li>
                     <li className="overview-icons">
                         <Beer className="mb-3 h-8 w-8" />
@@ -33,9 +37,12 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                     </li>
                     <li className="overview-icons">
                         <Earth className="mb-3 h-8 w-8" />
-                        <span className="text-xl text-black">
+                        <Link
+                            href={`/breweries/country/${data.country.isoCode}`}
+                            className="text-xl text-black hover:underline"
+                        >
                             {data.country.name}
-                        </span>
+                        </Link>
                     </li>
                     <li className="overview-icons">
                         <Star className="mb-3 h-8 w-8" />
@@ -49,7 +56,7 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
                 <div className="w-full">
                     <div className="h-auto w-full rounded-lg bg-white p-5 shadow-lg md:p-14">
                         <h4 className="mb-5 text-4xl">{`"${data.headline}"`}</h4>
-                        <p className="whitespace-pre-wrap text-lg leading-8">
+                        <p className="text-lg leading-8 whitespace-pre-wrap">
                             {data.description}
                         </p>
                     </div>

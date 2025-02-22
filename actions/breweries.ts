@@ -452,7 +452,7 @@ export const getBrewery = async (slug: string) => {
                 }
             },
             breweryType: {
-                select: { name: true }
+                select: { name: true, slug: true }
             },
             images: { orderBy: { order: "asc" } },
             user: { select: { id: true, displayName: true } },
@@ -829,8 +829,9 @@ export const getAllBreweriesPage = async ({
                 _count: {
                     select: { beers: true }
                 },
-                images: { select: { id: true, image: true } },
-                breweryType: { select: { id: true, name: true, colour: true } },
+                breweryType: {
+                    select: { id: true, name: true, colour: true, slug: true }
+                },
                 country: { select: { id: true, name: true } },
                 breweryReviews: { select: { id: true } },
                 breweryFavourites: {
@@ -946,7 +947,6 @@ export const getBreweriesAZ = async ({
                 _count: {
                     select: { beers: true }
                 },
-                images: { select: { id: true, image: true } },
                 breweryType: { select: { id: true, name: true, colour: true } },
                 country: { select: { id: true, name: true } },
                 breweryReviews: { select: { id: true } },
@@ -990,7 +990,7 @@ export const getCountriesBreweries = async ({
     letter?: string;
 }) => {
     try {
-        const skip = page * 10;
+        const skip = page * 9;
         const countries = await db.country.findMany({
             where: {
                 breweries: {
@@ -1065,7 +1065,6 @@ export const getCountryBreweries = async (isoCode: string) => {
                         _count: {
                             select: { beers: true }
                         },
-                        images: { select: { id: true, image: true } },
                         breweryType: {
                             select: { id: true, name: true, colour: true }
                         },

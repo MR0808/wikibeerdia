@@ -16,7 +16,7 @@ const BeersCountryContainer = ({
     total: number;
     letter: string;
 }) => {
-    const totalPages = Math.ceil(total / 10);
+    const totalPages = Math.ceil(total / 9);
     const { isLoading, data, isFetchingNextPage, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
             queryKey: ["beersCountry"],
@@ -79,7 +79,8 @@ const BeersCountryContainer = ({
                 <div className="mx-8 mt-4 grid grid-cols-1 justify-items-center gap-8 md:mt-5 md:grid-cols-3">
                     {pages.map((country) => {
                         return (
-                            <div
+                            <Link
+                                href={`/beers/country/${country.isoCode}`}
                                 key={country.id}
                                 className="group relative h-54 w-80 overflow-hidden rounded-4xl md:h-[340px] md:w-[520px]"
                             >
@@ -97,15 +98,12 @@ const BeersCountryContainer = ({
                                 <div className="absolute inset-0 bg-black/30"></div>
 
                                 <div className="relative z-10 flex h-full flex-col items-center justify-center bg-black/40 text-white">
-                                    <Link
-                                        href={`/beers/country/${country.isoCode}`}
-                                        className="mb-4 text-3xl font-bold"
-                                    >
+                                    <div className="mb-4 text-3xl font-bold">
                                         {country.name}
-                                    </Link>
+                                    </div>
                                     <div className="rounded-4xl border border-white px-5 py-1 text-lg font-medium">{`${country.beerCount} Beer${country.beerCount === 1 ? "" : "s"}`}</div>
                                 </div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>

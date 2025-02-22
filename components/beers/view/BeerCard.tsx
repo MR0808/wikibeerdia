@@ -19,7 +19,7 @@ const BeerCard = ({ beer }: { beer: BreweryBeersType }) => {
             <div className="group-hover:text-primary font-semibold">
                 {beer.name}
             </div>
-            <div>{beer.abv}%</div>
+            <div>{Number(beer.abv).toFixed(2)}%</div>
             <div className="group-hover:text-primary">{beer.style?.name}</div>
         </Link>
     );

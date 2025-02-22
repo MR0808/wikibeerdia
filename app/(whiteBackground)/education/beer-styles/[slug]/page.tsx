@@ -152,9 +152,12 @@ const ParentStyleInfoPage = async (props: { params: ParamsSlug }) => {
                                     id={style.slug}
                                     key={index}
                                 >
-                                    <h1 className="pb-5 text-4xl font-semibold">
+                                    <Link
+                                        href={`/beers/styles/${style.slug}`}
+                                        className="pb-5 text-4xl font-semibold hover:underline"
+                                    >
                                         {style.name}
-                                    </h1>
+                                    </Link>
 
                                     <div className="flex flex-col space-y-1">
                                         <p>

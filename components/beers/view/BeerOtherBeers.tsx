@@ -2,8 +2,6 @@
 
 import { useState, useTransition } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { ExtendedUser } from "@/next-auth";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { BreweryBeersType } from "@/types/breweries";

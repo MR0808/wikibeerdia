@@ -55,12 +55,14 @@ export interface BeerType {
         };
     };
     style: {
-        name: string;
         parentStyle: {
-            name: string;
             id: string;
+            slug: string;
+            name: string;
         };
         id: string;
+        slug: string;
+        name: string;
     } | null;
     images: {
         id: string;
@@ -117,6 +119,56 @@ export interface BeersContainerProps {
     highest: Highest;
 }
 
+export interface BeersGridBeerCountryProps {
+    beer: BeerCountryListing;
+    brewery: BeerCountryBrewery;
+}
+
+export interface BeerCountryBrewery {
+    slug: string;
+    name: string;
+    country: string;
+    region: string;
+}
+
+export interface BeerCountryListing {
+    averageRating: string;
+    abv: string;
+    style: {
+        name: string;
+        parentStyle: {
+            name: string;
+            slug: string;
+        };
+        id: string;
+        slug: string;
+    } | null;
+    images: {
+        id: string;
+        image: string;
+    }[];
+    beerReviews: {
+        id: string;
+    }[];
+    beerFavourites: {
+        id: string;
+    }[];
+    id: string;
+    name: string;
+    status: Status;
+    slug: string;
+    description: string;
+    headline: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    ibu: number | null;
+    yearCreated: number | null;
+    available: boolean;
+    breweryId: string;
+    styleId: string | null;
+}
+
 export interface BeersListing {
     averageRating: string;
     abv: string;
@@ -145,8 +197,13 @@ export interface BeersListing {
     breweryId: string;
     styleId: string | null;
     style: {
-        id: string;
         name: string;
+        parentStyle: {
+            name: string;
+            slug: string;
+        };
+        id: string;
+        slug: string;
     } | null;
     brewery: {
         country: {

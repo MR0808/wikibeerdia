@@ -2,10 +2,10 @@ import Image from "next/image";
 import { Beer, Star, MoveUpRight, Hop, CalendarDays } from "lucide-react";
 import Link from "next/link";
 
-import { BeersListing } from "@/types/beers";
-import BeersFavouriteToggleButton from "./BeersFavouriteToggleButton";
+import { BeersGridBeerCountryProps } from "@/types/beers";
+import BeersFavouriteToggleButton from "../BeersFavouriteToggleButton";
 
-const BeersGridBeer = ({ beer }: { beer: BeersListing }) => {
+const BeersGridBeerCountry = ({ beer, brewery }: BeersGridBeerCountryProps) => {
     const abv = parseFloat(beer.abv);
     return (
         <div className="relative flex flex-col space-y-4 rounded-3xl bg-white p-5">
@@ -42,10 +42,10 @@ const BeersGridBeer = ({ beer }: { beer: BeersListing }) => {
                     {`${beer.name}${beer.available == false ? " (No longer available)" : ""}`}
                 </Link>
                 <Link
-                    href={`/breweries/${beer.brewery.slug}`}
+                    href={`/breweries/${brewery.slug}`}
                     className="text-foreground/55 text-lg hover:underline"
                 >
-                    {`${beer.brewery.name}, ${beer.brewery.region}, ${beer.brewery.country.name}`}
+                    {`${brewery.name}, ${brewery.region}, ${brewery.country}`}
                 </Link>
             </div>
             <div className="text-foreground/60 w-full border-t border-dashed border-t-gray-300 pt-4 text-xl">
@@ -85,4 +85,4 @@ const BeersGridBeer = ({ beer }: { beer: BeersListing }) => {
         </div>
     );
 };
-export default BeersGridBeer;
+export default BeersGridBeerCountry;

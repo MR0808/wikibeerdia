@@ -2,11 +2,11 @@ import { redirect } from "next/navigation";
 import { biorhyme, assistant } from "@/app/fonts";
 import "../../../../../node_modules/flag-icons/css/flag-icons.min.css";
 
-import { getCountryBreweries } from "@/actions/breweries";
+import { getCountryBeers } from "@/actions/beers";
 import { ParamsIsoCode } from "@/utils/types";
-import BreweriesGridBrewery from "@/components/breweries/listing/BreweriesGridBrewery";
+import BeersGridBeerCountry from "@/components/beers/listing/country/BeersGridBeerCountry";
 import { Suspense } from "react";
-import BreweriesGridSkeleton from "@/components/breweries/listing/BreweriesGridSkeleton";
+import BeersGridSkeleton from "@/components/beers/listing/BeersGridSkeleton";
 import siteMetadata from "@/utils/siteMetaData";
 import { getAllCountries } from "@/data/location";
 
@@ -21,11 +21,10 @@ export async function generateMetadata({
     params: Promise<{ isoCode: string }>;
 }) {
     const { isoCode } = await params;
-    let data = await getCountryBreweries(isoCode);
+    let data = await getCountryBeers(isoCode);
     if (!data) {
         return;
     }
-
     let imageList = [`/images/countries/${isoCode}.jpg`];
     const ogImages = imageList.map((img) => {
         return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
@@ -34,12 +33,12 @@ export async function generateMetadata({
     const authors = siteMetadata.author;
 
     return {
-        title: ` Breweries by Country | ${data.name}`,
-        description: `Breweries from ${data.name}`,
+        title: ` Beers by Country | ${data.name}`,
+        description: `Beers from ${data.name}`,
         openGraph: {
             title: data.name,
-            description: `Breweries from ${data.name}`,
-            url: `${siteMetadata.siteUrl}/breweries/country/${isoCode}`,
+            description: `Beers from ${data.name}`,
+            url: `${siteMetadata.siteUrl}/beers/country/${isoCode}`,
             siteName: siteMetadata.title,
             locale: "en_AU",
             type: "website",
@@ -49,15 +48,15 @@ export async function generateMetadata({
         twitter: {
             card: "summary_large_image",
             title: data.name,
-            description: `Breweries from ${data.name}`,
+            description: `Beers from ${data.name}`,
             images: ogImages
         }
     };
 }
 
-const BreweriesCountryPage = async (props: { params: ParamsIsoCode }) => {
+const BeersCountryPage = async (props: { params: ParamsIsoCode }) => {
     const { isoCode } = await props.params;
-    const country = await getCountryBreweries(isoCode);
+    const country = await getCountryBeers(isoCode);
     if (!country) redirect("/breweries/country/");
     const backgroundImageUrl = `/images/countries/${isoCode}.jpg`;
 
@@ -70,7 +69,7 @@ const BreweriesCountryPage = async (props: { params: ParamsIsoCode }) => {
                 <div
                     className={`${biorhyme.className} container my-auto flex h-full flex-col content-center items-center space-y-5 pt-32 align-bottom text-6xl font-semibold text-white md:pt-48`}
                 >
-                    <div>Breweries from {country.name}</div>
+                    <div>Beers from {country.name}</div>
                     <div className="rounded bg-black/20 p-2 shadow-2xl">
                         <span
                             className={`fi fi-${isoCode.toLowerCase()} rounded shadow-2xl`}
@@ -78,26 +77,35 @@ const BreweriesCountryPage = async (props: { params: ParamsIsoCode }) => {
                     </div>
                 </div>
             </div>
-            <Suspense fallback={<BreweriesGridSkeleton />}>
-                {country.breweries ? (
+            <Suspense fallback={<BeersGridSkeleton />}>
+                {country.totalBeers > 0 ? (
                     <div className={`${assistant.className} container mt-10`}>
-                        <div className="text-2xl font-semibold">{`${country.breweries.length} brewer${country.breweries.length === 1 ? "y" : "ies"} found`}</div>
+                        <div className="text-2xl font-semibold">{`${country.totalBeers} beer${country.totalBeers === 1 ? "" : "s"} found`}</div>
                         <div className="mt-10 grid grid-cols-3 gap-10">
                             {country.breweries.map((brewery) => {
-                                return (
-                                    <BreweriesGridBrewery
-                                        key={brewery.id}
-                                        brewery={brewery}
-                                    />
-                                );
+                                const breweryProp = {
+                                    slug: brewery.slug,
+                                    name: brewery.name,
+                                    region: brewery.region,
+                                    country: country.name || ""
+                                };
+                                return brewery.beers.map((beer) => {
+                                    return (
+                                        <BeersGridBeerCountry
+                                            key={beer.id}
+                                            beer={beer}
+                                            brewery={breweryProp}
+                                        />
+                                    );
+                                });
                             })}
                         </div>
                     </div>
                 ) : (
-                    <div>No breweries for this country found</div>
+                    <div>No beers for this country found</div>
                 )}
             </Suspense>
         </div>
     );
 };
-export default BreweriesCountryPage;
+export default BeersCountryPage;

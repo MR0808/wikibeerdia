@@ -272,6 +272,7 @@ model BreweryReview {
 model BreweryType {
   id          String        @id @default(uuid())
   name        String
+  slug        String
   description String?
   colour      String
   status      Status        @default(PENDING)

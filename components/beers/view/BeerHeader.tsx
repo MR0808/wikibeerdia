@@ -43,6 +43,12 @@ const BeerHeader = ({
                                 />
                             </Link>
                             <div className="text-3xl">{data.name}</div>
+                            <Link
+                                href={`/breweries/${data.brewery.slug}`}
+                                className="text-xl hover:underline"
+                            >
+                                {data.brewery.name}
+                            </Link>
                             <BeerRating
                                 rating={rating}
                                 totalReviews={totalReviews}
@@ -72,15 +78,21 @@ const BeerHeader = ({
                     <div className="flex w-full flex-col justify-between space-y-4 md:text-center">
                         <div className="flex w-full flex-row justify-between">
                             <div className="text-base font-bold">Category:</div>
-                            <div className="w-1/2 text-left text-base">
+                            <Link
+                                href={`/beers/styles/${data.style?.parentStyle.slug}`}
+                                className="w-1/2 text-left text-base hover:underline"
+                            >
                                 {data.style?.parentStyle.name}
-                            </div>
+                            </Link>
                         </div>
                         <div className="flex w-full flex-row justify-between">
                             <div className="text-base font-bold">Style:</div>
-                            <div className="w-1/2 text-left text-base">
+                            <Link
+                                href={`/beers/styles/${data.style?.parentStyle.slug}/${data.style?.slug}`}
+                                className="w-1/2 text-left text-base hover:underline"
+                            >
                                 {data.style?.name}
-                            </div>
+                            </Link>
                         </div>
                         <div className="flex w-full flex-row justify-between">
                             <div className="text-base font-bold">ABV:</div>

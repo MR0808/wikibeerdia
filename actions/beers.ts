@@ -259,7 +259,10 @@ export const getBeer = async (slug: string) => {
                 select: {
                     id: true,
                     name: true,
-                    parentStyle: { select: { id: true, name: true } }
+                    slug: true,
+                    parentStyle: {
+                        select: { id: true, name: true, slug: true }
+                    }
                 }
             },
             images: { orderBy: { order: "asc" } },
@@ -647,7 +650,14 @@ export const getAllBeersPage = async ({
                     where: { userId: id },
                     select: { id: true }
                 },
-                style: { select: { id: true, name: true } },
+                style: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        parentStyle: { select: { slug: true, name: true } }
+                    }
+                },
                 brewery: {
                     select: {
                         id: true,
@@ -811,11 +821,11 @@ export const getCountriesBeers = async ({
     letter?: string;
 }) => {
     try {
-        const skip = page * 10;
+        const skip = page * 9;
         const countries = await db.country.findMany({
             where: {
                 name: {
-                    startsWith: "A",
+                    startsWith: letter,
                     mode: "insensitive" // Case-insensitive search
                 },
                 breweries: {
@@ -838,7 +848,9 @@ export const getCountriesBeers = async ({
                         }
                     }
                 }
-            }
+            },
+            skip,
+            take: 9
         });
 
         const result = countries.map((country) => ({
@@ -876,7 +888,7 @@ export const getCountriesBeersTotal = async (letter = "") => {
     }
 };
 
-export const getCountryBreweries = async (isoCode: string) => {
+export const getCountryBeers = async (isoCode: string) => {
     const user = await checkAuth();
 
     let id = "";
@@ -891,7 +903,8 @@ export const getCountryBreweries = async (isoCode: string) => {
                 isoCode,
                 breweries: {
                     some: {
-                        status: "APPROVED"
+                        status: "APPROVED",
+                        beers: { some: { status: "APPROVED" } }
                     }
                 }
             },
@@ -901,15 +914,29 @@ export const getCountryBreweries = async (isoCode: string) => {
                         _count: {
                             select: { beers: true }
                         },
-                        images: { select: { id: true, image: true } },
                         breweryType: {
                             select: { id: true, name: true, colour: true }
                         },
                         country: { select: { id: true, name: true } },
-                        breweryReviews: { select: { id: true } },
-                        breweryFavourites: {
-                            where: { userId: id },
-                            select: { id: true }
+                        beers: {
+                            include: {
+                                images: { select: { id: true, image: true } },
+                                style: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                        slug: true,
+                                        parentStyle: {
+                                            select: { slug: true, name: true }
+                                        }
+                                    }
+                                },
+                                beerReviews: { select: { id: true } },
+                                beerFavourites: {
+                                    where: { userId: id },
+                                    select: { id: true }
+                                }
+                            }
                         }
                     },
                     orderBy: { name: "asc" }
@@ -917,13 +944,30 @@ export const getCountryBreweries = async (isoCode: string) => {
             }
         });
 
-        const breweries = data?.breweries.map((item) => ({
-            ...item,
-            averageRating: item.averageRating.toString()
-        }));
+        const breweries =
+            data?.breweries.map((brewery) => ({
+                id: brewery.id,
+                slug: brewery.slug,
+                name: brewery.name,
+                region: brewery.region,
+                beers: brewery.beers.map((beer) => ({
+                    ...beer,
+                    averageRating: beer.averageRating.toString(),
+                    abv: beer.abv.toString()
+                }))
+            })) || [];
 
-        const country = { id: data?.id, name: data?.name, breweries };
+        const totalBeers = breweries.reduce(
+            (sum, brewery) => sum + brewery.beers.length,
+            0
+        );
 
+        const country = {
+            id: data?.id,
+            name: data?.name,
+            breweries,
+            totalBeers
+        };
         return country;
     } catch (err) {
         throw err;

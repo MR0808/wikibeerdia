@@ -52,10 +52,14 @@ const BreweryHeader = ({
                         {data.status !== "APPROVED" && (
                             <Badge className="mr-4">{data.status}</Badge>
                         )}
-                        <div className="mt-15 flex flex-row opacity-70">
+                        <Link
+                            href={`https://maps.google.com/?q=${data.formattedAddress}`}
+                            target="_blank"
+                            className="mt-15 flex flex-row opacity-70 hover:underline"
+                        >
                             <MapPin className="mr-1 h-5 w-5 align-middle opacity-70" />
                             {data.formattedAddress}
-                        </div>
+                        </Link>
                     </div>
                 </div>
                 <div className="flex w-1/2 flex-row justify-end md:text-center">

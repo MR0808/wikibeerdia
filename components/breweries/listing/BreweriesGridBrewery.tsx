@@ -8,14 +8,15 @@ import BreweriesFavouriteToggleButton from "./BreweriesFavouriteToggleButton";
 const BreweriesGridBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
     return (
         <div className="relative flex flex-col space-y-4 rounded-3xl bg-white p-5">
-            <div
+            <Link
+                href={`/breweries/type/${brewery.breweryType.slug}`}
                 className="absolute top-10 left-10 z-[1] w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white uppercase"
                 style={{
                     backgroundColor: brewery.breweryType.colour
                 }}
             >
                 {brewery.breweryType.name}
-            </div>
+            </Link>
             <div className="absolute top-10 right-10 z-[1] float-right">
                 <BreweriesFavouriteToggleButton
                     breweryId={brewery.id}
@@ -27,7 +28,7 @@ const BreweriesGridBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
                 className="h-full overflow-hidden rounded-xl"
             >
                 <Image
-                    src={brewery.images[0].image}
+                    src={brewery.logoUrl}
                     alt={brewery.name}
                     width={300}
                     height={200}
