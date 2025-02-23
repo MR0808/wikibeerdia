@@ -947,7 +947,9 @@ export const getBreweriesAZ = async ({
                 _count: {
                     select: { beers: true }
                 },
-                breweryType: { select: { id: true, name: true, colour: true } },
+                breweryType: {
+                    select: { id: true, name: true, colour: true, slug: true }
+                },
                 country: { select: { id: true, name: true } },
                 breweryReviews: { select: { id: true } },
                 breweryFavourites: {
