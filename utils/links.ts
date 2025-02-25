@@ -28,7 +28,6 @@ export const links: NavLink[] = [
                 href: "/breweries",
                 label: "Find a Brewery"
             },
-
             {
                 href: "/breweries/az",
                 label: "A-Z"
@@ -61,6 +60,10 @@ export const links: NavLink[] = [
             {
                 href: "/beers",
                 label: "Find a Beer"
+            },
+            {
+                href: "/beers/az",
+                label: "A-Z"
             },
             {
                 href: "/beers/country",

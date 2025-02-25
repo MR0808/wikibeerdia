@@ -8,13 +8,20 @@ type Props = {
     isLoadingIntial: boolean;
     isLoadingMore: boolean;
     children: React.ReactNode;
+    hasNoResults: boolean;
     loadMore: () => void;
 };
 
 function InfiniteScroll(props: Props) {
     const observerElement = useRef<HTMLDivElement | null>(null);
-    const { isLoadingIntial, isLoadingMore, children, loadMore, typeLoading } =
-        props;
+    const {
+        isLoadingIntial,
+        isLoadingMore,
+        children,
+        hasNoResults,
+        loadMore,
+        typeLoading
+    } = props;
 
     useEffect(() => {
         // is element in view?
@@ -43,6 +50,14 @@ function InfiniteScroll(props: Props) {
         // cleanup function
         return () => observer.disconnect();
     }, [isLoadingMore, isLoadingIntial, loadMore]);
+
+    if (hasNoResults) {
+        return (
+            <div className="text-center text-lg font-semibold text-gray-500">
+                No results found.
+            </div>
+        );
+    }
 
     return (
         <>

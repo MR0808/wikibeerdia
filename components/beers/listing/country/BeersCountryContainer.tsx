@@ -74,6 +74,7 @@ const BeersCountryContainer = ({
                 typeLoading="countries"
                 isLoadingIntial={isLoading}
                 isLoadingMore={isFetchingNextPage}
+                hasNoResults={pages.length === 0}
                 loadMore={() => hasNextPage && fetchNextPage()}
             >
                 <div className="mx-8 mt-4 grid grid-cols-1 justify-items-center gap-8 md:mt-5 md:grid-cols-3">

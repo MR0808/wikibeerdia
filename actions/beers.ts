@@ -12,7 +12,7 @@ import { BeerSchemaCreate, BeerEditSchema } from "@/schemas/beer";
 import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
-import { BeerPageFilterSearch, Filters } from "@/types/beers";
+import { BeerPageFilterSearch, Filters, BeerAZPageSearch } from "@/types/beers";
 
 const slugger = new GithubSlugger();
 
@@ -969,6 +969,135 @@ export const getCountryBeers = async (isoCode: string) => {
             totalBeers
         };
         return country;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getBeersAZ = async ({ page, letter = "a" }: BeerAZPageSearch) => {
+    const user = await checkAuth();
+
+    let id = "";
+
+    if (user) {
+        id = user.id;
+    }
+
+    try {
+        const offset = page * 10;
+
+        if (letter !== "number") {
+            const data = await db.beer.findMany({
+                where: { name: { startsWith: letter, mode: "insensitive" } },
+                include: {
+                    images: { select: { id: true, image: true } },
+                    beerReviews: { select: { id: true } },
+                    beerFavourites: {
+                        where: { userId: id },
+                        select: { id: true }
+                    },
+                    style: {
+                        select: {
+                            id: true,
+                            name: true,
+                            slug: true,
+                            parentStyle: { select: { slug: true, name: true } }
+                        }
+                    },
+                    brewery: {
+                        select: {
+                            id: true,
+                            name: true,
+                            region: true,
+                            country: { select: { name: true } },
+                            slug: true
+                        }
+                    }
+                },
+                orderBy: { name: "asc" },
+                skip: offset,
+                take: 10
+            });
+            const updatedData = data.map((item) => ({
+                ...item,
+                averageRating: item.averageRating.toString(),
+                abv: item.abv.toString()
+            }));
+
+            return updatedData;
+        } else {
+            const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            const data = await db.beer.findMany({
+                where: {
+                    OR: numbers.map((number) => ({
+                        name: {
+                            startsWith: number
+                        }
+                    }))
+                },
+                include: {
+                    images: { select: { id: true, image: true } },
+                    beerReviews: { select: { id: true } },
+                    beerFavourites: {
+                        where: { userId: id },
+                        select: { id: true }
+                    },
+                    style: {
+                        select: {
+                            id: true,
+                            name: true,
+                            slug: true,
+                            parentStyle: { select: { slug: true, name: true } }
+                        }
+                    },
+                    brewery: {
+                        select: {
+                            id: true,
+                            name: true,
+                            region: true,
+                            country: { select: { name: true } },
+                            slug: true
+                        }
+                    }
+                },
+                orderBy: { name: "asc" },
+                skip: offset,
+                take: 10
+            });
+            const updatedData = data.map((item) => ({
+                ...item,
+                averageRating: item.averageRating.toString(),
+                abv: item.abv.toString()
+            }));
+
+            return updatedData;
+        }
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getBeersAZTotal = async (letter = "a") => {
+    try {
+        let total = 0;
+        if (letter !== "number") {
+            total = await db.beer.count({
+                where: { name: { startsWith: letter, mode: "insensitive" } }
+            });
+        } else {
+            const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            total = await db.beer.count({
+                where: {
+                    OR: numbers.map((number) => ({
+                        name: {
+                            startsWith: number
+                        }
+                    }))
+                }
+            });
+        }
+
+        return total;
     } catch (err) {
         throw err;
     }

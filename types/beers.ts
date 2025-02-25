@@ -394,8 +394,33 @@ export interface BeersResultsProps {
     isPending: boolean;
 }
 
-export type BreweriesResult = { name: string; slug: string };
+export type BeersResult = { name: string; slug: string };
 
 export interface BeersAZAlphabetProps {
     letter: string;
+}
+
+export interface BeersAZContainerProps {
+    total: number;
+    letter: string;
+}
+
+export interface AZparams {
+    pageSize: number;
+    page: number;
+    view: "grid" | "list" | "";
+    letter: string;
+}
+
+export interface BeerAZPageSearch {
+    page: number;
+    letter?: string;
+}
+
+export interface BeersAZAlphabetProps {
+    letter: string;
+}
+
+export interface BeersAZViewToggleProps {
+    paramsView: string;
 }

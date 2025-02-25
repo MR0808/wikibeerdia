@@ -4,22 +4,19 @@ import { assistant } from "@/app/fonts";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import InfiniteScroll from "@/components/global/InfiniteScroll";
-import { BreweriesAZContainerProps } from "@/types/breweries";
-import BreweriesAZAlphabet from "./BreweriesAZAlphabet";
-import BreweriesListSkeleton from "../BreweriesListSkeleton";
-import { getBreweriesAZ } from "@/actions/breweries";
-import BreweriesListBrewery from "../BreweriesListBrewery";
+import { BeersAZContainerProps } from "@/types/beers";
+import BeersAZAlphabet from "./BeersAZAlphabet";
+import BeersListSkeleton from "../BeersListSkeleton";
+import { getBeersAZ } from "@/actions/beers";
+import BeersListBeer from "../BeersListBeer";
 
-const BreweriesAZContainer = ({
-    total = 0,
-    letter
-}: BreweriesAZContainerProps) => {
+const BeersAZContainer = ({ total = 0, letter }: BeersAZContainerProps) => {
     const totalPages = Math.ceil(total / 10);
     const { isLoading, data, isFetchingNextPage, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
             queryKey: ["breweriesAZ"],
             queryFn: ({ pageParam }) =>
-                getBreweriesAZ({
+                getBeersAZ({
                     page: pageParam,
                     letter
                 }),
@@ -44,7 +41,7 @@ const BreweriesAZContainer = ({
             <div
                 className={`${assistant.className} flex flex-col space-y-5 pt-5 md:mx-auto md:w-[1000px]`}
             >
-                <BreweriesListSkeleton />
+                <BeersListSkeleton />
             </div>
         );
     }
@@ -55,7 +52,7 @@ const BreweriesAZContainer = ({
                 className={`${assistant.className} flex flex-col space-y-5 pt-5 md:mx-auto md:w-[1000px]`}
             >
                 <div className="text-2xl font-semibold">
-                    No breweries found that match your search
+                    No beers found that match your search
                 </div>
             </div>
         );
@@ -67,25 +64,20 @@ const BreweriesAZContainer = ({
         <div
             className={`${assistant.className} flex flex-col space-y-5 pt-5 md:mx-auto md:w-[1000px]`}
         >
-            <BreweriesAZAlphabet letter={letter} />
+            <BeersAZAlphabet letter={letter} />
             <div className="flex flex-row justify-between">
                 <div className="text-xl font-semibold">{`${total} result${total === 1 ? "" : "s"}`}</div>
             </div>
             <InfiniteScroll
-                typeLoading="breweries"
+                typeLoading="beers"
                 isLoadingIntial={isLoading}
                 isLoadingMore={isFetchingNextPage}
                 hasNoResults={pages.length === 0}
                 loadMore={() => hasNextPage && fetchNextPage()}
             >
                 <div className="flex flex-col gap-4">
-                    {pages.map((brewery) => {
-                        return (
-                            <BreweriesListBrewery
-                                brewery={brewery}
-                                key={brewery.id}
-                            />
-                        );
+                    {pages.map((beer) => {
+                        return <BeersListBeer beer={beer} key={beer.id} />;
                     })}
                 </div>
             </InfiniteScroll>
@@ -93,4 +85,4 @@ const BreweriesAZContainer = ({
     );
 };
 
-export default BreweriesAZContainer;
+export default BeersAZContainer;
