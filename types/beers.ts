@@ -394,7 +394,7 @@ export interface BeersResultsProps {
     isPending: boolean;
 }
 
-export type BeersResult = { name: string; slug: string };
+export type BreweriesResult = { name: string; slug: string };
 
 export interface BeersAZAlphabetProps {
     letter: string;
