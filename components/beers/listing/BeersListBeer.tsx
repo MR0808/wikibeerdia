@@ -8,7 +8,7 @@ import BeersFavouriteToggleButton from "./BeersFavouriteToggleButton";
 const BeersListBeer = ({ beer }: { beer: BeersListing }) => {
     const abv = parseFloat(beer.abv);
     return (
-        <div className="relative flex flex-col rounded-3xl bg-white p-5 md:h-72 md:flex-row">
+        <div className="relative flex flex-col rounded-3xl bg-white p-5 md:min-h-72 md:flex-row">
             <div className="w-full md:mr-12 md:w-1/3">
                 <Link
                     href={`/beers/styles/${beer.style?.parentStyle.slug}/${beer.style?.slug}`}

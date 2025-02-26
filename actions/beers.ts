@@ -12,7 +12,12 @@ import { BeerSchemaCreate, BeerEditSchema } from "@/schemas/beer";
 import { ReviewSchema, ReviewSchemaCreate } from "@/schemas/reviews";
 import { getErrorMessage, renderError } from "@/lib/handleError";
 import { ImagesUpload } from "@/types/global";
-import { BeerPageFilterSearch, Filters, BeerAZPageSearch } from "@/types/beers";
+import {
+    BeerPageFilterSearch,
+    Filters,
+    BeerAZPageSearch,
+    BeerStylePageSearch
+} from "@/types/beers";
 
 const slugger = new GithubSlugger();
 
@@ -1098,6 +1103,61 @@ export const getBeersAZTotal = async (letter = "a") => {
         }
 
         return total;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getBeersStyles = async ({ page, style }: BeerStylePageSearch) => {
+    const user = await checkAuth();
+
+    let id = "";
+
+    if (user) {
+        id = user.id;
+    }
+
+    try {
+        const offset = page * 10;
+
+        const data = await db.beer.findMany({
+            where: { styleId: { in: style } },
+            include: {
+                images: { select: { id: true, image: true } },
+                beerReviews: { select: { id: true } },
+                beerFavourites: {
+                    where: { userId: id },
+                    select: { id: true }
+                },
+                style: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        parentStyle: { select: { slug: true, name: true } }
+                    }
+                },
+                brewery: {
+                    select: {
+                        id: true,
+                        name: true,
+                        region: true,
+                        country: { select: { name: true } },
+                        slug: true
+                    }
+                }
+            },
+            orderBy: { name: "asc" },
+            skip: offset,
+            take: 10
+        });
+        const updatedData = data.map((item) => ({
+            ...item,
+            averageRating: item.averageRating.toString(),
+            abv: item.abv.toString()
+        }));
+
+        return updatedData;
     } catch (err) {
         throw err;
     }

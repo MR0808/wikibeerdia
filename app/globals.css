@@ -1,4 +1,8 @@
 @import "tailwindcss";
+/*
+  ---break---
+*/
+@custom-variant dark (&:is(.dark *));
 
 @plugin "tailwindcss-animate";
 
@@ -53,6 +57,7 @@
     --background-image-location-bg: url("/images/bg-location.jpg");
     --background-image-country-bg: url("/images/bg-country.png");
     --background-image-country-beers-bg: url("/images/beers-country-bg.png");
+    --background-image-styles-beers-bg: url("/images/bg-beer-styles.png");
 
     @keyframes accordion-down {
         from {
@@ -372,4 +377,17 @@
 html body[data-scroll-locked] {
     overflow: visible !important;
     margin-right: 0 !important;
+}
+
+/*
+  ---break---
+*/
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
 }

@@ -424,3 +424,28 @@ export interface BeersAZAlphabetProps {
 export interface BeersAZViewToggleProps {
     paramsView: string;
 }
+
+export interface ParentStyles {
+    id: string;
+    slug: string;
+    name: string;
+}
+
+export interface Styles {
+    id: string;
+    slug: string;
+    name: string;
+}
+
+export interface BeersStylesParentsListingProps {
+    parentStyles: ParentStyles[];
+}
+
+export interface BeerStylePageSearch {
+    page: number;
+    style?: string[];
+}
+
+export interface Regions {
+    regions: string[];
+}

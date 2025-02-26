@@ -6,6 +6,7 @@ import { BeersAZAlphabetProps } from "@/types/beers";
 
 const BeersAZAlphabet = ({ letter }: BeersAZAlphabetProps) => {
     const alphabet = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+    console.log(letter);
 
     return (
         <div className="flex flex-wrap justify-between pt-4 text-sm md:flex-row md:text-base">
@@ -20,7 +21,7 @@ const BeersAZAlphabet = ({ letter }: BeersAZAlphabetProps) => {
             ))}
             <Link
                 href={`/beers/az?letter=number`}
-                className={`${letter === "number" ? "bg-slate-700" : "bg-primary hover:bg-primary/50"} w-7 cursor-pointer rounded-lg p-2 text-center text-white transition duration-200`}
+                className={`${letter === "NUMBER" ? "bg-slate-700" : "bg-primary hover:bg-primary/50"} w-7 cursor-pointer rounded-lg p-2 text-center text-white transition duration-200`}
             >
                 #
             </Link>
