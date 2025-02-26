@@ -7,13 +7,15 @@ import { addDays, format } from "date-fns";
 import type { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
+
+type ButtonProps = React.ComponentProps<typeof Button>;
 
 interface DateRangePickerProps
     extends React.ComponentPropsWithoutRef<typeof PopoverContent> {
