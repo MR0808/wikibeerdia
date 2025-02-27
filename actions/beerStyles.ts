@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
-import { unstable_noStore as noStore } from "next/cache";
 import { Style, type Style as StyleType } from "@prisma/client";
 import { format } from "date-fns";
 import GithubSlugger from "github-slugger";
@@ -85,7 +84,6 @@ export const getParentStyle = async (slug: string) => {
 };
 
 export const getBeerStyles = async (input: GetSearchSchema) => {
-    noStore();
     let {
         page,
         per_page,
@@ -188,7 +186,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
 };
 
 export const getBeerStyle = async (id: string) => {
-    noStore();
     const data = await db.style.findUnique({
         where: {
             id
@@ -206,7 +203,6 @@ export const getBeerStyle = async (id: string) => {
 };
 
 export const getBeerStylesForm = async (parentStyleId: string) => {
-    noStore();
     const data = await db.style.findMany({
         where: {
             parentStyleId,
@@ -221,7 +217,6 @@ export const getBeerStylesForm = async (parentStyleId: string) => {
 };
 
 export const getParentStyles = async () => {
-    noStore();
     const data = await db.parentStyle.findMany({
         select: {
             id: true,
@@ -239,7 +234,6 @@ export const getParentStyles = async () => {
 export const createBeerStyle = async (
     values: z.infer<typeof BeerStyleSchema>
 ) => {
-    noStore();
     const user = await checkAuth(true);
 
     if (!user)
@@ -317,7 +311,6 @@ export const updateBeerStyle = async (
     values: z.infer<typeof BeerStyleSchema>,
     id: string
 ) => {
-    noStore();
     const user = await checkAuth(true);
 
     if (!user)
@@ -407,7 +400,6 @@ export const updateBeerStyles = async (input: {
     ids: string[];
     status?: StyleType["status"];
 }) => {
-    noStore();
     const user = await checkAuth(true);
 
     if (!user)

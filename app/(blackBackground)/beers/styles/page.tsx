@@ -1,12 +1,32 @@
 import { biorhyme } from "@/app/fonts";
+import {
+    dehydrate,
+    HydrationBoundary,
+    QueryClient
+} from "@tanstack/react-query";
 
 import { getParentStyles } from "@/actions/beerStyles";
-import BeersStylesFilter from "@/components/beers/listing/styles/BeersStylesFilter";
+import BeersStylesContainer from "@/components/beers/listing/styles/BeersStylesContainer";
+import { getBeersByStyles, getBeersByStylesTotal } from "@/actions/beers";
 
 const BeersStylesPage = async () => {
-    const { data } = await getParentStyles();
+    const { data: parentStyles } = await getParentStyles();
+    const parentSlug = parentStyles[0].slug;
+    const queryClient = new QueryClient();
+    await queryClient.prefetchInfiniteQuery({
+        queryKey: ["breweriesByStyle"],
+        queryFn: ({ pageParam }) =>
+            getBeersByStyles({
+                slug: "all",
+                parentSlug,
+                page: pageParam
+            }),
+        initialPageParam: 0
+    });
+
+    const total = await getBeersByStylesTotal("all", parentSlug);
     return (
-        <>
+        <HydrationBoundary state={dehydrate(queryClient)}>
             <div className="bg-styles-beers-bg h-84 bg-black bg-cover bg-center drop-shadow-lg md:h-96">
                 <div className="h-full bg-black/70">
                     <div
@@ -16,8 +36,11 @@ const BeersStylesPage = async () => {
                     </div>
                 </div>
             </div>
-            <BeersStylesFilter parentStyles={data} />
-        </>
+            <BeersStylesContainer
+                parentStyles={parentStyles}
+                initialTotal={total}
+            />
+        </HydrationBoundary>
     );
 };
 export default BeersStylesPage;

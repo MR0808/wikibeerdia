@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
-import { unstable_noStore as noStore } from "next/cache";
 import { BreweryType, type BreweryType as TypeType } from "@prisma/client";
 import { format } from "date-fns";
 import GithubSlugger from "github-slugger";
@@ -17,7 +16,6 @@ import { filterColumn } from "@/lib/filterColumn";
 import { getErrorMessage } from "@/lib/handleError";
 
 export const getBreweryTypesForms = async () => {
-    noStore();
     const data = await db.breweryType.findMany({
         where: {
             status: "APPROVED"
@@ -32,7 +30,6 @@ export const getBreweryTypesForms = async () => {
 };
 
 export const getBreweryTypes = async (input: GetTypesSchema) => {
-    noStore();
     const { page, per_page, sort, name, status, operator, from, to } = input;
 
     try {
@@ -96,7 +93,6 @@ export const getBreweryTypes = async (input: GetTypesSchema) => {
 export const createBreweryType = async (
     values: z.infer<typeof BreweryTypeSchema>
 ) => {
-    noStore();
     const user = await checkAuth(true);
 
     if (!user)
@@ -157,7 +153,6 @@ export const updateBreweryType = async (
     values: z.infer<typeof BreweryTypeSchema>,
     id: string
 ) => {
-    noStore();
     const user = await checkAuth(true);
 
     if (!user)
@@ -200,7 +195,6 @@ export const updateBreweryTypes = async (input: {
     ids: string[];
     status?: TypeType["status"];
 }) => {
-    noStore();
     const user = await checkAuth(true);
 
     if (!user)

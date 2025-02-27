@@ -8,7 +8,6 @@ import {
     BreweryReview
 } from "@prisma/client";
 import { redirect } from "next/navigation";
-import { unstable_noStore as noStore } from "next/cache";
 import { revalidatePath } from "next/cache";
 import { format } from "date-fns";
 import GithubSlugger from "github-slugger";
@@ -27,7 +26,6 @@ import {
     BreweryPageFilterSearch,
     BreweryAZPageSearch
 } from "@/types/breweries";
-import { error } from "console";
 
 const slugger = new GithubSlugger();
 
@@ -43,7 +41,6 @@ export const getBreweries = async () => {
 };
 
 export const getBreweriesSearch = async (input: GetBreweriesSchema) => {
-    noStore();
     const { page, per_page, sort, name, status, operator, from, to } = input;
 
     try {
@@ -113,7 +110,6 @@ export const updateBreweryStatusAdmin = async (input: {
     ids: string[];
     status?: BreweryType["status"];
 }) => {
-    noStore();
     const user = await checkAuth(true);
 
     if (!user)

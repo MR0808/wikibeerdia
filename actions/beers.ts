@@ -772,7 +772,7 @@ export const getAllBeersPage = async ({
 export const getBreweriesNames = async (breweries: string[]) => {
     try {
         const data = await db.brewery.findMany({
-            where: { slug: { in: breweries } },
+            where: { status: "APPROVED", slug: { in: breweries } },
             select: { name: true, slug: true }
         });
 
@@ -789,7 +789,7 @@ export const getBreweriesNames = async (breweries: string[]) => {
 export const getStylesNames = async (styles: string[]) => {
     try {
         const stylesReturn = await db.style.findMany({
-            where: { slug: { in: styles } },
+            where: { status: "APPROVED", slug: { in: styles } },
             select: {
                 id: true,
                 name: true,
@@ -993,7 +993,10 @@ export const getBeersAZ = async ({ page, letter = "a" }: BeerAZPageSearch) => {
 
         if (letter !== "number") {
             const data = await db.beer.findMany({
-                where: { name: { startsWith: letter, mode: "insensitive" } },
+                where: {
+                    status: "APPROVED",
+                    name: { startsWith: letter, mode: "insensitive" }
+                },
                 include: {
                     images: { select: { id: true, image: true } },
                     beerReviews: { select: { id: true } },
@@ -1087,7 +1090,10 @@ export const getBeersAZTotal = async (letter = "a") => {
         let total = 0;
         if (letter !== "number") {
             total = await db.beer.count({
-                where: { name: { startsWith: letter, mode: "insensitive" } }
+                where: {
+                    status: "APPROVED",
+                    name: { startsWith: letter, mode: "insensitive" }
+                }
             });
         } else {
             const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -1108,7 +1114,11 @@ export const getBeersAZTotal = async (letter = "a") => {
     }
 };
 
-export const getBeersStyles = async ({ page, style }: BeerStylePageSearch) => {
+export const getBeersByStyles = async ({
+    page,
+    slug,
+    parentSlug = ""
+}: BeerStylePageSearch) => {
     const user = await checkAuth();
 
     let id = "";
@@ -1120,44 +1130,112 @@ export const getBeersStyles = async ({ page, style }: BeerStylePageSearch) => {
     try {
         const offset = page * 10;
 
-        const data = await db.beer.findMany({
-            where: { styleId: { in: style } },
-            include: {
-                images: { select: { id: true, image: true } },
-                beerReviews: { select: { id: true } },
-                beerFavourites: {
-                    where: { userId: id },
-                    select: { id: true }
-                },
-                style: {
-                    select: {
-                        id: true,
-                        name: true,
-                        slug: true,
-                        parentStyle: { select: { slug: true, name: true } }
+        if (slug !== "all") {
+            const data = await db.beer.findMany({
+                where: { status: "APPROVED", style: { slug } },
+                include: {
+                    images: { select: { id: true, image: true } },
+                    beerReviews: { select: { id: true } },
+                    beerFavourites: {
+                        where: { userId: id },
+                        select: { id: true }
+                    },
+                    style: {
+                        select: {
+                            id: true,
+                            name: true,
+                            slug: true,
+                            parentStyle: { select: { slug: true, name: true } }
+                        }
+                    },
+                    brewery: {
+                        select: {
+                            id: true,
+                            name: true,
+                            region: true,
+                            country: { select: { name: true } },
+                            slug: true
+                        }
                     }
                 },
-                brewery: {
-                    select: {
-                        id: true,
-                        name: true,
-                        region: true,
-                        country: { select: { name: true } },
-                        slug: true
-                    }
-                }
-            },
-            orderBy: { name: "asc" },
-            skip: offset,
-            take: 10
-        });
-        const updatedData = data.map((item) => ({
-            ...item,
-            averageRating: item.averageRating.toString(),
-            abv: item.abv.toString()
-        }));
+                orderBy: { name: "asc" },
+                skip: offset,
+                take: 10
+            });
 
-        return updatedData;
+            const updatedData = data.map((item) => ({
+                ...item,
+                averageRating: item.averageRating.toString(),
+                abv: item.abv.toString()
+            }));
+
+            return updatedData;
+        } else {
+            const data = await db.beer.findMany({
+                where: {
+                    status: "APPROVED",
+                    style: { parentStyle: { slug: parentSlug } }
+                },
+                include: {
+                    images: { select: { id: true, image: true } },
+                    beerReviews: { select: { id: true } },
+                    beerFavourites: {
+                        where: { userId: id },
+                        select: { id: true }
+                    },
+                    style: {
+                        select: {
+                            id: true,
+                            name: true,
+                            slug: true,
+                            parentStyle: { select: { slug: true, name: true } }
+                        }
+                    },
+                    brewery: {
+                        select: {
+                            id: true,
+                            name: true,
+                            region: true,
+                            country: { select: { name: true } },
+                            slug: true
+                        }
+                    }
+                },
+                orderBy: { name: "asc" },
+                skip: offset,
+                take: 10
+            });
+
+            const updatedData = data.map((item) => ({
+                ...item,
+                averageRating: item.averageRating.toString(),
+                abv: item.abv.toString()
+            }));
+
+            return updatedData;
+        }
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getBeersByStylesTotal = async (slug: string, parentSlug = "") => {
+    try {
+        let total = 0;
+        if (slug !== "all") {
+            total = await db.beer.count({
+                where: { status: "APPROVED", style: { slug } }
+            });
+        } else {
+            total = await db.beer.count({
+                where: {
+                    status: "APPROVED",
+                    style: { parentStyle: { slug: parentSlug } }
+                }
+            });
+        }
+
+        return total;
     } catch (err) {
         throw err;
     }

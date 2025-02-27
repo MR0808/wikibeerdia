@@ -437,13 +437,15 @@ export interface Styles {
     name: string;
 }
 
-export interface BeersStylesParentsListingProps {
+export interface BeersStylesContainerProps {
     parentStyles: ParentStyles[];
+    initialTotal: number;
 }
 
 export interface BeerStylePageSearch {
     page: number;
-    style?: string[];
+    slug: string;
+    parentSlug?: string;
 }
 
 export interface MultiSelect {
