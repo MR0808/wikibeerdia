@@ -446,6 +446,8 @@ export interface BeerStylePageSearch {
     style?: string[];
 }
 
-export interface Regions {
-    regions: string[];
+export interface MultiSelect {
+    parent?: string;
+    value: string;
+    label: string;
 }

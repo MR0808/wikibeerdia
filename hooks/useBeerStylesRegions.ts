@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { Regions } from "@/types/beers";
+import { MultiSelect } from "@/types/beers";
 
 export const useBeerStylesRegions = (parentStyleSlug: string) => {
-    return useQuery<Regions>({
+    return useQuery<MultiSelect[]>({
         queryKey: ["beerStylesRegions", parentStyleSlug],
         queryFn: async () => {
             if (!parentStyleSlug) return [];

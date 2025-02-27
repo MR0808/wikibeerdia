@@ -12,22 +12,27 @@ export async function GET(request: Request) {
         if (!parentStyleSlug || parentStyleSlug === "all") {
             // Fetch all regions from all styles
             styles = await db.style.findMany({
+                where: { status: "APPROVED" },
                 select: { region: true }
             });
         } else {
             // Fetch regions based on specific parentStyleId
             styles = await db.style.findMany({
-                where: { parentStyle: { slug: parentStyleSlug } }, // Ensuring parentStyleId is always a string
+                where: {
+                    parentStyle: { slug: parentStyleSlug },
+                    status: "APPROVED"
+                }, // Ensuring parentStyleId is always a string
                 select: { region: true }
             });
         }
 
-        // Flatten and get unique regions
-        const uniqueRegions = [
-            ...new Set(styles.flatMap((style) => style.region))
-        ];
+        const regions = Array.from(
+            new Set(styles.flatMap((style) => style.region))
+        )
+            .sort()
+            .map((region) => ({ value: region, label: region }));
 
-        return NextResponse.json({ regions: uniqueRegions });
+        return NextResponse.json(regions);
     } catch (error) {
         return NextResponse.json(
             { error: "Failed to fetch data" },

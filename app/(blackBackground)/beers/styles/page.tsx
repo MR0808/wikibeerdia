@@ -4,8 +4,7 @@ import { getParentStyles } from "@/actions/beerStyles";
 import BeersStylesFilter from "@/components/beers/listing/styles/BeersStylesFilter";
 
 const BeersStylesPage = async () => {
-    const { data: parentStyles } = await getParentStyles();
-    const slug = "all";
+    const { data } = await getParentStyles();
     return (
         <>
             <div className="bg-styles-beers-bg h-84 bg-black bg-cover bg-center drop-shadow-lg md:h-96">
@@ -17,7 +16,7 @@ const BeersStylesPage = async () => {
                     </div>
                 </div>
             </div>
-            <BeersStylesFilter parentStyles={parentStyles} />
+            <BeersStylesFilter parentStyles={data} />
         </>
     );
 };

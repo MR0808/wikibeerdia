@@ -1,7 +1,7 @@
 "use client";
 
-import { X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+
 import {
     Command,
     CommandEmpty,
@@ -10,10 +10,10 @@ import {
     CommandItem,
     CommandList
 } from "@/components/ui/command";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 type MultiSelectProps = {
-    options: string[];
+    options: { parent?: string; value: string; label: string }[];
     selected: string[];
     onChange: (selected: string[]) => void;
     placeholder?: string;
@@ -33,84 +33,105 @@ export function MultiSelect({
     placeholder = "Select options..."
 }: MultiSelectProps) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
 
-    const handleUnselect = (option: string) => {
-        onChange(selected.filter((s) => s !== option));
-    };
+    const selectables = options.filter(
+        (option) => !selected.includes(option.value)
+    );
 
-    const selectables = options.filter((option) => !selected.includes(option));
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node) &&
+                inputRef.current &&
+                !inputRef.current.contains(event.target as Node)
+            ) {
+                setOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    let parent = "";
+    let indent = false;
 
     return (
         <Command className="overflow-visible bg-transparent">
-            <div className="group border-input ring-offset-background focus-within:ring-ring rounded-md border px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-offset-2">
+            <div
+                className="group border-dark input ring-offset-background focus-within:ring-ring rounded-4xl border-2 px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-offset-2"
+                onClick={() => setOpen(true)}
+            >
                 <div className="flex flex-wrap gap-1">
-                    {selected.map((option) => {
-                        return (
-                            <Badge key={option} variant="secondary">
-                                {option}
-                                <button
-                                    className="ring-offset-background focus:ring-ring ml-1 rounded-full outline-none focus:ring-2 focus:ring-offset-2"
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") {
-                                            handleUnselect(option);
-                                        }
-                                    }}
-                                    onMouseDown={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                    }}
-                                    onClick={() => handleUnselect(option)}
-                                >
-                                    <X className="text-muted-foreground hover:text-foreground h-3 w-3 cursor-pointer" />
-                                </button>
-                            </Badge>
-                        );
-                    })}
                     <CommandInput
                         ref={inputRef}
                         value={inputValue}
                         onValueChange={setInputValue}
-                        onBlur={() => setOpen(false)}
-                        onFocus={() => setOpen(true)}
                         placeholder={placeholder}
                         className="placeholder:text-muted-foreground ml-2 flex-1 bg-transparent outline-none"
                     />
                 </div>
             </div>
-            <div className="relative mt-2">
+            <div className="relative mt-2" ref={dropdownRef}>
                 {open && selectables.length > 0 ? (
                     <div className="bg-popover text-popover-foreground animate-in absolute top-0 z-10 w-full rounded-md border shadow-md outline-none">
-                        <CommandList>
+                        <CommandList
+                            className={cn("max-h-[300px] overflow-hidden")}
+                        >
                             <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup className="h-full overflow-auto">
+                            <CommandGroup className="max-h-[300px] overflow-auto">
                                 {selectables.map((option) => {
-                                    return (
-                                        <CommandItem
-                                            key={option}
-                                            onMouseDown={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                            }}
-                                            onSelect={() => {
-                                                setInputValue("");
-                                                onChange([...selected, option]);
-                                            }}
-                                            className={"cursor-pointer"}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
+                                    if (
+                                        option.parent &&
+                                        option.parent !== parent
+                                    ) {
+                                        parent = option.parent;
+                                        indent = true;
+                                        return (
+                                            <CommandItem
+                                                key={option.parent}
+                                                onMouseDown={(e) =>
+                                                    e.preventDefault()
+                                                }
+                                                className="font-bold"
+                                            >
+                                                {option.parent}
+                                            </CommandItem>
+                                        );
+                                    } else {
+                                        return (
+                                            <CommandItem
+                                                key={option.value}
+                                                onMouseDown={(e) =>
+                                                    e.preventDefault()
+                                                }
+                                                onSelect={() => {
+                                                    setInputValue("");
                                                     onChange([
                                                         ...selected,
-                                                        option
+                                                        option.value
                                                     ]);
-                                                    setInputValue("");
-                                                }
-                                            }}
-                                        >
-                                            {option}
-                                        </CommandItem>
-                                    );
+                                                }}
+                                                className={`cursor-pointer ${indent ? "ml-2" : ""}`}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        onChange([
+                                                            ...selected,
+                                                            option.value
+                                                        ]);
+                                                        setInputValue("");
+                                                    }
+                                                }}
+                                            >
+                                                {option.label}
+                                            </CommandItem>
+                                        );
+                                    }
                                 })}
                             </CommandGroup>
                         </CommandList>

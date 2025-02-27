@@ -40,45 +40,49 @@ export const getAllBeerStyles = async () => {
         const data = await db.parentStyle.findMany({
             where: { status: "APPROVED" },
             include: {
-                styles: { where: { status: "APPROVED" }, orderBy: { name: "asc" } }
+                styles: {
+                    where: { status: "APPROVED" },
+                    orderBy: { name: "asc" }
+                }
             },
             orderBy: { name: "asc" }
-        })
+        });
 
         return {
             data,
             error: null
         };
-
     } catch (err) {
         return {
             data: null,
             error: getErrorMessage(err)
         };
     }
-}
+};
 
 export const getParentStyle = async (slug: string) => {
     try {
         const data = await db.parentStyle.findUnique({
             where: { slug, status: "APPROVED" },
             include: {
-                styles: { where: { status: "APPROVED" }, orderBy: { name: "asc" } }
+                styles: {
+                    where: { status: "APPROVED" },
+                    orderBy: { name: "asc" }
+                }
             }
-        })
+        });
 
         return {
             data,
             error: null
         };
-
     } catch (err) {
         return {
             data: null,
             error: getErrorMessage(err)
         };
     }
-}
+};
 
 export const getBeerStyles = async (input: GetSearchSchema) => {
     noStore();
@@ -101,9 +105,9 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
             "name",
             "asc"
         ]) as [
-                keyof Style | "parentStyle" | undefined,
-                "asc" | "desc" | undefined
-            ];
+            keyof Style | "parentStyle" | undefined,
+            "asc" | "desc" | undefined
+        ];
 
         const fromDay = from ? format(new Date(from), "yyyy-MM-dd") : undefined;
         const toDay = to ? format(new Date(to), "yyyy-MM-dd") : undefined;
@@ -126,7 +130,6 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
                     isSelectable: true
                 })
             );
-
 
         // description &&
         //     whereFilter.push(
@@ -211,7 +214,7 @@ export const getBeerStylesForm = async (parentStyleId: string) => {
         },
         select: {
             id: true,
-            name: true,
+            name: true
         }
     });
     return { data };
@@ -227,13 +230,15 @@ export const getParentStyles = async () => {
         },
         where: {
             status: "APPROVED"
-        }
+        },
+        orderBy: { name: "asc" }
     });
     return { data };
 };
 
 export const createBeerStyle = async (
-    values: z.infer<typeof BeerStyleSchema>) => {
+    values: z.infer<typeof BeerStyleSchema>
+) => {
     noStore();
     const user = await checkAuth(true);
 
@@ -266,9 +271,12 @@ export const createBeerStyle = async (
             }
         }
 
-        const { name, parentStyle, status, description, region, abv, ibu } = validatedFields.data
+        const { name, parentStyle, status, description, region, abv, ibu } =
+            validatedFields.data;
 
-        const regionDb = region.map((item) => { return item.value })
+        const regionDb = region.map((item) => {
+            return item.value;
+        });
 
         const abvLow = Math.min(...abv).toString();
         const abvHigh = Math.max(...abv).toString();
@@ -327,7 +335,6 @@ export const updateBeerStyle = async (
         };
     }
     try {
-
         const checkStyle = await db.style.findUnique({ where: { id } });
 
         if (!checkStyle) {
@@ -337,7 +344,8 @@ export const updateBeerStyle = async (
             };
         }
 
-        const { name, parentStyle, status, description, region, abv, ibu } = validatedFields.data
+        const { name, parentStyle, status, description, region, abv, ibu } =
+            validatedFields.data;
 
         let slug = checkStyle.slug;
 
@@ -356,7 +364,9 @@ export const updateBeerStyle = async (
             }
         }
 
-        const regionDb = region.map((item) => { return item.value })
+        const regionDb = region.map((item) => {
+            return item.value;
+        });
 
         const abvLow = Math.min(...abv).toString();
         const abvHigh = Math.max(...abv).toString();
