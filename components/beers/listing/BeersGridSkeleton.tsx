@@ -2,9 +2,9 @@ import { Beer, Star, Hop, CalendarDays } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-const BeersGridSkeleton = () => {
+const BeersGridSkeleton = ({ grids = 2 }: { grids?: number }) => {
     return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className={`grid grid-cols-1 gap-4 md:grid-cols-${grids}`}>
             {Array.from({ length: 12 }).map((_, index) => {
                 return (
                     <div

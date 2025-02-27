@@ -453,3 +453,19 @@ export interface MultiSelect {
     value: string;
     label: string;
 }
+
+export interface BeersStylesFilterProps {
+    parentStyles: ParentStyles[];
+    setParentSlug: (parentSlug: string) => void;
+    setStyleSlug: (styleSlug: string) => void;
+    parentSlug: string;
+    stylesLoading: boolean;
+    styles: Styles[];
+    styleSlug: string;
+}
+
+export interface BeerStylesViewToggleProps {
+    view: string;
+    total: number;
+    setView: (view: string) => void;
+}
