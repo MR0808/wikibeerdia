@@ -1128,7 +1128,7 @@ export const getBeersByStyles = async ({
     }
 
     try {
-        const offset = page * 10;
+        const offset = page * 12;
 
         if (slug !== "all") {
             const data = await db.beer.findMany({
@@ -1160,7 +1160,7 @@ export const getBeersByStyles = async ({
                 },
                 orderBy: { name: "asc" },
                 skip: offset,
-                take: 10
+                take: 12
             });
 
             const updatedData = data.map((item) => ({
@@ -1203,7 +1203,7 @@ export const getBeersByStyles = async ({
                 },
                 orderBy: { name: "asc" },
                 skip: offset,
-                take: 10
+                take: 12
             });
 
             const updatedData = data.map((item) => ({

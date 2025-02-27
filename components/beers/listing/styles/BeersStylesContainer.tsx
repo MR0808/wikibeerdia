@@ -19,8 +19,8 @@ import { useBeerByStylesTotal } from "@/hooks/useBeerByStylesTotal";
 import InfiniteScroll from "@/components/global/InfiniteScroll";
 import BeersListSkeleton from "../BeersListSkeleton";
 import { getBeersByStyles, getBeersByStylesTotal } from "@/actions/beers";
-import BeersListBeer from "../BeersListBeer";
-import BeersGridBeer from "../BeersGridBeer";
+import BeersGridView from "../BeersGridView";
+import BeersListView from "../BeersListView";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const BeersStylesContainer = ({
@@ -36,10 +36,10 @@ const BeersStylesContainer = ({
 
     const { data: total = 0 } = useBeerByStylesTotal(styleSlug, parentSlug);
 
-    const [totalPages, setTotalPages] = useState(Math.ceil(initialTotal / 10));
+    const [totalPages, setTotalPages] = useState(Math.ceil(initialTotal / 12));
 
     useEffect(() => {
-        setTotalPages(Math.ceil(total / 10));
+        setTotalPages(Math.ceil(total / 12));
     }, [total]);
 
     const onParentChange = (slug: string) => {
@@ -200,18 +200,11 @@ const BeersStylesContainer = ({
                         loadMore={() => hasNextPage && fetchNextPage()}
                     >
                         <div className="container flex flex-col gap-4">
-                            {pages.map((beer) => {
-                                return view === "list" ? (
-                                    <BeersListBeer beer={beer} key={beer.id} />
-                                ) : (
-                                    <div
-                                        className="grid grid-cols-1 gap-4 md:grid-cols-2"
-                                        key={beer.id}
-                                    >
-                                        <BeersGridBeer beer={beer} />
-                                    </div>
-                                );
-                            })}
+                            {view === "list" ? (
+                                <BeersListView beers={pages} />
+                            ) : (
+                                <BeersGridView beers={pages} grids={3} />
+                            )}
                         </div>
                     </InfiniteScroll>
                 </>
