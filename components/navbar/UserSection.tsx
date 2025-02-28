@@ -8,6 +8,7 @@ import {
     Settings,
     LogOut,
     Gauge,
+    Mail
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -17,7 +18,7 @@ import type { Session } from "next-auth";
 import {
     Popover,
     PopoverContent,
-    PopoverTrigger,
+    PopoverTrigger
 } from "@/components/ui/popover";
 import profile from "@/public/images/profile.jpg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -63,7 +64,7 @@ const UserSection = ({ session }: { session: Session | null }) => {
                     </Avatar>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
-                            <div className="text-dark relative flex cursor-pointer items-center justify-between py-2 text-base font-medium group-hover:text-primary lg:ml-3 lg:mr-0 lg:inline-flex lg:pl-0 lg:group-hover:text-primary">
+                            <div className="text-dark group-hover:text-primary lg:group-hover:text-primary relative flex cursor-pointer items-center justify-between py-2 text-base font-medium lg:mr-0 lg:ml-3 lg:inline-flex lg:pl-0">
                                 {user.firstName}
                                 <ChevronDown className="ml-2 hidden fill-current md:block" />
                             </div>
@@ -74,7 +75,7 @@ const UserSection = ({ session }: { session: Session | null }) => {
                             alignOffset={20}
                         >
                             <div className="grid gap-4">
-                                <div className="grid gap-4">
+                                {/* <div className="grid gap-4">
                                     <div className="grid items-center gap-6">
                                         <Link
                                             href="/profile"
@@ -86,16 +87,29 @@ const UserSection = ({ session }: { session: Session | null }) => {
                                             </div>
                                         </Link>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="grid gap-2">
                                     <div className="grid items-center gap-4">
                                         <Link
                                             href="/account"
-                                            className="flex w-full items-center gap-2 duration-300 hover:ml-2 hover:text-primary hover:transition-all"
+                                            className="hover:text-primary flex w-full items-center gap-2 duration-300 hover:ml-2 hover:transition-all"
                                         >
                                             <Settings />
-                                            <div className="text-md block font-sans font-normal leading-normal text-inherit antialiased">
+                                            <div className="text-md block font-sans leading-normal font-normal text-inherit antialiased">
                                                 Account
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                                <div className="grid gap-2">
+                                    <div className="grid items-center gap-4">
+                                        <Link
+                                            href="/contact"
+                                            className="hover:text-primary flex w-full items-center gap-2 duration-300 hover:ml-2 hover:transition-all"
+                                        >
+                                            <Mail />
+                                            <div className="text-md block font-sans leading-normal font-normal text-inherit antialiased">
+                                                Contact
                                             </div>
                                         </Link>
                                     </div>
@@ -105,10 +119,10 @@ const UserSection = ({ session }: { session: Session | null }) => {
                                         <div className="grid items-center gap-4">
                                             <Link
                                                 href="/admin"
-                                                className="flex w-full items-center gap-2 duration-300 hover:ml-2 hover:text-primary hover:transition-all"
+                                                className="hover:text-primary flex w-full items-center gap-2 duration-300 hover:ml-2 hover:transition-all"
                                             >
                                                 <Gauge />
-                                                <div className="text-md block font-sans font-normal leading-normal text-inherit antialiased">
+                                                <div className="text-md block font-sans leading-normal font-normal text-inherit antialiased">
                                                     Admin
                                                 </div>
                                             </Link>
@@ -121,10 +135,10 @@ const UserSection = ({ session }: { session: Session | null }) => {
                                             onClick={() =>
                                                 signOut({ callbackUrl: "/" })
                                             }
-                                            className="flex w-full cursor-pointer items-center gap-2 duration-300 hover:ml-2 hover:text-primary hover:transition-all"
+                                            className="hover:text-primary flex w-full cursor-pointer items-center gap-2 duration-300 hover:ml-2 hover:transition-all"
                                         >
                                             <LogOut />
-                                            <div className="text-md block font-sans font-normal leading-normal text-inherit antialiased">
+                                            <div className="text-md block font-sans leading-normal font-normal text-inherit antialiased">
                                                 Logout
                                             </div>
                                         </span>
@@ -137,7 +151,7 @@ const UserSection = ({ session }: { session: Session | null }) => {
             ) : (
                 <Button
                     variant="ghost"
-                    className="sm:text-md flex h-11 rounded border border-primary p-2 text-sm"
+                    className="sm:text-md border-primary flex h-11 rounded border p-2 text-sm"
                     onClick={() => signIn()}
                 >
                     Login / Signup

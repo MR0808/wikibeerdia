@@ -58,6 +58,7 @@
     --background-image-country-bg: url("/images/bg-country.png");
     --background-image-country-beers-bg: url("/images/beers-country-bg.png");
     --background-image-styles-beers-bg: url("/images/bg-beer-styles.png");
+    --background-image-types-breweries-bg: url("/images/bg-brewery-types.png");
 
     @keyframes accordion-down {
         from {
@@ -384,10 +385,10 @@ html body[data-scroll-locked] {
 */
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
 }

@@ -14,7 +14,7 @@ const BeersStylesPage = async () => {
     const parentSlug = parentStyles[0].slug;
     const queryClient = new QueryClient();
     await queryClient.prefetchInfiniteQuery({
-        queryKey: ["breweriesByStyle"],
+        queryKey: ["beersByStyle", "all", parentSlug],
         queryFn: ({ pageParam }) =>
             getBeersByStyles({
                 slug: "all",
@@ -30,7 +30,7 @@ const BeersStylesPage = async () => {
             <div className="bg-styles-beers-bg h-84 bg-black bg-cover bg-center drop-shadow-lg md:h-96">
                 <div className="h-full bg-black/70">
                     <div
-                        className={`${biorhyme.className} container my-auto flex h-full flex-col content-center items-center space-y-5 pt-32 align-bottom text-6xl font-semibold text-white md:pt-48`}
+                        className={`${biorhyme.className} container my-auto flex h-full flex-col content-center items-center space-y-5 pt-32 align-bottom text-5xl font-semibold text-white md:pt-48 md:text-6xl`}
                     >
                         <div>Beers in any style you want...</div>
                     </div>

@@ -259,3 +259,18 @@ export const getChunkedTypes = async (input: { chunkSize?: number } = {}) => {
         };
     }
 };
+
+export const getBreweryTypesList = async () => {
+    const data = await db.breweryType.findMany({
+        select: {
+            id: true,
+            name: true,
+            slug: true
+        },
+        where: {
+            status: "APPROVED"
+        },
+        orderBy: { name: "asc" }
+    });
+    return { data };
+};

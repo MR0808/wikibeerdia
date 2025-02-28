@@ -330,3 +330,37 @@ export interface BreweryAZPageSearch {
 export interface BreweriesAZAlphabetProps {
     letter: string;
 }
+
+export interface BreweryTypes {
+    id: string;
+    slug: string;
+    name: string;
+}
+
+export interface BreweriesTypesFilterProps {
+    breweryTypes: BreweryTypes[];
+    setSlug: (slug: string) => void;
+    slug: string;
+}
+
+export interface BreweriesTypesSlugFilterProps {
+    breweryTypes: BreweryTypes[];
+    slug: string;
+}
+
+export interface BreweriesTypesViewToggleProps {
+    view: string;
+    total: number;
+    setView: (view: string) => void;
+}
+
+export interface BreweriesTypesContainerProps {
+    breweryTypes: BreweryTypes[];
+    initialTotal: number;
+}
+
+export interface BreweriesTypesSlugContainerProps {
+    breweryTypes: BreweryTypes[];
+    initialTotal: number;
+    slug: string;
+}

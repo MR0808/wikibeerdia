@@ -9,7 +9,7 @@ const BreweriesGridBrewery = ({ brewery }: { brewery: BreweriesListing }) => {
     return (
         <div className="relative flex flex-col space-y-4 rounded-3xl bg-white p-5">
             <Link
-                href={`/breweries/type/${brewery.breweryType.slug}`}
+                href={`/breweries/types/${brewery.breweryType.slug}`}
                 className="absolute top-10 left-10 z-[1] w-fit rounded-3xl px-3 text-center text-sm leading-7 tracking-wide text-white uppercase"
                 style={{
                     backgroundColor: brewery.breweryType.colour

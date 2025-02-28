@@ -17,14 +17,14 @@ const BreweryMain = ({ data }: { data: BreweryType }) => {
         <>
             <div className="mt-12 h-auto w-full items-center rounded-lg bg-white p-10 align-middle shadow-lg md:mt-16">
                 <ul className="mx-auto flex list-none flex-wrap items-center justify-center">
-                    <li className="relative hidden w-1/6 p-2 text-base md:block">
+                    <li className="relative hidden w-1/12 p-2 text-base md:block">
                         &nbsp;
                     </li>
-                    <li className="relative mt-2 w-1/2 p-2 text-base md:mt-0 md:w-1/5">
+                    <li className="relative mt-2 w-1/2 p-2 text-base md:mt-0 md:w-1/4">
                         <Factory className="mb-3 h-8 w-8" />
                         <Link
                             href={`/breweries/types/${data.breweryType.slug}`}
-                            className="text-xl text-black hover:underline"
+                            className="text-xl whitespace-normal text-black hover:underline"
                         >
                             {data.breweryType.name}
                         </Link>

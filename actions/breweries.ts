@@ -938,7 +938,10 @@ export const getBreweriesAZ = async ({
     try {
         const offset = page * 10;
         const data = await db.brewery.findMany({
-            where: { name: { startsWith: letter, mode: "insensitive" } },
+            where: {
+                status: "APPROVED",
+                name: { startsWith: letter, mode: "insensitive" }
+            },
             include: {
                 _count: {
                     select: { beers: true }
@@ -972,7 +975,10 @@ export const getBreweriesAZ = async ({
 export const getBreweriesAZTotal = async (letter = "a") => {
     try {
         const total = await db.brewery.count({
-            where: { name: { startsWith: letter, mode: "insensitive" } }
+            where: {
+                status: "APPROVED",
+                name: { startsWith: letter, mode: "insensitive" }
+            }
         });
         return total;
     } catch (err) {
@@ -1091,6 +1097,68 @@ export const getCountryBreweries = async (isoCode: string) => {
         const country = { id: data?.id, name: data?.name, breweries };
 
         return country;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getBreweriesByType = async ({
+    page,
+    slug
+}: {
+    page: number;
+    slug: string;
+}) => {
+    const user = await checkAuth();
+
+    let id = "";
+
+    if (user) {
+        id = user.id;
+    }
+
+    try {
+        const offset = page * 12;
+        const data = await db.brewery.findMany({
+            where: { status: "APPROVED", breweryType: { slug } },
+            include: {
+                _count: {
+                    select: { beers: true }
+                },
+                breweryType: {
+                    select: { id: true, name: true, colour: true, slug: true }
+                },
+                country: { select: { id: true, name: true } },
+                breweryReviews: { select: { id: true } },
+                breweryFavourites: {
+                    where: { userId: id },
+                    select: { id: true }
+                }
+            },
+            orderBy: { name: "asc" },
+            skip: offset,
+            take: 12
+        });
+
+        const updatedData = data.map((item) => ({
+            ...item,
+            averageRating: item.averageRating.toString()
+        }));
+
+        return updatedData;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getBreweriesByTypesTotal = async (slug: string) => {
+    try {
+        let total = 0;
+        total = await db.brewery.count({
+            where: { status: "APPROVED", breweryType: { slug } }
+        });
+
+        return total;
     } catch (err) {
         throw err;
     }

@@ -231,6 +231,18 @@ export const getParentStyles = async () => {
     return { data };
 };
 
+export const getChildStyles = async (parentSlug: string) => {
+    const data = await db.style.findMany({
+        where: { parentStyle: { slug: parentSlug } },
+        select: {
+            id: true,
+            name: true,
+            slug: true
+        }
+    });
+    return { data };
+};
+
 export const createBeerStyle = async (
     values: z.infer<typeof BeerStyleSchema>
 ) => {

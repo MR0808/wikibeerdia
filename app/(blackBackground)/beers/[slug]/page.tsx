@@ -13,12 +13,7 @@ import { currentUser } from "@/lib/auth";
 import { getBreweryBeers } from "@/actions/breweries";
 import { ParamsSlug } from "@/utils/types";
 import getRatings from "@/lib/ratings";
-import {
-    getBeers,
-    getBeer,
-    getBeerReviews,
-    findExistingReview
-} from "@/actions/beers";
+import { getBeer, getBeerReviews, findExistingReview } from "@/actions/beers";
 import BeerSkeleton from "@/components/beers/view/BeerSkeleton";
 import BeerHeader from "@/components/beers/view/BeerHeader";
 import BeerReviews from "@/components/beers/view/BeerReviews";

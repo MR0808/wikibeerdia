@@ -38,7 +38,7 @@ const BeersStylesContainer = ({
 
     const { isLoading, data, isFetchingNextPage, hasNextPage, fetchNextPage } =
         useInfiniteQuery({
-            queryKey: ["breweriesByStyle", styleSlug, parentSlug],
+            queryKey: ["beersByStyle", styleSlug, parentSlug],
             queryFn: ({ pageParam }) =>
                 getBeersByStyles({
                     slug: styleSlug,

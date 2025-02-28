@@ -30,7 +30,7 @@ const BeersCountryPage = async ({
             <div className="bg-country-beers-bg h-84 bg-black bg-cover bg-center drop-shadow-lg md:h-96">
                 <div className="h-full bg-black/70">
                     <div
-                        className={`${biorhyme.className} container my-auto flex h-full flex-col content-center items-center space-y-5 pt-32 align-bottom text-6xl font-semibold text-white md:pt-48`}
+                        className={`${biorhyme.className} container my-auto flex h-full flex-col content-center items-center space-y-5 pt-32 align-bottom text-5xl font-semibold text-white md:pt-48 md:text-6xl`}
                     >
                         <div>Beers Around the Globe</div>
                     </div>

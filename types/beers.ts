@@ -442,6 +442,13 @@ export interface BeersStylesContainerProps {
     initialTotal: number;
 }
 
+export interface BeersStylesSlugContainerProps {
+    parentStyles: ParentStyles[];
+    initialTotal: number;
+    parentSlug: string;
+    styleSlug: string;
+}
+
 export interface BeerStylePageSearch {
     page: number;
     slug: string;
@@ -458,6 +465,14 @@ export interface BeersStylesFilterProps {
     parentStyles: ParentStyles[];
     setParentSlug: (parentSlug: string) => void;
     setStyleSlug: (styleSlug: string) => void;
+    parentSlug: string;
+    stylesLoading: boolean;
+    styles: Styles[];
+    styleSlug: string;
+}
+
+export interface BeersStylesSlugFilterProps {
+    parentStyles: ParentStyles[];
     parentSlug: string;
     stylesLoading: boolean;
     styles: Styles[];
