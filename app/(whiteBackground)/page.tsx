@@ -1,9 +1,16 @@
-import Hero from '@/components/home/Hero';
+import { getStylesByRandom } from "@/actions/beerStyles";
+import Hero from "@/components/home/Hero";
 
-const HomePage = () => {
+const HomePage = async () => {
+    const { styles } = await getStylesByRandom();
+
+    const stylesArray = styles.map((style) => {
+        return style.name;
+    });
+
     return (
         <>
-            <Hero />
+            <Hero styles={stylesArray} />
             <p>
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde,
                 debitis quasi aspernatur placeat sunt voluptates! Aliquid,

@@ -476,3 +476,10 @@ export const getChunkedTypes = async (input: { chunkSize?: number } = {}) => {
         };
     }
 };
+
+export const getStylesByRandom = async () => {
+    const data = await db.style.findMany({ select: { id: true, name: true } });
+    const shortRecords = data.filter((record) => record.name.length <= 20);
+    const styles = shortRecords.sort(() => Math.random() - 0.5);
+    return { styles };
+};

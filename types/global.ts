@@ -10,3 +10,7 @@ export interface ImagesUpload {
     order: number;
     image: string;
 }
+
+export interface HeroProps {
+    styles: string[];
+}
