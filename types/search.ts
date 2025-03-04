@@ -6,6 +6,8 @@ export interface SearchFilter {
     pageSize: number;
     query?: string;
     type: "all" | "beers" | "breweries";
+    country?: string;
+    rating?: number;
 }
 
 export type FullResults = Awaited<ReturnType<typeof getSearchResults>>;
@@ -25,6 +27,7 @@ export interface Results {
     breweryName?: string;
     region: string;
     country: string;
+    countryId: string;
     averageRating: string;
     abv?: string;
     ibu?: number | null;
@@ -35,6 +38,7 @@ export interface Results {
     breweryTypeColour?: string;
     logoUrl?: string;
     beerCount?: number;
+    createdAt: Date;
 }
 
 export interface SearchContainerProps {
@@ -50,6 +54,8 @@ type SetSort = (
 ) => void;
 type SetType = (newType: "all" | "beers" | "breweries") => void;
 type SetQuery = (newQuery: string) => void;
+type SetRating = (newRating: number) => void;
+type SetCountry = (newCountry: string[]) => void;
 
 export interface SearchListingProps {
     results: FullResults | null;
@@ -57,6 +63,10 @@ export interface SearchListingProps {
     setQuery: SetQuery;
     type: Type;
     setType: SetType;
+    country: string[];
+    setCountry: SetCountry;
+    rating: number;
+    setRating: SetRating;
     pageSize: number;
     setPageSize: SetPageSize;
     page: number;
@@ -88,15 +98,24 @@ export interface SearchResultsProps {
     setQuery: SetQuery;
     type: Type;
     setType: SetType;
+    country: string[];
+    setCountry: SetCountry;
+    rating: number;
+    setRating: SetRating;
     nuqsView: View;
     isPending: boolean;
 }
 
 export interface SearchFilterProps {
+    countries: IdNameFilter[];
     query: string;
     setQuery: SetQuery;
     type: Type;
     setType: SetType;
+    country: string[];
+    setCountry: SetCountry;
+    rating: number;
+    setRating: SetRating;
     isPending: boolean;
 }
 
@@ -108,4 +127,21 @@ export interface SearchFilterSearchProps {
 export interface SearchFilterTypeProps {
     type: Type;
     setType: SetType;
+}
+
+export interface SearchFilterRatingProps {
+    rating: number;
+    setRating: SetRating;
+}
+
+export interface IdNameFilter {
+    id: string;
+    name: string;
+    count: number;
+}
+
+export interface SearchFilterCountryProps {
+    country: string[];
+    setCountry: SetCountry;
+    countries: IdNameFilter[];
 }

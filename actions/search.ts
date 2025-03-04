@@ -1,29 +1,22 @@
 "use server";
 
-import { PrismaPromise } from "@prisma/client";
-
 import db from "@/lib/db";
 import { checkAuth } from "@/lib/auth";
-import { SearchSchema } from "@/schemas/search";
 import { SearchFilter } from "@/types/search";
+import { sortResults } from "@/utils/sortResults";
 
 export const getSearchResults = async ({
     sort,
     page,
     pageSize,
     query,
-    type
+    type,
+    country,
+    rating
 }: SearchFilter) => {
-    const validation = SearchSchema.safeParse({
-        query,
-        page,
-        pageSize,
-        type
-    });
-
-    if (!validation.success) {
-        return { error: "Invalid search parameters" };
-    }
+    const convertCommaListToArray = (list: string) => {
+        return list.split(",").map((item) => item.trim());
+    };
 
     const skip = (page - 1) * pageSize;
     const take = pageSize;
@@ -32,30 +25,77 @@ export const getSearchResults = async ({
 
     let userId = user ? user.id : "";
 
+    let beerWhere: any = { status: "APPROVED" };
+    let breweryWhere: any = { status: "APPROVED" };
+
+    if (query) {
+        const searchQuery = query.split(" ").join(" & ");
+        beerWhere = {
+            ...beerWhere,
+            OR: [
+                {
+                    name: {
+                        search: searchQuery
+                    }
+                },
+                {
+                    headline: {
+                        search: searchQuery
+                    }
+                },
+                {
+                    description: {
+                        search: searchQuery
+                    }
+                }
+            ]
+        };
+        breweryWhere = {
+            ...breweryWhere,
+            OR: [
+                {
+                    name: {
+                        search: searchQuery
+                    }
+                },
+                {
+                    headline: {
+                        search: searchQuery
+                    }
+                },
+                {
+                    description: {
+                        search: searchQuery
+                    }
+                }
+            ]
+        };
+    }
+    if (country) {
+        const countriesSearch = convertCommaListToArray(country);
+        beerWhere = {
+            ...beerWhere,
+            brewery: { country: { name: { in: countriesSearch } } }
+        };
+        breweryWhere = {
+            ...breweryWhere,
+            country: { name: { in: countriesSearch } }
+        };
+    }
+
+    if (rating != null && rating >= 0) {
+        beerWhere = { ...beerWhere, averageRating: { gte: rating } };
+        breweryWhere = {
+            ...breweryWhere,
+            averageRating: { gte: rating }
+        };
+    }
+
     try {
-        console.log(type);
         const beers =
             type === "all" || type === "beers"
                 ? await db.beer.findMany({
-                      where: {
-                          OR: [
-                              {
-                                  name: { contains: query, mode: "insensitive" }
-                              },
-                              {
-                                  description: {
-                                      contains: query,
-                                      mode: "insensitive"
-                                  }
-                              },
-                              {
-                                  headline: {
-                                      contains: query,
-                                      mode: "insensitive"
-                                  }
-                              }
-                          ]
-                      },
+                      where: beerWhere,
                       include: {
                           images: { select: { id: true, image: true } },
                           beerReviews: { select: { id: true } },
@@ -77,7 +117,7 @@ export const getSearchResults = async ({
                                   id: true,
                                   name: true,
                                   region: true,
-                                  country: { select: { name: true } },
+                                  country: { select: { id: true, name: true } },
                                   slug: true
                               }
                           }
@@ -88,25 +128,7 @@ export const getSearchResults = async ({
         const breweries =
             type === "all" || type === "breweries"
                 ? await db.brewery.findMany({
-                      where: {
-                          OR: [
-                              {
-                                  name: { contains: query, mode: "insensitive" }
-                              },
-                              {
-                                  description: {
-                                      contains: query,
-                                      mode: "insensitive"
-                                  }
-                              },
-                              {
-                                  headline: {
-                                      contains: query,
-                                      mode: "insensitive"
-                                  }
-                              }
-                          ]
-                      },
+                      where: breweryWhere,
                       include: {
                           _count: { select: { beers: true } },
                           breweryType: {
@@ -143,11 +165,13 @@ export const getSearchResults = async ({
                 breweryName: b.brewery.name,
                 region: b.brewery.region,
                 country: b.brewery.country.name,
+                countryId: b.brewery.country.id,
                 averageRating: b.averageRating.toString(),
                 abv: b.abv.toString(),
                 ibu: b.ibu,
                 yearCreated: b.yearCreated,
-                reviewsLength: b.beerReviews.length
+                reviewsLength: b.beerReviews.length,
+                createdAt: b.createdAt
             })),
             ...breweries.map((b) => ({
                 type: "brewery",
@@ -161,26 +185,50 @@ export const getSearchResults = async ({
                 logoUrl: b.logoUrl,
                 region: b.region,
                 country: b.country.name,
+                countryId: b.country.id,
                 beerCount: b._count.beers,
                 averageRating: b.averageRating.toString(),
-                reviewsLength: b.breweryReviews.length
+                reviewsLength: b.breweryReviews.length,
+                createdAt: b.createdAt
             }))
         ];
 
-        mergedResults.sort((a, b) => a.name.localeCompare(b.name));
+        const countriesList = await db.country.findMany({
+            where: {
+                breweries: {
+                    some: {}
+                }
+            },
+            orderBy: { name: "asc" }
+        });
+
+        let countries = countriesList.map((country) => {
+            return { id: country.id, name: country.name, count: 0 };
+        });
+
+        const sortedResults = sortResults(mergedResults, sort);
+
+        for (const result of sortedResults) {
+            const itemCountry = countries.find(
+                (itemCountry) => itemCountry.id === result.countryId
+            );
+            if (itemCountry) itemCountry.count += 1;
+        }
 
         // Apply pagination
-        const paginatedResults = mergedResults.slice(skip, skip + take);
+        const paginatedResults = sortedResults.slice(skip, skip + take);
 
         return {
             results: paginatedResults,
-            total: mergedResults.length,
+            total: sortedResults.length,
+            countries,
             error: null
         };
     } catch (error) {
         return {
             results: null,
             total: null,
+            countries: null,
             error: `Something went wrong while searching - ${error}`
         };
     }

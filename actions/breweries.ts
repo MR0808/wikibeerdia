@@ -745,14 +745,10 @@ export const getAllBreweriesPage = async ({
 
     const user = await checkAuth();
 
-    let id = "";
-
     const pageInt = parseInt(page);
     const pageSizeInt = parseInt(pageSize);
 
-    if (user) {
-        id = user.id;
-    }
+    let id = user ? user.id : "";
 
     switch (sort) {
         case "az":

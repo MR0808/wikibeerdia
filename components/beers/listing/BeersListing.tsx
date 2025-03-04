@@ -58,7 +58,9 @@ const BeersListing = ({
         beers && beers.length > 0
             ? postsPerPage * currentPage - postsPerPage + 1
             : 0;
-    const end = postsPerPage * currentPage;
+    let end = postsPerPage * currentPage;
+
+    if (end > total) end = total;
     return (
         <>
             <div className="flex flex-col justify-between space-y-5 text-xl md:flex-row md:space-y-0">

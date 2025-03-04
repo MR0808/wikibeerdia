@@ -75,7 +75,6 @@ export interface BreweriesContainerProps {
 type SetCountry = (newCountry: string[]) => void;
 type SetSearch = (newSearch: string) => void;
 type SetType = (newType: string[]) => void;
-type SetLetter = (newLetter: string) => void;
 type SetPageSize = (newPageSize: number) => void;
 type SetPage = (newPage: number) => void;
 type SetBeers = (newBeers: number[]) => void;

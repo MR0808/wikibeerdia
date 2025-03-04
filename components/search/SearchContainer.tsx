@@ -15,6 +15,10 @@ const SearchContainer = ({ results }: SearchContainerProps) => {
         setQuery,
         type,
         setType,
+        country,
+        setCountry,
+        rating,
+        setRating,
         sort,
         setSort,
         page,
@@ -30,16 +34,23 @@ const SearchContainer = ({ results }: SearchContainerProps) => {
         window.scrollTo({ top: 0 });
         setIsLoading(false);
     }, [isLoading]);
+    const countries = results?.countries ? results.countries : [];
+
     return (
         <div
             className={`${assistant.className} flex flex-col-reverse space-x-10 px-5 pt-10 md:container md:flex-row md:px-0 md:pt-28`}
         >
             <div className="w-full md:w-1/4">
                 <SearchFilter
+                    countries={countries}
                     query={query}
                     setQuery={setQuery}
                     type={type}
                     setType={setType}
+                    country={country}
+                    setCountry={setCountry}
+                    rating={rating}
+                    setRating={setRating}
                     isPending={isPending}
                 />
             </div>
@@ -50,6 +61,10 @@ const SearchContainer = ({ results }: SearchContainerProps) => {
                     setQuery={setQuery}
                     type={type}
                     setType={setType}
+                    country={country}
+                    setCountry={setCountry}
+                    rating={rating}
+                    setRating={setRating}
                     view={view}
                     page={page}
                     setPage={setPage}

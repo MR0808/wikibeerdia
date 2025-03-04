@@ -31,6 +31,23 @@ export function useSearchParams() {
         })
     );
 
+    const [country, setParamCountry] = useQueryState("country", {
+        defaultValue: [],
+        parse: (value) => value.split(",").filter(Boolean),
+        serialize: (value) => value.join(","),
+        shallow: false,
+        startTransition
+    });
+
+    const [rating, setParamRating] = useQueryState(
+        "rating",
+        parseAsInteger.withDefault(0).withOptions({
+            shallow: false,
+            history: "push",
+            startTransition
+        })
+    );
+
     const [view, setView] = useQueryState(
         "view",
         zodViewParser.withDefault("grid" as ViewOption).withOptions({
@@ -74,6 +91,20 @@ export function useSearchParams() {
         setPage(1);
     };
 
+    const setCountry = (newCountry: string[]) => {
+        if (newCountry.length == 0) {
+            setParamCountry(null);
+        } else {
+            setParamCountry(newCountry);
+        }
+        setParams({ page: 1 });
+    };
+
+    const setRating = (newRating: number) => {
+        setParamRating(newRating);
+        setPage(1);
+    };
+
     return {
         view,
         setView,
@@ -87,6 +118,10 @@ export function useSearchParams() {
         setQuery,
         type,
         setType,
+        country,
+        setCountry,
+        rating,
+        setRating,
         isPending
     };
 }

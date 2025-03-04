@@ -20,6 +20,10 @@ const SearchListing = ({
     setQuery,
     type,
     setType,
+    country,
+    setCountry,
+    rating,
+    setRating,
     view,
     page,
     setPage,
@@ -40,7 +44,9 @@ const SearchListing = ({
         searchResults && searchResults.length > 0
             ? postsPerPage * currentPage - postsPerPage + 1
             : 0;
-    const end = postsPerPage * currentPage;
+    let end = postsPerPage * currentPage;
+
+    if (end > total) end = total;
 
     return (
         <>
@@ -67,6 +73,10 @@ const SearchListing = ({
                     setQuery={setQuery}
                     type={type}
                     setType={setType}
+                    country={country}
+                    setCountry={setCountry}
+                    rating={rating}
+                    setRating={setRating}
                     nuqsView={view}
                     isPending={isPending}
                 />
