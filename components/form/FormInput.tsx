@@ -103,7 +103,7 @@ export const AddFormSliderInput = forwardRef<
 });
 
 export const AddFormTextArea = forwardRef<HTMLInputElement, FormInputProps>(
-    function AddFormTextArea({ name, ...props }, ref) {
+    function AddFormTextArea({ name, placeholder = "", ...props }, ref) {
         return (
             <Textarea
                 name={name}
@@ -111,6 +111,7 @@ export const AddFormTextArea = forwardRef<HTMLInputElement, FormInputProps>(
                 className={cn(
                     "block h-28 w-full rounded-lg border-neutral-200 bg-white p-5"
                 )}
+                placeholder={placeholder}
             />
         );
     }

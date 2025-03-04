@@ -84,7 +84,7 @@ const SearchResults = ({
                         <button
                             type="button"
                             className="group hover:border-primary mr-2 flex cursor-pointer items-center rounded-lg border border-zinc-300 outline-none"
-                            onClick={() => setRating(1)}
+                            onClick={() => setRating(0)}
                         >
                             <span className="group-hover:bg-primary flex h-full items-center rounded-tl-sm rounded-bl-sm bg-zinc-300 px-2 whitespace-nowrap text-stone-700 group-hover:text-white">
                                 Rating
