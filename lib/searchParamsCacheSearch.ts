@@ -3,10 +3,7 @@ import {
     createSearchParamsCache,
     parseAsString,
     parseAsInteger,
-    parseAsStringEnum,
-    parseAsArrayOf,
-    parseAsBoolean,
-    parseAsFloat
+    parseAsStringEnum
 } from "nuqs/server";
 
 enum View {
@@ -15,17 +12,9 @@ enum View {
 }
 
 export const searchParamsCacheSearch = createSearchParamsCache({
-    search: parseAsString.withDefault(""),
-    country: parseAsString.withDefault(""),
-    style: parseAsString.withDefault(""),
-    brewery: parseAsString.withDefault(""),
-    abv: parseAsArrayOf(parseAsInteger).withDefault([]),
-    ibu: parseAsArrayOf(parseAsFloat).withDefault([]),
-    yearCreated: parseAsArrayOf(parseAsInteger).withDefault([]),
-    available: parseAsString.withDefault(""),
+    q: parseAsString.withDefault(""),
     sort: parseAsString.withDefault(""),
     page: parseAsInteger.withDefault(1),
     pageSize: parseAsInteger.withDefault(10),
-    rating: parseAsInteger.withDefault(0),
     view: parseAsStringEnum<View>(Object.values(View)).withDefault(View.grid)
 });

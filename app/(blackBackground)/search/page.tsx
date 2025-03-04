@@ -2,7 +2,7 @@ import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 
 import { searchParamsCacheSearch } from "@/lib/searchParamsCacheSearch";
-import BeersContainer from "@/components/beers/listing/BeersContainer";
+import SearchContainer from "@/components/search/SearchContainer";
 import { getSearchResults } from "@/actions/search";
 
 const SearchPage = async ({
@@ -16,7 +16,7 @@ const SearchPage = async ({
         sort: params.sort,
         page: params.page,
         pageSize: params.pageSize,
-        query: params.search
+        query: params.q
     });
 
     return (
@@ -29,16 +29,7 @@ const SearchPage = async ({
                 </div>
             </div>
             <Suspense>
-                {/* <BeersContainer
-                    beers={beers.data}
-                    total={beers.total || 0}
-                    filters={beers.filters}
-                    highest={highest}
-                /> */}
-                {results.results &&
-                    results.results.map((result) => {
-                        return <div key={result.id}>{result.name}</div>;
-                    })}
+                <SearchContainer results={results} />
             </Suspense>
         </>
     );

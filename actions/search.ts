@@ -108,8 +108,43 @@ export const getSearchResults = async ({
 
         // Merge and sort results alphabetically by name
         const mergedResults = [
-            ...beers.map((b) => ({ ...b, type: "beer" })),
-            ...breweries.map((b) => ({ ...b, type: "brewery" }))
+            ...beers.map((b) => ({
+                type: "beer",
+                id: b.id,
+                slug: b.slug,
+                name: b.name,
+                parentStyleSlug: b.style?.parentStyle.slug,
+                styleSlug: b.style?.slug,
+                style: b.style?.name,
+                favouritesId: b.beerFavourites[0]?.id,
+                image: b.images[0].image,
+                available: b.available,
+                brewerySlug: b.brewery.slug,
+                breweryName: b.brewery.name,
+                region: b.brewery.region,
+                country: b.brewery.country.name,
+                averageRating: b.averageRating.toString(),
+                abv: b.abv.toString(),
+                ibu: b.ibu,
+                yearCreated: b.yearCreated,
+                reviewsLength: b.beerReviews.length
+            })),
+            ...breweries.map((b) => ({
+                type: "brewery",
+                id: b.id,
+                slug: b.slug,
+                name: b.name,
+                breweryTypeName: b.breweryType.name,
+                breweryTypeSlug: b.breweryType.slug,
+                breweryTypeColour: b.breweryType.colour,
+                favouritesId: b.breweryFavourites[0]?.id,
+                logoUrl: b.logoUrl,
+                region: b.region,
+                country: b.country.name,
+                beerCount: b._count.beers,
+                averageRating: b.averageRating.toString(),
+                reviewsLength: b.breweryReviews.length
+            }))
         ];
 
         mergedResults.sort((a, b) => a.name.localeCompare(b.name));
@@ -126,7 +161,7 @@ export const getSearchResults = async ({
         return {
             results: null,
             total: null,
-            error: "Something went wrong while searching"
+            error: `Something went wrong while searching - ${error}`
         };
     }
 };

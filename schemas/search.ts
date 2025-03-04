@@ -5,3 +5,7 @@ export const SearchSchema = z.object({
     page: z.number().min(1).default(1),
     pageSize: z.number().min(1).max(100).default(10)
 });
+
+export const SiteSearchSchema = z.object({
+    query: z.string().min(1, "Query is required")
+});
