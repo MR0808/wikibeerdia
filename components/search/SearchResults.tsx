@@ -13,6 +13,8 @@ const SearchResults = ({
     results,
     query,
     setQuery,
+    type,
+    setType,
     nuqsView,
     isPending
 }: SearchResultsProps) => {

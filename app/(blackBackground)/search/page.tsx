@@ -16,7 +16,8 @@ const SearchPage = async ({
         sort: params.sort,
         page: params.page,
         pageSize: params.pageSize,
-        query: params.q
+        query: params.q,
+        type: params.type
     });
 
     return (

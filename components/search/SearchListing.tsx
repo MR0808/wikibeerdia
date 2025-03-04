@@ -18,6 +18,8 @@ const SearchListing = ({
     results,
     query,
     setQuery,
+    type,
+    setType,
     view,
     page,
     setPage,
@@ -63,6 +65,8 @@ const SearchListing = ({
                     results={searchResults}
                     query={query}
                     setQuery={setQuery}
+                    type={type}
+                    setType={setType}
                     nuqsView={view}
                     isPending={isPending}
                 />

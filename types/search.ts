@@ -5,6 +5,7 @@ export interface SearchFilter {
     page: number;
     pageSize: number;
     query?: string;
+    type: "all" | "beers" | "breweries";
 }
 
 export type FullResults = Awaited<ReturnType<typeof getSearchResults>>;
@@ -41,18 +42,21 @@ export interface SearchContainerProps {
 }
 
 type View = "grid" | "list" | "";
+export type Type = "all" | "beers" | "breweries";
 type SetPageSize = (newPageSize: number) => void;
 type SetPage = (newPage: number) => void;
-type SetBeers = (newBeers: number[]) => void;
 type SetSort = (
     newSort: "" | "az" | "za" | "newest" | "oldest" | "popular"
 ) => void;
-type setQuery = (newQuery: string) => void;
+type SetType = (newType: "all" | "beers" | "breweries") => void;
+type SetQuery = (newQuery: string) => void;
 
 export interface SearchListingProps {
     results: FullResults | null;
     query: string;
-    setQuery: setQuery;
+    setQuery: SetQuery;
+    type: Type;
+    setType: SetType;
     pageSize: number;
     setPageSize: SetPageSize;
     page: number;
@@ -81,18 +85,27 @@ export interface SearchViewToggleProps {
 export interface SearchResultsProps {
     results: Results[] | null;
     query: string;
-    setQuery: setQuery;
+    setQuery: SetQuery;
+    type: Type;
+    setType: SetType;
     nuqsView: View;
     isPending: boolean;
 }
 
 export interface SearchFilterProps {
     query: string;
-    setQuery: setQuery;
+    setQuery: SetQuery;
+    type: Type;
+    setType: SetType;
     isPending: boolean;
 }
 
 export interface SearchFilterSearchProps {
     query: string;
-    setQuery: setQuery;
+    setQuery: SetQuery;
+}
+
+export interface SearchFilterTypeProps {
+    type: Type;
+    setType: SetType;
 }

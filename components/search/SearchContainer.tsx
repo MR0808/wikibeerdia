@@ -13,6 +13,8 @@ const SearchContainer = ({ results }: SearchContainerProps) => {
     const {
         query,
         setQuery,
+        type,
+        setType,
         sort,
         setSort,
         page,
@@ -36,6 +38,8 @@ const SearchContainer = ({ results }: SearchContainerProps) => {
                 <SearchFilter
                     query={query}
                     setQuery={setQuery}
+                    type={type}
+                    setType={setType}
                     isPending={isPending}
                 />
             </div>
@@ -44,6 +48,8 @@ const SearchContainer = ({ results }: SearchContainerProps) => {
                     results={results}
                     query={query}
                     setQuery={setQuery}
+                    type={type}
+                    setType={setType}
                     view={view}
                     page={page}
                     setPage={setPage}
