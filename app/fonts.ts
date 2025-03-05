@@ -5,7 +5,8 @@ import {
     Shrikhand,
     Questrial,
     Assistant,
-    BioRhyme
+    BioRhyme,
+    Source_Serif_4
 } from "next/font/google";
 
 export const inter = Inter({ subsets: ["latin"] });
@@ -13,6 +14,8 @@ export const inter = Inter({ subsets: ["latin"] });
 export const assistant = Assistant({ subsets: ["latin"] });
 
 export const biorhyme = BioRhyme({ subsets: ["latin"] });
+
+export const sourceSerif = Source_Serif_4({ subsets: ["latin"] });
 
 export const averia = Averia_Serif_Libre({
     weight: "700",

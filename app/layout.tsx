@@ -13,6 +13,7 @@ import siteMetadata from "@/utils/siteMetaData";
 import { inter } from "./fonts";
 import Scroll from "@/components/global/Scroll";
 import { ApiKeyProvider } from "@/Providers/ApiKeyProvider";
+import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteMetadata.siteUrl),
@@ -69,6 +70,7 @@ export default async function RootLayout({
                             <TooltipProvider>
                                 <GoogleTagManager gtmId="G-FBQEGT4TEE" />
                                 {children}
+                                <Footer />
                             </TooltipProvider>
                         </ReactQueryProvider>
                     </NuqsAdapter>
