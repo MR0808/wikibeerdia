@@ -7,7 +7,8 @@
         "fast": "next dev --turbopack",
         "build": "npx prisma generate && next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "check": "next lint && tsc --noEmit && next build"
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.8.0",
