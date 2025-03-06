@@ -25,11 +25,7 @@ export async function subscribeToNewsletter(email: string) {
     const data: KitSubscriptionResponse = await response.json();
 
     if (!response.ok) {
-        throw new Error(
-            data?.subscription
-                ? "Failed to subscribe."
-                : "Invalid response from server."
-        );
+        return { data: false };
     }
 
     return data;

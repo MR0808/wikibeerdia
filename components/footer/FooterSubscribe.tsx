@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { AccountFormInput } from "@/components/form/FormInput";
 import { FormErrorSubscribe } from "@/components/form/FormError";
-import FormSuccess from "@/components/form/FormSuccess";
+import { FormSuccessSubscribe } from "@/components/form/FormSuccess";
 import { EmailSchema } from "@/schemas/auth";
 import { cn } from "@/lib/utils";
 import { subscribeToNewsletter } from "@/actions/subscribe";
@@ -32,7 +32,17 @@ const FooterSubscribe = () => {
         setError(undefined);
         setSuccess(undefined);
 
-        startTransition(async () => {});
+        startTransition(async () => {
+            const data = await subscribeToNewsletter(values.email);
+
+            if (!data) {
+                setError("Failed to subscribe, please try again");
+            }
+            if (data) {
+                form.reset();
+                setSuccess("Successfully subscribed, welcome aboard");
+            }
+        });
     };
 
     return (
@@ -79,7 +89,7 @@ const FooterSubscribe = () => {
 
             <div className="flex flex-row gap-x-6">
                 <div className="basis-full text-white">
-                    <FormSuccess message={success} />
+                    <FormSuccessSubscribe message={success} />
                     <FormErrorSubscribe
                         message={error || form.formState.errors.email?.message}
                     />

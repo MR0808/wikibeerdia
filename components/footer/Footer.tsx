@@ -1,14 +1,18 @@
 import Image from "next/image";
 import { sourceSerif } from "@/app/fonts";
 import Link from "next/link";
-import { InstagramLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import {
+    DividerHorizontalIcon,
+    InstagramLogoIcon,
+    TwitterLogoIcon
+} from "@radix-ui/react-icons";
 import { XIcon } from "../global/Icons";
 import FooterSubscribe from "./FooterSubscribe";
 
 const Footer = () => {
     return (
-        <div className="bg-black text-white">
-            <div className="container flex flex-row justify-between py-16">
+        <div className="h-full bg-black pb-16 text-white">
+            <div className="border-b-primary container mb-16 flex flex-row justify-between border-b py-16">
                 <div>
                     <Image
                         src="/images/logo-icon.png"
@@ -80,6 +84,31 @@ const Footer = () => {
                         </div>
                         <FooterSubscribe />
                     </div>
+                </div>
+            </div>
+            <div className="container flex flex-row justify-between text-lg">
+                <div className="flex flex-row">
+                    <div className="border-r-primary mr-2 border-r pr-2">
+                        &copy; {new Date().getFullYear()} Wikibeerdia
+                    </div>
+                    <div>All Rights Reserved</div>
+                </div>
+                <div className="flex flex-row">
+                    <Link
+                        href="/sitemap"
+                        className="border-r-primary hover:text-primary mr-2 border-r pr-2"
+                    >
+                        Sitemap
+                    </Link>
+                    <Link
+                        href="/termsconditions"
+                        className="border-r-primary hover:text-primary mr-2 border-r pr-2"
+                    >
+                        Terms and Conditions
+                    </Link>
+                    <Link href="/privacy" className="hover:text-primary">
+                        Privacy Policy
+                    </Link>
                 </div>
             </div>
         </div>
