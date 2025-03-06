@@ -77,10 +77,10 @@ const Footer = () => {
                     </div>
                     <div className="flex flex-col space-y-9 text-base md:text-lg">
                         <div className="px-4 text-center md:px-0 md:text-left">
-                            Keep up to date with the going ons at Wikibeerdia,
-                            get notified when new breweries are listed, and see
-                            what's happening in the world of beer. Sign up for
-                            our newsletter here!
+                            Keep up to date with what's happening at
+                            Wikibeerdia, get notified when new breweries are
+                            listed, and see what's happening in the world of
+                            beer. Sign up for our newsletter here!
                         </div>
                         <FooterSubscribe />
                     </div>
