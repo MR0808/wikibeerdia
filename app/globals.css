@@ -61,6 +61,7 @@
     --background-image-country-beers-bg: url("/images/beers-country-bg.png");
     --background-image-styles-beers-bg: url("/images/bg-beer-styles.png");
     --background-image-types-breweries-bg: url("/images/bg-brewery-types.png");
+    --background-image-privacy-bg: url("/images/privacy-bg.jpg");
 
     @keyframes accordion-down {
         from {

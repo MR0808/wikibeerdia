@@ -158,7 +158,10 @@ export const getSearchResults = async ({
                 parentStyleSlug: b.style?.parentStyle.slug,
                 styleSlug: b.style?.slug,
                 style: b.style?.name,
-                favouritesId: b.beerFavourites[0]?.id,
+                favouritesId:
+                    b.beerFavourites && b.beerFavourites.length > 0
+                        ? b.beerFavourites[0].id
+                        : "",
                 image: b.images[0].image,
                 available: b.available,
                 brewerySlug: b.brewery.slug,
@@ -181,7 +184,10 @@ export const getSearchResults = async ({
                 breweryTypeName: b.breweryType.name,
                 breweryTypeSlug: b.breweryType.slug,
                 breweryTypeColour: b.breweryType.colour,
-                favouritesId: b.breweryFavourites[0]?.id,
+                favouritesId:
+                    b.breweryFavourites && b.breweryFavourites.length > 0
+                        ? b.breweryFavourites[0].id
+                        : "",
                 logoUrl: b.logoUrl,
                 region: b.region,
                 country: b.country.name,
@@ -225,6 +231,10 @@ export const getSearchResults = async ({
             error: null
         };
     } catch (error) {
+        // console.error("Server Action Error:", error);
+        // if (error instanceof Error) {
+        //     console.error(error.stack); // Stack trace with line numbers
+        // }
         return {
             results: null,
             total: null,

@@ -49,7 +49,7 @@ const FooterSubscribe = () => {
         <div className="flex flex-col">
             <Form {...form}>
                 <form
-                    className="flex w-full flex-row space-x-4"
+                    className="flex w-full flex-col items-center space-y-4 space-x-0 px-4 md:flex-row md:space-y-0 md:space-x-4 md:px-0"
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <FormField
