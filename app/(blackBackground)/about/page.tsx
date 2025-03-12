@@ -6,7 +6,7 @@ const TermsConditionsPage = () => {
             <div className="bg-privacy-bg h-80 bg-black bg-cover bg-center drop-shadow-lg">
                 <div className="h-full bg-black/50">
                     <div className="container my-auto h-full content-center pt-20 text-5xl font-semibold text-white">
-                        Terms and Conditions
+                        About
                     </div>
                 </div>
             </div>
