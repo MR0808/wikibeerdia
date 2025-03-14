@@ -440,46 +440,18 @@ export const updateBeerStyles = async (input: {
     }
 };
 
-export const getChunkedTypes = async (input: { chunkSize?: number } = {}) => {
+export const getStylesByRandom = async () => {
     try {
-        const chunkSize = input.chunkSize ?? 1000;
-
-        const totalTypes = await db.style.count();
-
-        const totalChunks = Math.ceil(totalTypes / chunkSize);
-
-        let chunkedTasks;
-
-        for (let i = 0; i < totalChunks; i++) {
-            const chunked = await db.style.findMany({
-                take: chunkSize,
-                skip: i
-            });
-
-            chunkedTasks = chunked.map((type) => {
-                return {
-                    ...type,
-                    createdAt: type.createdAt.toString(),
-                    updatedAt: type.updatedAt?.toString()
-                };
-            });
-        }
-
+        const data = await db.style.findMany({
+            select: { id: true, name: true }
+        });
+        const shortRecords = data.filter((record) => record.name.length <= 20);
+        const styles = shortRecords.sort(() => Math.random() - 0.5);
+        return { styles, error: null };
+    } catch (error) {
         return {
-            data: chunkedTasks,
-            error: null
-        };
-    } catch (err) {
-        return {
-            data: null,
-            error: getErrorMessage(err)
+            styles: null,
+            error: getErrorMessage(error)
         };
     }
-};
-
-export const getStylesByRandom = async () => {
-    const data = await db.style.findMany({ select: { id: true, name: true } });
-    const shortRecords = data.filter((record) => record.name.length <= 20);
-    const styles = shortRecords.sort(() => Math.random() - 0.5);
-    return { styles };
 };

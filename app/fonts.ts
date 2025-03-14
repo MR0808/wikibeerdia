@@ -6,7 +6,8 @@ import {
     Questrial,
     Assistant,
     BioRhyme,
-    Source_Serif_4
+    Source_Serif_4,
+    Geo
 } from "next/font/google";
 
 export const inter = Inter({ subsets: ["latin"] });
@@ -36,6 +37,12 @@ export const shrikhand = Shrikhand({
 });
 
 export const questrial = Questrial({
+    weight: "400",
+    subsets: ["latin"],
+    display: "swap"
+});
+
+export const geo = Geo({
     weight: "400",
     subsets: ["latin"],
     display: "swap"

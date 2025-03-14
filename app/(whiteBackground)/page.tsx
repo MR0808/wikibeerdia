@@ -4,9 +4,11 @@ import Hero from "@/components/home/Hero";
 const HomePage = async () => {
     const { styles } = await getStylesByRandom();
 
-    const stylesArray = styles.map((style) => {
-        return style.name;
-    });
+    const stylesArray = styles
+        ? styles.map((style) => {
+              return style.name;
+          })
+        : ["Lager", "Pale Ale", "Stout", "Sour"];
 
     return (
         <>
