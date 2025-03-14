@@ -19,7 +19,7 @@ const AboutHero = () => {
         setCurrentVideo((prev) => (prev + 1) % videos.length);
     };
     return (
-        <section className="relative h-[700px] w-full overflow-hidden pt-24">
+        <section className="relative h-[400px] w-full overflow-hidden pt-24 md:h-[700px]">
             <video
                 key={currentVideo} // This forces re-render when video changes
                 autoPlay
@@ -33,10 +33,16 @@ const AboutHero = () => {
 
             {/* Overlay Content */}
             <div
-                className={`${geo.className} absolute inset-0 flex items-center justify-center bg-black/40 text-white`}
+                className={`${geo.className} absolute inset-0 flex flex-col items-center justify-center space-y-20 bg-black/40 pt-10 text-white md:pt-0`}
             >
-                <h1 className="-skew-y-5 text-center text-7xl leading-0.5 font-bold tracking-widest uppercase">
+                <h1 className="hidden -skew-y-5 text-center text-7xl leading-0.5 font-bold tracking-widest uppercase md:block">
                     We Just Love Beer
+                </h1>
+                <h1 className="-skew-y-5 text-center text-7xl leading-0.5 font-bold tracking-widest uppercase md:hidden">
+                    We Just
+                </h1>
+                <h1 className="-skew-y-5 text-center text-7xl leading-0.5 font-bold tracking-widest uppercase md:hidden">
+                    Love Beer
                 </h1>
             </div>
         </section>
