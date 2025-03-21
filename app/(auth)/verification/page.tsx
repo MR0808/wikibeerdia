@@ -1,5 +1,12 @@
-import VerificationForm from '@/components/auth/VerificationForm';
-import AuthWrapper from '@/components/auth/AuthWrapper';
+import VerificationForm from "@/components/auth/VerificationForm";
+import AuthWrapper from "@/components/auth/AuthWrapper";
+
+export async function generateMetadata() {
+    return {
+        title: "Verification",
+        description: "Wikibeerdia Verification"
+    };
+}
 
 const NewVerificationPage = () => {
     return (

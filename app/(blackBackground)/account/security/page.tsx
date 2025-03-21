@@ -8,17 +8,26 @@ import {
     BreadcrumbLink,
     BreadcrumbList,
     BreadcrumbPage,
-    BreadcrumbSeparator,
+    BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 
 import TwoFactorForm from "@/components/account/security/TwoFactorForm";
 import getSession from "@/lib/session";
 import { checkAuthenticated } from "@/lib/auth";
 
+export async function generateMetadata() {
+    return {
+        title: "Account Management | Security",
+        description: "Wikibeerdia Security Management"
+    };
+}
+
 const SecurityPage = async () => {
-    const user = await checkAuthenticated()
-    if (!user) { redirect("/login");}
-    
+    const user = await checkAuthenticated();
+    if (!user) {
+        redirect("/login");
+    }
+
     const session = await getSession();
 
     return (
@@ -38,7 +47,7 @@ const SecurityPage = async () => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mb-14 mt-8">
+            <div className="mt-8 mb-14">
                 <h1 className="text-4xl font-semibold">Login and Security</h1>
             </div>
             <div className="flex flex-row gap-x-16">

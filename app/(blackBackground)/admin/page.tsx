@@ -10,6 +10,13 @@ import {
 } from "@/components/ui/card";
 import { checkAuthenticated } from "@/lib/auth";
 
+export async function generateMetadata() {
+    return {
+        title: "Admin",
+        description: "Wikibeerdia Admin"
+    };
+}
+
 const AdminPage = async () => {
     const user = await checkAuthenticated(true);
     if (!user) {

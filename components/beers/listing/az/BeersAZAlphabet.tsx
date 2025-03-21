@@ -6,8 +6,6 @@ import { BeersAZAlphabetProps } from "@/types/beers";
 
 const BeersAZAlphabet = ({ letter }: BeersAZAlphabetProps) => {
     const alphabet = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
-    console.log(letter);
-
     return (
         <div className="flex flex-wrap justify-between pt-4 text-sm md:flex-row md:text-base">
             {alphabet.map((item) => (

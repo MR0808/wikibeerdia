@@ -34,6 +34,19 @@ export const getBeerStylesByParent = async (slug: string) => {
     }
 };
 
+export const getAllBeerStylesMetadata = async () => {
+    const data = await db.style.findMany({ select: { id: true, slug: true } });
+    return data;
+};
+
+export const getBeerStyleMetadata = async (slug: string) => {
+    const data = await db.style.findFirst({
+        where: { slug },
+        include: { parentStyle: { select: { name: true } } }
+    });
+    return data;
+};
+
 export const getAllBeerStyles = async () => {
     try {
         const data = await db.parentStyle.findMany({

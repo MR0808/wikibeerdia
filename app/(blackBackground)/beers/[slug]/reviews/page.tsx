@@ -16,6 +16,62 @@ import getRatings from "@/lib/ratings";
 import BeerReviews from "@/components/beers/reviews/BeerReviews";
 import BeerReviewsHeading from "@/components/beers/reviews/BeerReviewsHeading";
 import BeerReviewsSkeleton from "@/components/beers/reviews/BeerReviewsSkeleton";
+import siteMetadata from "@/utils/siteMetaData";
+
+// export async function generateStaticParams() {
+//     const { data: beers } = await getBeers();
+//     return beers.map((beer) => ({ slug: beer.slug }));
+// }
+
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const { data: beer } = await getBeer(slug);
+    if (!beer) {
+        return;
+    }
+
+    const publishedAt = new Date(beer.createdAt).toISOString();
+    const modifiedAt = new Date(beer.updatedAt || beer.createdAt).toISOString();
+
+    let imageList = [];
+    if (beer.images) {
+        for (const image of beer.images) {
+            imageList.push(image.image);
+        }
+    }
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+
+    const authors = siteMetadata.author;
+
+    return {
+        title: ` Beers | ${beer.name} | Reviews`,
+        description: beer.headline,
+        openGraph: {
+            title: `${beer.name} | Reviews`,
+            description: beer.headline,
+            url: `${siteMetadata.siteUrl}/beers/${beer.id}`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "article",
+            publishedTime: publishedAt,
+            modifiedTime: modifiedAt,
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `${beer.name} | Reviews`,
+            description: beer.headline,
+            images: ogImages
+        }
+    };
+}
 
 const BeerReviewsPage = async (props: { params: ParamsSlug }) => {
     const { slug } = await props.params;

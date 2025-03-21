@@ -21,7 +21,13 @@ export const metadata: Metadata = {
         template: `${siteMetadata.title} | %s`,
         default: siteMetadata.title // a default is required when creating a template
     },
+    applicationName: siteMetadata.title,
     description: siteMetadata.description,
+    appleWebApp: {
+        title: siteMetadata.title,
+        statusBarStyle: "default",
+        capable: true
+    },
     openGraph: {
         title: siteMetadata.title,
         description: siteMetadata.description,

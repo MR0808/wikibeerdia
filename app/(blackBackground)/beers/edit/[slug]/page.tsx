@@ -18,6 +18,23 @@ import getSession from "@/lib/session";
 import { ParamsSlug } from "@/utils/types";
 import BeerSkeleton from "@/components/beers/view/BeerSkeleton";
 
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const { data: beer } = await getBeer(slug);
+    if (!beer) {
+        return;
+    }
+
+    return {
+        title: `Edit Beer | ${beer.name}`,
+        description: `Wikibeerdia Edit Beer | ${beer.name}`
+    };
+}
+
 const BeerEditPage = async (props: { params: ParamsSlug }) => {
     const { slug } = await props.params;
     const { data } = await getBeer(slug);

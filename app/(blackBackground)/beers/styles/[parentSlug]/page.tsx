@@ -6,10 +6,57 @@ import {
     QueryClient
 } from "@tanstack/react-query";
 
-import { getParentStyles } from "@/actions/beerStyles";
+import { getParentStyles, getParentStyle } from "@/actions/beerStyles";
 import BeersStylesSlugContainer from "@/components/beers/listing/stylesslug/BeersStylesSlugContainer";
 import { getBeersByStyles, getBeersByStylesTotal } from "@/actions/beers";
 import { ParamsParentSlug } from "@/utils/types";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateStaticParams() {
+    const { data } = await getParentStyles();
+    return data.map((parentStyle) => ({ slug: parentStyle }));
+}
+
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ parentSlug: string }>;
+}) {
+    const { parentSlug } = await params;
+    const { data: parentStyle } = await getParentStyle(parentSlug);
+    if (!parentStyle) {
+        return;
+    }
+    let imageList = [siteMetadata.siteLogo];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+    const authors = siteMetadata.author;
+    const title = `Beers by Style | ${parentStyle.name}`;
+    const description = "Find your next favourite beer whatever the style!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/beers/styles`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "website",
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
 
 const BeersStylesParentPage = async (props: { params: ParamsParentSlug }) => {
     const { parentSlug } = await props.params;

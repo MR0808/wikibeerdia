@@ -12,7 +12,7 @@ import {
     BreadcrumbLink,
     BreadcrumbList,
     BreadcrumbPage,
-    BreadcrumbSeparator,
+    BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 
 import getSession from "@/lib/session";
@@ -23,12 +23,21 @@ import {
     getCountryByName,
     getStatesByCountry,
     getStateById,
-    getCountryById,
+    getCountryById
 } from "@/data/location";
+
+export async function generateMetadata() {
+    return {
+        title: "Account Management | Personal Information",
+        description: "Wikibeerdia Personal Information Management"
+    };
+}
 
 const PersonalInfoPage = async () => {
     const user = await currentUser();
-    if (!user) { redirect("/login");}
+    if (!user) {
+        redirect("/login");
+    }
     const session = await getSession();
     const userDb = await getUserById(user?.id!);
     const countries = await getAllCountries();
@@ -61,7 +70,7 @@ const PersonalInfoPage = async () => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mb-14 mt-8">
+            <div className="mt-8 mb-14">
                 <h1 className="text-4xl font-semibold">Personal Info</h1>
             </div>
             <div className="flex flex-col-reverse gap-x-16 sm:flex-row">

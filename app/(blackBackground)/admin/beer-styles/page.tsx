@@ -20,6 +20,13 @@ import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import { checkAuthenticated } from "@/lib/auth";
 import { getBeerStyles, getParentStyles } from "@/actions/beerStyles";
 
+export async function generateMetadata() {
+    return {
+        title: "Admin | Beer Styles",
+        description: "Wikibeerdia Beer Styles"
+    };
+}
+
 const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
     const searchParams = await props.searchParams;
     const user = checkAuthenticated(true);

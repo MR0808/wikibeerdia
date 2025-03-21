@@ -4,6 +4,40 @@ import { Suspense } from "react";
 import { getAllBeersPage } from "@/actions/beers";
 import { searchParamsCacheBeersMain } from "@/lib/searchParamsCacheBeersMain";
 import BeersContainer from "@/components/beers/listing/BeersContainer";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateMetadata() {
+    let imageList = [siteMetadata.siteLogo];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+
+    const authors = siteMetadata.author;
+    const title = "Find a beer";
+    const description = "Find your next favourite beer!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/beers`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "website",
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
 
 const BreweriesPage = async ({
     searchParams

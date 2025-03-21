@@ -20,6 +20,13 @@ import { getBreweryTypes } from "@/actions/breweryTypes";
 import { DateRangePicker } from "@/components/datatable/DateRangePicker";
 import { checkAuthenticated } from "@/lib/auth";
 
+export async function generateMetadata() {
+    return {
+        title: "Admin | Brewery Types",
+        description: "Wikibeerdia Brewery Types"
+    };
+}
+
 const BreweryTypesPage = async (props: { searchParams: SearchParams }) => {
     const searchParams = await props.searchParams;
     const user = checkAuthenticated(true);
@@ -48,7 +55,7 @@ const BreweryTypesPage = async (props: { searchParams: SearchParams }) => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="mb-14 mt-8 flex w-80 flex-row justify-between sm:w-1/2">
+            <div className="mt-8 mb-14 flex w-80 flex-row justify-between sm:w-1/2">
                 <h1 className="text-4xl font-semibold">Brewery Types</h1>
             </div>
             <div className="flex flex-col-reverse gap-x-16 sm:flex-row">

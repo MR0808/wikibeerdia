@@ -1,4 +1,11 @@
-import AuthWrapper from '@/components/auth/AuthWrapper';
+import AuthWrapper from "@/components/auth/AuthWrapper";
+
+export async function generateMetadata() {
+    return {
+        title: "Error Page",
+        description: "Wikibeerdia Error Page"
+    };
+}
 
 const ErrorPage = () => {
     return (

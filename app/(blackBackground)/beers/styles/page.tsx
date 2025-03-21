@@ -8,6 +8,39 @@ import {
 import { getParentStyles } from "@/actions/beerStyles";
 import BeersStylesContainer from "@/components/beers/listing/styles/BeersStylesContainer";
 import { getBeersByStyles, getBeersByStylesTotal } from "@/actions/beers";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateMetadata() {
+    let imageList = [siteMetadata.siteLogo];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+    const authors = siteMetadata.author;
+    const title = `Beers by Style`;
+    const description = "Find your next favourite beer whatever the style!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/beers/styles`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "website",
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
 
 const BeersStylesPage = async () => {
     const { data: parentStyles } = await getParentStyles();

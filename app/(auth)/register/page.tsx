@@ -1,12 +1,21 @@
 import { redirect } from "next/navigation";
 
-import RegisterForm from '@/components/auth/RegisterForm';
-import AuthWrapper from '@/components/auth/AuthWrapper';
+import RegisterForm from "@/components/auth/RegisterForm";
+import AuthWrapper from "@/components/auth/AuthWrapper";
 import { checkAuthenticated } from "@/lib/auth";
 
+export async function generateMetadata() {
+    return {
+        title: "Register",
+        description: "Wikibeerdia Registration"
+    };
+}
+
 const RegisterPage = async () => {
-    const user = await checkAuthenticated()
-    if (user) { redirect("/");}
+    const user = await checkAuthenticated();
+    if (user) {
+        redirect("/");
+    }
 
     return (
         <AuthWrapper

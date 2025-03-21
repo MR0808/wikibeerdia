@@ -2,6 +2,51 @@ import { arvo } from "@/app/fonts";
 
 import AboutHero from "@/components/about/AboutHero";
 import Image from "next/image";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateMetadata() {
+    const publishedAt = new Date("2025-03-16T00:00:00Z").toISOString;
+    const modifiedAt = new Date("2025-03-16T00:00:00Z").toISOString;
+
+    let imageList = [
+        siteMetadata.siteLogo,
+        "images/about1.jpg",
+        "images/about2.jpg",
+        "images/about3.jpg"
+    ];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+
+    const authors = siteMetadata.author;
+    const title = "Our Story";
+    const description =
+        "Welcome to Wikibeerdia, read about why we exist and our mission and vision!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/about`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "article",
+            publishedTime: publishedAt,
+            modifiedTime: modifiedAt,
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
 
 const AboutPage = () => {
     return (

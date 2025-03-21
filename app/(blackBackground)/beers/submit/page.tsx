@@ -7,6 +7,13 @@ import { getBeerStylesForm, getParentStyles } from "@/actions/beerStyles";
 import BeerForm from "@/components/beers/submit/BeerForm";
 import { BeerSubmitSearchParams } from "@/types/beers";
 
+export async function generateMetadata() {
+    return {
+        title: "Submit Beer",
+        description: "Wikibeerdia Submit Beer"
+    };
+}
+
 const SubmitBeerPage = async (props: {
     searchParams?: Promise<BeerSubmitSearchParams>;
 }) => {
