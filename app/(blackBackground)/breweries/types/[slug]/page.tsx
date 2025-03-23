@@ -21,7 +21,7 @@ import siteMetadata from "@/utils/siteMetaData";
 
 export async function generateStaticParams() {
     const data = await getAllBreweryTypesMetadata();
-    return data.map((type) => ({ slug: type }));
+    return data.map((type) => ({ slug: type.slug }));
 }
 
 export async function generateMetadata({
