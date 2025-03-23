@@ -1,5 +1,45 @@
 import Link from "next/link";
 
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateMetadata() {
+    const publishedAt = new Date("2025-03-16T00:00:00Z").toISOString;
+    const modifiedAt = new Date("2025-03-16T00:00:00Z").toISOString;
+
+    let imageList = [siteMetadata.siteLogo];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+
+    const authors = siteMetadata.author;
+    const title = "Privacy Policy";
+    const description = "Welcome to Wikibeerdia, read our privacy policy!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/privacy`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "article",
+            publishedTime: publishedAt,
+            modifiedTime: modifiedAt,
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
+
 const PrivacyPage = () => {
     return (
         <>

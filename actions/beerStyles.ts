@@ -42,7 +42,7 @@ export const getAllBeerStylesMetadata = async () => {
 export const getBeerStyleMetadata = async (slug: string) => {
     const data = await db.style.findFirst({
         where: { slug },
-        include: { parentStyle: { select: { name: true } } }
+        include: { parentStyle: { select: { name: true, slug: true } } }
     });
     return data;
 };

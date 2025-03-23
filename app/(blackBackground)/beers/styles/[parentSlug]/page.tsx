@@ -42,7 +42,7 @@ export async function generateMetadata({
         openGraph: {
             title,
             description,
-            url: `${siteMetadata.siteUrl}/beers/styles`,
+            url: `${siteMetadata.siteUrl}/beers/styles/${parentSlug}`,
             siteName: siteMetadata.title,
             locale: "en_AU",
             type: "website",

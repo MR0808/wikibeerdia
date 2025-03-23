@@ -1,5 +1,4 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import parse from "html-react-parser";
 

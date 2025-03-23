@@ -17,6 +17,23 @@ import getSession from "@/lib/session";
 import { ParamsSlug } from "@/utils/types";
 import BrewerySkeleton from "@/components/breweries/view/BrewerySkeleton";
 
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const { data: brewery } = await getBrewery(slug);
+    if (!brewery) {
+        return;
+    }
+
+    return {
+        title: `Edit Brewery | ${brewery.name}`,
+        description: `Wikibeerdia Edit Brewery | ${brewery.name}`
+    };
+}
+
 const BreweryEditPage = async (props: { params: ParamsSlug }) => {
     const { slug } = await props.params;
     const { data } = await getBrewery(slug);

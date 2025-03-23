@@ -5,6 +5,13 @@ import BreweryForm from "@/components/breweries/submit/BreweryForm";
 import getSession from "@/lib/session";
 import { checkAuthenticated } from "@/lib/auth";
 
+export async function generateMetadata() {
+    return {
+        title: "Submit Brewery",
+        description: "Wikibeerdia Submit Brewery"
+    };
+}
+
 const SubmitBreweryPage = async () => {
     const user = await checkAuthenticated();
     if (!user) {

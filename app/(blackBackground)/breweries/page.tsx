@@ -4,6 +4,40 @@ import { Suspense } from "react";
 import { getAllBreweriesPage } from "@/actions/breweries";
 import { searchParamsCacheBreweriesMain } from "@/lib/searchParamsCacheBreweriesMain";
 import BreweriesContainer from "@/components/breweries/listing/BreweriesContainer";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateMetadata() {
+    let imageList = [siteMetadata.siteLogo];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+
+    const authors = siteMetadata.author;
+    const title = "Find a brewery";
+    const description = "Find your next favourite brewery!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/breweries`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "website",
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
 
 const BreweriesPage = async ({
     searchParams

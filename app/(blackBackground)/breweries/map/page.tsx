@@ -3,6 +3,40 @@ import { biorhyme } from "@/app/fonts";
 import BreweriesLocationContainer from "@/components/breweries/listing/map/BreweriesLocationContainer";
 import { getBreweryTypesForms } from "@/actions/breweryTypes";
 import { GoogleMapsProvider } from "@/Providers/GoogleMapsProvider";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateMetadata() {
+    let imageList = [siteMetadata.siteLogo];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+    const authors = siteMetadata.author;
+    const title = "Breweries Mapped";
+    const description =
+        "Find your next favourite brewery anywhere on the globe!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/breweries/map`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "website",
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
 
 const BreweriesLocation = async () => {
     const types = await getBreweryTypesForms();

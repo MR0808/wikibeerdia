@@ -274,3 +274,17 @@ export const getBreweryTypesList = async () => {
     });
     return { data };
 };
+
+export const getAllBreweryTypesMetadata = async () => {
+    const data = await db.breweryType.findMany({
+        select: { id: true, slug: true }
+    });
+    return data;
+};
+
+export const getBreweryTypeMetadata = async (slug: string) => {
+    const data = await db.breweryType.findFirst({
+        where: { slug }
+    });
+    return data;
+};

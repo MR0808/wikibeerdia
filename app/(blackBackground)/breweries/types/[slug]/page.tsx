@@ -6,13 +6,64 @@ import {
     QueryClient
 } from "@tanstack/react-query";
 
-import { getBreweryTypesList } from "@/actions/breweryTypes";
+import {
+    getBreweryTypesList,
+    getAllBreweryTypesMetadata,
+    getBreweryTypeMetadata
+} from "@/actions/breweryTypes";
 import BreweriesTypesSlugContainer from "@/components/breweries/listing/typesslug/BreweriesTypesSlugContainer";
 import {
     getBreweriesByType,
     getBreweriesByTypesTotal
 } from "@/actions/breweries";
 import { ParamsSlug } from "@/utils/types";
+import siteMetadata from "@/utils/siteMetaData";
+
+export async function generateStaticParams() {
+    const data = await getAllBreweryTypesMetadata();
+    return data.map((type) => ({ slug: type }));
+}
+
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const data = await getBreweryTypeMetadata(slug);
+    if (!data) {
+        return;
+    }
+    let imageList = [siteMetadata.siteLogo];
+
+    const ogImages = imageList.map((img) => {
+        return { url: img.includes("http") ? img : siteMetadata.siteUrl + img };
+    });
+    const authors = siteMetadata.author;
+    const title = `Beers by Style | ${data.name}`;
+    const description = "Find your next favourite brewery whatever the style!";
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${siteMetadata.siteUrl}/breweries/types/${slug}`,
+            siteName: siteMetadata.title,
+            locale: "en_AU",
+            type: "website",
+            images: ogImages,
+            authors: authors.length > 0 ? authors : [siteMetadata.author]
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: ogImages
+        }
+    };
+}
 
 const BeersStylesParentPage = async (props: { params: ParamsSlug }) => {
     const { slug } = await props.params;

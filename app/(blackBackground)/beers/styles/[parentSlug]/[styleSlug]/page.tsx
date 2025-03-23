@@ -10,7 +10,6 @@ import {
     getParentStyles,
     getChildStyles,
     getAllBeerStylesMetadata,
-    getParentStyle,
     getBeerStyleMetadata
 } from "@/actions/beerStyles";
 import BeersStylesSlugContainer from "@/components/beers/listing/stylesslug/BeersStylesSlugContainer";
@@ -48,7 +47,7 @@ export async function generateMetadata({
         openGraph: {
             title,
             description,
-            url: `${siteMetadata.siteUrl}/beers/styles`,
+            url: `${siteMetadata.siteUrl}/beers/styles${data.parentStyle.name}/${styleSlug}`,
             siteName: siteMetadata.title,
             locale: "en_AU",
             type: "website",

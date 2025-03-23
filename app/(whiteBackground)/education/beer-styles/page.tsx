@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 import StylesHero from "@/components/education/StylesHero";
-import { getAllBeerStyles, getBeerStylesByParent } from "@/actions/beerStyles";
+import { getAllBeerStyles } from "@/actions/beerStyles";
 import StylesSection from "@/components/education/StylesSection";
 import siteMetadata from "@/utils/siteMetaData";
 
