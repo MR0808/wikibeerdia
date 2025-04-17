@@ -92,7 +92,6 @@ const BreweryForm = ({ id, session, breweryTypes }: Props) => {
             await createBreweryImages(images);
             const formData = { ...values, images, logoUrl: logoUrl.publicUrl };
             const test = await createBrewery(formData);
-            console.log(test);
         });
     };
 
