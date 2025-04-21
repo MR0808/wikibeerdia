@@ -14,8 +14,7 @@ import {
     getBrewery,
     getBreweryBeers,
     getBreweryReviews,
-    findExistingReview,
-    getBreweries
+    findExistingReview
 } from "@/actions/breweries";
 import BreweryHeader from "@/components/breweries/view/BreweryHeader";
 import BreweryImages from "@/components/breweries/view/BreweryImages";
