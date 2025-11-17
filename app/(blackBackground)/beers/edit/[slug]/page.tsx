@@ -35,7 +35,7 @@ export async function generateMetadata({
     };
 }
 
-const BeerEditPage = async (props: { params: ParamsSlug }) => {
+const BeerEditPage = async (props: { params: Promise<ParamsSlug> }) => {
     const { slug } = await props.params;
     const { data } = await getBeer(slug);
     if (!data) redirect("/beers/");

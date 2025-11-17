@@ -27,7 +27,7 @@ export async function generateMetadata() {
     };
 }
 
-const BeerStylesPage = async (props: { searchParams: SearchParams }) => {
+const BeerStylesPage = async (props: { searchParams: Promise<SearchParams> }) => {
     const searchParams = await props.searchParams;
     const user = checkAuthenticated(true);
     if (!user) {

@@ -83,7 +83,7 @@ export async function generateMetadata({
     };
 }
 
-const BreweryDetailsPage = async (props: { params: ParamsSlug }) => {
+const BreweryDetailsPage = async (props: { params: Promise<ParamsSlug> }) => {
     const { slug } = await props.params;
     const { data } = await getBrewery(slug);
     if (!data) redirect("/breweries/");

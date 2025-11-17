@@ -63,7 +63,7 @@ export async function generateMetadata({
     };
 }
 
-const BeersStylesChildPage = async (props: { params: ParamsStyleSlug }) => {
+const BeersStylesChildPage = async (props: { params: Promise<ParamsStyleSlug> }) => {
     const { parentSlug, styleSlug } = await props.params;
     console.log(parentSlug, styleSlug);
 

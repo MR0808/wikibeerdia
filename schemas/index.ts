@@ -1,13 +1,14 @@
-import { z, ZodSchema } from "zod";
+import { z } from "zod";
 
 export function validateWithZodSchema<T>(
-    schema: ZodSchema<T>,
+    schema: z.ZodType<T>,
     data: unknown
 ): T {
     const result = schema.safeParse(data);
+
     if (!result.success) {
-        const errors = result.error.errors.map((error) => error.message);
-        throw new Error(errors.join(", "));
+        throw result.error; // best: keeps ZodError details
     }
+
     return result.data;
 }

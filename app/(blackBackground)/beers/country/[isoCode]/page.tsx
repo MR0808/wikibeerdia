@@ -54,7 +54,7 @@ export async function generateMetadata({
     };
 }
 
-const BeersCountryPage = async (props: { params: ParamsIsoCode }) => {
+const BeersCountryPage = async (props: { params: Promise<ParamsIsoCode> }) => {
     const { isoCode } = await props.params;
     const country = await getCountryBeers(isoCode);
     if (!country) redirect("/breweries/country/");

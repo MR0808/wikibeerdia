@@ -60,7 +60,7 @@ export async function generateMetadata({
     };
 }
 
-const ParentStyleInfoPage = async (props: { params: ParamsSlug }) => {
+const ParentStyleInfoPage = async (props: { params: Promise<ParamsSlug> }) => {
     const { slug } = await props.params;
     const { data } = await getParentStyle(slug);
 

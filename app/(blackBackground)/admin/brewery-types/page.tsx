@@ -27,7 +27,7 @@ export async function generateMetadata() {
     };
 }
 
-const BreweryTypesPage = async (props: { searchParams: SearchParams }) => {
+const BreweryTypesPage = async (props: { searchParams: Promise<SearchParams> }) => {
     const searchParams = await props.searchParams;
     const user = checkAuthenticated(true);
     if (!user) {
