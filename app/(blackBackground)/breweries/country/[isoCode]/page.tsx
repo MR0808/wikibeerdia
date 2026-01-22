@@ -10,10 +10,10 @@ import BreweriesGridSkeleton from "@/components/breweries/listing/BreweriesGridS
 import siteMetadata from "@/utils/siteMetaData";
 import { getAllCountries } from "@/data/location";
 
-export async function generateStaticParams() {
-    const data = await getAllCountries();
-    return data ? data.map((country) => ({ isoCode: country.isoCode })) : [];
-}
+// export async function generateStaticParams() {
+//     const data = await getAllCountries();
+//     return data ? data.map((country) => ({ isoCode: country.isoCode })) : [];
+// }
 
 export async function generateMetadata({
     params

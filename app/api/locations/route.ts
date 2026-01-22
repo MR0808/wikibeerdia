@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import db from "@/lib/db";
 import { checkAuth } from "@/lib/auth";
-
-const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
     const url = new URL(req.url);
@@ -28,7 +26,7 @@ export async function GET(req: Request) {
     //     where = { ...where, breweryTypeId: breweryType };
     // }
 
-    const locations = await prisma.brewery.findMany({
+    const locations = await db.brewery.findMany({
         where,
         include: {
             _count: {
@@ -45,7 +43,7 @@ export async function GET(req: Request) {
         orderBy: { name: "asc" }
     });
 
-    const updatedLocations = locations.map((item) => ({
+    const updatedLocations = locations.map((item: typeof locations[0]) => ({
         ...item,
         averageRating: item.averageRating.toString()
     }));

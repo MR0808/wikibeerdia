@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import { Report, Status, ReportTypes } from "@prisma/client";
+import { Report, Status, ReportTypes } from '@/generated/prisma/client';
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 

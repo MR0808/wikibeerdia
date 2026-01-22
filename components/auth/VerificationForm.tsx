@@ -5,7 +5,7 @@ import { BeatLoader } from 'react-spinners';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-import { verification } from '@/actions/verification';
+import verification from '@/actions/verification';
 import FormError from '@/components/form/FormError';
 import FormSuccess from '@/components/form/FormSuccess';
 

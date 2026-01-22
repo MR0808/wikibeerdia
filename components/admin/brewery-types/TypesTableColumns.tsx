@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BreweryType } from "@prisma/client";
+import { BreweryType } from '@/generated/prisma/client';
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 

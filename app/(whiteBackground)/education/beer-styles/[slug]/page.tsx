@@ -16,10 +16,10 @@ import ParentStylesHero from "@/components/education/ParentStylesHero";
 import TableOfContentsItem from "@/components/education/TableOfContentsItem";
 import siteMetadata from "@/utils/siteMetaData";
 
-export async function generateStaticParams() {
-    const { data: styles } = await getParentStyles();
-    return styles.map((style) => ({ slug: style.slug }));
-}
+// export async function generateStaticParams() {
+//     const { data: styles } = await getParentStyles();
+//     return styles.map((style) => ({ slug: style.slug }));
+// }
 
 export async function generateMetadata({
     params

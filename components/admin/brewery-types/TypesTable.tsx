@@ -2,7 +2,7 @@
 "use memo";
 
 import { use, useMemo } from "react";
-import { BreweryType } from "@prisma/client";
+import { BreweryType } from '@/generated/prisma/client';
 
 import { type DataTableFilterField } from "@/utils/types";
 import { statusLabels } from "@/utils/types";

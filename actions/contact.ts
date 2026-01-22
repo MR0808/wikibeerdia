@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import { Contact } from "@prisma/client";
+import { Contact } from '@/generated/prisma/client';
 
 import db from "@/lib/db";
 import { checkAuth, currentUser } from "@/lib/auth";

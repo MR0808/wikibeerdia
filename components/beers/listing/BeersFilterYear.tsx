@@ -17,8 +17,8 @@ const BeersFilterYear = ({
     highestYear,
     lowestYear
 }: BeersFilterYearProps) => {
-    let yearArray = [lowestYear, highestYear];
-    if (yearCreated.length > 0) yearArray = yearCreated;
+    let yearArray: [number, number] = [lowestYear, highestYear];
+    if (yearCreated.length > 0) yearArray = [yearCreated[0], yearCreated[1]] as [number, number];
 
     const formYear = useForm<z.infer<typeof BeerYearSchema>>({
         resolver: zodResolver(BeerYearSchema),

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { BreweryType } from "@prisma/client";
+import { BreweryType } from '@/generated/prisma/client';
 
 import { Button } from "@/components/ui/button";
 import {

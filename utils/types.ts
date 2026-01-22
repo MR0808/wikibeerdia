@@ -1,7 +1,22 @@
 import { ExtendedUser } from "@/next-auth";
-import { Country, Gender, State, Status } from "@prisma/client";
+import { Gender, Status } from '@/generated/prisma/enums';
 import type { Session } from "next-auth";
 import { Dispatch, SetStateAction } from "react";
+
+// Minimal types for Country and State to avoid importing Prisma client in client components
+export type Country = {
+    id: string;
+    name: string;
+    isoCode: string;
+    currency: string;
+};
+
+export type State = {
+    id: string;
+    name: string;
+    isoCode: string;
+    countryId: string;
+};
 
 export type NavLink = {
     href: string;

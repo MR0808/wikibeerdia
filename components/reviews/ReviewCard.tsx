@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { Ellipsis } from "lucide-react";
-import { ReportTypes } from "@prisma/client";
+import { ReportTypes } from '@/generated/prisma/client';
 
 import {
     DropdownMenu,

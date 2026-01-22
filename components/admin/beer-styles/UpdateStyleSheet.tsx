@@ -73,8 +73,8 @@ export const UpdateStyleSheet = ({
             name: style.name,
             description: style.description || undefined,
             region,
-            abv: [abvLow, abvHigh],
-            ibu: [ibuLow, ibuHigh]
+            abv: [abvLow, abvHigh] as [number, number],
+            ibu: [ibuLow, ibuHigh] as [number, number]
         }
     });
 
@@ -90,8 +90,8 @@ export const UpdateStyleSheet = ({
             name: style.name,
             description: style.description || undefined,
             region,
-            abv: [abvLow, abvHigh],
-            ibu: [ibuLow, ibuHigh]
+            abv: [abvLow, abvHigh] as [number, number],
+            ibu: [ibuLow, ibuHigh] as [number, number]
         });
     }, [style, form]);
 

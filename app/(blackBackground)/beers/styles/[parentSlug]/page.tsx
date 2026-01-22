@@ -12,10 +12,10 @@ import { getBeersByStyles, getBeersByStylesTotal } from "@/actions/beers";
 import { ParamsParentSlug } from "@/utils/types";
 import siteMetadata from "@/utils/siteMetaData";
 
-export async function generateStaticParams() {
-    const { data } = await getParentStyles();
-    return data.map((parentStyle) => ({ slug: parentStyle }));
-}
+// export async function generateStaticParams() {
+//     const { data } = await getParentStyles();
+//     return data.map((parentStyle) => ({ slug: parentStyle }));
+// }
 
 export async function generateMetadata({
     params

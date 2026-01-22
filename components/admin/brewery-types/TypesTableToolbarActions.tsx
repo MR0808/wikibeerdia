@@ -1,6 +1,6 @@
 "use client";
 
-import { BreweryType } from "@prisma/client";
+import { BreweryType } from '@/generated/prisma/client';
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { type Table } from "@tanstack/react-table";
 

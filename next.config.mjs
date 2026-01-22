@@ -8,6 +8,9 @@ if (!process.env.VELITE_STARTED && (isDev || isBuild)) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    turbopack: {
+        root: process.cwd()
+    },
     images: {
         remotePatterns: [
             {
@@ -19,9 +22,11 @@ const nextConfig = {
     experimental: {
         serverSourceMaps: true,
         serverActions: {
+            bodySizeLimit: '10mb',
             allowedOrigins: [
                 "organic-space-rotary-phone-5r5w4qxq6qh7r9j-3000.app.github.dev",
-                "localhost:3000"
+                "localhost:3000",
+                "wikibeerdia.com"
             ]
         }
     },

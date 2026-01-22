@@ -12,8 +12,8 @@ import { BeerAbvSchema } from "@/schemas/beer";
 import { BeersFilterAbvProps } from "@/types/beers";
 
 const BeersFilterAbv = ({ abv, setAbv, highestAbv }: BeersFilterAbvProps) => {
-    let abvArray = [0, highestAbv];
-    if (abv.length > 0) abvArray = abv;
+    let abvArray: [number, number] = [0, highestAbv];
+    if (abv.length > 0) abvArray = [abv[0], abv[1]] as [number, number];
 
     const formAbv = useForm<z.infer<typeof BeerAbvSchema>>({
         resolver: zodResolver(BeerAbvSchema),

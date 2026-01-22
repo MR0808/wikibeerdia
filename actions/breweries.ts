@@ -6,7 +6,7 @@ import {
     type Brewery as BreweryType,
     Status,
     BreweryReview
-} from "@prisma/client";
+} from '@/generated/prisma/client';
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { format } from "date-fns";
@@ -82,7 +82,7 @@ export const getBreweriesSearch = async (input: GetBreweriesSchema) => {
             ? (usedFilter = { AND: [...whereFilter] })
             : (usedFilter = { OR: [...whereFilter] });
 
-        const orderBy = [{ [`${column}`]: `${order}` }];
+        const orderBy = [{ [String(column)]: order }];
 
         const data = await db.brewery.findMany({
             where: usedFilter,

@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { Status } from "@prisma/client";
+import { Status } from '@/generated/prisma/enums';
 
 // -----------------------
 // Brewery Type Schema
@@ -14,14 +14,13 @@ export const BreweryTypeSchema = z.object({
 // -----------------------
 // IBU Schema
 // -----------------------
-const ibuSchema = z.coerce.number().pipe(z.number().int().min(0).max(100));
+const ibuSchema = z.number().int().min(0).max(100);
 
 // -----------------------
 // ABV Schema (0–30, step 0.1)
 // -----------------------
 const abvSchema = z
-    .array(z.coerce.number().pipe(z.number().min(0).max(30).multipleOf(0.1)))
-    .length(2)
+    .tuple([z.number().min(0).max(30).multipleOf(0.1), z.number().min(0).max(30).multipleOf(0.1)])
     .refine(([min, max]) => min <= max, {
         message: "Minimum value must be less than or equal to maximum value"
     });
@@ -42,7 +41,7 @@ export const BeerStyleSchema = z.object({
         })
     ),
     abv: abvSchema,
-    ibu: z.array(ibuSchema).length(2)
+    ibu: z.tuple([ibuSchema, ibuSchema])
 });
 
 // -----------------------

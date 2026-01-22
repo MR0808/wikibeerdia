@@ -2,7 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition, Dispatch, SetStateAction } from "react";
-import { ReportTypes } from "@prisma/client";
+import { ReportTypes } from '@/generated/prisma/client';
 
 import {
     Dialog,

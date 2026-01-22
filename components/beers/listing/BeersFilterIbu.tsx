@@ -12,8 +12,8 @@ import { BeerIbuSchema } from "@/schemas/beer";
 import { BeersFilterIbuProps } from "@/types/beers";
 
 const BeersFilterIbu = ({ ibu, setIbu, highestIbu }: BeersFilterIbuProps) => {
-    let ibuArray = [0, highestIbu];
-    if (ibu.length > 0) ibuArray = ibu;
+    let ibuArray: [number, number] = [0, highestIbu];
+    if (ibu.length > 0) ibuArray = [ibu[0], ibu[1]] as [number, number];
 
     const formIbu = useForm<z.infer<typeof BeerIbuSchema>>({
         resolver: zodResolver(BeerIbuSchema),

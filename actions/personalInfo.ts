@@ -16,7 +16,7 @@ import { getUserById } from "@/data/user";
 import { unstable_update as update } from "@/auth";
 import { currentUser } from "@/lib/auth";
 import { checkAuth } from "@/lib/auth";
-import { State } from "@prisma/client";
+import { State } from '@/generated/prisma/client';
 import { uploadImage, deleteImage } from "@/utils/supabase";
 import { renderError } from "@/lib/handleError";
 

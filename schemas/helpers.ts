@@ -14,37 +14,28 @@ export const stringRequired = (msg: string) => z.string().min(1, msg);
 
 /* --------------------------------------------------------
    NUMBER COERCION (Zod 4 safe)
-   — Uses preprocess instead of pipe() to preserve ZodNumber
+   — Uses coerce which properly infers number output type
 ---------------------------------------------------------*/
 export const coercedNumber = (schema: z.ZodNumber) =>
-    z.preprocess((value) => {
-        if (value === "" || value === null || value === undefined)
-            return undefined;
-        const n = Number(value);
-        return isNaN(n) ? value : n;
-    }, schema);
+    z.coerce.number().pipe(schema);
 
 /* --------------------------------------------------------
    REQUIRED NUMBER / INT
+   — Using z.number() directly since forms handle conversion
+   — For API/form data that needs coercion, use z.coerce.number() directly
 ---------------------------------------------------------*/
 export const numberRequired = (msg: string) =>
-    coercedNumber(z.number({ message: msg }));
+    z.number({ message: msg });
 
 export const intRequired = (msg: string) =>
-    coercedNumber(z.number().int({ message: msg }));
+    z.number().int({ message: msg });
 
 /* --------------------------------------------------------
-   BOOLEAN COERCION
+   BOOLEAN
+   — Using z.boolean() directly since forms handle conversion
 ---------------------------------------------------------*/
 export const booleanRequired = (msg: string) =>
-    z.preprocess(
-        (value) => {
-            if (value === "true" || value === true) return true;
-            if (value === "false" || value === false) return false;
-            return value;
-        },
-        z.boolean({ message: msg })
-    );
+    z.boolean({ message: msg });
 
 /* --------------------------------------------------------
    FILE VALIDATORS (Zod 4)
@@ -63,32 +54,32 @@ export const fileObjectArray = () => z.array(z.object({ value: fileValue() }));
 /* --------------------------------------------------------
    RANGE HELPERS (Zod 4 safe)
    Output: { min: number, max: number }
+   Input: [number, number] (for form compatibility)
 ---------------------------------------------------------*/
-export const numberRange = (msg: string, validator: z.ZodType<number>) =>
-    z
-        .array(validator)
-        .length(2, { message: msg })
-        .transform((arr) => {
-            const [min, max] = arr as [number, number];
-            return { min, max };
-        })
-        .refine(({ min, max }) => min <= max, {
+export const numberRange = (msg: string, validator: z.ZodType<number>) => {
+    const tupleSchema = z.tuple([validator, validator]);
+    return tupleSchema
+        .refine(([min, max]) => min <= max, {
             message: msg
+        })
+        .transform(([min, max]) => ({ min, max }));
+};
+
+/* ABV Range (0–30, step 0.1) - returns array for form compatibility */
+export const abvRange = () =>
+    z
+        .tuple([z.number().min(0).max(30).multipleOf(0.1), z.number().min(0).max(30).multipleOf(0.1)])
+        .refine(([min, max]) => min <= max, {
+            message: "Minimum ABV must be ≤ Maximum ABV"
         });
 
-/* ABV Range (0–30, step 0.1) */
-export const abvRange = () =>
-    numberRange(
-        "Minimum ABV must be ≤ Maximum ABV",
-        coercedNumber(z.number().min(0).max(30).multipleOf(0.1))
-    );
-
-/* IBU Range (0–100 int) */
+/* IBU Range (0–100 int) - returns array for form compatibility */
 export const ibuIntRange = () =>
-    numberRange(
-        "Minimum IBU must be ≤ Maximum IBU",
-        coercedNumber(z.number().int().min(0).max(100))
-    );
+    z
+        .tuple([z.number().int().min(0).max(100), z.number().int().min(0).max(100)])
+        .refine(([min, max]) => min <= max, {
+            message: "Minimum IBU must be ≤ Maximum IBU"
+        });
 
 /* --------------------------------------------------------
    URL HELPERS

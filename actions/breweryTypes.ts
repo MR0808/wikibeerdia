@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
-import { BreweryType, type BreweryType as TypeType } from "@prisma/client";
+import { BreweryType, type BreweryType as TypeType } from '@/generated/prisma/client';
 import { format } from "date-fns";
 import GithubSlugger from "github-slugger";
 
@@ -71,7 +71,7 @@ export const getBreweryTypes = async (input: GetTypesSchema) => {
             ? (usedFilter = { AND: [...whereFilter] })
             : (usedFilter = { OR: [...whereFilter] });
 
-        const orderBy = [{ [`${column}`]: `${order}` }];
+        const orderBy = [{ [String(column)]: order }];
 
         const data = await db.breweryType.findMany({
             where: usedFilter,

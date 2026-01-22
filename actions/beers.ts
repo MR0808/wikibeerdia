@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import { Beer, Status, BeerReview } from "@prisma/client";
+import { Beer, Status, BeerReview } from '@/generated/prisma/client';
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import GithubSlugger, { slug } from "github-slugger";

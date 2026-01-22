@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
-import { Style, type Style as StyleType } from "@prisma/client";
+import { Style, type Style as StyleType } from '@/generated/prisma/client';
 import { format } from "date-fns";
 import GithubSlugger from "github-slugger";
 
@@ -168,7 +168,7 @@ export const getBeerStyles = async (input: GetSearchSchema) => {
             ? (usedFilter = { AND: [...whereFilter] })
             : (usedFilter = { OR: [...whereFilter] });
 
-        let orderBy = [{ [`${column}`]: `${order}` }];
+        let orderBy = [{ [String(column)]: order }];
 
         if (column === "parentStyle") {
             sort = undefined;

@@ -1,5 +1,4 @@
-import { Status } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Status } from '@/generated/prisma/client';
 
 export interface BreweryType {
     id: string;

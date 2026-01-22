@@ -96,5 +96,5 @@ export const BeerIbuSchema = z.object({
 // --------------------------------------------------------
 
 export const BeerYearSchema = z.object({
-    yearCreated: z.array(coercedNumber(z.number().int())).length(2)
+    yearCreated: z.tuple([z.number().int(), z.number().int()])
 });

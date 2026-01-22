@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { Status } from "@prisma/client";
+import { Status } from '@/generated/prisma/client';
 
 import {
     typesSearchParamsSchema,

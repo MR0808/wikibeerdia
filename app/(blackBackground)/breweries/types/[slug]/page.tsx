@@ -19,10 +19,10 @@ import {
 import { ParamsSlug } from "@/utils/types";
 import siteMetadata from "@/utils/siteMetaData";
 
-export async function generateStaticParams() {
-    const data = await getAllBreweryTypesMetadata();
-    return data.map((type) => ({ slug: type.slug }));
-}
+// export async function generateStaticParams() {
+//     const data = await getAllBreweryTypesMetadata();
+//     return data.map((type) => ({ slug: type.slug }));
+// }
 
 export async function generateMetadata({
     params

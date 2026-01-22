@@ -2,7 +2,7 @@
 
 import { Ellipsis, Watch } from "lucide-react";
 import { useTransition } from "react";
-import { Status } from "@prisma/client";
+import { Status } from '@/generated/prisma/client';
 import { toast } from "sonner";
 import Link from "next/link";
 

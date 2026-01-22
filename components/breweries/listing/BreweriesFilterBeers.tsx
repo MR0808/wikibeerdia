@@ -21,8 +21,8 @@ const BreweriesFilterBeers = ({
         formBeers.reset();
     };
 
-    let beersArray = [0, highestBeers];
-    if (beers.length > 0) beersArray = beers;
+    let beersArray: [number, number] = [0, highestBeers];
+    if (beers.length > 0) beersArray = [beers[0], beers[1]] as [number, number];
 
     const formBeers = useForm<z.infer<typeof BreweryBeersSchema>>({
         resolver: zodResolver(BreweryBeersSchema),

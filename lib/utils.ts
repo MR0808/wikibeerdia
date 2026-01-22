@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Status } from "@prisma/client";
+import { Status } from '@/generated/prisma/client';
 
 import {
     CheckCircledIcon,

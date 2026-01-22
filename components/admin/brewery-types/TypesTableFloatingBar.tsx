@@ -1,4 +1,4 @@
-import { BreweryType } from "@prisma/client";
+import { BreweryType } from '@/generated/prisma/client';
 import { useTransition, useState, useEffect } from "react";
 import {
     CheckCircledIcon,

@@ -101,5 +101,5 @@ export const BrewerySearchSchema = z.object({
 // --------------------------------------------------------
 
 export const BreweryBeersSchema = z.object({
-    beers: z.array(coercedNumber(z.number().int())).length(2)
+    beers: z.tuple([z.number().int(), z.number().int()])
 });
