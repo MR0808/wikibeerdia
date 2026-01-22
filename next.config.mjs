@@ -11,6 +11,22 @@ const nextConfig = {
     turbopack: {
         root: process.cwd()
     },
+    serverComponentsExternalPackages: ['@prisma/client'],
+    webpack: (config, { isServer }) => {
+        if (!isServer) {
+            // Exclude Prisma client from browser builds
+            config.resolve.alias = {
+                ...config.resolve.alias,
+                '@prisma/client': false,
+                '.prisma/client': false,
+            };
+            config.resolve.fallback = {
+                ...config.resolve.fallback,
+                '@prisma/client': false,
+            };
+        }
+        return config;
+    },
     images: {
         remotePatterns: [
             {

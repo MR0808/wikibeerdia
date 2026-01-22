@@ -28,7 +28,7 @@ import { SubmitButton } from '@/components/form/Buttons';
 import FormError from '@/components/form/FormError';
 import { updateGender } from '@/actions/personalInfo';
 import { GenderSchema } from '@/schemas/personal-info';
-import { Gender } from '@prisma/client';
+import { Gender } from '@/generated/prisma/enums';
 import { GenderProps } from '@/utils/types';
 import { cn } from '@/lib/utils';
 
